@@ -42,7 +42,7 @@ public:
     AutomaticID<class Dimension, int> dim = VanillaDimensions::Undefined;
 
     inline PlayerSpawnPoint()        = default;
-    inline PlayerSpawnPoint &operator=(PlayerSpawnPoint &&) = default;
+    inline PlayerSpawnPoint &operator = (PlayerSpawnPoint &&) = default;
     inline bool hasSpawnPoint() const { return spawn_block != BlockPos::MIN && dim != VanillaDimensions::Undefined; }
     inline void invalidate() { *this = {}; }
     inline bool isValid() const { return dim != VanillaDimensions::Undefined; }
@@ -187,6 +187,7 @@ public:
   void recheckSpawnPosition(void);
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
+  BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);
   BUILD_ACCESS_COMPAT(class Certificate &, Certificate);
   BUILD_ACCESS_COMPAT(class NetworkIdentifier const &, NetworkIdentifier);
   BUILD_ACCESS_COMPAT(class BlockPos &, SpawnPosition);

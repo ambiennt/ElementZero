@@ -11,6 +11,7 @@ class ActorDamageSource;
 class Actor;
 class ItemInstance;
 class EnchantUtils;
+class EnchantmentInstance;
 
 class Enchant {
 public:
@@ -20,6 +21,7 @@ public:
     feather_falling       = 2,
     blast_protection      = 3,
     projectile_protection = 4,
+    thorns                = 5,
     respiration           = 6,
     depth_strider         = 7,
     aqua_affinity         = 8,
@@ -50,6 +52,7 @@ public:
     multishot             = 33,
     piercing              = 34,
     quick_charge          = 35,
+    soul_speed            = 36
   };
   enum struct Frequency {};
   enum struct Slot {};
@@ -83,6 +86,7 @@ public:
 class EnchantUtils {
 public:
   MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int);
+  MCAPI static bool applyEnchant(class ItemStackBase&, EnchantmentInstance const&, bool); //bool - allow non vanilla enchants
   inline static char const *getEnchantName(Enchant::Type type) {
     switch (type) {
     case Enchant::Type::protection: return "protection";
@@ -90,6 +94,7 @@ public:
     case Enchant::Type::feather_falling: return "feather_falling";
     case Enchant::Type::blast_protection: return "blast_protection";
     case Enchant::Type::projectile_protection: return "projectile_protection";
+    case Enchant::Type::thorns: return "thorns";
     case Enchant::Type::respiration: return "respiration";
     case Enchant::Type::depth_strider: return "depth_strider";
     case Enchant::Type::aqua_affinity: return "aqua_affinity";
@@ -120,6 +125,7 @@ public:
     case Enchant::Type::multishot: return "multishot";
     case Enchant::Type::piercing: return "piercing";
     case Enchant::Type::quick_charge: return "quick_charge";
+    case Enchant::Type::soul_speed: return "soul_speed";
     default: return "unknown";
     }
   }

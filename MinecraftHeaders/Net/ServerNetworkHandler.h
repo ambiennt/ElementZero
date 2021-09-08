@@ -1,7 +1,7 @@
 #pragma once
 
 #include <hook.h>
-
+#include "../Actor/ServerPlayer.h"
 #include "NetworkIdentifier.h"
 #include "../dll.h"
 
@@ -16,5 +16,12 @@ public:
     CallServerClassMethod<void>("?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", this, player, hide);
   }
 
+  inline ServerPlayer* getServerPlayer(NetworkIdentifier const & netId) {
+      return _getServerPlayer(netId, 0);
+  }
+  
   BASEAPI std::string &GetMotd();
+
+  private:
+      MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const&, unsigned char);
 };

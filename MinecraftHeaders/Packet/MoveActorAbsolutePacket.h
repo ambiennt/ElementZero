@@ -2,14 +2,22 @@
 
 #include "../Core/Packet.h"
 #include "../Math/Vec3.h"
+#include "../Actor/ActorRuntimeID.h"
 #include "../dll.h"
 
 class MoveActorAbsolutePacket : public Packet {
 public:
-  enum struct Flags { teleport = 1, on_ground = 2 };
-  Flags flags = Flags::teleport;
+
+  enum struct Flags : uint8_t { 
+    GROUND = 0x01, 
+    TELEPORT = 0x02, 
+    FORCE_MOVE = 0x04
+  };
+
+  ActorRuntimeID rid;
+  uint8_t flags = 0x01;
   Vec3 pos;
-  char pitch = 0, head_yaw = 0, yaw = 0;
+  uint8_t pitch = 0, head_yaw = 0, yaw = 0;
 
   inline ~MoveActorAbsolutePacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

@@ -15,7 +15,7 @@ public:
   int selectedSlot = 0;
   ItemStack item;
   char selectedContainerId = 0;
-  std::unique_ptr<Inventory> invectory;
+  std::unique_ptr<Inventory> inventory;
   std::vector<ItemStack> complexItems;
   std::weak_ptr<HudContainerManagerModel> model;
 

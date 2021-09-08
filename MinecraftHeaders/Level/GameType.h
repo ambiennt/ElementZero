@@ -1,3 +1,9 @@
 #pragma once
 
-enum struct GameType { Survival, Creative, Viewer = 4, Adventure = 5 };
+enum struct GameType {
+	Survival = 0,
+	Creative = 1,
+	SurvivalViewer = 3,
+	CreativeViewer = 4,
+	Default = 5
+};

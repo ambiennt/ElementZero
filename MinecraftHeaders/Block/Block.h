@@ -8,8 +8,6 @@
 #include <modutils.h>
 
 class Block {
-	
-	
 
 public:
   unsigned short aux;

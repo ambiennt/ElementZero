@@ -22,9 +22,9 @@ class SerializedSkin {
 public:
   std::string skin_id, name, skin_resource_patch, geometry_name;
   mce::Image texture, cape_texture;
-  std::vector<AnimatedImageData> animated_imge_data;
+  std::vector<AnimatedImageData> animated_image_data;
   Json::Value geometry_data, geometry_data_mutable;
-  std::string animateion_data, cape_id;
+  std::string animation_data, cape_id;
   bool premium_skin, persona_skin, cape_on_classic_skin;
   enum struct TrustedFlag : char { UNSET, NO, YES } trusted_flag;
   std::vector<SerializedPersonaPieceHandle> appearance;
@@ -74,7 +74,7 @@ public:
   inline bool setIsPersonaCapeOnClassicSkin(bool value) { return cape_on_classic_skin = value; }
 
   inline float getAnimationFrames(AnimatedTextureType type) const {
-    for (auto &item : animated_imge_data) {
+    for (auto &item : animated_image_data) {
       if (item.type == type) return item.frame;
     }
     return 1.0f;
@@ -84,6 +84,7 @@ public:
 
 static_assert(offsetof(SerializedSkin, premium_skin) == 312);
 static_assert(offsetof(SerializedSkin, persona_skin) == 313);
+static_assert(offsetof(SerializedSkin, cape_on_classic_skin) == 314);
 static_assert(offsetof(SerializedSkin, trusted_flag) == 315);
 static_assert(offsetof(SerializedSkin, appearance) == 320);
 static_assert(offsetof(SerializedSkin, appearance_name) == 344);

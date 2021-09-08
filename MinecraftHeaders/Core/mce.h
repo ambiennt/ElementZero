@@ -120,7 +120,7 @@ public:
     this->usage  = usage;
   }
 
-  inline void setRawImge(Blob &&buffer) { data = std::move(buffer); }
+  inline void setRawImage(Blob &&buffer) { data = std::move(buffer); }
 };
 
 static_assert(offsetof(Image, data) == 16);

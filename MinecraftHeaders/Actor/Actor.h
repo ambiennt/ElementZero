@@ -19,87 +19,143 @@
 
 class Dimension;
 enum class ActorType;
-enum class InputMode;
 enum class ActorLocation;
 enum class MaterialType;
 enum class ActorEvent;
-enum class ArmorSlot;
 enum class ArmorMaterialType;
 enum class ArmorTextureType;
 enum class LevelSoundEvent;
-enum class ItemUseMethod;
 enum class PaletteColor;
-enum class ActorFlags;
 enum class ActorDamageCause;
 
+enum class InputMode {
+  Undefined           = 0,
+  Mouse               = 1,
+  Touch               = 2,
+  GamePad             = 3,
+  MotionController_0  = 4
+};
+
+enum class ItemUseMethod {
+  Unknown          = -1,
+  EquipArmor       = 0,
+  Eat_1            = 1,
+  Attack_0         = 2,
+  Consume          = 3,
+  Throw_0          = 4,
+  Shoot_0          = 5,
+  Place_0          = 6,
+  FillBottle       = 7,
+  FillBucket       = 8,
+  PourBucket       = 9,
+  UseTool          = 10,
+  Interact         = 11,
+  Retrieved        = 12,
+  Dyed             = 13,
+  Traded           = 14
+};
+
+enum class ArmorSlot {
+  Head             = 0,
+  Torso            = 1,
+  Legs             = 2,
+  Feet             = 3
+};
+
 enum class ActorFlags {
-  ONFIRE               = 0,
-  SNEAKING             = 1,
-  RIDING               = 2,
-  SPRINTING            = 3,
-  ACTION               = 4,
-  INVISIBLE            = 5,
-  TEMPTED              = 6,
-  INLOVE               = 7,
-  SADDLED              = 8,
-  POWERED              = 9,
-  IGNITED              = 10,
-  BABY                 = 11, // disable head scaling
-  CONVERTING           = 12,
-  CRITICAL             = 13,
-  CAN_SHOW_NAMETAG     = 14,
-  ALWAYS_SHOW_NAMETAG  = 15,
-  IMMOBILE             = 16,
-  NO_AI                = 16,
-  SILENT               = 17,
-  WALLCLIMBING         = 18,
-  CAN_CLIMB            = 19,
-  SWIMMER              = 20,
-  CAN_FLY              = 21,
-  WALKER               = 22,
-  RESTING              = 23,
-  SITTING              = 24, // VERIFIED
-  ANGRY                = 25, // VERIFIED
-  INTERESTED           = 26,
-  CHARGED              = 27,
-  TAMED                = 28, // VERIFIED
-  ORPHANED             = 29, // VERIFIED
-  LEASHED              = 30,
-  SHEARED              = 31,
-  GLIDING              = 32, // VERIFIED
-  ELDER                = 33,
-  MOVING               = 34,
-  BREATHING            = 35,
-  CHESTED              = 36, // VERIFIED
-  STACKABLE            = 37,
-  SHOWBASE             = 38, // VERIFIED
-  STANDING             = 39,
-  REARING              = 39,
-  VIBRATING            = 40,
-  IDLING               = 41,
-  EVOKER_SPELL         = 42,
-  CHARGE_ATTACK        = 43,
-  WASD_CONTROLLED      = 44,
-  CAN_POWER_JUMP       = 45, // VERIFIED
-  LINGER               = 46,
-  PHYSICAL             = 47,
-  FIRE_RESISTANCE      = 49,
-  DANCING              = 50,
-  ENCHANTED            = 51,
-  DAMAGE_NEAR_BY_MOBS  = 55,
-  SWIMMING             = 56, // VERIFIED
-  EATING               = 62,
-  LAYING_DWON          = 63,
-  TRUSTED              = 65,
-  SCARED               = 67, // VERIFIED
-  TRADE_INTEREST       = 77,
-  DOOR_BREAKER         = 78,
-  BREAKING_OBSTRUCTION = 79,
-  DOOR_OPENER          = 80,
-  ILLAGER_CAPTION      = 81,
-  ROARING              = 83,
-  DELAYED_ATTACKING    = 84,
-  EMOTING              = 90,
+  Unknown                     = -1,
+  OnFire                      = 0,
+  Sneaking                    = 1,
+  Riding                      = 2,
+  Sprinting                   = 3,
+  UsingItem                   = 4,
+  Invisible                   = 5,
+  Tempted                     = 6,
+  InLove                      = 7,
+  Saddled                     = 8,
+  Powered                     = 9,
+  Ignited                     = 10,
+  Baby                        = 11,
+  Converting                  = 12,
+  Critical                    = 13,
+  CanShowName                 = 14, 
+  AlwaysShowName              = 15,
+  NoAI                        = 16, //Immobile flag
+  Silent                      = 17,
+  WallClimbing                = 18,
+  CanClimb                    = 19,
+  CanSwim                     = 20,
+  CanFly                      = 21,
+  CanWalk                     = 22,
+  Resting                     = 23,
+  Sitting                     = 24,
+  Angry                       = 25,
+  Interested                  = 26,
+  Charged                     = 27,
+  Tamed                       = 28,
+  Orphaned                    = 29,
+  Leashed                     = 30,
+  Sheared                     = 31,
+  Gliding                     = 32,
+  Elder                       = 33,
+  Moving                      = 34,
+  Breathing                   = 35,
+  Chested                     = 36,
+  Stackable                   = 37,
+  ShowBottom                  = 38,
+  Standing                    = 39,
+  Shaking                     = 40,
+  Idling                      = 41,
+  Casting                     = 42,
+  Charging                    = 43,
+  WasdControlled              = 44,
+  CanPowerJump                = 45,
+  Lingering                   = 46,
+  HasCollision                = 47,
+  HasGravity                  = 48,
+  FireImmune                  = 49,
+  Dancing                     = 50,
+  Enchanted                   = 51,
+  ReturnTrident               = 52,
+  ContainerIsPrivate          = 53,
+  IsTransforming              = 54,
+  DamageNearbyMobs            = 55,
+  Swimming                    = 56,
+  Bribed                      = 57,
+  IsPregnant                  = 58,
+  LayingEgg                   = 59,
+  RiderCanPick                = 60,
+  TransitionSitting           = 61,
+  Eating                      = 62,
+  LayingDown                  = 63,
+  Sneezing                    = 64,
+  Trusting                    = 65,
+  Rolling                     = 66,
+  Scared                      = 67,
+  InScaffolding               = 68,
+  OverScaffolding             = 69,
+  FallThroughScaffolding      = 70,
+  Blocking                    = 71,
+  TransitionBlocking          = 72,
+  BlockedUsingShield          = 73,
+  BlockedUsingDamagedShield   = 74,
+  Sleeping                    = 75,
+  WantsToWake                 = 76,
+  TradeInterest               = 77,
+  DoorBreaker                 = 78,
+  BreakingObstruction         = 79,
+  DoorOpener                  = 80,
+  IsIllagerCaptain            = 81,
+  Stunned                     = 82,
+  Roaring                     = 83,
+  DelayedAttack               = 84,
+  IsAvoidingMobs              = 85,
+  FacingTargetToRangeAttack   = 86,
+  HiddenWhenInvisible         = 87,
+  IsInUI                      = 88,
+  Stalking                    = 89,
+  Emoting                     = 90,
+  Celebrating                 = 91
 };
 
 class Actor {

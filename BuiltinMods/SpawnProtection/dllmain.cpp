@@ -89,7 +89,7 @@ void checkInventoryTransaction(
           auto &legacy = block.LegacyBlock;
           if (!legacy.isInteractiveBlock() || legacy.BlockID == VanillaBlockTypes::mItemFrame->BlockID ||
               entry.player->isSneaking()) {
-            data.onTransactionError(*entry.player, InventoryTransactionError::Unexcepted);
+            data.onTransactionError(*entry.player, InventoryTransactionError::StateMismatch);
             token("Blocked by SpawnProtection");
           }
         }
@@ -97,7 +97,7 @@ void checkInventoryTransaction(
       case ItemUseInventoryTransaction::Type::USE_ITEM: break;
       case ItemUseInventoryTransaction::Type::DESTROY:
         if (!Check(entry.player, data.pos.x, data.pos.z)) {
-          data.onTransactionError(*entry.player, InventoryTransactionError::Unexcepted);
+          data.onTransactionError(*entry.player, InventoryTransactionError::StateMismatch);
           token("Blocked by SpawnProtection");
         }
         break;
@@ -107,7 +107,7 @@ void checkInventoryTransaction(
       auto &data    = (ItemUseOnActorInventoryTransaction const &) transaction;
       auto composed = data.playerPos + data.clickPos;
       if (!Check(entry.player, composed.x, composed.z)) {
-        data.onTransactionError(*entry.player, InventoryTransactionError::Unexcepted);
+        data.onTransactionError(*entry.player, InventoryTransactionError::StateMismatch);
         token("Blocked by SpawnProtection");
       }
     } break;

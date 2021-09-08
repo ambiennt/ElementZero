@@ -19,7 +19,7 @@ public:
   virtual bool canAdd(ItemStack const &);
   virtual void dropAll(bool);
   virtual void clearSlot(int);
-  virtual void clearInvertory(int);
+  virtual void clearInventory(int);
   virtual void load(ListTag const &, SemVersion const &, Level &);
   virtual void doDrop(ItemStack &, bool);
   virtual int getEmptySlotsCount() const;
