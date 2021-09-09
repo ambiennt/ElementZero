@@ -32,6 +32,12 @@ SimpleContainer &Actor::getHandContainer() const { return direct_access<SimpleCo
 class Dimension *Actor::getDimension() const {
   return direct_access<class Dimension *>(this, 808);
 }
+
+// Player::Player
+class EnderChestContainer * Player::getEnderChestContainer() const {
+    return direct_access<std::unique_ptr<class EnderChestContainer>>(this, 4032).get();
+}
+
 // Player::getSelectedItem
 PlayerInventory &Player::getInventory() const { return *direct_access<PlayerInventory *>(this, 2928); }
 // Player::Player

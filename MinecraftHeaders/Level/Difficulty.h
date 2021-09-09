@@ -5,6 +5,6 @@ enum struct Difficulty {
 	Easy = 1,
 	Normal_0 = 2,
 	Hard = 3,
-	Count_1 = 4,
+	Default = 4,
 	Unknown = 5
 };
