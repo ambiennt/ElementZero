@@ -9,15 +9,15 @@
 #include "../dll.h"
 
 enum class BossEventUpdateType {
-  SHOW              = 0,
-  REGISTER_PLAYER   = 1,
+  SHOW              = 0, // add
+  REGISTER_PLAYER   = 1, // player added
   UPDATE            = 1,
-  HIDE              = 2,
-  UNREGISTER_PLAYER = 3,
-  HEALTH_PERCENT    = 4,
-  TITLE             = 5,
-  TOGGLE_FOG        = 6,
-  TEXTURE           = 7
+  HIDE              = 2, // remove
+  UNREGISTER_PLAYER = 3, // player removed
+  HEALTH_PERCENT    = 4, // update percent
+  TITLE             = 5, // update name
+  TOGGLE_FOG        = 6, // update properties
+  TEXTURE           = 7  // update style
 };
 
 class BossEventPacket : public Packet {

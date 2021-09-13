@@ -10,7 +10,16 @@
 
 class CraftingEventPacket : public Packet {
 public:
-  enum class Type { shapeless, shaped, furnace, furnace_data, multi, shulker_box };
+  enum class Type {
+    ShapelessRecipe           = 0, //unverified
+    ShapedRecipe              = 1,
+    FurnaceRecipe             = 2,
+    FurnaceAuxRecipe          = 3,
+    MultiRecipe               = 4
+    ShulkerBoxRecipe          = 5,
+    ShapelessChemistryRecipe  = 6,
+    ShapedChemistryRecipe     = 7
+  };
 
   ContainerID container = ContainerID::Invalid;
   Type type = Type::shapeless;

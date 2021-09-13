@@ -7,7 +7,13 @@
 
 class InteractPacket : public Packet {
 public:
-  enum struct Action : char { stop_riding = 3, mouse = 4, open_container = 6 };
+  enum struct Action : char {
+    invalid        = 0,
+    stop_riding    = 3,
+    mouse          = 4, //InteractUpdate
+    npc_open       = 5,
+    open_container = 6
+  };
   Action action = Action::mouse;
   ActorRuntimeID actor;
   Vec3 pos;
