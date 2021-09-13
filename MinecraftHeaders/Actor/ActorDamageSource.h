@@ -5,19 +5,48 @@
 
 class ActorUniqueID;
 enum class ActorType;
-enum class ActorCategory;
+
+enum class ActorCategory {
+    None                     = 0,
+    Player                   = 1,
+    Mob                      = 2,
+    Monster                  = 4,
+    Humandoid                = 8,
+    HumanoidMonster          = 12,
+    Animal                   = 16,
+    WaterSpawning            = 32,
+    WaterAnimal              = 48,
+    Pathable                 = 64,
+    Tamable                  = 128,
+    TamableAnimal            = 144,
+    Ridable                  = 256,
+    Item                     = 1024,
+    Ambient                  = 2048,
+    Villager                 = 4096,
+    EvocationIllagerMonster  = 4108,
+    Arthropod                = 8192,
+    Undead                   = 16384,
+    UndeadMob                = 16388,
+    Zombie                   = 32768,
+    ZombieMonster            = 32772,
+    Minecart                 = 65536,
+    MinecartRidable          = 65792,
+    Boat                     = 131072,
+    BoatRideable             = 131328,
+    NonTargetable            = 262144
+};
 
 enum class ActorDamageCause {
 	None             = -1,
 	Override         = 0,
 	Contact          = 1,
 	EntityAttack     = 2,
-	Projectile_0     = 3,
+	Projectile       = 3,
 	Suffocation      = 4,
-	Fall_0           = 5,
-	Fire_1           = 6,
+	Fall             = 5,
+	Fire             = 6,
 	FireTick         = 7,
-	Lava_2           = 8,
+	Lava             = 8,
 	Drowning         = 9,
 	BlockExplosion   = 10,
 	EntityExplosion  = 11,
@@ -26,17 +55,17 @@ enum class ActorDamageCause {
 	Magic            = 14,
 	Wither           = 15,
 	Starve           = 16,
-	Anvil_1          = 17,
-	Thorns_0         = 18,
-	FallingBlock_0   = 19,
-	Piston_0         = 20,
+	Anvil            = 17,
+	Thorns           = 18,
+	FallingBlock     = 19,
+	Piston           = 20,
 	FlyIntoWall      = 21,
 	Magma            = 22,
-	Fireworks_0      = 23,
-	Lightning_0      = 24,
+	Fireworks        = 23,
+	Lightning        = 24,
 	Charging         = 25,
 	Temperature      = 26,
-	All_0            = 31
+	All              = 31
 };
 
 class ActorDamageSource {

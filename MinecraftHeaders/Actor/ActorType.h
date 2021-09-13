@@ -133,9 +133,17 @@ enum class ActorType {
   ElderGuardianGhost   = 0xB78,
   Fox                  = 0x1379,
   Bee                  = 0x17A,
+  Piglin               = 0x17B,
+  PiglinBrute          = 0x17F,
+  Hoglin               = 0x137C,
+  Zoglin               = 0x10B7E,
+  Strider              = 0x137D
 };
 
-enum class ActorTypeNamespaceRules { IncludeNamespace, ExcludeNamespace };
+enum class ActorTypeNamespaceRules {
+  ReturnWithoutNamespace  = 0,
+  ReturnWithNamespace     = 1
+};
 
 MCAPI void forEachEntityType(std::function<bool(ActorType, std::string const &)>);
 MCAPI ActorType EntityTypeFromString(std::string const &);

@@ -11,10 +11,10 @@
 class NetworkIdentifier {
 public:
   enum class Type : char {
-    GUID  = 0,
+    GUID  = 0, //raknet
     IPv4  = 1,
     IPv6  = 2,
-    Empty = 3,
+    Empty = 3, //generic
   };
   RakNet::RakNetGUID guid;
   uint16_t port;

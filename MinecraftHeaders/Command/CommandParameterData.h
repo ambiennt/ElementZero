@@ -8,7 +8,13 @@
 
 class CommandOrigin;
 
-enum class CommandParameterDataType { NORMAL, ENUM, SOFT_ENUM };
+enum class CommandParameterDataType {
+  NORMAL    = 0,
+  ENUM      = 1,
+  SOFTENUM  = 2,
+  POSTFIX   = 3
+};
+
 struct CommandParameterData {
   using ParseFn = bool (CommandRegistry::*)(
       void *, CommandRegistry::ParseToken const &, CommandOrigin const &, int, std::string &,

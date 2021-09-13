@@ -26,7 +26,13 @@ public:
   Json::Value geometry_data, geometry_data_mutable;
   std::string animation_data, cape_id;
   bool premium_skin, persona_skin, cape_on_classic_skin;
-  enum struct TrustedFlag : char { UNSET, NO, YES } trusted_flag;
+
+  enum struct TrustedFlag : char {
+    UNSET  = 0,
+    NO     = 1,
+    YES    = 2
+  } trusted_flag;
+
   std::vector<SerializedPersonaPieceHandle> appearance;
   std::string appearance_name;
   std::unordered_map<PieceType, TintMapColor> colormap;

@@ -2,6 +2,14 @@
 
 #include "../Math/Direction.h"
 
+enum class Rotation {
+  None             = 0,
+  Rotate90         = 1,
+  Rotate180        = 2,
+  Rotate270        = 3,
+  Total            = 4
+};
+
 class DataLoadHelper {
 public:
   virtual ~DataLoadHelper();

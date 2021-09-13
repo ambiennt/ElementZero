@@ -5,7 +5,13 @@
 
 class GameRule {
 public:
-  enum struct Type : char { Invalid = 0, Boolean = 1, Integer = 2, Float = 3 };
+  enum struct Type : char {
+    Invalid = 0,
+    Boolean = 1,
+    Integer = 2,
+    Float   = 3
+  };
+
   union Value {
     bool val_bool;
     int val_int;

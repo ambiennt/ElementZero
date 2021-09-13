@@ -14,6 +14,7 @@
 #include "../Core/AutomaticID.h"
 #include "../Core/VanillaDimensions.h"
 #include "../Command/CommandPermissionLevel.h"
+#include "../Level/GameType.h"
 #include "../dll.h"
 
 class Packet;
@@ -21,7 +22,6 @@ class ServerPlayer;
 class NetworkIdentifier;
 class Dimension;
 enum class StructureFeatureType;
-enum class AbilitiesIndex;
 enum class BedSleepingResult;
 enum class GameType;
 enum class CooldownType;
@@ -32,58 +32,82 @@ enum class MovementEventType {
   BackInSync         = 1
 };
 
+enum class AbilitiesIndex {
+  Invalid              = -1,
+  Build                = 0,
+  Mine                 = 1,
+  DoorsAndSwitches     = 2,
+  OpenContainers       = 3,
+  AttackPlayers        = 4,
+  AttackMobs           = 5,
+  OperatorCommands     = 6,
+  Teleport             = 7,
+  ExposedAbilityCount  = 8,
+  Invulnerable         = 8,
+  Flying               = 9,
+  MayFly               = 10,
+  Instabuild           = 11,
+  Lightning            = 12,
+  FlySpeed             = 13,
+  WalkSpeed            = 14,
+  Muted                = 15,
+  WorldBuilder         = 16,
+  NoClip               = 17,
+  AbilityCount         = 18
+};
+
 enum class PlayerUISlot {
-  CursorSelected         = 0,
-  AnvilInput             = 1,
-  AnvilMaterial          = 2,
-  StoneCutterInput       = 3,
-  Trade2Ingredient1      = 4,
-  Trade2Ingredient2      = 5,
-  TradeIngredient1       = 6,
-  TradeIngredient2       = 7,
-  MaterialReducerInput   = 8,
-  LoomInput              = 9,
-  LoomDye                = 10,
-  LoomMaterial           = 11,
-  CartographyInput       = 12,
-  CartographyAdditional  = 13,
-  EnchantingInput        = 14,
-  EnchantingMaterial     = 15,
-  GrindstoneInput        = 16,
-  GrindstoneAdditional   = 17,
-  CompoundCreatorInput1  = 18,
-  CompoundCreatorInput2  = 19,
-  CompoundCreatorInput3  = 20,
-  CompoundCreatorInput4  = 21,
-  CompoundCreatorInput5  = 22,
-  CompoundCreatorInput6  = 23,
-  CompoundCreatorInput7  = 24,
-  CompoundCreatorInput8  = 25,
-  CompoundCreatorInput9  = 26,
-  BeaconPayment          = 27,
-  Crafting2x2Input1      = 28,
-  Crafting2x2Input2      = 29,
-  Crafting2x2Input3      = 30,
-  Crafting2x2Input4      = 31,
-  Crafting3x3Input1      = 32,
-  Crafting3x3Input2      = 33,
-  Crafting3x3Input3      = 34,
-  Crafting3x3Input4      = 35,
-  Crafting3x3Input5      = 36,
-  Crafting3x3Input6      = 37,
-  Crafting3x3Input7      = 38,
-  Crafting3x3Input8      = 39,
-  Crafting3x3Input9      = 40,
-  MaterialReducerOutput1 = 41,
-  MaterialReducerOutput2 = 42,
-  MaterialReducerOutput3 = 43,
-  MaterialReducerOutput4 = 44,
-  MaterialReducerOutput5 = 45,
-  MaterialReducerOutput6 = 46,
-  MaterialReducerOutput7 = 47,
-  MaterialReducerOutput8 = 48,
-  MaterialReducerOutput9 = 49,
-  CreatedItemOutput      = 50
+  CursorSelected          = 0,
+  AnvilInput              = 1,
+  AnvilMaterial           = 2,
+  StoneCutterInput        = 3,
+  Trade2Ingredient1       = 4,
+  Trade2Ingredient2       = 5,
+  TradeIngredient1        = 6,
+  TradeIngredient2        = 7,
+  MaterialReducerInput    = 8,
+  LoomInput               = 9,
+  LoomDye                 = 10,
+  LoomMaterial            = 11,
+  CartographyInput        = 12,
+  CartographyAdditional   = 13,
+  EnchantingInput         = 14,
+  EnchantingMaterial      = 15,
+  GrindstoneInput         = 16,
+  GrindstoneAdditional    = 17,
+  CompoundCreatorInput1   = 18,
+  CompoundCreatorInput2   = 19,
+  CompoundCreatorInput3   = 20,
+  CompoundCreatorInput4   = 21,
+  CompoundCreatorInput5   = 22,
+  CompoundCreatorInput6   = 23,
+  CompoundCreatorInput7   = 24,
+  CompoundCreatorInput8   = 25,
+  CompoundCreatorInput9   = 26,
+  BeaconPayment           = 27,
+  Crafting2x2Input1       = 28,
+  Crafting2x2Input2       = 29,
+  Crafting2x2Input3       = 30,
+  Crafting2x2Input4       = 31,
+  Crafting3x3Input1       = 32,
+  Crafting3x3Input2       = 33,
+  Crafting3x3Input3       = 34,
+  Crafting3x3Input4       = 35,
+  Crafting3x3Input5       = 36,
+  Crafting3x3Input6       = 37,
+  Crafting3x3Input7       = 38,
+  Crafting3x3Input8       = 39,
+  Crafting3x3Input9       = 40,
+  MaterialReducerOutput1  = 41,
+  MaterialReducerOutput2  = 42,
+  MaterialReducerOutput3  = 43,
+  MaterialReducerOutput4  = 44,
+  MaterialReducerOutput5  = 45,
+  MaterialReducerOutput6  = 46,
+  MaterialReducerOutput7  = 47,
+  MaterialReducerOutput8  = 48,
+  MaterialReducerOutput9  = 49,
+  CreatedItemOutput       = 50
 };
 
 #ifndef BASEAPI

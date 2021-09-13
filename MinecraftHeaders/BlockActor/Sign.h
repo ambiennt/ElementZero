@@ -10,6 +10,18 @@ class SignBlockActor : public BlockActor {
   char pad[352];
 
 public:
+
+  enum class SignType {
+    Oak                  = 0,
+    Spruce               = 1,
+    Birch                = 2,
+    Jungle               = 3,
+    Acacia               = 4,
+    DarkOak              = 5,
+    RedBigNetherShroom   = 6,
+    BlueBigNetherShroom  = 7
+  };
+
   BUILD_ACCESS_MUT(TextObjectRoot, TextObject, 304);
   BUILD_ACCESS_MUT(std::string, Single, 240);
   BUILD_ACCESS_MUT(std::string, Owner, 208);

@@ -12,6 +12,8 @@
 #include "../Core/Util.h"
 #include "../Core/RelativeFloat.h"
 #include "../Command/CommandPermissionLevel.h"
+//#include "../Item/Item.h"
+//#include "../Block/BlockSource.h"
 #include "../dll.h"
 
 #include <hook.h>
@@ -19,47 +21,135 @@
 
 class Dimension;
 enum class ActorType;
-enum class ActorLocation;
 enum class MaterialType;
 enum class ActorEvent;
 enum class ArmorMaterialType;
 enum class ArmorTextureType;
-enum class LevelSoundEvent;
-enum class PaletteColor;
 enum class ActorDamageCause;
+enum class ItemUseMethod;
+
+enum class ActorLocation {
+  Feet               = 0,
+  Body               = 1,
+  WeaponAttachPoint  = 2,
+  Head               = 3,
+  DropAttachPoint    = 4,
+  ExplosionPoint     = 5,
+  Eyes               = 6,
+  BreathingPoint     = 7,
+  Mouth              = 8
+};
+
+enum class LevelSoundEvent {
+  Undefined             = 0x0,
+  Bubble                = 0x1,
+  BubbleManual          = 0x2,
+  Crit                  = 0x3,
+  BlockForceField       = 0x4,
+  Smoke                 = 0x5,
+  Explode               = 0x6,
+  Evaporation           = 0x7,
+  Flame                 = 0x8,
+  Lava                  = 0x9,
+  LargeSmoke            = 0x0A,
+  RedDust               = 0x0B,
+  RisingBorderDust      = 0x0C,
+  IconCrack             = 0x0D,
+  SnowballPoof          = 0x0E,
+  LargeExplode          = 0x0F,
+  HugeExplosion         = 0x10,
+  MobFlame              = 0x11,
+  Heart                 = 0x12,
+  Terrain               = 0x13,
+  TownAura              = 0x14,
+  Portal                = 0x15,
+  MobPortal             = 0x16,
+  WaterSplash           = 0x17,
+  WaterSplashManual     = 0x18,
+  WaterWake             = 0x19,
+  DripWater             = 0x1A,
+  DripLava              = 0x1B,
+  DripHoney             = 0x1C,
+  FallingDust           = 0x1D,
+  MobSpell              = 0x1E,
+  MobSpellAmbient       = 0x1F,
+  MobSpellInstantaneous = 0x20,
+  Ink                   = 0x21,
+  Slime                 = 0x22,
+  RainSplash            = 0x23,
+  VillagerAngry         = 0x24,
+  VillagerHappy         = 0x25,
+  EnchantingTable       = 0x26,
+  TrackingEmitter       = 0x27,
+  Note                  = 0x28,
+  WitchSpell            = 0x29,
+  CarrotBoost           = 0x2A,
+  MobAppearance         = 0x2B,
+  EndRod                = 0x2C,
+  DragonBreath          = 0x2D,
+  Spit                  = 0x2E,
+  Totem                 = 0x2F,
+  Food                  = 0x30,
+  FireworksStarter      = 0x31,
+  Fireworks             = 0x32,
+  FireworksOverlay      = 0x33,
+  BalloonGas            = 0x34,
+  ColoredFlame          = 0x35,
+  Sparkler              = 0x36,
+  Conduit               = 0x37,
+  BubbleColumnUp        = 0x38,
+  BubbleColumnDown      = 0x39,
+  Sneeze                = 0x3A,
+  ShulkerBullet         = 0x3B,
+  Bleach                = 0x3C,
+  DragonDestroyBlock    = 0x3D,
+  MyceliumDust          = 0x3E,
+  FallingBorderDust     = 0x3F,
+  CampfireSmoke         = 0x40,
+  CampfireSmokeTall     = 0x41,
+  DragonBreathFire      = 0x42,
+  DragonBreathTrail     = 0x43,
+  BlueFlame             = 0x44,
+  Soul                  = 0x45,
+  ObsidianTear          = 0x46,
+  PortalReverse         = 0x47,
+  LevelSoundEventCount  = 0x48
+};
+
+enum class PaletteColor {
+  White              = 0,
+  Orange             = 1,
+  Magenta            = 2,
+  LightBlue          = 3,
+  Yellow             = 4,
+  LightGreen         = 5,
+  Pink               = 6,
+  Gray               = 7,
+  Silver             = 8,
+  Cyan               = 9,
+  Purple             = 10,
+  Blue               = 11,
+  Brown              = 12,
+  Green              = 13,
+  Red                = 14,
+  Black              = 15,
+  PaletteColorCount  = 16
+};
 
 enum class InputMode {
   Undefined           = 0,
   Mouse               = 1,
   Touch               = 2,
   GamePad             = 3,
-  MotionController_0  = 4
-};
-
-enum class ItemUseMethod {
-  Unknown          = -1,
-  EquipArmor       = 0,
-  Eat_1            = 1,
-  Attack_0         = 2,
-  Consume          = 3,
-  Throw_0          = 4,
-  Shoot_0          = 5,
-  Place_0          = 6,
-  FillBottle       = 7,
-  FillBucket       = 8,
-  PourBucket       = 9,
-  UseTool          = 10,
-  Interact         = 11,
-  Retrieved        = 12,
-  Dyed             = 13,
-  Traded           = 14
+  MotionController    = 4
 };
 
 enum class ArmorSlot {
   Head             = 0,
   Torso            = 1,
   Legs             = 2,
-  Feet             = 3
+  Feet             = 3,
+  SlotCount        = 4
 };
 
 enum class ActorFlags {
@@ -81,6 +171,7 @@ enum class ActorFlags {
   CanShowName                 = 14, 
   AlwaysShowName              = 15,
   NoAI                        = 16, //Immobile flag
+  Immobile                    = 16,
   Silent                      = 17,
   WallClimbing                = 18,
   CanClimb                    = 19,
@@ -161,7 +252,16 @@ enum class ActorFlags {
 class Actor {
 
 public:
-  enum class InitializationMethod;
+  enum class InitializationMethod {
+    INVALID          = 0,
+    LOADED           = 1,
+    SPAWNED          = 2,
+    BORN             = 3,
+    TRANSFORMED      = 4,
+    UPDATED          = 5,
+    EVENT            = 6,
+    LEGACY           = 7
+  };
 
   virtual void reloadHardcoded(enum InitializationMethod, class VariantParameterList const &);
   virtual void reloadHardcodedClient(enum InitializationMethod, class VariantParameterList const &);

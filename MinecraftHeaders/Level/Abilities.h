@@ -14,8 +14,21 @@ public:
 
 class Ability {
 public:
-  enum class Type : char { Invalid = 0, Boolean = 1, Float = 2 };
-  enum class Options : char { Unset = 0, Saved = 1, Command = 2, Permission = 4 };
+  enum class Type : char {
+    Invalid  = 0,
+    Unset    = 1,
+    Boolean  = 2,
+    Float    = 3
+  };
+
+  enum class Options : char {
+    None                         = 0,
+    NoSave                       = 1,
+    CommandExposed               = 2,
+    PermissionsInterfaceExposed  = 4,
+    WorldbuilderOverrides        = 8
+  };
+  
   union Value {
     bool val_bool;
     float val_float;
@@ -25,7 +38,7 @@ public:
   };
   Type type = Type::Invalid;
   Value value{};
-  Options opts = Options::Unset;
+  Options opts = Options::None;
 };
 
 class Abilities {

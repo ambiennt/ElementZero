@@ -8,6 +8,91 @@
 
 #include <modutils.h>
 
+enum class BlockRendererLayer {
+  RENDERLAYER_DOUBLE_SIDED                = 0,
+  RENDERLAYER_BLEND                       = 1,
+  RENDERLAYER_OPAQUE                      = 2,
+  RENDERLAYER_OPTIONAL_ALPHATEST          = 3,
+  RENDERLAYER_ALPHATEST                   = 4,
+  RENDERLAYER_SEASONS_OPAQUE              = 5,
+  RENDERLAYER_SEASONS_OPTIONAL_ALPHATEST  = 6,
+  RENDERLAYER_ALPHATEST_SINGLE_SIDE       = 7,
+  RENDERLAYER_ENDPORTAL                   = 8,
+  RENDERLAYER_BARRIER                     = 9,
+  RENDERLAYER_STRUCTURE_VOID              = 10,
+  _RENDERLAYER_COUNT                      = 11
+};
+
+enum class BlockSupportType {
+  Center  = 0,
+  Edge    = 1,
+  Any     = 2
+};
+
+enum class BlockProperty : long long {
+  None                          = 0x0,
+  Stair                         = 0x1,
+  HalfSlab                      = 0x2,
+  Hopper                        = 0x4,
+  TopSnow                       = 0x8,
+  FenceGate                     = 0x10,
+  Leaf                          = 0x20,
+  ThinConnects2D                = 0x40,
+  Connects2D                    = 0x80,
+  Carpet                        = 0x100,
+  Button                        = 0x200,
+  Door                          = 0x400,
+  Portal                        = 0x800,
+  Heavy                         = 0x1000,
+  Snow                          = 0x2000,
+  Trap                          = 0x4000,
+  Sign                          = 0x8000,
+  Walkable                      = 0x10000,
+  PressurePlate                 = 0x20000,
+  PistonBlockGrabber            = 0x40000,
+  TopSolidBlocking              = 0x80000,
+  SolidBlocking                 = 0x100000,
+  CubeShaped                    = 0x200000,
+  Power_NO                      = 0x400000,
+  Power_BlockDown               = 0x800000,
+  Immovable                     = 0x1000000,
+  BreakOnPush                   = 0x2000000,
+  Piston                        = 0x4000000,
+  InfiniBurn                    = 0x8000000,
+  RequiresWorldBuilder          = 0x10000000,
+  CausesDamage                  = 0x20000000,
+  BreaksWhenFallenOnByHeavy     = 0x40000000,
+  OnlyPistonPush                = 0x80000000,
+  Liquid                        = 0x100000000,
+  CanBeBuiltOver                = 0x200000000,
+  SnowRecoverable               = 0x400000000,
+  Scaffolding                   = 0x800000000,
+  CanSupportCenterHangingBlock  = 0x1000000000,
+  BreaksWhenHitByArrow          = 0x2000000000,
+  Unwalkable                    = 0x4000000000,
+  Impenetrable                  = 0x8000000000,
+  Hollow                        = 0x10000000000,
+  OperatorBlock                 = 0x20000000000,
+  SupportedByFlowerPot          = 0x40000000000,
+  PreventsJumping               = 0x80000000000,
+  ContainsHoney                 = 0x100000000000,
+  Slime                         = 0x200000000000 //bit shifting in enums mojang?!?!?
+};
+
+enum class Flip {
+  None             = 0,
+  RotateCW         = 1,
+  RotateCCW        = 2,
+  Rotate180        = 3,
+  MirrorX          = 4,
+  DontRotate       = 5
+};
+
+enum class FertilizerType {
+  Bonemeal         = 0,
+  Rapid            = 1
+};
+
 class BlockLegacy {
 public:
   virtual ~BlockLegacy();

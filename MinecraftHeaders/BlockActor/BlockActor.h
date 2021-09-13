@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../Math/Vec3.h"
+#include "BlockActorType.h"
 #include "../dll.h"
 
 #include <modutils.h>

@@ -8,7 +8,17 @@
 
 class Facing {
 public:
-  enum class Name : unsigned char { Down, Up, North, South, West, East, Unknown };
+  enum class Name : unsigned char {
+    Down             = 0,
+    Up               = 1,
+    North            = 2,
+    South            = 3,
+    West             = 4,
+    East             = 5,
+    Max              = 6,
+    Undefined        = 6,
+    Num_culling_ids  = 7
+  };
 
   struct Plane {
     MCAPI static class std::vector<unsigned char> HORIZONTAL;

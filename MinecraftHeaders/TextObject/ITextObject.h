@@ -5,7 +5,7 @@
 #include "../dll.h"
 
 namespace Json {
-class Value;
+  class Value;
 }
 
 class ITextObject {

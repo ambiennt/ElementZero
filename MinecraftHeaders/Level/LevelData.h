@@ -144,7 +144,7 @@ public:
     if (auto value = extractValue<GeneratorType>(LevelDataKeys::GENERATOR))
       return *value;
     else
-      return GeneratorType::Normal;
+      return GeneratorType::Overworld;
   }
   inline void setWorldGenerator(GeneratorType seed) { setValue(LevelDataKeys::SEED, seed); }
 
