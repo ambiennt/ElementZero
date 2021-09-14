@@ -242,3 +242,5 @@ public:
   MCAPI static class WeakPtr<class Item> mExperiencePotionItem;
   MCAPI static class WeakPtr<class Item> mFermented_spider_eye;
 };
+
+//TODO: add 1.16 items

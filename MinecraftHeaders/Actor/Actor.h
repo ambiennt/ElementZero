@@ -12,6 +12,7 @@
 #include "../Core/Util.h"
 #include "../Core/RelativeFloat.h"
 #include "../Command/CommandPermissionLevel.h"
+#include "../Level/Level.h"
 //#include "../Item/Item.h"
 //#include "../Block/BlockSource.h"
 #include "../dll.h"
@@ -27,6 +28,7 @@ enum class ArmorMaterialType;
 enum class ArmorTextureType;
 enum class ActorDamageCause;
 enum class ItemUseMethod;
+enum class LevelSoundEvent;
 
 enum class ActorLocation {
   Feet               = 0,
@@ -38,82 +40,6 @@ enum class ActorLocation {
   Eyes               = 6,
   BreathingPoint     = 7,
   Mouth              = 8
-};
-
-enum class LevelSoundEvent {
-  Undefined             = 0x0,
-  Bubble                = 0x1,
-  BubbleManual          = 0x2,
-  Crit                  = 0x3,
-  BlockForceField       = 0x4,
-  Smoke                 = 0x5,
-  Explode               = 0x6,
-  Evaporation           = 0x7,
-  Flame                 = 0x8,
-  Lava                  = 0x9,
-  LargeSmoke            = 0x0A,
-  RedDust               = 0x0B,
-  RisingBorderDust      = 0x0C,
-  IconCrack             = 0x0D,
-  SnowballPoof          = 0x0E,
-  LargeExplode          = 0x0F,
-  HugeExplosion         = 0x10,
-  MobFlame              = 0x11,
-  Heart                 = 0x12,
-  Terrain               = 0x13,
-  TownAura              = 0x14,
-  Portal                = 0x15,
-  MobPortal             = 0x16,
-  WaterSplash           = 0x17,
-  WaterSplashManual     = 0x18,
-  WaterWake             = 0x19,
-  DripWater             = 0x1A,
-  DripLava              = 0x1B,
-  DripHoney             = 0x1C,
-  FallingDust           = 0x1D,
-  MobSpell              = 0x1E,
-  MobSpellAmbient       = 0x1F,
-  MobSpellInstantaneous = 0x20,
-  Ink                   = 0x21,
-  Slime                 = 0x22,
-  RainSplash            = 0x23,
-  VillagerAngry         = 0x24,
-  VillagerHappy         = 0x25,
-  EnchantingTable       = 0x26,
-  TrackingEmitter       = 0x27,
-  Note                  = 0x28,
-  WitchSpell            = 0x29,
-  CarrotBoost           = 0x2A,
-  MobAppearance         = 0x2B,
-  EndRod                = 0x2C,
-  DragonBreath          = 0x2D,
-  Spit                  = 0x2E,
-  Totem                 = 0x2F,
-  Food                  = 0x30,
-  FireworksStarter      = 0x31,
-  Fireworks             = 0x32,
-  FireworksOverlay      = 0x33,
-  BalloonGas            = 0x34,
-  ColoredFlame          = 0x35,
-  Sparkler              = 0x36,
-  Conduit               = 0x37,
-  BubbleColumnUp        = 0x38,
-  BubbleColumnDown      = 0x39,
-  Sneeze                = 0x3A,
-  ShulkerBullet         = 0x3B,
-  Bleach                = 0x3C,
-  DragonDestroyBlock    = 0x3D,
-  MyceliumDust          = 0x3E,
-  FallingBorderDust     = 0x3F,
-  CampfireSmoke         = 0x40,
-  CampfireSmokeTall     = 0x41,
-  DragonBreathFire      = 0x42,
-  DragonBreathTrail     = 0x43,
-  BlueFlame             = 0x44,
-  Soul                  = 0x45,
-  ObsidianTear          = 0x46,
-  PortalReverse         = 0x47,
-  LevelSoundEventCount  = 0x48
 };
 
 enum class PaletteColor {

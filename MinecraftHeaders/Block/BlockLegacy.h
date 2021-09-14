@@ -29,7 +29,7 @@ enum class BlockSupportType {
   Any     = 2
 };
 
-enum class BlockProperty : long long {
+enum class BlockProperty : long long { //bit shifting in enums mojang?!?!?
   None                          = 0x0,
   Stair                         = 0x1,
   HalfSlab                      = 0x2,
@@ -76,7 +76,10 @@ enum class BlockProperty : long long {
   SupportedByFlowerPot          = 0x40000000000,
   PreventsJumping               = 0x80000000000,
   ContainsHoney                 = 0x100000000000,
-  Slime                         = 0x200000000000 //bit shifting in enums mojang?!?!?
+  Slime                         = 0x200000000000,
+  IrregularShapedPathable       = 0x400000000000,  // unverified
+  Climbable                     = 0x800000000000,  // unverified
+  CanHaltWhenClimbing           = 0x1000000000000  // unverified
 };
 
 enum class Flip {

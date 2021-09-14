@@ -4,6 +4,28 @@
 
 #include <bitset>
 
+
+enum class EquipmentSlot {
+  None                = -1,
+  Begin               = 0,
+  HandSlot            = 0,
+  Mainhand            = 0,
+  Offhand             = 1,
+  ArmorSlot           = 2,
+  Head                = 2,
+  Torso               = 3,
+  Legs                = 4,
+  Feet                = 5,
+  ContainerSlot       = 6,
+  Hotbar              = 6,
+  Inventory           = 7,
+  EnderChest          = 8,
+  Saddle              = 9,
+  EntityArmor         = 10,
+  Chest               = 11,
+  EquipmentSlotCount  = 12
+};
+
 class Mob : public Actor {
 public:
 

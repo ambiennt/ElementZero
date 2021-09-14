@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Item/NetworkItemStackDescriptor.h"
 #include "../Item/ItemStack.h"
 #include "../Core/ContainerID.h"
 #include "../Core/Packet.h"

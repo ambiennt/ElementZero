@@ -9,7 +9,12 @@
 
 class IdentityDefinition {
 public:
-  enum class Type : char { Invalid = 0, Player = 1, Actor = 2, Fake = 3 };
+  enum class Type : char {
+    Invalid  = 0,
+    Player   = 1,
+    Actor    = 2,
+    Fake     = 3
+  };
 
   ScoreboardId id;
   bool hidden_fake_player_type;

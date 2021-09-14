@@ -64,7 +64,7 @@ enum class MinecraftPacketIds {
 	ChangeDimension                    = 0x3d,
 	SetPlayerGameType                  = 0x3e,
 	PlayerList                         = 0x3f,
-	SimpleEvent						   = 0x40,
+	SimpleEvent                        = 0x40,
 	Event                              = 0x41,
 	SpawnExperienceOrb                 = 0x42,
 	ClientboundMapItemData             = 0x43,

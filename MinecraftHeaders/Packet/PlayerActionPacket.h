@@ -19,13 +19,13 @@ enum class PlayerActionType : unsigned {
   STOP_SPRINT              = 10,
   START_SNEAK              = 11,
   STOP_SNEAK               = 12,
-  DIMENSION_CHANGE_REQUEST = 13,
-  DIMENSION_CHANGE_ACK     = 14,
+  DIMENSION_CHANGE_REQUEST = 13, //deprecated
+  DIMENSION_CHANGE_ACK     = 14, //acknowledgement
   START_GLIDE              = 15,
   STOP_GLIDE               = 16,
   BUILD_DENIED             = 17,
   CONTINUE_BREAK           = 18,
-  UNK19                    = 19,
+  CHANGE_SKIN              = 19,
   SET_ENCHANTMENT_SEED     = 20,
   START_SWIMMING           = 21,
   STOP_SWIMMING            = 22,

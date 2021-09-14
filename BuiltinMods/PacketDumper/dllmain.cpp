@@ -59,7 +59,7 @@ TInstanceHook(
     "std@@V?$allocator@D@2@@std@@@Z",
     NetworkHandler::Connection, std::string &data) {
   auto status = original(this, data);
-  if (status == NetworkPeer::DataStatus::OK && database) LogPacket(false, id, data);
+  if (status == NetworkPeer::DataStatus::HasData && database) LogPacket(false, id, data);
   return status;
 }
 
