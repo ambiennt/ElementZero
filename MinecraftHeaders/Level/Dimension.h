@@ -8,6 +8,7 @@
 #include "../Core/AutomaticID.h"
 #include "LevelListener.h"
 #include "SavedData.h"
+#include "../dll.h"
 
 class Dimension : public LevelListener, public SavedData {
 public:
@@ -18,6 +19,8 @@ public:
 
   BUILD_ACCESS(Id, DimensionId, 192);
 
+  MCAPI void sendPacketForEntity(class Actor const&, class Packet const&, class Player const*);
+  
   virtual ~Dimension();
   virtual void init(void);
   virtual void tick(void);

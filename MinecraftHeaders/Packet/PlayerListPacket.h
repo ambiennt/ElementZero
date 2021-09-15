@@ -25,7 +25,23 @@ public:
   ActorUniqueID uid;
   mce::UUID uuid;
   std::string name, xuid, platform_online_id;
-  enum BuildPlatform platform;
+
+  enum struct BuildPlatform : int {
+    Unknown          = -1,
+    Google           = 1,
+    iOS              = 2,
+    OSX              = 3,
+    Amazon           = 4,
+    GearVR           = 5,
+    UWP              = 7,
+    Win32            = 8,
+    Dedicated        = 9,  // bds
+    PS4              = 10, // orbis
+    Nx               = 11,
+    Xbox             = 12,
+    WindowsPhone     = 13
+  } platform;
+
   SerializedSkin skin;
   bool teacher, host;
 
@@ -34,4 +50,7 @@ public:
   MCAPI StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-enum PlayerListPacketType { Add, Remove };
+enum PlayerListPacketType {
+  Add     = 0,
+  Remove  = 1
+};

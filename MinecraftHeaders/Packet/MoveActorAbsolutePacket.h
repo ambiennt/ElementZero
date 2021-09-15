@@ -9,8 +9,8 @@ class MoveActorAbsolutePacket : public Packet {
 public:
 
   enum struct Flags : uint8_t { 
-    GROUND = 0x01, 
-    TELEPORT = 0x02, 
+    GROUND     = 0x01,
+    TELEPORT   = 0x02,
     FORCE_MOVE = 0x04
   };
 

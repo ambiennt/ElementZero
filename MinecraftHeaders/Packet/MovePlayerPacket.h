@@ -14,6 +14,7 @@ class MovePlayerPacket : public Packet {
         bool onGround;                          // 0x49
         ActorRuntimeID ridingActorId;           // 0x50
         int teleportCause;                      // 0x58
+        int sourceEntityType;                   // 0x5C
 
         inline ~MovePlayerPacket() {}
         MCAPI virtual MinecraftPacketIds getId() const;
@@ -31,3 +32,4 @@ static_assert(offsetof(MovePlayerPacket, mode) == 72);
 static_assert(offsetof(MovePlayerPacket, onGround) == 73);
 static_assert(offsetof(MovePlayerPacket, ridingActorId) == 80);
 static_assert(offsetof(MovePlayerPacket, teleportCause) == 88);
+static_assert(offsetof(MovePlayerPacket, sourceEntityType) == 92);

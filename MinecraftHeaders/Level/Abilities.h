@@ -4,12 +4,12 @@
 #include <array>
 
 #include "../Command/CommandPermissionLevel.h"
-#include "PlayerPermissions.h"
+#include "PlayerPermissionLevel.h"
 
 class PermissionsHandler {
 public:
   CommandPermissionLevel mCommandPermissionsLevel;
-  PlayerPermissions mPlayerPermissions;
+  PlayerPermissionLevel mPlayerPermissions;
 };
 
 class Ability {

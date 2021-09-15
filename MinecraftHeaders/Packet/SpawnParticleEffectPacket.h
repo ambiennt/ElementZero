@@ -2,8 +2,8 @@
 
 #include "../Core/Packet.h"
 #include "../Actor/ActorRuntimeID.h"
-#include "../dll.h"
 #include "../Math/Vec3.h"
+#include "../dll.h"
 
 class SpawnParticleEffectPacket : public Packet {
 public:

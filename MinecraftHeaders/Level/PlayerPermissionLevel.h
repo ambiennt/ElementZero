@@ -1,6 +1,6 @@
 #pragma once
 
-enum class PlayerPermissions : unsigned char { //PlayerPermissionLevel
+enum class PlayerPermissionLevel : unsigned char {
   Visitor  = 0,
   Member   = 1,
   Operator = 2,

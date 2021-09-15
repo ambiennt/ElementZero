@@ -34,7 +34,7 @@ public:
   } trusted_flag;
 
   std::vector<SerializedPersonaPieceHandle> appearance;
-  std::string appearance_name;
+  std::string arm_size;
   std::unordered_map<PieceType, TintMapColor> colormap;
   Color skin_color;
 
@@ -93,6 +93,6 @@ static_assert(offsetof(SerializedSkin, persona_skin) == 313);
 static_assert(offsetof(SerializedSkin, cape_on_classic_skin) == 314);
 static_assert(offsetof(SerializedSkin, trusted_flag) == 315);
 static_assert(offsetof(SerializedSkin, appearance) == 320);
-static_assert(offsetof(SerializedSkin, appearance_name) == 344);
+static_assert(offsetof(SerializedSkin, arm_size) == 344);
 static_assert(offsetof(SerializedSkin, colormap) == 376);
 static_assert(offsetof(SerializedSkin, skin_color) == 440);

@@ -2,12 +2,13 @@
 
 #include "../Core/Packet.h"
 #include "../Core/NBT.h"
+#include "../Math/NetworkBlockPosition.h"
 #include "../Math/BlockPos.h"
 #include "../dll.h"
 
 class BlockActorDataPacket : public Packet {
 public:
-  BlockPos pos;
+  BlockPos pos; // NetworkBlockPosition
   CompoundTag tag;
 
   inline ~BlockActorDataPacket() {}

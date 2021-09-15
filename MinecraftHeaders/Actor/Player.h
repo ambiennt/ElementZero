@@ -141,6 +141,13 @@ public:
     return const_cast<ServerPlayer *>(reinterpret_cast<ServerPlayer const *>(this));
   }
 
+  enum class PositionMode : unsigned char {
+    Normal       = 0,
+    Respawn      = 1,
+    Teleport     = 2,
+    OnlyHeadRot  = 3
+  };
+
   virtual void prepareRegion(class ChunkSource &);
   virtual void destroyRegion(void);
   virtual void suspendRegion(void);

@@ -1,6 +1,6 @@
 #pragma once
 
-enum class CommandPermissionLevel : char {
+enum class CommandPermissionLevel : unsigned char {
   Any         = 0,
   GameMasters = 1,
   Admin       = 2,
