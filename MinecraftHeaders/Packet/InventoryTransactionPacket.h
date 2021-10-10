@@ -41,14 +41,17 @@ enum class InventorySourceType {
   WorldInteraction       = 2,
   Creative               = 3,
   UntrackedInteractionUI = 100,
-  NONIMPLEMENTEDTODO     = 99999
+  NONIMPLEMENTEDTODO     = 99999 // .give
 };
 
 class InventorySource {
 public:
   InventorySourceType type = InventorySourceType::Invalid;
   ContainerID container    = ContainerID::Invalid;
-  enum class InventorySourceFlags { DropItem, PickupItem, None } flags;
+  enum class InventorySourceFlags {
+    NoFlag                   = 0,
+    WorldInteraction_Random  = 1
+  } flags;
 
   inline InventorySource(ContainerID id) : container(id) {}
   inline InventorySource(InventorySourceType type) : type(type) {}

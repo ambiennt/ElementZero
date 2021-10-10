@@ -123,7 +123,7 @@ public:
     AutomaticID<class Dimension, int> dim = VanillaDimensions::Undefined;
 
     inline PlayerSpawnPoint()        = default;
-    inline PlayerSpawnPoint &operator = (PlayerSpawnPoint &&) = default;
+    inline PlayerSpawnPoint &operator=(PlayerSpawnPoint &&) = default;
     inline bool hasSpawnPoint() const { return spawn_block != BlockPos::MIN && dim != VanillaDimensions::Undefined; }
     inline void invalidate() { *this = {}; }
     inline bool isValid() const { return dim != VanillaDimensions::Undefined; }
