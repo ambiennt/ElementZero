@@ -72,7 +72,7 @@ public:
 };
 
 enum ImageFormat { NONE, RGB, RGBA };
-enum ImageUsage : char {};
+enum ImageUsage : char { unknown, sRGB, data };
 
 inline unsigned numChannels(ImageFormat format) {
   switch (format) {

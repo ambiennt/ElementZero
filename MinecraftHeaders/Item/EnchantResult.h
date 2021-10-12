@@ -16,4 +16,6 @@ struct EnchantResult {
   int level;
 };
 
-static_assert(sizeof(EnchantResult) == 24);
+static_assert(offsetof(EnchantIdx) == 0x8);
+static_assert(offsetof(level) == 0x10);
+static_assert(sizeof(EnchantResult) == 0x18);

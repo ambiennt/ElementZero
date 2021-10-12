@@ -137,7 +137,7 @@ enum class MinecraftPacketIds {
 	ClientCacheBlobStatus              = 0x87,
 	ClientCacheMissResponse            = 0x88,
 	EducationSettings                  = 0x89,
-	EmoteList                          = 0x8a,
+	Emote                              = 0x8a,
 	MultiplayerSettings                = 0x8b,
 	SettingsCommand                    = 0x8c,
 	AnvilDamage                        = 0x8d,
@@ -177,4 +177,4 @@ enum class MinecraftPacketIds {
 	CreatePhotoPacket                  = 0xab,
 	UpdateSubChunkBlocks               = 0xac,
 	PhotoInfoRequest                   = 0xad,*/
-}
+};

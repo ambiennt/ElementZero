@@ -26,14 +26,14 @@ private:
 class ValueConstIterator;
 class ValueIterator;
 enum ValueType : char {
-  nullValue = 0, ///< 'null' value
-  intValue,      ///< signed integer value
-  uintValue,     ///< unsigned integer value
-  realValue,     ///< double value
-  stringValue,   ///< UTF-8 string value
-  booleanValue,  ///< bool value
-  arrayValue,    ///< array value (ordered list)
-  objectValue    ///< object value (collection of name/value pairs).
+  nullValue     = 0, ///< 'null' value
+  intValue      = 1, ///< signed integer value
+  uintValue     = 2, ///< unsigned integer value
+  realValue     = 3, ///< double value
+  stringValue   = 4, ///< UTF-8 string value
+  booleanValue  = 5, ///< bool value
+  arrayValue    = 6, ///< array value (ordered list)
+  objectValue   = 7  ///< object value (collection of name/value pairs).
 };
 
 using UInt        = unsigned;
@@ -45,11 +45,10 @@ using LargestUInt = UInt64;
 using ArrayIndex  = unsigned;
 
 enum CommentPlacement {
-  commentBefore = 0,      ///< a comment placed on the line before a value
-  commentAfterOnSameLine, ///< a comment just after a value on the same line
-  commentAfter,           ///< a comment on the line after a value (only make sense for
-  /// root value)
-  numberOfCommentPlacement
+  commentBefore            = 0, ///< a comment placed on the line before a value
+  commentAfterOnSameLine   = 1, ///< a comment just after a value on the same line
+  commentAfter             = 2, ///< a comment on the line after a value (only make sense for root value)
+  numberOfCommentPlacement = 3
 };
 
 class Value {
