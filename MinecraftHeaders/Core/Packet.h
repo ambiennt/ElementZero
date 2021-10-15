@@ -31,7 +31,7 @@ class ReadOnlyBinaryStream;
 
 class Packet {
 public:
-  unsigned priority              = 2; // PacketPriority::MEDIUM_PRIORITY
+  PacketPriority priority        = PacketPriority::MEDIUM_PRIORITY;
   PacketReliability reliability  = PacketReliability::RELIABLE_ORDERED;
   unsigned char clientSubId      = 0;
   uint64_t handler               = 0;

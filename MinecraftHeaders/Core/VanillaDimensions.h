@@ -21,3 +21,5 @@ struct VanillaDimensions {
   MCAPI static AutomaticID<Dimension, int> fromString(std::string const &);
   MCAPI static std::string toString(class AutomaticID<class Dimension, int> const &);
 };
+
+static_assert(sizeof(DimensionConversionData) == 0x10);

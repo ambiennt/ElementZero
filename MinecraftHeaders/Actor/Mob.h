@@ -29,10 +29,13 @@ enum class EquipmentSlot {
 class Mob : public Actor {
 public:
 
-  inline void sendInventory(bool a0) const {
-    return CallServerClassMethod<void>("?sendInventory@Mob@@UEAAX_N@Z", this, a0);
-  }
-
+  enum class TravelType {
+    Water  = 0,
+    Lava   = 1,
+    Ground = 2,
+    Air    = 3
+  };
+  
   virtual void knockback(class Actor *, int, float, float, float, float, float);
   virtual void resolveDeathLoot(int, class ActorDamageSource const &);
   virtual void spawnAnim();
@@ -125,13 +128,6 @@ public:
   virtual void updateGliding(void);
   virtual bool _allowAscendingScaffolding(void) const;
 
-  enum class TravelType {
-    Water  = 0,
-    Lava   = 1,
-    Ground = 2,
-    Air    = 3
-  };
-
   void frostWalk(void);
   int getCaravanSize(void) const;
   void setEatCounter(int);
@@ -143,4 +139,8 @@ public:
   enum TravelType getTravelType(void);
   float calcMoveRelativeSpeed(enum TravelType);
   bool checkTotemDeathProtection(class ActorDamageSource const &);
+
+  inline void sendInventory(bool shouldSelectSlot) const {
+    return CallServerClassMethod<void>("?sendInventory@Mob@@UEAAX_N@Z", this, shouldSelectSlot);
+  }
 };

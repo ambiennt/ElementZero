@@ -9,14 +9,14 @@
 class NetworkPeer {
 public:
 
-  enum class Reliability : int {
+  enum class Reliability {
     Reliable             = 0,
     ReliableOrdered      = 1,
     Unreliable           = 2,
     UnreliableSequenced  = 3
   };
 
-  enum class DataStatus : int {
+  enum class DataStatus {
     HasData     = 0,
     NoData      = 1,
     BrokenData  = 2

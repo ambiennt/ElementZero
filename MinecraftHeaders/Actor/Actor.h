@@ -13,8 +13,6 @@
 #include "../Core/RelativeFloat.h"
 #include "../Command/CommandPermissionLevel.h"
 #include "../Level/Level.h"
-//#include "../Item/Item.h"
-//#include "../Block/BlockSource.h"
 #include "../dll.h"
 
 #include <hook.h>
@@ -350,7 +348,7 @@ public:
   virtual void loadLinks(class CompoundTag const &, std::vector<struct ActorLink> &, class DataLoadHelper &);
   virtual enum ActorType getEntityTypeId(void) const;
   virtual class HashedString const &queryEntityRenderer(void) const;
-  virtual ActorUniqueID getSourceUniqueID() const;
+  virtual struct ActorUniqueID getSourceUniqueID() const;
   virtual void setOnFire(int);
   virtual class AABB getHandleWaterAABB(void) const;
   virtual void handleInsidePortal(class BlockPos const &);
@@ -359,7 +357,7 @@ public:
   virtual class AutomaticID<class Dimension, int> getDimensionId(void) const;
   virtual bool canChangeDimensions() const;
   virtual void changeDimension(class AutomaticID<class Dimension, int>, bool);
-  virtual void changeDimension(class ChangeDimensionRequest const &);
+  virtual void changeDimension(class ChangeDimensionPacket const &);
   virtual struct ActorUniqueID getControllingPlayer(void) const;
   virtual void checkFallDamage(float, bool);
   virtual void causeFallDamage(float);

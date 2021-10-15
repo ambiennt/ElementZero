@@ -33,7 +33,7 @@ public:
   Abilities abilities;
   std::string device_id;
   int build_platform          = 0;
-  SynchedActorData *syncedata = nullptr;
+  SynchedActorData *synched_data = nullptr;
 
   inline ~AddPlayerPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

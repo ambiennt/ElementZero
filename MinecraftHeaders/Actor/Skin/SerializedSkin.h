@@ -26,16 +26,11 @@ public:
   Json::Value geometry_data, geometry_data_mutable;
   std::string animation_data, cape_id;
   bool premium_skin, persona_skin, cape_on_classic_skin;
-  std::vector<SerializedPersonaPieceHandle> appearance;
+  std::vector<SerializedPersonaPieceHandle> persona_pieces;
   std::string arm_size;
-  std::unordered_map<PieceType, TintMapColor> colormap;
+  std::unordered_map<PieceType, TintMapColor> piece_tint_colors;
   Color skin_color;
-  
-  enum struct TrustedFlag : char {
-    UNSET  = 0,
-    NO     = 1,
-    YES    = 2
-  } trusted_flag;
+  enum struct TrustedFlag : char { UNSET, NO, YES } trusted_flag;
 
 #pragma region methods
   MCAPI SerializedSkin();
@@ -90,8 +85,9 @@ public:
 static_assert(offsetof(SerializedSkin, premium_skin) == 0x138);
 static_assert(offsetof(SerializedSkin, persona_skin) == 0x139);
 static_assert(offsetof(SerializedSkin, cape_on_classic_skin) == 0x13A);
-static_assert(offsetof(SerializedSkin, appearance) == 0x140);
+static_assert(offsetof(SerializedSkin, persona_pieces) == 0x140);
 static_assert(offsetof(SerializedSkin, arm_size) == 0x158);
-static_assert(offsetof(SerializedSkin, colormap) == 0x178);
+static_assert(offsetof(SerializedSkin, piece_tint_colors) == 0x178);
 static_assert(offsetof(SerializedSkin, skin_color) == 0x1B8);
 static_assert(offsetof(SerializedSkin, trusted_flag) == 0x1C8);
+static_assert(sizeof(SerializedSkin) == 0x1D0);

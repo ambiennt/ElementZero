@@ -191,8 +191,7 @@ public:
   virtual void displayClientMessage(std::string const &);
   virtual void displayTextObjectMessage(class TextObjectRoot const &);
   virtual void displayTextObjectWhisperMessage(class TextObjectRoot const &, std::string const &, std::string const &);
-  virtual void
-  displayWhisperMessage(std::string const &, std::string const &, std::string const &, std::string const &);
+  virtual void displayWhisperMessage(std::string const &, std::string const &, std::string const &, std::string const &);
   virtual enum BedSleepingResult startSleepInBed(class BlockPos const &);
   virtual void stopSleepInBed(bool, bool);
   virtual bool canStartSleepInBed(void);
@@ -215,8 +214,7 @@ public:
   virtual void addExperience(int);
   virtual void addLevels(int);
   virtual void setContainerData(class IContainerManager &, int, int);
-  virtual void slotChanged(
-      class IContainerManager &, class Container &, int, class ItemStack const &, class ItemStack const &, bool);
+  virtual void slotChanged(class IContainerManager &, class Container &, int, class ItemStack const &, class ItemStack const &, bool);
   virtual void inventoryChanged(class Container &, int, class ItemStack const &, class ItemStack const &, bool);
   virtual void refreshContainer(class IContainerManager &);
   virtual void deleteContainerManager(void);
@@ -282,6 +280,12 @@ public:
   bool checkNeedAutoJump(float, float);
   void clearRespawnPosition(void);
   void recheckSpawnPosition(void);
+
+  inline class ItemStack const& getPlayerUIItem() {
+    return CallServerClassMethod<class ItemStack const&>(
+      "?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
+  }
+
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
   BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);

@@ -9,7 +9,7 @@ class NetworkIdentifierWithSubId;
 
 class PacketSender {
 public:
-  unsigned char flag;
+  unsigned char senderSubId;
 
   virtual ~PacketSender() {}
   virtual void send(Packet &)                                                                = 0;
