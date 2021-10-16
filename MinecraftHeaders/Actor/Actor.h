@@ -187,13 +187,13 @@ public:
     LEGACY           = 7
   };
 
+  virtual bool hasComponent(class HashedString const &) const;
   virtual void reloadHardcoded(enum InitializationMethod, class VariantParameterList const &);
   virtual void reloadHardcodedClient(enum InitializationMethod, class VariantParameterList const &);
   virtual void initializeComponents(enum InitializationMethod, class VariantParameterList const &);
   virtual void reloadComponents(enum InitializationMethod, class VariantParameterList const &);
   virtual void _serverInitItemStackIds(void);
   virtual void _doInitialMove(void);
-  virtual bool hasComponent(class HashedString const &) const;
   virtual ~Actor();
   virtual void reset(void);
   virtual int getOnDeathExperience(void);
@@ -586,6 +586,10 @@ public:
         "?teleport@TeleportCommand@@SAXAEAVActor@@VVec3@@PEAV3@V?$AutomaticID@VDimension@@H@@VRelativeFloat@@"
         "4HAEBUActorUniqueID@@@Z",
         this, target, &old, dim, yaw, pitch, flag, &id);
+  }
+
+  inline ItemStack* getOffhandSlot() const {
+    return CallServerClassMethod<ItemStack*>("?getOffhandSlot@Actor@@QEBAAEBVItemStack@@XZ", this);
   }
 
   AS_FIELD(ActorRuntimeID, RuntimeID, getRuntimeID);

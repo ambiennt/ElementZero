@@ -6,9 +6,9 @@
 
 class PlayerHotbarPacket : public Packet {
 public:
-  int slot = 0;
-  ContainerID container = ContainerID::Invalid;
+  unsigned int slot = 0;
   bool selected = false;
+  ContainerID container_id = ContainerID::Invalid;
 
   inline ~PlayerHotbarPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

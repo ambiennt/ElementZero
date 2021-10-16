@@ -24,3 +24,5 @@ public:
   MCAPI virtual void write(BinaryStream &) const;
   MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
+
+static_assert(sizeof(CraftingEventPacket) == 0x48);

@@ -7,16 +7,18 @@
 
 class InventorySlotPacket : public Packet {
 public:
-    char container = 0;
+    ContainerID container_id = ContainerID::Invalid;
     unsigned int slot = 0;
-    ItemStack itemStack;
+    ItemStack item;
 
     inline ~InventorySlotPacket() {}
 
-    MCAPI InventorySlotPacket(enum ContainerID containerId, unsigned int slot, ItemStack const &itemStack);
+    MCAPI InventorySlotPacket(enum ContainerID container_id, unsigned int slot, ItemStack const &item);
 
     MCAPI virtual MinecraftPacketIds getId() const;
     MCAPI virtual std::string getName() const;
     MCAPI virtual void write(BinaryStream &) const;
     MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
+
+static_assert(sizeof(InventorySlotPacket) == 0xC0);

@@ -3,9 +3,8 @@
 #include "../Core/Packet.h"
 #include "../Core/AutomaticID.h"
 #include "../Math/Vec3.h"
+#include "../Level/Dimension.h"
 #include "../dll.h"
-
-class Dimension;
 
 class ChangeDimensionPacket : public Packet {
 public:

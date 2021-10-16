@@ -1,10 +1,10 @@
 #pragma once
 
 enum class BlockFace : unsigned char {
-  Down,
-  Up,
-  North,
-  South,
-  West,
-  East,
+  Down   = 0,
+  Up     = 1,
+  North  = 2,
+  South  = 3,
+  West   = 4,
+  East   = 5
 };

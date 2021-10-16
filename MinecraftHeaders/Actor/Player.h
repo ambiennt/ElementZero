@@ -22,7 +22,6 @@ class ServerPlayer;
 class NetworkIdentifier;
 class Dimension;
 enum class StructureFeatureType;
-enum class BedSleepingResult;
 enum class GameType;
 enum class CooldownType;
 enum class ClientPlayMode;

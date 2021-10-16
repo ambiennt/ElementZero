@@ -242,7 +242,7 @@ public:
   virtual bool isSameItem(class ItemStackBase const &, class ItemStackBase const &) const;
   virtual std::string getInteractText(class Player const &) const;
   virtual int getAnimationFrameFor(class Mob *, bool, class ItemStack const *, bool) const;
-  virtual class Brightness getLightEmission(int) const ;
+  virtual struct Brightness getLightEmission(int) const;
   virtual struct TextureUVCoordinateSet const &getIcon(class ItemStackBase const &, int, bool) const;
   virtual int getIconYOffset() const;
   virtual class Item &setIcon(std::string const &, int);

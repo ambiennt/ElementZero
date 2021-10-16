@@ -11,33 +11,27 @@ enum class PacketPriority : unsigned int {
   NUMBER_OF_PRIORITIES  = 4
 };
 
-enum class PacketReliability {
-  UNRELIABLE                         = 0,
-  UNRELIABLE_SEQUENCED               = 1,
-  RELIABLE                           = 2,
-  RELIABLE_ORDERED                   = 3,
-  RELIABLE_SEQUENCED                 = 4,
-  UNRELIABLE_WITH_ACK_RECEIPT        = 5,
-  RELIABLE_WITH_ACK_RECEIPT          = 6,
-  RELIABLE_ORDERED_WITH_ACK_RECEIPT  = 7,
-  NUMBER_OF_RELIABILITIES            = 8
+enum class Compressibility : unsigned int {
+  Compressible    = 0,
+  Incompressible  = 1
 };
 
-enum class StreamReadResult {};
-enum class ExtendedStreamReadResult {};
-enum class MinecraftPacketIds {};
+enum class MinecraftPacketIds;
+enum class StreamReadResult;
+enum class ExtendedStreamReadResult;
+enum class MinecraftPacketIds;
 class BinaryStream;
 class ReadOnlyBinaryStream;
 
 class Packet {
 public:
-  PacketPriority priority        = PacketPriority::MEDIUM_PRIORITY;
-  PacketReliability reliability  = PacketReliability::RELIABLE_ORDERED;
-  unsigned char clientSubId      = 0;
-  uint64_t handler               = 0;
-  unsigned incompressible        = 0;
+  PacketPriority priority     = PacketPriority::MEDIUM_PRIORITY;
+  int reliability             = 1; // NetworkPeer::Reliability
+  unsigned char clientSubId   = 0;
+  int64_t handler             = 0;
+  unsigned int compress_type  = 0; // Compressibility::Compressible
 
-  inline Packet(unsigned compress) : incompressible(!compress) {}
+  inline Packet(unsigned int compress) : compress_type(!compress) {}
   inline Packet() {}
   inline virtual ~Packet() {}
   virtual MinecraftPacketIds getId() const              = 0;
@@ -54,5 +48,5 @@ static_assert(offsetof(Packet, priority) == 0x8);
 static_assert(offsetof(Packet, reliability) == 0xC);
 static_assert(offsetof(Packet, clientSubId) == 0x10);
 static_assert(offsetof(Packet, handler) == 0x18);
-static_assert(offsetof(Packet, incompressible) == 0x20);
+static_assert(offsetof(Packet, compress_type) == 0x20);
 static_assert(sizeof(Packet) == 0x28);

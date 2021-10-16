@@ -21,27 +21,28 @@ class ItemDescriptor;
 class Container {
 public:
   ContainerType type;
-  std::unordered_set<ContainerContentChangeListener *> content_change_listeners; // 16
-  std::unordered_set<ContainerSizeChangeListener *> content_size_listeners;      // 80
-  std::deque<std::function<void(Container &, int, ItemStack const &, ItemStack const &)>> transcations;
+  std::unordered_set<ContainerContentChangeListener *> content_change_listeners;
+  std::unordered_set<ContainerSizeChangeListener *> content_size_listeners;
+  std::deque<std::function<void(Container &, int, ItemStack const &, ItemStack const &)>> transactions;
   std::string custom_name;
   bool has_custom_name;
+  //SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0> container_runtime_id;
 
   MCAPI Container(ContainerType);
   virtual ~Container();
   virtual void init();
-  virtual void serverInitItemStackIds(int, int, std::function<void(int, class ItemStack const &)>);
-  virtual void addContentChangeListener(class ContainerContentChangeListener *);
-  virtual void removeContentChangeListener(class ContainerContentChangeListener *);
+  virtual void serverInitItemStackIds(int, int, std::function<void(int, ItemStack const &)>);
+  virtual void addContentChangeListener(ContainerContentChangeListener *);
+  virtual void removeContentChangeListener(ContainerContentChangeListener *);
   virtual class ItemStack const &getItem(int) const;
-  virtual bool hasRoomForItem(class ItemStack const &);
-  virtual void addItem(class ItemStack &);
-  virtual bool addItemToFirstEmptySlot(class ItemStack &);
-  virtual void setItem(int, class ItemStack const &);
-  virtual void setItemWithForceBalance(int, class ItemStack const &, bool);
+  virtual bool hasRoomForItem(ItemStack const &);
+  virtual void addItem(ItemStack &);
+  virtual bool addItemToFirstEmptySlot(ItemStack &);
+  virtual void setItem(int, ItemStack const &);
+  virtual void setItemWithForceBalance(int, ItemStack const &, bool);
   virtual void removeItem(int, int);
   virtual void removeAllItems(void);
-  virtual void dropContents(class BlockSource &, class Vec3 const &, bool);
+  virtual void dropContents(BlockSource &, Vec3 const &, bool);
   virtual int getContainerSize() const = 0;
   virtual int getMaxStackSize() const  = 0;
   virtual void startOpen(Player &)     = 0;
@@ -60,9 +61,12 @@ public:
   virtual void addAdditionalSaveData(CompoundTag &);
   virtual void createTransactionContext(
       std::function<void(Container &, int, ItemStack const &, ItemStack const &)>, std::function<void()>);
-  virtual void triggerTransactionChange(int, ItemStack const &, ItemStack const &);
+  virtual void initializeContainerContents(BlockSource &);
+
+  MCAPI void triggerTransactionChange(int, ItemStack const&, ItemStack const&);
 };
 
-static_assert(offsetof(Container, content_change_listeners) == 16);
-static_assert(offsetof(Container, content_size_listeners) == 80);
-static_assert(offsetof(Container, custom_name) == 184);
+static_assert(offsetof(Container, type) == 0x8);
+static_assert(offsetof(Container, content_change_listeners) == 0x10);
+static_assert(offsetof(Container, content_size_listeners) == 0x50);
+static_assert(offsetof(Container, custom_name) == 0xB8);
