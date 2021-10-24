@@ -1,28 +1,33 @@
+#include <dllentry.h>
 #include <Net/NetworkHandler.h>
 #include <Net/NetworkIdentifier.h>
 #include <Actor/Player.h>
-
-#include <dllentry.h>
-
 #include <base/base.h>
 #include <base/playerdb.h>
 #include <base/log.h>
 #include <mods/CommandSupport.h>
 #include <mods/ScriptSupport/scriptapi.h>
+#include <Packet/TextPacket.h>
 
 DEF_LOGGER("NetworkStatus");
+
+void dllenter() {}
+void dllexit() {}
 
 struct NetworkStatus : Command {
   void execute(const CommandOrigin &orig, CommandOutput &outp) override {
     if (orig.getOriginType() != CommandOriginType::Player) {
-      outp.error("commands.generic.error.invalidPlayer", {"/net-stat"});
-      return;
+      return outp.error("commands.generic.error.invalidPlayer", {"/net-stat"});
     }
     auto ent    = (Player *) orig.getEntity();
     auto &netid = ent->getNetworkIdentifier();
     auto peer   = LocateService<NetworkHandler>()->getPeerForUser(netid);
     auto status = peer->getNetworkStatus();
-    outp.success("commands.net-stat.result", {status.ping, status.avgping, status.packetloss, status.avgpacketloss});
+
+    auto netStatResult = TextPacket::createTextPacket<TextPacketType::SystemMessage>(
+      "ping: " + std::to_string(status.ping) + " average: " + std::to_string(status.avgping) + " packet loss: " + std::to_string(status.packetloss) + " average: " + std::to_string(status.avgpacketloss));
+    ent->sendNetworkPacket(netStatResult);
+    //outp.success("commands.net-stat.result", {status.ping, status.avgping, status.packetloss, status.avgpacketloss});
   }
 
   static void setup(CommandRegistry *reg) {

@@ -57,10 +57,7 @@ enum class MaterialType {
   Any                  = 42
 };
 
-enum class TickingQueueType {
-  Internal = 0,
-  Random   = 1
-};
+enum class TickingQueueType { Internal, Random };
 
 class BlockSource {
   char pad[224 - 8];

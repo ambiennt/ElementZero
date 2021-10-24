@@ -1,9 +1,8 @@
 #pragma once
-#include <boost/functional/hash.hpp>
 
+#include <boost/functional/hash.hpp>
 #include <hook.h>
 #include <modutils.h>
-
 #include "../Core/mce.h"
 #include "../RakNet/RakNetTypes.h"
 #include "../dll.h"
@@ -11,10 +10,10 @@
 class NetworkIdentifier {
 public:
   enum class Type : char {
-    GUID  = 0, //raknet
-    IPv4  = 1,
-    IPv6  = 2,
-    Empty = 3, //generic
+    RakNet   = 0,
+    IPv4     = 1,
+    IPv6     = 2,
+    Generic  = 3
   };
   RakNet::RakNetGUID guid;
   uint16_t port;

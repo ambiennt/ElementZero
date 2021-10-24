@@ -3,13 +3,13 @@
 enum class CommandFlagValue : char {
   None        = 0,
   Usage       = 1,
-  Visibility2 = 2,
-  Visibility4 = 4,
-  Visibility6 = 6,
+  Visibility2 = 2, // HiddenFromCommandBlockOrigin 
+  Visibility4 = 4, // HiddenFromPlayerOrigin
+  Visibility6 = 6, // Hidden
   Sync        = 8,
   Execute     = 16,
   Type        = 32,
-  Cheat       = 64,
+  Cheat       = 64
 };
 
 struct CommandFlag {

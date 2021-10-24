@@ -213,7 +213,7 @@ public:
   SimpleClientNetId<ItemStackLegacyRequestIdTag, int, 0> client_id;
   std::vector<std::pair<ContainerEnumName, std::vector<unsigned char>>> container;
   std::unique_ptr<ComplexInventoryTransaction> transaction;
-  bool flag;
+  bool is_client_side = false;
 
   inline ~InventoryTransactionPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

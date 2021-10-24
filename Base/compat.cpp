@@ -23,41 +23,74 @@ template <typename Holder> struct ValueHolder {
 #pragma region Player
 
 // ServerPlayer::handleActorPickRequestOnServer
-SynchedActorData &Actor::getEntityData() const { return direct_access<SynchedActorData>(this, 320); }
+SynchedActorData &Actor::getEntityData() const {
+  return direct_access<SynchedActorData>(this, 320); // verified
+}
+
 // Actor::Actor
-SimpleContainer &Actor::getEquipmentContainer() const { return direct_access<SimpleContainer>(this, 1400); }
+SimpleContainer &Actor::getEquipmentContainer() const {
+  return direct_access<SimpleContainer>(this, 1400); // verified
+}
+
 // Actor::Actor
-SimpleContainer &Actor::getHandContainer() const { return direct_access<SimpleContainer>(this, 1408); }
+SimpleContainer &Actor::getHandContainer() const {
+return direct_access<SimpleContainer>(this, 1408); // verified
+}
+
 // xref to Actor::transferTickingArea
 class Dimension *Actor::getDimension() const {
-  return direct_access<class Dimension *>(this, 808);
+  return direct_access<class Dimension *>(this, 808); // verified
 }
 
 // Player::Player
 class EnderChestContainer * Player::getEnderChestContainer() const {
-    return direct_access<std::unique_ptr<class EnderChestContainer>>(this, 4032).get();
+    return direct_access<std::unique_ptr<class EnderChestContainer>>(this, 4032).get(); // verified
 }
 
 // Player::getSelectedItem
-PlayerInventory &Player::getInventory() const { return *direct_access<PlayerInventory *>(this, 2928); }
+PlayerInventory &Player::getInventory() const {
+  return *direct_access<PlayerInventory *>(this, 2928);  // verified
+}
+
 // Player::Player
-Certificate &Player::getCertificate() const { return *direct_access<class Certificate *>(this, 2736); }
+Certificate &Player::getCertificate() const {
+  return *direct_access<class Certificate *>(this, 2736); // verified
+}
+
 // Player::setBedRespawnPosition
-BlockPos &Player::getSpawnPosition() const { return direct_access<BlockPos>(this, 7176); }
+BlockPos &Player::getSpawnPosition() const {
+  return direct_access<BlockPos>(this, 7176);
+}
+
 // ServerPlayer::ServerPlayer
 NetworkIdentifier const &Player::getNetworkIdentifier() const {
   return direct_access<class NetworkIdentifier const>(this, 8048);
 }
+
 // AddPlayerPacket::AddPlayerPacket
-std::string &Player::getDeviceId() const { return direct_access<std::string>(this, 7872); }
+std::string &Player::getDeviceId() const {
+  return direct_access<std::string>(this, 7872);
+}
+
 // ServerNetworkHandler::_createNewPlayer
-std::string &Player::getClientPlatformId() const { return direct_access<std::string>(this, 2744); }
+std::string &Player::getClientPlatformId() const {
+  return direct_access<std::string>(this, 2744); // verified
+}
+
 // ServerNetworkHandler::_createNewPlayer
-std::string &Player::getPlatformOfflineId() const { return direct_access<std::string>(this, 2680); }
+std::string &Player::getPlatformOfflineId() const {
+  return direct_access<std::string>(this, 2680);  // verified
+}
+
 // ServerNetworkHandler::_createNewPlayer
-std::string &Player::getClientPlatformOnlineId() const { return direct_access<std::string>(this, 3528); }
+std::string &Player::getClientPlatformOnlineId() const {
+  return direct_access<std::string>(this, 3528); // verified
+}
+
 // RaidBossComponent::_sendBossEvent
-unsigned char Player::getClientSubId() const { return direct_access<unsigned char>(this, 3520); }
+unsigned char Player::getClientSubId() const {
+  return direct_access<unsigned char>(this, 3520); // verified
+}
 
 #pragma endregion
 
@@ -67,7 +100,7 @@ void NetworkIdentifier::kick(std::string const &reason) const {
 
 void Player::kick() { LocateService<ServerNetworkHandler>()->forceDisconnectClient(this, true); }
 
-std::string &ServerNetworkHandler::GetMotd() { return direct_access<std::string>(this, 600); }
+std::string &ServerNetworkHandler::GetMotd() { return direct_access<std::string>(this, 600); } // verified
 
 void CommandOutput::success() { direct_access<bool>(this, 40) = true; }
 
@@ -81,9 +114,9 @@ ActorUniqueID Level::getNewUniqueID() const {
 }
 
 // RaidBossComponent::_sendBossEvent
-PacketSender &Level::getPacketSender() const { return *direct_access<PacketSender *>(this, 2096); }
+PacketSender &Level::getPacketSender() const { return *direct_access<PacketSender *>(this, 2240); } // verified
 
-LevelDataWrapper &Level::GetLevelDataWrapper() { return direct_access<LevelDataWrapper>(this, 544); }
+LevelDataWrapper &Level::GetLevelDataWrapper() { return direct_access<LevelDataWrapper>(this, 544); } // verified
 
 template <> Minecraft *LocateService<Minecraft>() {
   return *GetServerSymbol<Minecraft *>("?mGame@ServerCommand@@1PEAVMinecraft@@EA");
@@ -94,7 +127,7 @@ template <> ServerNetworkHandler *LocateService<ServerNetworkHandler>() {
 }
 
 template <> NetworkHandler *LocateService<NetworkHandler>() {
-  return direct_access<std::unique_ptr<NetworkHandler>>(LocateService<ServerInstance>(), 152).get();
+  return direct_access<std::unique_ptr<NetworkHandler>>(LocateService<ServerInstance>(), 152).get(); // verified
 }
 
 template <> MinecraftCommands *LocateService<MinecraftCommands>() { return LocateService<Minecraft>()->getCommands(); }

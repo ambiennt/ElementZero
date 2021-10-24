@@ -17,7 +17,7 @@ public:
   ActorRuntimeID rid;
   uint8_t flags = 0x01;
   Vec3 pos;
-  uint8_t pitch = 0, head_yaw = 0, yaw = 0;
+  uint8_t pitch = 0, yaw = 0, head_yaw = 0;
 
   inline ~MoveActorAbsolutePacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

@@ -20,6 +20,8 @@ class BinaryStream;
 
 class SerializedSkin {
 public:
+  enum struct TrustedFlag : char { UNSET, NO, YES };
+
   std::string skin_id, name, skin_resource_patch, geometry_name;
   mce::Image texture, cape_texture;
   std::vector<AnimatedImageData> animated_image_data;
@@ -30,7 +32,7 @@ public:
   std::string arm_size;
   std::unordered_map<PieceType, TintMapColor> piece_tint_colors;
   Color skin_color;
-  enum struct TrustedFlag : char { UNSET, NO, YES } trusted_flag;
+  TrustedFlag trusted_flag;
 
 #pragma region methods
   MCAPI SerializedSkin();

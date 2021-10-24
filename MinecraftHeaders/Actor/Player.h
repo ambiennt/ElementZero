@@ -26,10 +26,7 @@ enum class GameType;
 enum class CooldownType;
 enum class ClientPlayMode;
 
-enum class MovementEventType {
-  PositionCorrected  = 0,
-  BackInSync         = 1
-};
+enum class MovementEventType { PositionCorrected, BackInSync };
 
 enum class AbilitiesIndex {
   Invalid              = -1,
@@ -106,7 +103,9 @@ enum class PlayerUISlot {
   MaterialReducerOutput7  = 47,
   MaterialReducerOutput8  = 48,
   MaterialReducerOutput9  = 49,
-  CreatedItemOutput       = 50
+  CreatedItemOutput       = 50,
+  SmithingTableInput      = 51,
+  SmithingTableMaterial   = 52
 };
 
 enum class BedSleepingResult {
@@ -285,6 +284,17 @@ public:
       "?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
   }
 
+  inline class PlayerSpawnPoint* getPlayerSpawnPoint() {
+    return direct_access<class PlayerSpawnPoint *>(this, 0x1C18);
+  }
+
+  inline std::string getPlayerName() const {
+    return direct_access<std::string>(this, 0x818);
+  }
+
+  inline class BlockSource* getRegion() {
+    return direct_access<class BlockSource*>(this, 0x320);
+  }
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
   BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);

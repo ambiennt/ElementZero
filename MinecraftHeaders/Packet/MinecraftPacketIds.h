@@ -17,7 +17,7 @@ enum class MinecraftPacketIds {
 	AddActor                           = 0xd,
 	RemoveActor                        = 0xe,
 	AddItemActor                       = 0xf,
-	UNUSED_PLS_USE_ME                  = 0x10, //unused
+	UNUSED_PLS_USE_ME                  = 0x10, // deprecated
 	TakeItemActor                      = 0x11,
 	MoveActorAbsolute                  = 0x12,
 	MovePlayer                         = 0x13,
@@ -38,6 +38,7 @@ enum class MinecraftPacketIds {
 	BlockPickRequest                   = 0x22,
 	ActorPickRequest                   = 0x23,
 	PlayerAction                       = 0x24,
+	ActorFall                          = 0x25, // deprecated
 	HurtArmor                          = 0x26,
 	SetActorData                       = 0x27,
 	SetActorMotion                     = 0x28,
@@ -116,7 +117,7 @@ enum class MinecraftPacketIds {
 	SetLocalPlayerAsInitialized        = 0x71,
 	UpdateSoftEnum                     = 0x72,
 	NetworkStackLatency                = 0x73,
-	BlockPalette                       = 0x74, //unused?
+	BlockPalette                       = 0x74, // deprecated
 	ScriptCustomEvent                  = 0x75,
 	SpawnParticleEffect                = 0x76,
 	AvailableActorIdentifiers          = 0x77,
@@ -125,9 +126,9 @@ enum class MinecraftPacketIds {
 	LevelSoundEvent                    = 0x7b,
 	LevelEventGeneric                  = 0x7c,
 	LecternUpdate                      = 0x7d,
-	VideoStreamConnect_DEPRECATED      = 0x7e, //mixer
-	AddEntity                          = 0x7f, //unused
-	RemoveEntity                       = 0x80, //unused
+	VideoStreamConnect_DEPRECATED      = 0x7e, // deprecated (mixer)
+	AddEntity                          = 0x7f, // deprecated
+	RemoveEntity                       = 0x80, // deprecated
 	ClientCacheStatus                  = 0x81,
 	OnScreenTextureAnimation           = 0x82,
 	MapCreateLockedCopy                = 0x83,

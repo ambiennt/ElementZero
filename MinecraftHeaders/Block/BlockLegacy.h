@@ -29,7 +29,7 @@ enum class BlockSupportType {
   Any     = 2
 };
 
-enum class BlockProperty : long long { //bit shifting in enums mojang?!?!?
+enum class BlockProperty : int64_t {
   None                          = 0x0,
   Stair                         = 0x1,
   HalfSlab                      = 0x2,
