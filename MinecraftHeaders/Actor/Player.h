@@ -251,7 +251,6 @@ public:
   float getDestroySpeed(class Block const &) const;
   float getDestroyProgress(class Block const &) const;
   class ItemStack const &getSelectedItem(void) const;
-  enum GameType getPlayerGameType(void) const;
   class ItemStack const &getCurrentActiveShield(void) const;
   class EnderChestContainer *getEnderChestContainer(void);
 
@@ -294,6 +293,10 @@ public:
 
   inline class BlockSource* getRegion() {
     return direct_access<class BlockSource*>(this, 0x320);
+  }
+
+  inline enum GameType getPlayerGameType() const {
+    return direct_access<enum GameType>(this, 0x1C84);
   }
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);

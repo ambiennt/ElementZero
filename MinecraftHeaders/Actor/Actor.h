@@ -170,7 +170,9 @@ enum class ActorFlags {
   IsInUI                      = 88,
   Stalking                    = 89,
   Emoting                     = 90,
-  Celebrating                 = 91
+  Celebrating                 = 91,
+  Admiring                    = 92,
+  CelebratingSpecial          = 93,
 };
 
 class Actor {

@@ -48,10 +48,7 @@ class InventorySource {
 public:
   InventorySourceType type = InventorySourceType::Invalid;
   ContainerID container    = ContainerID::Invalid;
-  enum class InventorySourceFlags {
-    NoFlag                   = 0,
-    WorldInteraction_Random  = 1
-  } flags;
+  enum class InventorySourceFlags { NoFlag, WorldInteraction_Random } flags;
 
   inline InventorySource(ContainerID id) : container(id) {}
   inline InventorySource(InventorySourceType type) : type(type) {}

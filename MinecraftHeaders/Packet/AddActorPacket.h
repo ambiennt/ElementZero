@@ -9,7 +9,7 @@
 #include "../Math/Vec3.h"
 #include "../Math/Vec2.h"
 #include "../Actor/ActorDefinitionIdentifier.h"
-#include "../Actor/AttributeInstanceHandle.h"
+#include "../Actor/Attribute.h"
 #include "../Actor/ActorLink.h"
 #include "../Actor/SyncedAttribute.h"
 #include "../Actor/ActorUniqueID.h"
