@@ -283,21 +283,8 @@ public:
       "?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
   }
 
-  inline class PlayerSpawnPoint* getPlayerSpawnPoint() {
-    return direct_access<class PlayerSpawnPoint *>(this, 0x1C18);
-  }
-
-  inline std::string getPlayerName() const {
-    return direct_access<std::string>(this, 0x818);
-  }
-
-  inline class BlockSource* getRegion() {
-    return direct_access<class BlockSource*>(this, 0x320);
-  }
-
-  inline enum GameType getPlayerGameType() const {
-    return direct_access<enum GameType>(this, 0x1C84);
-  }
+  BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
+  BUILD_ACCESS_MUT(enum GameType, mPlayerGameType, 0x1C84);
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
   BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);
@@ -309,5 +296,6 @@ public:
   BUILD_ACCESS_COMPAT(std::string &, PlatformOfflineId);
   BUILD_ACCESS_COMPAT(std::string &, ClientPlatformOnlineId);
   BUILD_ACCESS_COMPAT(unsigned char, ClientSubId);
+
   BASEAPI void kick();
 };

@@ -22,11 +22,29 @@ class Dimension;
 enum class ActorType;
 enum class MaterialType;
 enum class ActorEvent;
-enum class ArmorMaterialType;
-enum class ArmorTextureType;
 enum class ActorDamageCause;
 enum class ItemUseMethod;
 enum class LevelSoundEvent;
+
+enum class ArmorMaterialType {
+  None                  = -1,
+  DefaultArmor          = 0,
+  EnchantedArmor        = 1,
+  LeatherArmor          = 2,
+  EnchantedLeatherArmor = 3
+};
+
+enum class ArmorTextureType {
+  None      = -1,
+  Leather   = 0,
+  Chain     = 1,
+  Iron      = 2,
+  Diamond   = 3,
+  Gold      = 4,
+  Elytra    = 5,
+  Turtle    = 6,
+  Netherite = 7
+};
 
 enum class ActorLocation {
   Feet               = 0,
@@ -594,9 +612,36 @@ public:
     return CallServerClassMethod<ItemStack*>("?getOffhandSlot@Actor@@QEBAAEBVItemStack@@XZ", this);
   }
 
+  
+  //BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8);
+  BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);
+  BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
+  BUILD_ACCESS_MUT(class VariantParameterList, mInitParams, 0x48);
+  BUILD_ACCESS_MUT(bool, mForceInitMethodToSpawnOnReload, 0xC8);
+  //BUILD_ACCESS_MUT(class AutomaticID<class Dimension, int>, mDimensionId, 0xCC);
+  BUILD_ACCESS_MUT(int, mDimensionId, 0xCC);
+
+  BUILD_ACCESS_MUT(class Vec2, mRot, 0x100);
+  BUILD_ACCESS_MUT(int, mLastHurtByPlayerTime, 0x138);
+  BUILD_ACCESS_MUT(float, mFallDistance, 0x19C);
+  BUILD_ACCESS_MUT(bool, mOnGround, 0x1A0);
+  BUILD_ACCESS_MUT(bool, mFirstTick, 0x268);
+  BUILD_ACCESS_MUT(int, mTickCount, 0x26C);
+  BUILD_ACCESS_MUT(int, mInvulnerableTime, 0x270);
+  BUILD_ACCESS_MUT(int, mLastHealth, 0x274);
+  BUILD_ACCESS_MUT(bool, mIsAlive, 0x2F8);
+  BUILD_ACCESS_MUT(class BlockSource*, mRegion, 0x320);
+  BUILD_ACCESS_MUT(std::unique_ptr<class BaseAttributeMap>, mAttributes, 0x438);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mTargetId, 0x4A0);
+
   AS_FIELD(ActorRuntimeID, RuntimeID, getRuntimeID);
   BUILD_ACCESS_COMPAT(SimpleContainer &, EquipmentContainer);
   BUILD_ACCESS_COMPAT(SimpleContainer &, HandContainer);
   BUILD_ACCESS_COMPAT(SynchedActorData &, EntityData);
   BUILD_ACCESS_COMPAT(class Dimension *, Dimension);
 };
+
+// ACTOR: 0x0 - 0x620
+// MOB: 0x620 - 0x7D0
+// PLAYER: 0x7D0 - 0x1F20
+// SERVERPLAYER: 0x1F20 - 0x21D0

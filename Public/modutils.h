@@ -37,8 +37,9 @@ template <typename Ret, typename Type> Ret &direct_access(Type *type, size_t off
   type get##name() const { return direct_access<type>(this, offset); }
 
 #define BUILD_ACCESS_MUT(type, name, offset)                                                                           \
-  AS_FIELD(type &, name, get##name);                                                                                   \
-  type &get##name() const { return direct_access<type>(this, offset); }
+  DEF_FIELD_RW(type, name);                                                                                            \
+  type &get##name() const { return direct_access<type>(this, offset); }                                                \
+  template<typename T>void set##name(T const &value) { direct_access<type>(this, offset) = value; }
 
 #define BUILD_ACCESS_COMPAT(type, name)                                                                                \
   AS_FIELD(type, name, get##name);                                                                                     \

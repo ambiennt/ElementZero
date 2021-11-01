@@ -36,7 +36,7 @@ template <typename T> struct copyFor {
 
 namespace ActorDataIDs {
 inline constexpr int16_t FLAGS                               = 0;  // LONG
-inline constexpr int16_t HEALTH                              = 1;  // INT (minecart/boat)
+inline constexpr int16_t HEALTH                              = 1;  // INT (minecart/boat/armor stand)
 inline constexpr int16_t VARIANT                             = 2;  // INT
 inline constexpr int16_t COLOR                               = 3;  // BYTE
 inline constexpr int16_t NAMETAG                             = 4;  // STRING
@@ -46,8 +46,8 @@ inline constexpr int16_t AIR                                 = 7;  // SHORT
 inline constexpr int16_t POTION_COLOR                        = 8;  // INT (ARGB!)
 inline constexpr int16_t POTION_AMBIENT                      = 9;  // BYTE
 inline constexpr int16_t JUMP_DURATION                       = 10; // LONG
-inline constexpr int16_t HURT_TIME                           = 11; // INT (minecart/boat)
-inline constexpr int16_t HURT_DIRECTION                      = 12; // INT (minecart/boat)
+inline constexpr int16_t HURT_TIME                           = 11; // INT (minecart/boat/armor stand)
+inline constexpr int16_t HURT_DIRECTION                      = 12; // INT (minecart/boat/armor stand)
 inline constexpr int16_t PADDLE_TIME_LEFT                    = 13; // FLOAT
 inline constexpr int16_t PADDLE_TIME_RIGHT                   = 14; // FLOAT
 inline constexpr int16_t EXPERIENCE_VALUE                    = 15; // INT (xp orb)
@@ -85,7 +85,7 @@ inline constexpr int16_t MARK_VARIANT                        = 43; // INT
 inline constexpr int16_t CONTAINER_TYPE                      = 44; // BYTE
 inline constexpr int16_t CONTAINER_BASE_SIZE                 = 45; // INT
 inline constexpr int16_t CONTAINER_EXTRA_SLOTS_PER_STRENGTH  = 46; // INT
-inline constexpr int16_t BLOCK_TARGET                        = 47; // POS (ENDER CRYSTAL)
+inline constexpr int16_t BLOCK_TARGET                        = 47; // POS (ender crystal)
 inline constexpr int16_t WITHER_INVULNERABLE_TICKS           = 48; // INT
 inline constexpr int16_t WITHER_TARGET_1                     = 49; // LONG
 inline constexpr int16_t WITHER_TARGET_2                     = 50; // LONG
