@@ -5,6 +5,7 @@
 #include "../FakeGSL/span.h"
 #include "../Core/buffer_span.h"
 #include "../Actor/ActorType.h"
+#include "../Block/ActorBlockSyncMessage.h"
 #include "../dll.h"
 
 #include <hook.h>
@@ -18,7 +19,7 @@ enum class MaterialType {
   Stone                = 3,
   Metal                = 4,
   Water                = 5,
-  Lava_1               = 6,
+  Lava                 = 6,
   Leaves               = 7,
   Plant                = 8,
   ReplaceablePlant     = 9,

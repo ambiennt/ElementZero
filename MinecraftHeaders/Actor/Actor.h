@@ -79,11 +79,12 @@ enum class PaletteColor {
 };
 
 enum class InputMode {
-  Undefined           = 0,
-  Mouse               = 1,
-  Touch               = 2,
-  GamePad             = 3,
-  MotionController    = 4
+  Undefined         = 0,
+  Mouse             = 1,
+  Touch             = 2,
+  GamePad           = 3,
+  MotionController  = 4,
+  Count             = 5
 };
 
 enum class ArmorSlot {
@@ -633,6 +634,7 @@ public:
   BUILD_ACCESS_MUT(class BlockSource*, mRegion, 0x320);
   BUILD_ACCESS_MUT(std::unique_ptr<class BaseAttributeMap>, mAttributes, 0x438);
   BUILD_ACCESS_MUT(struct ActorUniqueID, mTargetId, 0x4A0);
+  BUILD_ACCESS_MUT(bool, mIsKnockedBackOnDeath, 0x570);
 
   AS_FIELD(ActorRuntimeID, RuntimeID, getRuntimeID);
   BUILD_ACCESS_COMPAT(SimpleContainer &, EquipmentContainer);

@@ -39,20 +39,21 @@ protected:
   static std::string const TAG_STORE_CAN_PLACE_ON;
 
 public:
-  Item *item{};
-  std::unique_ptr<CompoundTag> tag; //mUserData
-  uint64_t block_state{};
-  uint16_t aux_value{};
-  unsigned char count{};
-  bool is_valid{};
-  std::chrono::steady_clock::time_point create_time{}; //mPickupTime
-  bool show_pick_up{};
-  std::vector<BlockLegacy *> can_place_on;
-  uint64_t can_place_on_hash{};
-  std::vector<BlockLegacy *> can_destroy;
-  uint64_t can_destroy_hash{};
-  Tick blocking_tick;
-  std::unique_ptr<ItemInstance> charged_item;
+  std::weak_ptr<class Item> mItem{};
+  std::unique_ptr<CompoundTag> mUserData;
+  uint16_t mBlockState{};
+  uint16_t mAuxValue{};
+  uint8_t mCount{};
+  bool mValid{};
+  std::chrono::steady_clock::time_point mPickupTime{};
+  bool mShowPickUp{};
+  bool mWasPickedUp{};
+  std::vector<class BlockLegacy *> mCanPlaceOn;
+  uint64_t mCanPlaceOnHash{};
+  std::vector<BlockLegacy *> mCanDestroy;
+  uint64_t mCanDestroyHash{};
+  struct Tick mBlockingTick;
+  std::unique_ptr<class ItemInstance> mChargedItem;
 
   MCAPI virtual ~ItemStackBase();
 
@@ -116,7 +117,7 @@ public:
   MCAPI void hurtAndBreak(int, class Actor *);
   MCAPI void _read(class ReadOnlyBinaryStream &);
 
-  inline unsigned char getStackSize() const { return count; }
+  inline unsigned char getStackSize() const { return mCount; }
   AS_FIELD(short, Id, getId);
   AS_FIELD(short, Aux, getAuxValue);
   AS_FIELD(int, IdAux, getIdAux);
@@ -128,8 +129,8 @@ public:
 
   inline std::vector<std::string> getCustomLore() const {
     std::vector<std::string> ret;
-    if (tag && tag->contains(TAG_DISPLAY, Tag::Compound)) {
-      auto disp = tag->getCompound(TAG_DISPLAY);
+    if (mUserData && mUserData->contains(TAG_DISPLAY, Tag::Compound)) {
+      auto disp = mUserData->getCompound(TAG_DISPLAY);
       if (disp->contains(TAG_LORE, Tag::List)) {
         auto list = disp->getList(TAG_LORE);
         for (auto &item : list->value) ret.emplace_back(static_cast<StringTag *>(item.get())->value);
@@ -160,7 +161,7 @@ public:
 };
 class ItemStack : public ItemStackBase {
 public:
-  ItemStackNetIdVariant var_id;
+  class ItemStackNetIdVariant mNetIdVariant;
 
   MCAPI static ItemStack const EMPTY_ITEM;
   MCAPI ItemStack();
@@ -177,5 +178,5 @@ public:
   MCAPI void reinit(BlockLegacy const &, int);
 };
 
-static_assert(sizeof(ItemStackBase) == 136);
-static_assert(sizeof(ItemStack) == 144);
+static_assert(sizeof(ItemStackBase) == 0x88);
+static_assert(sizeof(ItemStack) == 0x90);

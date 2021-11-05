@@ -74,7 +74,7 @@ void loadCustomScript() try {
   JsModuleRecord root;
 
   if (!fs::exists("scripts/index.js")) {
-    LOGW("scripts/index.js file not exists, skipping");
+    LOGW("scripts/index.js file does not exist, skipping");
     return;
   }
 
@@ -163,7 +163,7 @@ static void FetchModule(JsModuleRecord referencingModule, JsValueRef specifier, 
   }
   ThrowError(resolveModule(specifier, base, full));
 
-  LOGV("try to load module %s") % base;
+  LOGV("Attempting to load module %s") % base;
 
   if (auto it = mod_cache.find(base); it != mod_cache.end()) {
     *target = it->second;

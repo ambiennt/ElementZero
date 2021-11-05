@@ -4,7 +4,7 @@
 #include <functional>
 
 enum class ActorType {
-  Undefined_2          = 0x1,
+  Undefined            = 0x1,
   TypeMask             = 0xFF,
   Mob                  = 0x100,
   PathfinderMob        = 0x300,
@@ -140,10 +140,7 @@ enum class ActorType {
   Strider              = 0x137D
 };
 
-enum class ActorTypeNamespaceRules {
-  ReturnWithoutNamespace  = 0,
-  ReturnWithNamespace     = 1
-};
+enum class ActorTypeNamespaceRules { ReturnWithoutNamespace, ReturnWithNamespace };
 
 MCAPI void forEachEntityType(std::function<bool(ActorType, std::string const &)>);
 MCAPI ActorType EntityTypeFromString(std::string const &);

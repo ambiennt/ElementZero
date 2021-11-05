@@ -17,7 +17,7 @@ template <> MinecraftServerScriptEngine *LocateService<MinecraftServerScriptEngi
 
 TInstanceHook(void, "?initialize@ScriptEngine@@UEAA_NXZ", MinecraftServerScriptEngine) {
   DEF_LOGGER("ScriptEngine");
-  LOGV("initialize");
+  LOGV("Initialized.");
   original(this);
   engine = this;
   if (mod_enabled) initBasicAPI();
@@ -25,7 +25,7 @@ TInstanceHook(void, "?initialize@ScriptEngine@@UEAA_NXZ", MinecraftServerScriptE
 
 TInstanceHook(int, "?startScriptLoading@ScriptEngine@@QEAAXXZ", ScriptEngine) {
   DEF_LOGGER("ScriptEngine");
-  LOGV("loading");
+  LOGV("Loading...");
   if (mod_enabled) loadCustomScript();
   return original(this);
 }

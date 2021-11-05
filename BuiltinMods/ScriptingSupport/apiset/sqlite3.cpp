@@ -89,7 +89,7 @@ struct Stmt {
     switch (GetJsType(key)) {
     case JsString: Bind_(FromJs<std::string>(key), value); break;
     case JsNumber: Bind_(FromJs<int>(key), value); break;
-    default: throw std::runtime_error{"Unexcpted key type"};
+    default: throw std::runtime_error{"Unexcepted key type"};
     }
   }
 
@@ -120,12 +120,12 @@ struct Stmt {
       }
       break;
     }
-    default: throw std::runtime_error{"Unexcpted key type"};
+    default: throw std::runtime_error{"Unexcepted key type"};
     }
   }
 
   void ForEach(JsValueRef fn) {
-    if (GetJsType(fn) != JsFunction) throw std::runtime_error{"Expect function"};
+    if (GetJsType(fn) != JsFunction) throw std::runtime_error{"Expected function"};
     int ec;
     auto cols = sqlite3_column_count(stmt);
     JsValueRef arr[cols + 1];

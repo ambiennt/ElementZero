@@ -9,14 +9,20 @@
 #include <hook.h>
 #include <modutils.h>
 
-enum class InHandUpdateType;
+enum class BlockShape;
+
+enum class InHandUpdateType {
+  None   = 0,
+  Update = 1,
+  Swap   = 2
+};
 
 enum class CooldownType { // custom items can have custom cooldown types
-  None               = -1,
-  ChorusFruit        = 0,
-  EnderPearl         = 1,
-  IceBomb            = 2,
-  CooldownTypeCount  = 3
+  None         = -1,
+  ChorusFruit  = 0,
+  EnderPearl   = 1,
+  IceBomb      = 2,
+  Count        = 3
 };
 
 enum class UseAnimation {
@@ -41,96 +47,6 @@ enum class CreativeItemCategory {
   ItemCommandOnly  = 5,
   Undefined        = 6,
   NUM_CATEGORIES   = 7
-};
-
-enum class BlockShape {
-  INVISIBLE                  = -0x1,
-  BLOCK                      = 0x0,
-  CROSS_TEXTURE              = 0x1,
-  TORCH                      = 0x2,
-  FIRE                       = 0x3,
-  WATER                      = 0x4,
-  RED_DUST                   = 0x5,
-  ROWS                       = 0x6,
-  DOOR                       = 0x7,
-  LADDER                     = 0x8,
-  RAIL                       = 0x9,
-  STAIRS                     = 0x0A,
-  FENCE                      = 0x0B,
-  LEVER                      = 0x0C,
-  CACTUS                     = 0x0D,
-  BED                        = 0x0E,
-  DIODE                      = 0x0F,
-  IRON_FENCE                 = 0x12,
-  STEM                       = 0x13,
-  VINE                       = 0x14,
-  FENCE_GATE                 = 0x15,
-  CHEST                      = 0x16,
-  LILYPAD                    = 0x17,
-  BREWING_STAND              = 0x19,
-  PORTAL_FRAME               = 0x1A,
-  COCOA                      = 0x1C,
-  TREE                       = 0x1F,
-  WALL                       = 0x20,
-  DOUBLE_PLANT               = 0x28,
-  FLOWER_POT                 = 0x2A,
-  ANVIL                      = 0x2B,
-  DRAGON_EGG                 = 0x2C,
-  STRUCTURE_VOID             = 0x30,
-  BLOCK_HALF                 = 0x43,
-  TOP_SNOW                   = 0x44,
-  TRIPWIRE                   = 0x45,
-  TRIPWIRE_HOOK              = 0x46,
-  CAULDRON                   = 0x47,
-  REPEATER                   = 0x48,
-  COMPARATOR                 = 0x49,
-  HOPPER                     = 0x4A,
-  SLIME_BLOCK                = 0x4B,
-  PISTON                     = 0x4C,
-  BEACON                     = 0x4D,
-  CHORUS_PLANT               = 0x4E,
-  CHORUS_FLOWER              = 0x4F,
-  END_PORTAL                 = 0x50,
-  END_ROD                    = 0x51,
-  END_GATEWAY                = 0x52,
-  SKULL                      = 0x53,
-  FACING_BLOCK               = 0x54,
-  COMMAND_BLOCK              = 0x55,
-  TERRACOTTA                 = 0x56,
-  DOUBLE_SIDE_FENCE          = 0x57,
-  ITEM_FRAME                 = 0x58,
-  SHULKER_BOX                = 0x59,
-  DOUBLESIDED_CROSS_TEXTURE  = 0x5A,
-  DOUBLESIDED_DOUBLE_PLANT   = 0x5B,
-  DOUBLESIDED_ROWS           = 0x5C,
-  ELEMENT_BLOCK              = 0x5D,
-  CHEMISTRY_TABLE            = 0x5E,
-  CORAL_FAN                  = 0x60,
-  SEAGRASS                   = 0x61,
-  KELP                       = 0x62,
-  TRAPDOOR                   = 0x63,
-  SEA_PICKLE                 = 0x64,
-  CONDUIT                    = 0x65,
-  TURTLE_EGG                 = 0x66,
-  BUBBLE_COLUMN              = 0x69,
-  BARRIER                    = 0x6A,
-  SIGN                       = 0x6B,
-  BAMBOO                     = 0x6C,
-  BAMBOO_SAPLING             = 0x6D,
-  SCAFFOLDING                = 0x6E,
-  GRINDSTONE                 = 0x6F,
-  BELL                       = 0x70,
-  LANTERN                    = 0x71,
-  CAMPFIRE                   = 0x72,
-  LECTERN                    = 0x73,
-  SWEET_BERRY_BUSH           = 0x74,
-  CARTOGRAPHY_TABLE          = 0x75,
-  COMPOSTER                  = 0x76,
-  STONE_CUTTER               = 0x77,
-  HONEY_BLOCK                = 0x78,
-  WEEPING_VINE               = 0x79,
-  TWISTING_VINE              = 0x7A,
-  CHAIN                      = 0x7B
 };
 
 enum class ItemUseMethod {

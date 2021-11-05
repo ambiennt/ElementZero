@@ -15,6 +15,7 @@
 #include "../Core/VanillaDimensions.h"
 #include "../Command/CommandPermissionLevel.h"
 #include "../Level/GameType.h"
+#include "../Level/Abilities.h"
 #include "../dll.h"
 
 class Packet;
@@ -22,35 +23,10 @@ class ServerPlayer;
 class NetworkIdentifier;
 class Dimension;
 enum class StructureFeatureType;
-enum class GameType;
-enum class CooldownType;
 enum class ClientPlayMode;
+enum class CooldownType;
 
 enum class MovementEventType { PositionCorrected, BackInSync };
-
-enum class AbilitiesIndex {
-  Invalid              = -1,
-  Build                = 0,
-  Mine                 = 1,
-  DoorsAndSwitches     = 2,
-  OpenContainers       = 3,
-  AttackPlayers        = 4,
-  AttackMobs           = 5,
-  OperatorCommands     = 6,
-  Teleport             = 7,
-  ExposedAbilityCount  = 8,
-  Invulnerable         = 8,
-  Flying               = 9,
-  MayFly               = 10,
-  Instabuild           = 11,
-  Lightning            = 12,
-  FlySpeed             = 13,
-  WalkSpeed            = 14,
-  Muted                = 15,
-  WorldBuilder         = 16,
-  NoClip               = 17,
-  AbilityCount         = 18
-};
 
 enum class PlayerUISlot {
   CursorSelected          = 0,
@@ -284,7 +260,9 @@ public:
   }
 
   BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
+  BUILD_ACCESS_MUT(class Ability, mAbilities, 0x840);
   BUILD_ACCESS_MUT(enum GameType, mPlayerGameType, 0x1C84);
+  BUILD_ACCESS_MUT(enum InputMode, mCurrentInputMode, 0x21A8);
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
   BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);

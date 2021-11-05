@@ -53,8 +53,8 @@ public:
     piercing              = 34,
     quick_charge          = 35,
     soul_speed            = 36,
-    NumEnchantments       = 37,
-    InvalidEnchantment    = 38
+    num_enchantments      = 37,
+    invalid_enchantment   = 38
   };
   enum struct Frequency {
     VeryRare         = 1,

@@ -71,20 +71,14 @@ Chat &Chat::GetInstance() {
 } // namespace Mod
 
 static struct Settings {
-  std::string database = "chat.db";
-
-  struct CustomChatFormatting {
-    bool enabled       = false;
-    std::string prefix = "<";
-    std::string sufix  = ">";
-
-    template <typename IO> static inline bool io(IO f, CustomChatFormatting &self, YAML::Node &node) {
-      return f(self.enabled, node["enabled"]) && f(self.prefix, node["prefix"]) && f(self.sufix, node["sufix"]);
-    }
-  } customChatFormatting;
+  std::string database             = "chat.db";
+  std::string namePrefix           = "<";
+  std::string nameSuffix           = ">";
 
   template <typename IO> static inline bool io(IO f, Settings &settings, YAML::Node &node) {
-    return f(settings.database, node["database"]) && f(settings.customChatFormatting, node["customChatFormatting"]);
+    return f(settings.database, node["database"]) &&
+           f(settings.namePrefix, node["namePrefix"]) &&
+           f(settings.nameSuffix, node["nameSuffix"]);
   }
 } settings;
 
@@ -135,11 +129,9 @@ TClasslessInstanceHook(
     return;
   }
   TextPacket packet;
-  if (!settings.customChatFormatting.enabled) {
-    packet = TextPacket::createTextPacket<TextPacketType::Chat>(displayName, content, std::to_string(it->xuid));
-  } else {
-    packet = TextPacket::createTextPacket<TextPacketType::SystemMessage>(displayName, settings.customChatFormatting.prefix + displayName + settings.customChatFormatting.sufix + " " + content, std::to_string(it->xuid));
-  }
+  packet = TextPacket::createTextPacket<TextPacketType::SystemMessage>(
+    displayName, settings.namePrefix + displayName + settings.nameSuffix + " " + content, std::to_string(it->xuid));
+  
   LocateService<Level>()->forEachPlayer([&](Player const &p) -> bool {
     p.sendNetworkPacket(packet);
     return true;
