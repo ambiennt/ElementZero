@@ -8,6 +8,24 @@
 #include "../Actor/ActorUniqueID.h"
 #include "../dll.h"
 
+enum class BossBarColor {
+  PINK    = 0,
+  BLUE    = 1,
+  RED     = 2,
+  GREEN   = 3,
+  YELLOW  = 4,
+  PURPLE  = 5,
+  WHITE   = 6
+};
+
+enum class BossBarOverlay {
+  Progress    = 0,
+  Notched_6   = 1,
+  Notched_10  = 2,
+  Notched_12  = 3,
+  Notched_20  = 4
+};
+
 enum class BossEventUpdateType {
   SHOW              = 0, // add
   REGISTER_PLAYER   = 1, // player added
@@ -22,13 +40,13 @@ enum class BossEventUpdateType {
 
 class BossEventPacket : public Packet {
 public:
-  int unk_val_1 = 1;
-  int unk_val_2 = 2;
+  int FLAG_DARKEN = 1;
+  int FLAG_FOG = 2;
   ActorUniqueID owner, player;
   BossEventUpdateType type;
   std::string name;
   float percent  = 0.0f;
-  unsigned color = 0, overlay = 0;
+  unsigned color = 0, overlay = 0; // enum BossBarColor, enum BossBarOverlay
   bool darken_sky = false, fog = false;
 
   inline ~BossEventPacket() {}

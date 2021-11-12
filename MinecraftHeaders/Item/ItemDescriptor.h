@@ -1,12 +1,11 @@
 #pragma once
 
-class Item;
-class Block;
+#include "../dll.h"
 
 class ItemDescriptor {
 public:
-  Item *item{};         // 0
-  Block *block{};       // 8
-  unsigned short aux{}; // 16
-  bool isItem{};        // 18
+    std::weak_ptr<class Item> mItem{};
+    class Block* mBlock{};
+    unsigned short mAuxValue{};
+    bool mValid{};
 };

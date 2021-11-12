@@ -30,9 +30,9 @@ class CommandSelectorBase {
   float radiusMax;                                                                      // 144 = 0x7f7fffff (float max)
   uint64_t resultCount;                                                                 // 152 = 0xFFFFFFFF
   bool includeDeadPlayers;                                                              // 160
-  bool flag161;                                                                         // 161
-  bool flag162;                                                                         // 162
-  bool flag163;                                                                         // 163
+  bool isPositionBound;                                                                 // 161
+  bool distanceFiltered;                                                                // 162
+  bool haveDeltas; // ?????                                                             // 163
   bool playerOnly;                                                                      // 164
   bool explicitIdSelector;                                                              // 165
 

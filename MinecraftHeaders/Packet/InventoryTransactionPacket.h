@@ -95,7 +95,7 @@ public:
   unsigned short itemAux = 0;
   std::unique_ptr<CompoundTag> tag;
   int count          = 0;
-  unsigned char flag = 0;
+  bool overflow      = false;
 
   MCAPI InventoryTransactionItemGroup(ItemStack const &, int);
   inline ~InventoryTransactionItemGroup() {}

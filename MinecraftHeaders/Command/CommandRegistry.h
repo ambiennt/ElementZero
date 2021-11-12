@@ -28,9 +28,9 @@ public:
     CommandVersion version;                   // 0
     FactoryFn factory;                        // 8
     std::vector<CommandParameterData> params; // 16
-    char unk;                                 // 40
+    int versionOffset;                        // 40
     inline Overload(CommandVersion version, FactoryFn factory, std::vector<CommandParameterData> &&args)
-        : version(version), factory(factory), params(std::move(args)), unk(0xFF) {}
+        : version(version), factory(factory), params(std::move(args)), versionOffset(0xFF) {}
   };
   struct Signature {
     std::string name;                                 // 0
@@ -40,10 +40,10 @@ public:
     CommandRegistry::Symbol main_symbol;              // 92
     CommandRegistry::Symbol alt_symbol;               // 96
     CommandFlag flag;                                 // 100
-    int unk72;
-    int unk76;
-    int unk80;
-    bool b84;
+    int firstRule;
+    int firstRuleFactorization;
+    int firstOptional;
+    bool runnable;
 
     inline Signature(
         std::string name, std::string desc, CommandPermissionLevel perm, CommandRegistry::Symbol symbol,

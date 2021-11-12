@@ -8,7 +8,7 @@ class CommandRequestPacket : public Packet {
 public:
   std::string command;
   CommandOriginData data;
-  bool flag = false;
+  bool internalSource = false;
 
   inline ~CommandRequestPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;
@@ -17,6 +17,7 @@ public:
   MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(CommandRequestPacket, command) == 40);
-static_assert(offsetof(CommandRequestPacket, data) == 72);
-static_assert(offsetof(CommandRequestPacket, flag) == 136);
+static_assert(offsetof(CommandRequestPacket, command) == 0x28);
+static_assert(offsetof(CommandRequestPacket, data) == 0x48);
+static_assert(offsetof(CommandRequestPacket, internalSource) == 0x88);
+static_assert(sizeof(CommandRequestPacket) == 0x90);

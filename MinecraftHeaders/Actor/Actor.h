@@ -26,6 +26,19 @@ enum class ActorDamageCause;
 enum class ItemUseMethod;
 enum class LevelSoundEvent;
 
+enum class SpawnRuleEnum {
+  Undefined     = -1,
+  NoSpawnRules  = 0,
+  HasSpawnRules = 1
+};
+
+enum class PortalAxis {
+  Unknown = 0,
+  X       = 1,
+  Z       = 2,
+  Count   = 3
+};
+
 enum class ArmorMaterialType {
   None                  = -1,
   DefaultArmor          = 0,
@@ -184,14 +197,16 @@ enum class ActorFlags {
   Roaring                     = 83,
   DelayedAttack               = 84,
   IsAvoidingMobs              = 85,
-  FacingTargetToRangeAttack   = 86,
-  HiddenWhenInvisible         = 87,
-  IsInUI                      = 88,
-  Stalking                    = 89,
-  Emoting                     = 90,
-  Celebrating                 = 91,
-  Admiring                    = 92,
-  CelebratingSpecial          = 93,
+  IsAvoidingBlock             = 86,
+  FacingTargetToRangeAttack   = 87,
+  HiddenWhenInvisible         = 88,
+  IsInUI                      = 89,
+  Stalking                    = 90,
+  Emoting                     = 91,
+  Celebrating                 = 92,
+  Admiring                    = 93,
+  CelebratingSpecial          = 94,
+  Count                       = 95
 };
 
 class Actor {
@@ -614,27 +629,176 @@ public:
   }
 
   
-  //BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8);
+  //BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // probably some legacy field
   BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);
   BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
   BUILD_ACCESS_MUT(class VariantParameterList, mInitParams, 0x48);
   BUILD_ACCESS_MUT(bool, mForceInitMethodToSpawnOnReload, 0xC8);
   //BUILD_ACCESS_MUT(class AutomaticID<class Dimension, int>, mDimensionId, 0xCC);
   BUILD_ACCESS_MUT(int, mDimensionId, 0xCC);
-
+  BUILD_ACCESS_MUT(bool, mAdded, 0xD0);
+  BUILD_ACCESS_MUT(class ActorDefinitionGroup *, mDefinitions, 0xD8);
+  BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDescriptor>, mCurrentDescription, 0xE0);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8);
+  BUILD_ACCESS_MUT(std::shared_ptr<class RopeSystem>, mLeashRopeSystem, 0xF0);
   BUILD_ACCESS_MUT(class Vec2, mRot, 0x100);
+  BUILD_ACCESS_MUT(class Vec2, mRotPrev, 0x108);
+  BUILD_ACCESS_MUT(float, mSwimAmount, 0x110);
+  BUILD_ACCESS_MUT(float, mSwimPrev, 0x114);
+  BUILD_ACCESS_MUT(class ChunkPos, mChunkPos, 0x118);
+  BUILD_ACCESS_MUT(class Vec3, mRenderPos, 0x120);
+  BUILD_ACCESS_MUT(class Vec2, mRenderRot, 0x12C);
+  BUILD_ACCESS_MUT(int, mAmbientSoundTime, 0x134);
   BUILD_ACCESS_MUT(int, mLastHurtByPlayerTime, 0x138);
+  //BUILD_ACCESS_MUT(uint8_t, mCategories[4], 0x13C); // _BYTE in ida? idk
+  BUILD_ACCESS_MUT(class SynchedActorData, mEntityData, 0x140);
+  BUILD_ACCESS_MUT(std::unique_ptr<class SpatialActorNetworkData>, mNetworkData, 0x160);
+  BUILD_ACCESS_MUT(class Vec3, mSentDelta, 0x168);
+  BUILD_ACCESS_MUT(float, mScale, 0x174);
+  BUILD_ACCESS_MUT(float, mScalePrev, 0x178);
+  BUILD_ACCESS_MUT(uint64_t, mNameTagHash, 0x180);
+  BUILD_ACCESS(const class Block *, mInsideBlock, 0x188);
+  BUILD_ACCESS_MUT(class BlockPos, mInsideBlockPos, 0x190);
   BUILD_ACCESS_MUT(float, mFallDistance, 0x19C);
   BUILD_ACCESS_MUT(bool, mOnGround, 0x1A0);
+  BUILD_ACCESS_MUT(bool, mWasOnGround, 0x1A1);
+  BUILD_ACCESS_MUT(bool, mHorizontalCollision, 0x1A2);
+  BUILD_ACCESS_MUT(bool, mVerticalCollision, 0x1A3);
+  BUILD_ACCESS_MUT(bool, mCollision, 0x1A4);
+  BUILD_ACCESS_MUT(bool, mIgnoreLighting, 0x1A5);
+  BUILD_ACCESS_MUT(bool, mFilterLighting, 0x1A6);
+  BUILD_ACCESS_MUT(class Color, mTintColor, 0x1A8);
+  BUILD_ACCESS_MUT(class Color, mTintColor2, 0x1B8);
+  BUILD_ACCESS_MUT(float, mStepSoundVolume, 0x1C8);
+  BUILD_ACCESS_MUT(float, mStepSoundPitch, 0x1CC);
+  BUILD_ACCESS_MUT(class AABB *, mLastHitBB, 0x1D0);
+  BUILD_ACCESS_MUT(std::vector<class AABB>, mSubBBs, 0x1D8); // presumably for ender dragon?
+  BUILD_ACCESS_MUT(float, mTerrainSurfaceOffset, 0x1F0);
+  BUILD_ACCESS_MUT(float, mHeightOffset, 0x1F4);
+  BUILD_ACCESS_MUT(float, mExplosionOffset, 0x1F8);
+  BUILD_ACCESS_MUT(float, mShadowOffset, 0x1FC);
+  BUILD_ACCESS_MUT(float, mMaxAutoStep, 0x200);
+  BUILD_ACCESS_MUT(float, mPushthrough, 0x204);
+  BUILD_ACCESS_MUT(float, mWalkDistPrev, 0x208);
+  BUILD_ACCESS_MUT(float, mWalkDist, 0x20C);
+  BUILD_ACCESS_MUT(float, mMoveDist, 0x210);
+  BUILD_ACCESS_MUT(float, mBlockMovementSlowdownMultiplier, 0x214);
+  BUILD_ACCESS_MUT(float, mNextStep, 0x218);
+  BUILD_ACCESS_MUT(bool, mImmobile, 0x21C);
+  BUILD_ACCESS_MUT(bool, mWasInWater, 0x21D);
+  BUILD_ACCESS_MUT(bool, mHasEnteredWater, 0x21E);
+  BUILD_ACCESS_MUT(bool, mHeadInWater, 0x21F);
+  BUILD_ACCESS_MUT(bool, mIsWet, 0x220);
+  BUILD_ACCESS_MUT(class Vec2, mSlideOffset, 0x224);
+  BUILD_ACCESS_MUT(class Vec3, mHeadOffset, 0x22C);
+  BUILD_ACCESS_MUT(class Vec3, mEyeOffset, 0x238);
+  BUILD_ACCESS_MUT(class Vec3, mBreathingOffset, 0x244);
+  BUILD_ACCESS_MUT(class Vec2, mMouthOffset, 0x250);
+  BUILD_ACCESS_MUT(class Vec3, mDropOffset, 0x25C);
   BUILD_ACCESS_MUT(bool, mFirstTick, 0x268);
   BUILD_ACCESS_MUT(int, mTickCount, 0x26C);
   BUILD_ACCESS_MUT(int, mInvulnerableTime, 0x270);
   BUILD_ACCESS_MUT(int, mLastHealth, 0x274);
-  BUILD_ACCESS_MUT(bool, mIsAlive, 0x2F8);
-  BUILD_ACCESS_MUT(class BlockSource*, mRegion, 0x320);
+  BUILD_ACCESS_MUT(bool, mFallDamageImmune, 0x278);
+  BUILD_ACCESS_MUT(bool, mHurtMarked, 0x279);
+  BUILD_ACCESS_MUT(bool, mWasHurtLastFrame, 0x27A);
+  BUILD_ACCESS_MUT(bool, mInvulnerable, 0x27B);
+  BUILD_ACCESS_MUT(int, mOnFireTicks, 0x27C);
+  BUILD_ACCESS_MUT(int, mFlameTexFrameIndex, 0x280);
+  BUILD_ACCESS_MUT(int, mClientSideFireTransitionStartTick, 0x284);
+  BUILD_ACCESS_MUT(float, mFlameFrameIncrementTime, 0x288);
+  BUILD_ACCESS_MUT(bool, mOnHotBlock, 0x28C);
+  BUILD_ACCESS_MUT(bool, mClientSideFireTransitionLatch, 0x28D);
+  BUILD_ACCESS_MUT(bool, mAlwaysFireImmune, 0x28E);
+  BUILD_ACCESS_MUT(int, mPortalCooldown, 0x290);
+  BUILD_ACCESS_MUT(class BlockPos, mPortalBlockPos, 0x294);
+  BUILD_ACCESS_MUT(enum PortalAxis, mPortalEntranceAxis, 0x2A0);
+  BUILD_ACCESS_MUT(int, mInsidePortalTime, 0x2A4);
+  BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mRiderIDs, 0x2A8);
+  BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mRiderIDsToRemove, 0x2C0);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mRidingID, 0x2D8);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mRidingPrevID, 0x2E0);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mPushedByID, 0x2E8);
+  BUILD_ACCESS_MUT(bool, mInheritRotationWhenRiding, 0x2F0);
+  BUILD_ACCESS_MUT(bool, mRidersChanged, 0x2F1);
+  BUILD_ACCESS_MUT(bool, mBlocksBuilding, 0x2F2);
+  BUILD_ACCESS_MUT(bool, mUsesOneWayCollision, 0x2F3);
+  BUILD_ACCESS_MUT(bool, mForcedLoading, 0x2F4);
+  BUILD_ACCESS_MUT(bool, mPrevPosRotSetThisTick, 0x2F5);
+  BUILD_ACCESS_MUT(bool, mTeleportedThisTick, 0x2F6);
+  BUILD_ACCESS_MUT(bool, mForceSendMotionPacket, 0x2F7);
+  BUILD_ACCESS_MUT(float, mSoundVolume, 0x2F8);
+  BUILD_ACCESS_MUT(int, mShakeTime, 0x2FC); // for arrows
+  BUILD_ACCESS_MUT(float, mWalkAnimSpeedMultiplier, 0x300); // set to 1.5x when hurt
+  BUILD_ACCESS_MUT(float, mWalkAnimSpeedO, 0x304);
+  BUILD_ACCESS_MUT(float, mWalkAnimSpeed, 0x308);
+  BUILD_ACCESS_MUT(float, mWalkAnimPos, 0x30C);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mLegacyUniqueID, 0x310);
+  BUILD_ACCESS_MUT(bool, mHighlightedThisFrame, 0x318);
+  BUILD_ACCESS_MUT(bool, mInitialized, 0x319);
+  BUILD_ACCESS_MUT(class BlockSource *, mRegion, 0x320);
+  BUILD_ACCESS_MUT(class Dimension *, mDimension, 0x328);
+  BUILD_ACCESS_MUT(class Level *, mLevel, 0x330);
+  BUILD_ACCESS_MUT(class HashedString, mActorRendererId, 0x338);
+  BUILD_ACCESS_MUT(class HashedString,
+    mActorRendererIdThatAnimationComponentWasInitializedWith, 0x360); // yes this is the actual name
+  BUILD_ACCESS_MUT(bool, mChanged, 0x338);
+  BUILD_ACCESS_MUT(bool, mRemoved, 0x389); // probably died on this tick
+  BUILD_ACCESS_MUT(bool, mGlobal, 0x38A);
+  BUILD_ACCESS_MUT(bool, mAutonomous, 0x38B);
+  BUILD_ACCESS_MUT(enum ActorType, mActorType, 0x38C);
+  BUILD_ACCESS_MUT(struct ActorDefinitionIdentifier, mActorIdentifier, 0x390);
   BUILD_ACCESS_MUT(std::unique_ptr<class BaseAttributeMap>, mAttributes, 0x438);
+  BUILD_ACCESS_MUT(std::unique_ptr<class EconomyTradeableComponent>, mEconomyTradeableComponent, 0x440);
+  BUILD_ACCESS_MUT(std::shared_ptr<class AnimationComponent>, mAnimationComponent, 0x448);
+  BUILD_ACCESS_MUT(class AABBShapeComponent, mAABBComponent, 0x458);
+  BUILD_ACCESS_MUT(struct StateVectorComponent, mStateVectorComponent, 0x47C);
   BUILD_ACCESS_MUT(struct ActorUniqueID, mTargetId, 0x4A0);
-  BUILD_ACCESS_MUT(bool, mIsKnockedBackOnDeath, 0x570);
+  BUILD_ACCESS_MUT(float, mRestrictRadius, 0x4A8);
+  BUILD_ACCESS_MUT(class BlockPos, mRestrictCenter, 0x4AC);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mInLovePartner, 0x4B8);
+  BUILD_ACCESS_MUT(std::vector<class MobEffectInstance>, mMobEffects, 0x4C0);
+  BUILD_ACCESS_MUT(bool, mEffectsDirty, 0x4D8);
+  BUILD_ACCESS_MUT(bool, mLootDropped, 0x4D9);
+  BUILD_ACCESS_MUT(bool, mPersistingTrade, 0x4DA);
+  BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mPersistingTradeOffers, 0x4E0);
+  BUILD_ACCESS_MUT(int, mPersistingTradeRiches, 0x4E8);
+  BUILD_ACCESS_MUT(class ActorRuntimeID, mRuntimeID, 0x4F0);
+  BUILD_ACCESS_MUT(class Color, mHurtColor, 0x4F8); // r 1.0, g 0.0, b 0.0, a 0.6
+  BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDiffList>, mDefinitionList, 0x508);
+  BUILD_ACCESS_MUT(bool, mHasLimitedLife, 0x510);
+  BUILD_ACCESS_MUT(bool, mEnforceRiderRotationLimit, 0x511);
+  BUILD_ACCESS_MUT(bool, mIsStuckItem, 0x512);
+  BUILD_ACCESS_MUT(bool, mIsSafeToSleepNear, 0x513);
+  BUILD_ACCESS_MUT(int, mLimitedLifeTicks, 0x514);
+  BUILD_ACCESS_MUT(int, mForceVisibleTimerTicks, 0x518);
+  BUILD_ACCESS_MUT(float, mRidingExitDistance, 0x51C);
+  BUILD_ACCESS_MUT(std::string, mFilteredNameTag, 0x520);
+  BUILD_ACCESS_MUT(class ActorTerrainInterlockData, mTerrainInterlockData, 0x540);
+  //BUILD_ACCESS_MUT(float, mArmorDropChance[4], 0x558); // default: 25% for each armor piece
+  //BUILD_ACCESS_MUT(float, mHandDropChance[2], 0x568); // default: 25% chance for mainhand and offhand
+  BUILD_ACCESS_MUT(bool, mIsKnockedBackOnDeath, 0x570); // does not work on players
+  BUILD_ACCESS_MUT(bool, mUpdateEffects, 0x571);
+  BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mArmor, 0x578);
+  BUILD_ACCESS_MUT(std::unique_ptr<SimpleContainer>, mHand, 0x580);
+  BUILD_ACCESS_MUT(std::vector<class AABB>, mOnewayPhysicsBlocks, 0x588);
+  BUILD_ACCESS_MUT(bool, mStuckInCollider, 0x5A0);
+  BUILD_ACCESS_MUT(bool, mPenetratingLastFrame, 0x5A1);
+  BUILD_ACCESS_MUT(bool, mCollidableMobNear, 0x5A2);
+  BUILD_ACCESS_MUT(bool, mCollidableMob, 0x5A3);
+  BUILD_ACCESS_MUT(bool, mCanPickupItems, 0x5A4);
+  BUILD_ACCESS_MUT(bool, mHasSetCanPickupItems, 0x5A5);
+  BUILD_ACCESS_MUT(bool, mChainedDamageEffects, 0x5A6);
+  BUILD_ACCESS_MUT(bool, mWasInBubbleColumn, 0x5A7);
+  BUILD_ACCESS_MUT(bool, mIsExperimental, 0x5A8);
+  BUILD_ACCESS_MUT(bool, mWasInWallLastTick, 0x5A9);
+  BUILD_ACCESS_MUT(int, mTicksInWall, 0x5AC);
+  BUILD_ACCESS_MUT(int, mDamageNearbyMobsTick, 0x5b0); // riptide / spin attack
+  BUILD_ACCESS_MUT(enum SpawnRuleEnum, mSpawnRulesEnum, 0x5B4);
+  BUILD_ACCESS_MUT(std::unique_ptr<class ActionQueue>, mActionQueue, 0x5B8);
+  BUILD_ACCESS_MUT(class MolangVariableMap, mMolangVariables, 0x5C0);
+  BUILD_ACCESS_MUT(class CompoundTag, mCachedComponentData, 0x600);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mFishingHookID, 0x618); // when player casts fishing hook
 
   AS_FIELD(ActorRuntimeID, RuntimeID, getRuntimeID);
   BUILD_ACCESS_COMPAT(SimpleContainer &, EquipmentContainer);

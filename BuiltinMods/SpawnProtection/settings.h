@@ -1,27 +1,24 @@
 #pragma once
 
 #include <cstdint>
-
 #include <yaml.h>
 
-struct Settings {
-  struct PosXZ {
-    int x = 0, z = 0;
+inline struct Settings {
+	struct PosXZ {
+		int x = 0, z = 0;
 
-    template <typename IO> static inline bool io(IO f, PosXZ &sz, YAML::Node &node) {
-      return f(sz.x, node["x"]) && f(sz.z, node["z"]);
-    }
-  };
+		template <typename IO> static inline bool io(IO f, PosXZ &sz, YAML::Node &node) {
+			return f(sz.x, node["x"]) && f(sz.z, node["z"]);
+		}
+	};
 
-  bool AllowOperator = false;
-  PosXZ Start, End;
+	bool AllowOperator = false;
+	PosXZ Start, End;
 
-  template <typename IO> static inline bool io(IO f, Settings &self, YAML::Node &node) {
-    return f(self.AllowOperator, node["allow-operator"]) && f(self.Start, node["start"]) && f(self.End, node["end"]);
-  }
-};
-
-extern Settings settings;
+	template <typename IO> static inline bool io(IO f, Settings &self, YAML::Node &node) {
+		return f(self.AllowOperator, node["allow-operator"]) && f(self.Start, node["start"]) && f(self.End, node["end"]);
+	}
+} settings;
 
 enum struct Mode { Disabled, Enforce, Permissive };
 extern Mode mode;
