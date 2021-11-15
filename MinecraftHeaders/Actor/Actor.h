@@ -674,7 +674,7 @@ public:
   BUILD_ACCESS_MUT(class AABB *, mLastHitBB, 0x1D0);
   BUILD_ACCESS_MUT(std::vector<class AABB>, mSubBBs, 0x1D8); // presumably for ender dragon?
   BUILD_ACCESS_MUT(float, mTerrainSurfaceOffset, 0x1F0);
-  BUILD_ACCESS_MUT(float, mHeightOffset, 0x1F4);
+  BUILD_ACCESS_MUT(float, mHeightOffset, 0x1F4); // 1.62 for players
   BUILD_ACCESS_MUT(float, mExplosionOffset, 0x1F8);
   BUILD_ACCESS_MUT(float, mShadowOffset, 0x1FC);
   BUILD_ACCESS_MUT(float, mMaxAutoStep, 0x200);
@@ -742,7 +742,7 @@ public:
   BUILD_ACCESS_MUT(class HashedString, mActorRendererId, 0x338);
   BUILD_ACCESS_MUT(class HashedString,
     mActorRendererIdThatAnimationComponentWasInitializedWith, 0x360); // yes this is the actual name
-  BUILD_ACCESS_MUT(bool, mChanged, 0x338);
+  BUILD_ACCESS_MUT(bool, mChanged, 0x388);
   BUILD_ACCESS_MUT(bool, mRemoved, 0x389); // probably died on this tick
   BUILD_ACCESS_MUT(bool, mGlobal, 0x38A);
   BUILD_ACCESS_MUT(bool, mAutonomous, 0x38B);
@@ -793,7 +793,7 @@ public:
   BUILD_ACCESS_MUT(bool, mIsExperimental, 0x5A8);
   BUILD_ACCESS_MUT(bool, mWasInWallLastTick, 0x5A9);
   BUILD_ACCESS_MUT(int, mTicksInWall, 0x5AC);
-  BUILD_ACCESS_MUT(int, mDamageNearbyMobsTick, 0x5b0); // riptide / spin attack
+  BUILD_ACCESS_MUT(int, mDamageNearbyMobsTick, 0x5B0); // riptide / spin attack
   BUILD_ACCESS_MUT(enum SpawnRuleEnum, mSpawnRulesEnum, 0x5B4);
   BUILD_ACCESS_MUT(std::unique_ptr<class ActionQueue>, mActionQueue, 0x5B8);
   BUILD_ACCESS_MUT(class MolangVariableMap, mMolangVariables, 0x5C0);

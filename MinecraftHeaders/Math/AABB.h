@@ -5,9 +5,9 @@
 
 class AABB {
 public:
-	Vec3 min,
-	Vec3 max,
-	bool empty
+	Vec3 min;
+	Vec3 max;
+	bool empty;
 };
 
 static_assert(sizeof(AABB) == 0x1C);

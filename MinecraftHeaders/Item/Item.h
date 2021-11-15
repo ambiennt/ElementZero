@@ -199,3 +199,5 @@ public:
   BUILD_ACCESS(class SeedItemComponent *, Seed, 408);
   BUILD_ACCESS(class CameraItemComponent *, Camera, 416);
 };
+
+class EnderPearlItem : public Item {};

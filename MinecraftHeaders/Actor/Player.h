@@ -25,6 +25,7 @@ class Dimension;
 enum class StructureFeatureType;
 enum class ClientPlayMode;
 enum class CooldownType;
+enum class BuildPlatform;
 
 enum class MovementEventType { PositionCorrected, BackInSync };
 
@@ -261,6 +262,7 @@ public:
 
   BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800);
   BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
+  BUILD_ACCESS_MUT(enum BuildPlatform, mBuildPlatform, 0x838);
   BUILD_ACCESS_MUT(class Ability, mAbilities, 0x840);
   BUILD_ACCESS_MUT(class PacketSender*, mPacketSender, 0xF88);
   BUILD_ACCESS_MUT(enum GameType, mPlayerGameType, 0x1C84);
