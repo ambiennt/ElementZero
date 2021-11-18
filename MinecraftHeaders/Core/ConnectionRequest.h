@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Certificate.h"
 #include "WebToken.h"
 #include "UnverifiedCertificate.h"
@@ -22,7 +24,7 @@ public:
 	MCAPI std::string getClientPlatformId(void) const;
 	MCAPI std::string getClientPlatformOfflineId(void) const;
 	MCAPI std::string getClientPlatformOnlineId(void) const;
-	MCAPI unsigned __int64 getClientRandomId(void) const;
+	MCAPI uint64_t getClientRandomId(void) const;
 	MCAPI std::string getClientThirdPartyName(void) const;
 	MCAPI std::string getDeviceId(void) const;
 	MCAPI class std::vector<class SerializedPersonaPieceHandle, class std::allocator<class SerializedPersonaPieceHandle> > getPersonaPieces(void) const;

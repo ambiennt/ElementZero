@@ -307,7 +307,7 @@ public:
   virtual void executeEvent(
       class BlockSource &, class BlockPos const &, class Block const &, std::string const &, class Actor &) const;
   virtual bool hasTag(class BlockSource &, class BlockPos const &, class Block const &, std::string const &) const;
-  virtual class MobSpawnerData const *getMobToSpawn(class SpawnConditions const &, class BlockSource &) const;
+  virtual struct MobSpawnerData const *getMobToSpawn(struct SpawnConditions const &, class BlockSource &) const;
   virtual class Color getMapColor(class BlockSource &, class BlockPos const &) const;
   virtual class Color getMapColor() const;
   virtual bool shouldStopFalling(class Actor &) const;

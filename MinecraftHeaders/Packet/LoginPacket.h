@@ -6,8 +6,8 @@
 
 class LoginPacket : public Packet {
 public:
-  int64_t client_network_version;
-  std::unique_ptr<ConnectionRequest> connection_request;
+  int32_t mClientNetworkVersion;
+  std::unique_ptr<ConnectionRequest> mConnectionRequest;
 
   inline ~LoginPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;
@@ -16,6 +16,6 @@ public:
   MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(LoginPacket, client_network_version) == 0x28);
-static_assert(offsetof(LoginPacket, connection_request) == 0x30);
+static_assert(offsetof(LoginPacket, mClientNetworkVersion) == 0x28);
+static_assert(offsetof(LoginPacket, mConnectionRequest) == 0x30);
 static_assert(sizeof(LoginPacket) == 0x38);

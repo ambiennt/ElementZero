@@ -1,6 +1,10 @@
 #pragma once
+
 #include "WebToken.h"
 #include "Certificate.h"
+#include "../dll.h"
+
+#include <memory>
 
 class UnverifiedCertificate {
 public:

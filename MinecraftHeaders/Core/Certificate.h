@@ -1,9 +1,10 @@
 #pragma once
 
 #include "UnverifiedCertificate.h"
-#include <memory>
 #include "json.h"
 #include "../dll.h"
+
+#include <memory>
 
 class Certificate {
 public:
