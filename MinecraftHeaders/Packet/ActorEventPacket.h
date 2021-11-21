@@ -63,9 +63,9 @@ enum class ActorEvent {
 
 class ActorEventPacket : public Packet {
 public:
-  ActorRuntimeID rid;
-  ActorEvent event;
-  int data;
+  ActorRuntimeID mRuntimeId;
+  ActorEvent mEventId;
+  int mData; // idk what this is for
 
   inline ~ActorEventPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

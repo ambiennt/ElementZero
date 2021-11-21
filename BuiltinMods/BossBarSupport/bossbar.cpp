@@ -257,7 +257,7 @@ void Instance::sendSetPercent() {
 
 void Instance::updateBossActorPosition() {
   MoveActorAbsolutePacket pkt;
-  pkt.pos = cfg.entry.player->getPos();
+  pkt.mPos = cfg.entry.player->getPos();
   cfg.entry.player->sendNetworkPacket(pkt);
 }
 

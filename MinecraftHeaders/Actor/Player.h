@@ -29,6 +29,28 @@ enum class BuildPlatform;
 
 enum class MovementEventType { PositionCorrected, BackInSync };
 
+enum class InputMode {
+    Undefined         = 0,
+    Mouse             = 1,
+    Touch             = 2,
+    GamePad           = 3,
+    MotionController  = 4,
+    Count             = 5
+};
+
+enum class ClientPlayMode {
+  Normal               = 0,
+  Teaser               = 1,
+  Screen               = 2,
+  Viewer               = 3,
+  Reality              = 4,
+  Placement            = 5,
+  LivingRoom           = 6, 
+  ExitLevel            = 7,
+  ExitLevelLivingRoom  = 8,
+  NumModes             = 9
+};
+
 enum class PlayerUISlot {
   CursorSelected          = 0,
   AnvilInput              = 1,
@@ -125,7 +147,7 @@ public:
     return const_cast<ServerPlayer *>(reinterpret_cast<ServerPlayer const *>(this));
   }
 
-  enum class PositionMode : unsigned char {
+  enum class PositionMode : uint8_t {
     Normal       = 0,
     Respawn      = 1,
     Teleport     = 2,
@@ -260,13 +282,28 @@ public:
       "?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
   }
 
+  //a more reliable way to get pos delta for players
+  Vec3 getPosDelta() {
+    Vec3 posDelta;
+    const auto& prevPos = this->getPosOld();
+    const auto& currPos = this->getPos();
+    posDelta.x = currPos.x - prevPos.x;
+    posDelta.y = currPos.y - prevPos.y;
+    posDelta.z = currPos.z - prevPos.z;
+    return posDelta;
+  }
+
   BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800);
   BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
   BUILD_ACCESS_MUT(enum BuildPlatform, mBuildPlatform, 0x838);
   BUILD_ACCESS_MUT(class Ability, mAbilities, 0x840);
-  BUILD_ACCESS_MUT(class PacketSender*, mPacketSender, 0xF88);
+  BUILD_ACCESS_MUT(class PacketSender *, mPacketSender, 0xF88);
+  // note to self: somewhere about here the offsets of public BDS are 0x10 bytes behind dev BDS!
+  BUILD_ACCESS_MUT(std::unique_ptr<class ItemStackNetManagerBase>, mItemStackNetManager, 0x1BD8); // calling methods on this prints garbage for some reason
   BUILD_ACCESS_MUT(enum GameType, mPlayerGameType, 0x1C84);
   BUILD_ACCESS_MUT(enum InputMode, mCurrentInputMode, 0x21A8);
+  BUILD_ACCESS_MUT(enum PlayMode, mPlayMode, 0x21AC);
+  BUILD_ACCESS_MUT(int32_t, mClientViewRadius, 0x211C); // max render distance
 
   BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
   BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);

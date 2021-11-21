@@ -102,14 +102,14 @@ TClasslessInstanceHook(
   auto &db = PlayerDatabase::GetInstance();
   if (auto it = db.Find(netid); it) {
     Mod::CallbackToken<std::string> token;
-    (mAuditSystem.*EmitPlayerTransaction)(SIG("inventory_transaction"), *it, *pkt.transaction, token);
+    (mAuditSystem.*EmitPlayerTransaction)(SIG("inventory_transaction"), *it, *pkt.mTransaction, token);
     if (database && !disable_temporary) {
       static SQLite::Statement stmt{*database,
                                     "INSERT INTO audit_transaction "
                                     "(session, player, dimension, blocked, data) VALUES "
                                     "(?, ?, ?, ?, ?)"};
       BinaryStream outp;
-      pkt.transaction->write(outp);
+      pkt.mTransaction->write(outp);
       auto data = outp.getAndReleaseData();
       BOOST_SCOPE_EXIT_ALL() {
         stmt.clearBindings();

@@ -1,6 +1,6 @@
 #pragma once
 
-enum class ContainerType : unsigned char {
+enum class ContainerType : uint8_t {
     CONTAINER            = 0,
     WORKBENCH            = 1,
     FURNACE              = 2,

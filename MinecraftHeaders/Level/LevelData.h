@@ -24,6 +24,17 @@
 
 #include "../dll.h"
 
+enum class EducationEditionOffer {
+  None        = 0,
+  RestOfWorld = 1,
+  China       = 2
+};
+
+enum class NetherWorldType : int8_t {
+  Normal = 0,
+  Flat   = 1
+};
+
 struct LevelDataValue : public std::variant<
                             int, bool, float, std::string, GeneratorType, GameType, BlockPos, unsigned int,
                             std::unique_ptr<CompoundTag>> {
@@ -45,20 +56,20 @@ extern MCAPI StringKey SPAWN_POS;
 class LevelData {
 public:
   AdventureSettings mAdventureSettings;
-  WorldTemplateLevelData mPremiumTemplate;
+  WorldTemplateLevelData mWorldTemplateLevelData;
   GameRules mGameRules;
   Abilities mAbilities;
-  std::string mName;
+  std::string mLevelName;
   int mStorageVersion;
-  GameVersion mGameVersion;
+  GameVersion mMinCompatibleClientVersion;
   int mNetworkVersion;
   SemVersion mInventoryVersion;
-  Tick mTick;
+  Tick mCurrentTick;
   bool mHasSpawnPos;
   BlockPos mLimitedWorldOrigin;
   int mDayCycleTime;
   uint64_t mLastPlayedTime;
-  unsigned mServerChunkTickRange = 4;
+  unsigned mServerChunkTickRange;
   float mRainLevel;
   unsigned mRainTime;
   float mLightningLevel;
@@ -68,17 +79,17 @@ public:
   GameType mGameType;
   bool mForceGameType;
   bool mSpawnMobs;
-  Json::Value mFlatGenerator;
+  Json::Value mFlatworldGeneratorOptions;
   int mWorldStartCount;
-  bool mHasBeenLoadedInCreative;
-  int mEducationEditionOffer;
+  bool mAchievementsDisabled;
+  EducationEditionOffer mEducationEditionOffer;
   bool mEducationFeaturesEnabled;
   bool mSingleUseWorld;
   bool mConfirmedPlatformLockedContent;
   bool mMultiplayerGameIntent;
-  bool mMultiplayerGameMode;
-  bool mLanGameIntent;
-  bool mLanGameMode;
+  bool mIsMultiplayerGame;
+  bool mLANBroadcastIntent;
+  bool mLANBroadcast;
   int mXBLBroadcastIntent;
   int mXBLBroadcastMode;
   int mPlatformBroadcastIntent;
@@ -87,16 +98,16 @@ public:
   bool mTexturepacksRequired;
   bool mLockedBehaviorPack;
   bool mLockedResourcePack;
-  bool mFromLockedTemplate;
+  bool mIsFromLockedTemplate;
   std::string mEducationProductId;
   bool mUseMsaGamertagsOnly;
   bool mBonusChestEnabled;
   bool mBonusChestSpawned;
   bool mStartWithMapEnabled;
-  bool mCenterMapsToOrigin;
+  bool mMapsCenteredToOrigin;
   bool mRequiresCopiedPackRemovalCheck;
   bool mOnlySpawnV1Villagers;
-  char mNetherType;
+  NetherWorldType mNetherType;
   SpawnSettings mSpawnSettings;
   std::unordered_map<StringKey, LevelDataValue> mKV, mAltKV;
   std::string mBiomeOverride;
@@ -178,11 +189,11 @@ public:
 
 static_assert(offsetof(LevelData, mGameRules) == 288);
 static_assert(offsetof(LevelData, mAbilities) == 312);
-static_assert(offsetof(LevelData, mName) == 632);
-static_assert(offsetof(LevelData, mGameVersion) == 672);
+static_assert(offsetof(LevelData, mLevelName) == 632);
+static_assert(offsetof(LevelData, mMinCompatibleClientVersion) == 672);
 static_assert(offsetof(LevelData, mNetworkVersion) == 728);
 static_assert(offsetof(LevelData, mInventoryVersion) == 736);
-static_assert(offsetof(LevelData, mTick) == 848);
+static_assert(offsetof(LevelData, mCurrentTick) == 848);
 static_assert(offsetof(LevelData, mLimitedWorldOrigin) == 860);
 static_assert(offsetof(LevelData, mDayCycleTime) == 872);
 static_assert(offsetof(LevelData, mServerChunkTickRange) == 888);

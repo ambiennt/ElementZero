@@ -25,6 +25,7 @@ enum class ActorEvent;
 enum class ActorDamageCause;
 enum class ItemUseMethod;
 enum class LevelSoundEvent;
+enum class InputMode;
 
 enum class SpawnRuleEnum {
   Undefined     = -1,
@@ -89,15 +90,6 @@ enum class PaletteColor {
   Red                = 14,
   Black              = 15,
   PaletteColorCount  = 16
-};
-
-enum class InputMode {
-  Undefined         = 0,
-  Mouse             = 1,
-  Touch             = 2,
-  GamePad           = 3,
-  MotionController  = 4,
-  Count             = 5
 };
 
 enum class ArmorSlot {
@@ -606,6 +598,7 @@ public:
   MCAPI void loadEntityFlags(class CompoundTag const &, class DataLoadHelper &);
   MCAPI void testForCollidableMobs(class BlockSource &, class AABB const &, std::vector<class AABB> &);
   MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
+  //MCAPI class ItemStack* getOffhandSlot(void) const; // idk why it says undefined symbol
 
   template <typename T> MCAPI T *tryGetComponent(void);
   template <typename T> MCAPI T const *tryGetComponent(void) const;
@@ -627,7 +620,6 @@ public:
   inline ItemStack* getOffhandSlot() const {
     return CallServerClassMethod<ItemStack*>("?getOffhandSlot@Actor@@QEBAAEBVItemStack@@XZ", this);
   }
-
   
   //BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // probably some legacy field
   BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);

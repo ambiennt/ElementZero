@@ -158,6 +158,11 @@ protected:
 
 public:
   virtual void reinit(BlockLegacy const &, int) = 0;
+
+  inline bool operator==(ItemStackBase const &rhs) const {
+    return this->matchesItem(rhs);
+  }
+
 };
 class ItemStack : public ItemStackBase {
 public:

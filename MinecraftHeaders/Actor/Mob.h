@@ -135,17 +135,17 @@ public:
   virtual void updateGliding(void);
   virtual bool _allowAscendingScaffolding(void) const;
 
-  void frostWalk(void);
-  int getCaravanSize(void) const;
-  void setEatCounter(int);
-  void resetAttributes(void);
-  void setIsPregnant(bool);
-  void _updateMobTravel(void);
-  class Mob *getFirstCaravanHead(void);
-  bool shouldApplyWaterGravity(void);
-  enum TravelType getTravelType(void);
-  float calcMoveRelativeSpeed(enum TravelType);
-  bool checkTotemDeathProtection(class ActorDamageSource const &);
+  MCAPI void frostWalk(void);
+  MCAPI int getCaravanSize(void) const;
+  MCAPI void setEatCounter(int);
+  MCAPI void resetAttributes(void);
+  MCAPI void setIsPregnant(bool);
+  MCAPI void _updateMobTravel(void);
+  MCAPI class Mob *getFirstCaravanHead(void);
+  MCAPI bool shouldApplyWaterGravity(void);
+  MCAPI enum TravelType getTravelType(void);
+  MCAPI float calcMoveRelativeSpeed(enum TravelType);
+  MCAPI bool checkTotemDeathProtection(class ActorDamageSource const &);
 
   BUILD_ACCESS_MUT(float, mYBodyRot, 0x620);
   BUILD_ACCESS_MUT(float, mYBodyRotO, 0x624);

@@ -1,35 +1,37 @@
 #pragma once
 
 #include "../Core/Packet.h"
+#include "../Math/Vec2.h"
 #include "../Math/Vec3.h"
+#include "../Actor/Player.h"
 #include "../Actor/ActorRuntimeID.h"
 #include "../dll.h"
 
 class MovePlayerPacket : public Packet {
-    public:
-        ActorRuntimeID rid;                     // 0x28
-        Vec3 pos;                               // 0x30
-        float pitch = 0, yaw = 0, head_yaw = 0; // 0x3C, 0x40, 0x44
-        uint8_t mode;                           // 0x48
-        bool onGround;                          // 0x49
-        ActorRuntimeID ridingActorId;           // 0x50
-        int teleportCause;                      // 0x58
-        int sourceEntityType;                   // 0x5C
+public:
+    ActorRuntimeID mRuntimeId;
+    Vec3 mPos;
+    Vec2 mRot;
+    float mRotYHead;
+    Player::PositionMode mPositionMode;
+    bool mOnGround;
+    ActorRuntimeID mRidingActorId;
+    int mTeleportCause;
+    int mSourceEntityType;
 
-        inline ~MovePlayerPacket() {}
-        MCAPI virtual MinecraftPacketIds getId() const;
-        MCAPI virtual std::string getName() const;
-        MCAPI virtual void write(BinaryStream &) const;
-        MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+    inline ~MovePlayerPacket() {}
+    MCAPI virtual MinecraftPacketIds getId() const;
+    MCAPI virtual std::string getName() const;
+    MCAPI virtual void write(BinaryStream &) const;
+    MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(MovePlayerPacket, rid) == 40);
-static_assert(offsetof(MovePlayerPacket, pos) == 48);
-static_assert(offsetof(MovePlayerPacket, pitch) == 60);
-static_assert(offsetof(MovePlayerPacket, yaw) == 64);
-static_assert(offsetof(MovePlayerPacket, head_yaw) == 68);
-static_assert(offsetof(MovePlayerPacket, mode) == 72);
-static_assert(offsetof(MovePlayerPacket, onGround) == 73);
-static_assert(offsetof(MovePlayerPacket, ridingActorId) == 80);
-static_assert(offsetof(MovePlayerPacket, teleportCause) == 88);
-static_assert(offsetof(MovePlayerPacket, sourceEntityType) == 92);
+static_assert(offsetof(MovePlayerPacket, mRuntimeId) == 40);
+static_assert(offsetof(MovePlayerPacket, mPos) == 48);
+static_assert(offsetof(MovePlayerPacket, mRot) == 60);
+static_assert(offsetof(MovePlayerPacket, mRotYHead) == 68);
+static_assert(offsetof(MovePlayerPacket, mPositionMode) == 72);
+static_assert(offsetof(MovePlayerPacket, mOnGround) == 73);
+static_assert(offsetof(MovePlayerPacket, mRidingActorId) == 80);
+static_assert(offsetof(MovePlayerPacket, mTeleportCause) == 88);
+static_assert(offsetof(MovePlayerPacket, mSourceEntityType) == 92);
