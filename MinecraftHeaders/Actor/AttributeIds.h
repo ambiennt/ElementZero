@@ -1,6 +1,6 @@
 #pragma once
 
-enum class AttributeIds : unsigned int {
+enum class AttributeIds {
 	PlayerHunger                     = 1,
 	PlayerSaturation                 = 2,
 	PlayerExhaustion                 = 3,

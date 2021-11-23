@@ -1,6 +1,6 @@
 #pragma once
 
-enum class ContainerID : char {
+enum class ContainerID : int8_t {
 	Invalid         = -1,
 	Inventory       = 0, 
 	First           = 1,

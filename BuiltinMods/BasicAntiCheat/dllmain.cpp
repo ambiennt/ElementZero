@@ -53,13 +53,13 @@ TClasslessInstanceHook(
 TClasslessInstanceHook(
     void, "?handle@ServerNetworkHandler@@UEAAXAEBVNetworkIdentifier@@AEBVActorFallPacket@@@Z", NetworkIdentifier *netid,
     ActorFallPacket *packet) {
-  if (packet->fallDistance < 0.1) {
+  if (packet->mFallDistance < 0.1) {
     auto &db = Mod::PlayerDatabase::GetInstance();
     auto it  = db.Find(*netid);
     if (!it) return;
     LOGI("\"%s\"(%d) has been detected using: No fall") % it->name % it->xuid;
     (mAntiCheat.*EmitDetected)(SIG("detected"), "nofall", *it);
-    packet->inVoid = true;
+    packet->mInVoid = true;
   }
   original(this, netid, packet);
 }

@@ -148,14 +148,14 @@ public:
   MCAPI bool checkTotemDeathProtection(class ActorDamageSource const &);
 
   BUILD_ACCESS_MUT(float, mYBodyRot, 0x620);
-  BUILD_ACCESS_MUT(float, mYBodyRotO, 0x624);
+  BUILD_ACCESS_MUT(float, mYBodyRotOld, 0x624);
   BUILD_ACCESS_MUT(float, mYHeadRot, 0x628);
-  BUILD_ACCESS_MUT(float, mYHeadRotO, 0x62C);
+  BUILD_ACCESS_MUT(float, mYHeadRotOld, 0x62C);
   BUILD_ACCESS_MUT(int, mHurtTime, 0x630);
   BUILD_ACCESS_MUT(int, mHurtDuration, 0x634);
   BUILD_ACCESS_MUT(float, mHurtDirection, 0x638);
   BUILD_ACCESS_MUT(int, mAttackTime, 0x63C);
-  BUILD_ACCESS_MUT(float, mOTilt, 0x640);
+  BUILD_ACCESS_MUT(float, mTiltOld, 0x640);
   BUILD_ACCESS_MUT(float, mTilt, 0x644);
   BUILD_ACCESS_MUT(int, mLookTime, 0x648);
   BUILD_ACCESS_MUT(int, mFallTime, 0x64C);
@@ -170,7 +170,7 @@ public:
   BUILD_ACCESS_MUT(float, mYRotA, 0x688);
   BUILD_ACCESS_MUT(bool, mHasMoveInput, 0x68C);
   BUILD_ACCESS_MUT(float, mAttackAnim, 0x690);
-  BUILD_ACCESS_MUT(float, mORun, 0x694);
+  BUILD_ACCESS_MUT(float, mRunOld, 0x694);
   BUILD_ACCESS_MUT(float, mRun, 0x698);
   BUILD_ACCESS_MUT(bool, mSwinging, 0x69C);
   BUILD_ACCESS_MUT(int, mSwingTime, 0x6A0);
@@ -183,7 +183,7 @@ public:
   BUILD_ACCESS_MUT(int, mDeathTime, 0x6BC);
   BUILD_ACCESS_MUT(int, mDeathScore, 0x6C0);
   BUILD_ACCESS_MUT(float, mAnimStep, 0x6C4);
-  BUILD_ACCESS_MUT(float, mAnimStepO, 0x6C8);
+  BUILD_ACCESS_MUT(float, mAnimStepOld, 0x6C8);
   BUILD_ACCESS_MUT(float, mLockedBodyYRot, 0x6CC);
   BUILD_ACCESS_MUT(float, mRiderYRotLimit, 0x6D0);
   BUILD_ACCESS_MUT(class MovementInterpolator, mInterpolation, 0x6D4);

@@ -143,15 +143,48 @@ public:
     }
   };
 
+  struct CachedSpawnData {
+    AutomaticID<class Dimension, int> mRespawnDimensionId;
+    Vec3 mActualRespawnPosition;
+    BlockPos mRequestedRespawnPosition;
+    bool mHasRespawnPosition;
+    BlockPos mSharedSpawnPosition;
+    bool mRespawnReady;
+    Vec3 mPlayerPos;
+    bool mIsForcedRespawn;
+    bool mIsAdventure;
+    bool mIsFlyingOrNotOverworld;
+    bool mPositionLoadedFromSave;
+  };
+
   inline ServerPlayer *asServerPlayer() const noexcept {
     return const_cast<ServerPlayer *>(reinterpret_cast<ServerPlayer const *>(this));
   }
+
+  enum class SpawnPositionState {
+    InitializeSpawnPositionRandomizer = 0,
+    WaitForClientAck                  = 1,
+    DetermineDimension                = 2,
+    ChangeDimension                   = 3,
+    WaitForDimension                  = 4,
+    ChooseSpawnArea                   = 5,
+    CheckLoadedChunk                  = 6,
+    ChooseSpawnPosition               = 7,
+    SpawnComplete                     = 8,
+  };
 
   enum class PositionMode : uint8_t {
     Normal       = 0,
     Respawn      = 1,
     Teleport     = 2,
     OnlyHeadRot  = 3
+  };
+
+  enum class DimensionState {
+    Ready                 = 0,
+    Pending               = 1,
+    WaitingServerResponse = 2,
+    WaitingArea           = 3
   };
 
   virtual void prepareRegion(class ChunkSource &);
@@ -293,14 +326,126 @@ public:
     return posDelta;
   }
 
-  BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800);
+  // some fields still missing
+  BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);
+  BUILD_ACCESS_MUT(bool, mAteKelp, 0x7D4);
+  BUILD_ACCESS_MUT(int32_t, mLastBiome, 0x7D8); // I guess biome ids are ints
+  BUILD_ACCESS_MUT(std::vector<int32_t>, mOceanBiomes, 0x7E0);
+  BUILD_ACCESS_MUT(bool, mCastawaySent, 0x7F8);
+  BUILD_ACCESS_MUT(enum Player::DimensionState, mDimensionState, 0x7FC);
+  BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800); // use mServerAuthoritativeMovement in Level instead
+  BUILD_ACCESS_MUT(int32_t, mScore, 0x804); // no clue what this is for
+  BUILD_ACCESS_MUT(float, mBob, 0x80C);
+  BUILD_ACCESS_MUT(bool, mHandsBusy, 0x810);
   BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
   BUILD_ACCESS_MUT(enum BuildPlatform, mBuildPlatform, 0x838);
   BUILD_ACCESS_MUT(class Ability, mAbilities, 0x840);
+  BUILD_ACCESS_MUT(const class NetworkIdentifier, mOwner, 0x980);
+  BUILD_ACCESS_MUT(std::string, mUniqueName, 0xA18); // can this be spoofed? 
+  BUILD_ACCESS_MUT(std::string, mServerId, 0xA38);
+  BUILD_ACCESS_MUT(std::string, mSelfSignedId, 0xA58);
+  BUILD_ACCESS_MUT(std::string, mPlatformOfflineId, 0xA78);
+  BUILD_ACCESS_MUT(uint64_t, mClientRandomId, 0xA98);
+  BUILD_ACCESS_MUT(const class mce::UUID, mClientUUID, 0xAA0);
+  BUILD_ACCESS_MUT(std::unique_ptr<class Certificate>, mCertificate, 0xAB0);
+  BUILD_ACCESS_MUT(std::string, mPlatformId, 0xAB8);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mPendingRideID, 0xAD8);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mPendingLeftShoulderRiderID, 0xAE0);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mPendingRightShoulderRiderID, 0xAE8);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mInteractTarget, 0xAF0);
+  BUILD_ACCESS_MUT(class Vec3, mInteractTargetPos, 0xAF8);
+  BUILD_ACCESS_MUT(bool, mHasFakeInventory, 0xB04);
+  BUILD_ACCESS_MUT(std::unique_ptr<class ChunkViewSource>, mChunkSource, 0xB08);
+  BUILD_ACCESS_MUT(std::unique_ptr<class ChunkViewSource>, mSpawnChunkSource, 0xB10);
+  BUILD_ACCESS_MUT(std::unique_ptr<class BlockSource>, mOwnedBlockSource, 0xB18);
+  BUILD_ACCESS_MUT(bool, mUpdateMobs, 0xB20); // whether or not the player can tick nearby mobs?
+  BUILD_ACCESS_MUT(class Vec3, mFirstPersonLatestHandOffset, 0xB24); // some remnants of client stuff
+  BUILD_ACCESS_MUT(class Vec3, mCapePosO, 0xB30);
+  BUILD_ACCESS_MUT(class vec3, mCapePos, 0xB3C);
+  BUILD_ACCESS_MUT(float, mDistanceSinceTraveledEvent, 0xB54);
+  BUILD_ACCESS_MUT(std::shared_ptr<class IContainerManager>, mContainerManager, 0xB60);
+  BUILD_ACCESS_MUT(std::unique_ptr<class PlayerInventory>, mInventory, 0xB70);
+  BUILD_ACCESS_MUT(class SerializedSkin, mSkin, 0xB78);
+  //BUILD_ACCESS_MUT(std::vector<class ItemInstance>, mCreativeItemList, 0xD48);
+  //BUILD_ACCESS_MUT(std::array<std::vector<class ItemGroup>, 4>, mFilteredCreativeItemList, 0xD60);
+  BUILD_ACCESS_MUT(uint8_t, mClientSubId, 0xDC0);
+  BUILD_ACCESS_MUT(std::string, mPlatformOnlineId, 0xDC8);
+  BUILD_ACCESS_MUT(enum Player::SpawnPositionState, mSpawnPositionState, 0xDE8);
+  BUILD_ACCESS_MUT(class Vec3, mSpawnPositioningTestPosition, 0xDF0);
+  BUILD_ACCESS_MUT(bool, mBlockRespawnUntilClientMessage, 0xDFC);
+  BUILD_ACCESS_MUT(uint32_t, mRespawnChunkBuilderPolicyHandle, 0xE00);
+  BUILD_ACCESS_MUT(Player::CachedSpawnData, mCachedSpawnData, 0xE04);
+  BUILD_ACCESS_MUT(std::unique_ptr<class BlockSource>, mSpawnBlockSource, 0xE48);
+  BUILD_ACCESS_MUT(bool, mHasSeenCredits, 0xE50);
+  BUILD_ACCESS_MUT(class StopWatch, mRespawnStopwatchSearching, 0xE58);
+  BUILD_ACCESS_MUT(class Vec3, mRespawnOriginalPosition, 0xE88);
+  //BUILD_ACCESS_MUT(AutomaticID<class Dimension, int>, mRespawnOriginalDimension, 0xE94);
+  BUILD_ACCESS_MUT(int32_t, mRespawnOriginalDimension, 0xE94);
+  BUILD_ACCESS_MUT(bool, mRespawnReady, 0xE98);
+  BUILD_ACCESS_MUT(std::string, mRespawnMessage, 0xEA0);
+  BUILD_ACCESS_MUT(bool, mCheckBed, 0xEC0); // idk what this is
+  BUILD_ACCESS_MUT(class ItemStack, mItemInUse, 0xEC8); // why isnt this a pointer?
+  BUILD_ACCESS_MUT(struct PlayerInventory::SlotData, mItemInUseSlot, 0xF58);
+  BUILD_ACCESS_MUT(int32_t, mItemInUseDuration, 0xF60);
+  BUILD_ACCESS_MUT(int16_t, mSleepCounter, 0xF64);
+  BUILD_ACCESS_MUT(int16_t, mPrevSleepCounter, 0xF66);
+  BUILD_ACCESS_MUT(bool, mInteractDataDirty, 0xF68);
+  BUILD_ACCESS_MUT(struct ActorUniqueID, mPreviousInteractEntity, 0xF70);
+  BUILD_ACCESS_MUT(int32_t, mPreviousCarriedItemSlot, 0xF78);
+  BUILD_ACCESS_MUT(bool, mAutoJumping, 0xF7C);
+  BUILD_ACCESS_MUT(int32_t, mEmoteTicks, 0xF80);
   BUILD_ACCESS_MUT(class PacketSender *, mPacketSender, 0xF88);
-  // note to self: somewhere about here the offsets of public BDS are 0x10 bytes behind dev BDS!
+  BUILD_ACCESS_MUT(class BlockPos, mBounceStartPos, 0xF90);
+  BUILD_ACCESS_MUT(const class Block *, mBounceBlock, 0xFA0);
+  BUILD_ACCESS_MUT(float, mFOVModifier, 0xFA8);
+  BUILD_ACCESS_MUT(std::shared_ptr<class HudContainerManagerModel>, mHudContainerManagerModel, 0xFB0);
+  BUILD_ACCESS_MUT(std::unique_ptr<class EnderChestContainer>, mEnderChestInventory, 0xFC0);
+  BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mTrackedBossIDs, 0xFC8);
+  BUILD_ACCESS_MUT(enum Player::PositionMode, mPositionMode, 0xFE0);
+  BUILD_ACCESS_MUT(enum ActorType, mLastHurtBy, 0xFE4);
+  BUILD_ACCESS_MUT(class ItemGroup, mCursorSelectedItemGroup, 0xFE8);
+  BUILD_ACCESS_MUT(class PlayerUIContainer, mPlayerUIContainer, 0x1078);
+  BUILD_ACCESS_MUT(class InventoryTransactionManager, mTransactionManager, 0x1178);
+  BUILD_ACCESS_MUT(std::unique_ptr<class GameMode>, mGameMode, 0x11A0);
+  BUILD_ACCESS_MUT(class PlayerSpawnRandomizer, mSpawnRandomizer, 0x11A8); // this is 0x10 bytes smaller in the public 1.16.20 BDS
+
+  // note to self: shift every offset back 0x10 bytes from here and below
   BUILD_ACCESS_MUT(std::unique_ptr<class ItemStackNetManagerBase>, mItemStackNetManager, 0x1BD8); // calling methods on this prints garbage for some reason
+  BUILD_ACCESS_MUT(float, mVRMoveAdjAngle, 0x1BE0);
+  BUILD_ACCESS_MUT(std::shared_ptr<class AnimationComponent>, mUIAnimationComponent, 0x1BE8);
+  BUILD_ACCESS_MUT(std::shared_ptr<class AnimationComponent>, mMapAnimationComponent, 0x1BF8);
+  BUILD_ACCESS_MUT(class Player::PlayerSpawnPoint, mPlayerRespawnPoint, 0x1C08);
+  BUILD_ACCESS_MUT(bool, mUseUIAnimationComponent, 0x1C24);
+  BUILD_ACCESS_MUT(std::vector<class PlayerListener *>, mListeners, 0x1C28);
+  BUILD_ACCESS_MUT(class Vec3, mRespawnPositionCandidate, 0x1C4C);
+  BUILD_ACCESS_MUT(bool, mPlayerIsSleeping, 0x1C58);
+  BUILD_ACCESS_MUT(bool, mDestroyingBlock, 0x1C5A);
+  BUILD_ACCESS_MUT(class Vec3, mSurvivalViewerPosition, 0x1C5C);
+  BUILD_ACCESS_MUT(std::vector<uint32_t>, mOnScreenAnimationTextures, 0x1C68);
+  BUILD_ACCESS_MUT(int32_t, mOnScreenAnimationTicks, 0x1C80);
   BUILD_ACCESS_MUT(enum GameType, mPlayerGameType, 0x1C84);
+  BUILD_ACCESS_MUT(uint32_t, mChunkRadius, 0x1C8C); // always mClientViewRadius + 5
+  BUILD_ACCESS_MUT(int32_t, mMapIndex, 0x1C90);
+  BUILD_ACCESS_MUT(uint64_t, mElytraLoop, 0x1C98);
+  BUILD_ACCESS_MUT(float, mElytraVolume, 0x1CA0);
+  BUILD_ACCESS_MUT(float, mUnderwaterLightLevel, 0x1CA4);
+  BUILD_ACCESS_MUT(std::vector<int32_t>, mCooldowns, 0x1CA8); // for item use, like chorus fruit
+  BUILD_ACCESS_MUT(int64_t, mStartedBlockingTimeStamp, 0x1CC0);
+  BUILD_ACCESS_MUT(int64_t, mBlockedUsingShieldTimeStamp, 0x1CC8);
+  BUILD_ACCESS_MUT(int64_t, mBlockedUsingDamagedShieldTimeStamp, 0x1CD0);
+  BUILD_ACCESS_MUT(bool, mPrevBlockedUsingShield, 0x1CD8);
+  BUILD_ACCESS_MUT(bool, mUsedPotion, 0x1CDA);
+  BUILD_ACCESS_MUT(int32_t, mBounceHeight, 0x1CDC);
+  BUILD_ACCESS_MUT(class SkinAdjustments, mSkinAdjustments, 0x1CE0);
+  BUILD_ACCESS_MUT(class SerializedSkin, mSerializedSkin, 0x1CE8); // idk how this differs from mSkin
+  BUILD_ACCESS_MUT(int32_t, mScanForDolphinTimer, 0x1EB8);
+  BUILD_ACCESS_MUT(bool, mR5DataRecoverComplete, 0x1EBC); // mojang...
+  BUILD_ACCESS_MUT(std::string, mDeviceId, 0x1EC0);
+  BUILD_ACCESS_MUT(bool, mFlagClientForBAIReset, 0x1EE0); // idk what this is
+  BUILD_ACCESS_MUT(class BedHelper, mBedHelper, 0x1EE4);
+
+  // ServerPlayer begins here
+  BUILD_ACCESS_MUT(class InventoryMenu, mInventoryMenu, 0x20D8);
   BUILD_ACCESS_MUT(enum InputMode, mCurrentInputMode, 0x21A8);
   BUILD_ACCESS_MUT(enum PlayMode, mPlayMode, 0x21AC);
   BUILD_ACCESS_MUT(int32_t, mClientViewRadius, 0x211C); // max render distance

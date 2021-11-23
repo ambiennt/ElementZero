@@ -58,10 +58,10 @@ TClasslessInstanceHook(
     NetworkIdentifier const &netid, PlayerActionPacket const &pkt) {
   using namespace Mod;
   PlayerAction action;
-  action.type    = pkt.type;
-  action.pos     = pkt.pos;
-  action.face    = pkt.face;
-  action.actorId = pkt.actorId;
+  action.pos     = pkt.mPos;
+  action.face    = pkt.mFace;
+  action.type    = pkt.mAction;
+  action.actorId = pkt.mRuntimeId;
 
   auto &db = PlayerDatabase::GetInstance();
   if (auto it = db.Find(netid); it) {
@@ -84,11 +84,11 @@ TClasslessInstanceHook(
         stmt.bindNoCopy(4, *token);
       else
         stmt.bind(4, nullptr);
-      stmt.bind(5, (int) pkt.type);
-      stmt.bind(6, pkt.pos.x);
-      stmt.bind(7, pkt.pos.y);
-      stmt.bind(8, pkt.pos.z);
-      stmt.bind(9, pkt.face);
+      stmt.bind(5, (int) pkt.mAction);
+      stmt.bind(6, pkt.mPos.x);
+      stmt.bind(7, pkt.mPos.y);
+      stmt.bind(8, pkt.mPos.z);
+      stmt.bind(9, pkt.mFace);
       stmt.exec();
     }
     if (!token) original(this, netid, pkt);

@@ -39,6 +39,17 @@ public:
 	ContainerScreenContext mScreenContext;
 	bool mCurrentRequestHasCraftAction;
 	SimpleClientNetId<ItemStackLegacyRequestIdTag, int32_t, 0> mLegacyTransactionRequestId;
+
+	virtual ~ItemStackNetManagerBase();
+    virtual bool isEnabled(void);
+    virtual int getRequestId(void);
+    virtual void retainSetItemStackNetIdVariant(void);
+    virtual bool allowInventoryTransactionManager(void);
+    virtual void _tryBeginClientLegacyTransactionRequest(void);
+    virtual void onContainerScreenOpen(class ContainerScreenContext const&);
+    virtual void onContainerScreenClose(void);
+    virtual void initOpenContainer(class BlockSource&, enum ContainerEnumName, struct ContainerWeakRef const&);
+    virtual void _addLegacyTransactionRequestSetItemSlot(enum ContainerType, int);
 };
 
 class ItemStackNetManagerServer : public ItemStackNetManagerBase {

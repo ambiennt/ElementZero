@@ -6,9 +6,9 @@
 
 class ActorFallPacket : public Packet {
 public:
-  ActorRuntimeID actorId;
-  float fallDistance = 0.0f;
-  bool inVoid        = false;
+  ActorRuntimeID mRuntimeId;
+  float mFallDistance = 0.0f;
+  bool mInVoid        = false;
 
   inline ~ActorFallPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;

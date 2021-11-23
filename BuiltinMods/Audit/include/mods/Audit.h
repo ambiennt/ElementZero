@@ -16,9 +16,9 @@
 namespace Mod {
 
 struct PlayerAction {
-  PlayerActionType type;
   BlockPos pos;
   int face;
+  PlayerActionType type;
   ActorRuntimeID actorId;
 };
 

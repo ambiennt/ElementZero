@@ -18,7 +18,7 @@ inline namespace persona {
     Feet             = 5,
     Dress            = 6,
     Top              = 7,
-    High_Pants       = 8,
+    HighPants        = 8,
     Hands            = 9,
     Outerwear        = 10,
     Back             = 11,

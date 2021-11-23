@@ -15,7 +15,7 @@ class MoveActorAbsolutePacket : public Packet {
 public:
 
     ActorRuntimeID mRuntimeId;
-    Flags mFlags = Flags::GROUND; // mHeader - MoveActorAbsoluteData::Header
+    uint8_t mFlags = 0x1; // Flags::GROUND, mHeader - MoveActorAbsoluteData::Header
     Vec3 mPos;
     uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
 

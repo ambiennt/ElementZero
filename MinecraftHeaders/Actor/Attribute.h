@@ -2,6 +2,8 @@
 
 #include <modutils.h>
 #include "AttributeIds.h"
+#include "Actor.h"
+#include "Mob.h"
 
 class AttributeInstance {
 public:
@@ -14,12 +16,12 @@ public:
 
 class BaseAttributeMap {
 public:
-    AttributeInstance* getMutableInstance(unsigned int id);
+    MCAPI AttributeInstance* getMutableInstance(uint32_t id);
 };
 
 class AttributeInstanceHandle {
 public:
-    int id;
+    int32_t id;
     char pad[0x4];
     BaseAttributeMap *source;
 };
@@ -42,7 +44,6 @@ public:
     class Mob* mMob;
  };
 
-AttributeInstance* getAttribute(class Actor* actor, unsigned int id) {
-    auto attributes = direct_access<BaseAttributeMap*>(actor, 0x438);
-    return attributes->getMutableInstance(id);
+AttributeInstance* getAttribute(class Actor* actor, uint32_t id) {
+    return actor->mAttributes->getMutableInstance(id);
 }

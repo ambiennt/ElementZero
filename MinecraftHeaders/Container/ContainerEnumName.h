@@ -1,6 +1,6 @@
 #pragma once
 
-enum class ContainerEnumName : unsigned char {
+enum class ContainerEnumName : int8_t {
     AnvilInputContainer                  = 0,
     AnvilMaterialContainer               = 1,
     AnvilResultPreviewContainer          = 2,

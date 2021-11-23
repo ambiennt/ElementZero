@@ -573,7 +573,7 @@ public:
   MCAPI void sendActorDefinitionEventTriggered(std::string const &);
   MCAPI void _sendDirtyActorData(void);
 
-  MCAPI void forEachLeashedActor(class A6AXPEAVfunction);
+  //MCAPI void forEachLeashedActor(std::function<void(gsl::not_null<class Actor *>)>);
 
   MCAPI bool shouldOrphan(class BlockSource &);
 
@@ -771,8 +771,8 @@ public:
   //BUILD_ACCESS_MUT(float, mHandDropChance[2], 0x568); // default: 25% chance for mainhand and offhand
   BUILD_ACCESS_MUT(bool, mIsKnockedBackOnDeath, 0x570); // does not work on players
   BUILD_ACCESS_MUT(bool, mUpdateEffects, 0x571);
-  BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mArmor, 0x578);
-  BUILD_ACCESS_MUT(std::unique_ptr<SimpleContainer>, mHand, 0x580);
+  BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mArmorContainer, 0x578);
+  BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mHandContainer, 0x580);
   BUILD_ACCESS_MUT(std::vector<class AABB>, mOnewayPhysicsBlocks, 0x588);
   BUILD_ACCESS_MUT(bool, mStuckInCollider, 0x5A0);
   BUILD_ACCESS_MUT(bool, mPenetratingLastFrame, 0x5A1);

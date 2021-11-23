@@ -2,16 +2,16 @@
 
 enum class BuildPlatform {
     Unknown      = -1,
-    Android      = 1, // google
+    Android      = 1,  // google
     iOS          = 2,
     OSX          = 3,
     Amazon       = 4,
     GearVR       = 5,
-    UWP          = 7,
+    UWP          = 7,  // windows 10
     Win32        = 8,
     Dedicated    = 9,  // bds
-    PS4          = 10, // orbis
-    Nintendo     = 11, // nx
-    Xbox         = 12,
-    WindowsPhone = 13
+    PS4          = 11, // orbis
+    Nintendo     = 12, // nx
+    Xbox         = 13,
+    WindowsPhone = 14
 };
