@@ -52,7 +52,7 @@ public:
 		PermissionsInterfaceExposed  = 4,
 		WorldbuilderOverrides        = 8
 	};
-	
+
 	union Value {
 		bool val_bool;
 		float val_float;

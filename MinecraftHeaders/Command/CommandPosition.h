@@ -4,6 +4,6 @@
 
 class CommandPosition {
 public:
-  Vec3 vec;
-  bool mx, my, mz, op;
+	Vec3 vec;
+	bool mx, my, mz, op;
 };

@@ -210,7 +210,7 @@ TClasslessInstanceHook(
     bool, "?_playerChangeDimension@Level@@AEAA_NPEAVPlayer@@AEAVChangeDimensionRequest@@@Z", Player *player,
     ChangeDimensionRequest &request) {
   bool ret = false;
-  if (request.unk0 == 0) {
+  if (request.mState == ChangeDimensionRequest::State::PrepareRegion) {
     if (auto it = container->find(player); it != container->end()) {
       (db.*emit_change_dim)(SIG("change_dimension"), *it, request, false);
       ret = original(this, player, request);

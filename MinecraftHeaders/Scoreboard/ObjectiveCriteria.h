@@ -9,9 +9,9 @@
 
 class ObjectiveCriteria {
 public:
-  std::string name;
-  bool readonly;
-  ObjectiveRenderType type;
+	std::string name;
+	bool readonly;
+	ObjectiveRenderType type;
 
-  MCAPI static std::unique_ptr<ObjectiveCriteria> deserialize(CompoundTag const &);
+	MCAPI static std::unique_ptr<ObjectiveCriteria> deserialize(CompoundTag const &);
 };

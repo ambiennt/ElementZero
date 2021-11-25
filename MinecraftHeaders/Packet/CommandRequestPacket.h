@@ -6,15 +6,15 @@
 
 class CommandRequestPacket : public Packet {
 public:
-  std::string command;
-  CommandOriginData data;
-  bool internalSource = false;
+	std::string command;
+	CommandOriginData data;
+	bool internalSource = false;
 
-  inline ~CommandRequestPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~CommandRequestPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(CommandRequestPacket, command) == 0x28);

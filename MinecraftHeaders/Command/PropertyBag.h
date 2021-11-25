@@ -4,6 +4,6 @@
 
 class PropertyBag {
 public:
-  Json::Value value;
-  int changed_version;
+	Json::Value value;
+	int changed_version;
 };

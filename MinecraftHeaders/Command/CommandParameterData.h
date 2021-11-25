@@ -8,30 +8,36 @@
 
 class CommandOrigin;
 
+enum class CommandParameterOption : int8_t {
+	None                      = 0,
+	EnumAutocompleteExpansion = 1,
+	HasSemanticConstraint     = 2
+};
+
 enum class CommandParameterDataType {
-  NORMAL    = 0,
-  ENUM      = 1,
-  SOFTENUM  = 2,
-  POSTFIX   = 3
+	NORMAL   = 0,
+	ENUM     = 1,
+	SOFTENUM = 2,
+	POSTFIX  = 3
 };
 
 struct CommandParameterData {
-  using ParseFn = bool (CommandRegistry::*)(
-      void *, CommandRegistry::ParseToken const &, CommandOrigin const &, int, std::string &,
-      std::vector<std::string> &) const;
-  typeid_t<CommandRegistry> tid; // 0
-  ParseFn parser;                // 8
-  std::string name;              // 16
-  char const *desc;              // 48
-  int unk56;                     // 56
-  CommandParameterDataType type; // 60
-  int offset;                    // 64
-  int flag_offset;               // 68
-  bool optional;                 // 72
-  bool pad73;                    // 73
-  CommandParameterData(
-      typeid_t<CommandRegistry> tid, ParseFn parser, std::string name, CommandParameterDataType type, char const *desc,
-      int offset, bool mand, int flag_offset)
-      : tid(tid), parser(parser), name(name), desc(desc), unk56(-1), type(type), offset(offset),
-        flag_offset(flag_offset), optional(mand), pad73(false) {}
+	using ParseFn = bool (CommandRegistry::*)(void *, CommandRegistry::ParseToken const &,
+		CommandOrigin const &, int32_t, std::string &, std::vector<std::string> &) const;
+
+	typeid_t<CommandRegistry> mTypeIndex; // 0x0
+	ParseFn mParser; // 0x8
+	std::string mName; // 0x10
+	const char *mEnumNameOrPostfix; // 0x30
+	int32_t mEnumOrPostfixSymbol; // 0x38
+	CommandParameterDataType mParamType; // 0x3C
+	int32_t mOffset; // 0x40
+	int32_t mSetOffset; // 0x44
+	bool mIsOptional; // 0x48
+	CommandParameterOption mOptions; // 0x49
+
+	CommandParameterData(typeid_t<CommandRegistry> typeIndex, ParseFn parser, std::string name, CommandParameterDataType paramType,
+		const char *enumNameOrPostfix, int32_t offset, bool optional, int32_t setOffset)
+		: mTypeIndex(typeIndex), mParser(parser), mName(name), mEnumNameOrPostfix(enumNameOrPostfix), mEnumOrPostfixSymbol(-1),
+		mParamType(paramType), mOffset(offset), mSetOffset(setOffset), mIsOptional(optional), mOptions(CommandParameterOption::None) {}
 };

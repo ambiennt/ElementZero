@@ -9,9 +9,15 @@
 #include <variant>
 
 class ContainerScreenContext {
-	Player *mPlayer;
-	ContainerType mScreenContainerType;
-	std::variant<std::monostate, ActorUniqueID, BlockPos> mOwner;
+public:
+	Player *mPlayer; // 0x0
+	ContainerType mScreenContainerType; // 0x8
+	std::variant<std::monostate, ActorUniqueID, BlockPos> mOwner; // 0x10
 
 	MCAPI Actor* tryGetActor(void);
 };
+
+static_assert(offsetof(ContainerScreenContext, mPlayer) == 0x0);
+static_assert(offsetof(ContainerScreenContext, mScreenContainerType) == 0x8);
+static_assert(offsetof(ContainerScreenContext, mOwner) == 0x10);
+static_assert(sizeof(ContainerScreenContext) == 0x28);

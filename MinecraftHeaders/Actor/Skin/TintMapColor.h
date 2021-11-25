@@ -2,6 +2,10 @@
 
 #include "../../Core/Color.h"
 
+#include <array>
+
 class TintMapColor {
-  Color data[4];
+	std::array<Color, 4> mColors;
 };
+
+static_assert(sizeof(TintMapColor) == 0x40);

@@ -9,21 +9,21 @@
 
 class MovePlayerPacket : public Packet {
 public:
-    ActorRuntimeID mRuntimeId;
-    Vec3 mPos;
-    Vec2 mRot;
-    float mRotYHead;
-    Player::PositionMode mPositionMode;
-    bool mOnGround;
-    ActorRuntimeID mRidingActorId;
-    int mTeleportCause;
-    int mSourceEntityType;
+	ActorRuntimeID mRuntimeId;
+	Vec3 mPos;
+	Vec2 mRot;
+	float mRotYHead;
+	Player::PositionMode mPositionMode;
+	bool mOnGround;
+	ActorRuntimeID mRidingActorId;
+	int mTeleportCause;
+	int mSourceEntityType;
 
-    inline ~MovePlayerPacket() {}
-    MCAPI virtual MinecraftPacketIds getId() const;
-    MCAPI virtual std::string getName() const;
-    MCAPI virtual void write(BinaryStream &) const;
-    MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~MovePlayerPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(MovePlayerPacket, mRuntimeId) == 40);

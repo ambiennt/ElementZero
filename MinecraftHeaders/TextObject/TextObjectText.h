@@ -5,9 +5,9 @@
 
 class TextObjectText : public ITextObject {
 public:
-  std::string text;
-  inline TextObjectText(std::string text) : text(text) {}
+	std::string text;
+	inline TextObjectText(std::string text) : text(text) {}
 
-  MCAPI std::string asString() const;
-  MCAPI Json::Value asJsonValue() const;
+	MCAPI std::string asString() const;
+	MCAPI Json::Value asJsonValue() const;
 };

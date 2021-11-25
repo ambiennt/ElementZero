@@ -8,8 +8,8 @@
 
 class UnverifiedCertificate {
 public:
-    const WebToken                         rawToken;
-    std::unique_ptr<UnverifiedCertificate> parentUnverified;
+	const WebToken                         rawToken;
+	std::unique_ptr<UnverifiedCertificate> parentUnverified;
 };
 
 static_assert(offsetof(UnverifiedCertificate, rawToken) == 0x0);

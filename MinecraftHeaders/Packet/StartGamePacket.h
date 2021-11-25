@@ -7,11 +7,12 @@
 
 class StartGamePacket : public Packet {
 public:
-    LevelSettings settings;
+	LevelSettings settings;
+	//TODO add rest of the fields
 
-    inline ~StartGamePacket() {}
-    MCAPI virtual MinecraftPacketIds getId() const;
-    MCAPI virtual std::string getName() const;
-    MCAPI virtual void write(BinaryStream &) const;
-    MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~StartGamePacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };

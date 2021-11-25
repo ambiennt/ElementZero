@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Direction {
-	enum Type : char {
+	enum Type : int8_t {
 		Undefined  = -1,
 		South      = 0,
 		West       = 1,

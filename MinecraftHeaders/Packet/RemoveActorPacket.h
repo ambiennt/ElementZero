@@ -6,11 +6,11 @@
 
 class RemoveActorPacket : public Packet {
 public:
-  ActorUniqueID uid;
+	ActorUniqueID uid;
 
-  inline ~RemoveActorPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~RemoveActorPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };

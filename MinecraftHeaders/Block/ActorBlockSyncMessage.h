@@ -4,8 +4,8 @@
 #include "../dll.h"
 
 struct ActorBlockSyncMessage {
-	ActorUniqueID id;
-	char unknown[0x4];
+	ActorUniqueID mEntityUniqueID;
+	int8_t mMessage[4];
 };
 
 static_assert(sizeof(ActorBlockSyncMessage) == 0x10);

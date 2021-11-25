@@ -2,6 +2,6 @@
 
 class ContainerContentChangeListener {
 public:
-  virtual void ContainerContentChanged(int) = 0;
-  virtual ~ContainerContentChangeListener(){};
+	virtual void ContainerContentChanged(int) = 0;
+	virtual ~ContainerContentChangeListener(){};
 };

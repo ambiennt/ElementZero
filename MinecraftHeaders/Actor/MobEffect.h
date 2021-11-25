@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include "Actor.h"
 #include "../dll.h"
 
 class MobEffect {
@@ -10,12 +11,12 @@ public:
 
 	MCAPI MobEffect(int, std::string const&, std::string const&, bool, int, int, std::string const&, bool);
 
-	MCAPI virtual ~MobEffect(void);
-	MCAPI virtual void applyEffects(class Actor*, int, int) const;
-	MCAPI virtual void removeEffects(class Actor*);
-	MCAPI virtual void applyInstantaneousEffect(class Actor*, class Actor*, class Actor*, int, float) const;
-	MCAPI virtual bool isInstantaneous(void) const;
-	MCAPI virtual float getAttributeModifierValue(int, class AttributeModifier const&) const;
+	virtual ~MobEffect(void);
+	virtual void applyEffects(class Actor*, int, int) const;
+	virtual void removeEffects(class Actor*);
+	virtual void applyInstantaneousEffect(class Actor*, class Actor*, class Actor*, int, float) const;
+	virtual bool isInstantaneous(void) const;
+	virtual float getAttributeModifierValue(int, class AttributeModifier const&) const;
 	
 	MCAPI void addAttributeBuff(class Attribute const&, std::shared_ptr<class AttributeBuff>);
 	MCAPI void addAttributeModifier(class Attribute const&, std::shared_ptr<class AttributeModifier>);
@@ -29,12 +30,11 @@ public:
 	MCAPI static void initEffects(class ResourcePackManager*);
 	MCAPI bool isHarmful(void) const;
 	MCAPI bool isVisible(void) const;
-	MCAPI static class std::unique_ptr<class MobEffect, struct std::default_delete<class MobEffect> >* mMobEffects;
+	MCAPI static std::unique_ptr<class MobEffect> mMobEffects;
 	MCAPI void setDurationAmplifier(std::shared_ptr<class Amplifier>);
 	MCAPI void setValueAmplifier(std::shared_ptr<class Amplifier>);
 	MCAPI static void shutdownEffects(void);
-	MCAPI class std::vector<struct std::pair<class Attribute const*, std::shared_ptr<class AttributeModifier> >, class std::allocator<struct std::pair<class Attribute const*, std::shared_ptr<class AttributeModifier> > > > const& viewAttributeModifiers(void) const;
-
+	MCAPI class std::vector<std::pair<class Attribute const*, std::shared_ptr<class AttributeModifier>>> const& viewAttributeModifiers(void) const;
 
 	//MCAPI static class mce::Color const DEFAULT_COLOR;
 	MCAPI static class MobEffect* ABSORPTION;
@@ -67,5 +67,4 @@ public:
 	MCAPI static class MobEffect* WATER_BREATHING;
 	MCAPI static class MobEffect* WEAKNESS;
 	MCAPI static class MobEffect* WITHER;
-
 };

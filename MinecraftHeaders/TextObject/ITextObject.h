@@ -5,12 +5,12 @@
 #include "../dll.h"
 
 namespace Json {
-  class Value;
+	class Value;
 }
 
 class ITextObject {
 public:
-  virtual ~ITextObject() {}
-  virtual std::string asString() const = 0;
-  virtual Json::Value asJsonValue() const = 0;
+	virtual ~ITextObject() {}
+	virtual std::string asString() const = 0;
+	virtual Json::Value asJsonValue() const = 0;
 };

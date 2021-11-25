@@ -6,14 +6,14 @@
 
 class LoginPacket : public Packet {
 public:
-  int32_t mClientNetworkVersion;
-  std::unique_ptr<ConnectionRequest> mConnectionRequest;
+	int32_t mClientNetworkVersion;
+	std::unique_ptr<ConnectionRequest> mConnectionRequest;
 
-  inline ~LoginPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~LoginPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(LoginPacket, mClientNetworkVersion) == 0x28);
@@ -24,13 +24,13 @@ static_assert(sizeof(LoginPacket) == 0x38);
 
 class SubClientLoginPacket : public Packet {
 public:
-  std::unique_ptr<SubClientConnectionRequest> mConnectionRequest;
+	std::unique_ptr<SubClientConnectionRequest> mConnectionRequest;
 
-  inline ~SubClientLoginPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~SubClientLoginPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(SubClientLoginPacket, mConnectionRequest) == 0x28);

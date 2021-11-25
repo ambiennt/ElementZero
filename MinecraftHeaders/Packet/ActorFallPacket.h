@@ -6,13 +6,13 @@
 
 class ActorFallPacket : public Packet {
 public:
-  ActorRuntimeID mRuntimeId;
-  float mFallDistance = 0.0f;
-  bool mInVoid        = false;
+	ActorRuntimeID mRuntimeId;
+	float mFallDistance = 0.0f;
+	bool mInVoid        = false;
 
-  inline ~ActorFallPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~ActorFallPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };

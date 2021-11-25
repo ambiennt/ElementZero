@@ -7,7 +7,7 @@
 
 class CommandOutputMessage {
 public:
-  CommandOutputMessageType type;
-  std::string message_id;
-  std::vector<std::string> params;
+	CommandOutputMessageType type;
+	std::string message_id;
+	std::vector<std::string> params;
 };

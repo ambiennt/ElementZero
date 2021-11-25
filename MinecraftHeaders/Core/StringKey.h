@@ -5,17 +5,17 @@
 
 class StringKey : public HashedString {
 public:
-  using HashedString::HashedString;
-  using HashedString::operator==;
-  using HashedString::operator!=;
+	using HashedString::HashedString;
+	using HashedString::operator==;
+	using HashedString::operator!=;
 
-  size_t mUnk;
+	const StringKey* mMatch;
 };
 
 namespace std {
 
 template <> struct hash<StringKey> {
-  std::size_t operator()(StringKey const &s) const noexcept { return s.getHash(); }
+	std::size_t operator()(StringKey const &s) const noexcept { return s.getHash(); }
 };
 
 } // namespace std

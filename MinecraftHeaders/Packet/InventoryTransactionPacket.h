@@ -11,16 +11,16 @@
 
 class InventoryTransactionPacket : public Packet {
 public:
-  SimpleClientNetId<ItemStackLegacyRequestIdTag, int32_t, 0> mLegacyRequestId;
-  std::vector<std::pair<ContainerEnumName, std::vector<uint8_t>>> mLegacySetItemSlots;
-  std::unique_ptr<ComplexInventoryTransaction> mTransaction;
-  bool mIsClientSide = false;
+	SimpleClientNetId<ItemStackLegacyRequestIdTag, int32_t, 0> mLegacyRequestId;
+	std::vector<std::pair<ContainerEnumName, std::vector<uint8_t>>> mLegacySetItemSlots;
+	std::unique_ptr<ComplexInventoryTransaction> mTransaction;
+	bool mIsClientSide = false;
 
-  inline ~InventoryTransactionPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~InventoryTransactionPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(InventoryTransactionPacket, mLegacyRequestId) == 0x28);

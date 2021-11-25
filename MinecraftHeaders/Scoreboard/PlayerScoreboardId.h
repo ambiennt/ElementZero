@@ -4,7 +4,7 @@
 #include "../dll.h"
 
 struct PlayerScoreboardId {
-  static PlayerScoreboardId Invalid;
-
-  ActorUniqueID id;
+	static PlayerScoreboardId Invalid;
+	
+	ActorUniqueID id;
 };

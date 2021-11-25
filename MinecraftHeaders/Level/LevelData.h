@@ -25,20 +25,19 @@
 #include "../dll.h"
 
 enum class EducationEditionOffer {
-  None        = 0,
-  RestOfWorld = 1,
-  China       = 2
+	None        = 0,
+	RestOfWorld = 1,
+	China       = 2
 };
 
 enum class NetherWorldType : int8_t {
-  Normal = 0,
-  Flat   = 1
+	Normal = 0,
+	Flat   = 1
 };
 
-struct LevelDataValue : public std::variant<
-                            int, bool, float, std::string, GeneratorType, GameType, BlockPos, unsigned int,
-                            std::unique_ptr<CompoundTag>> {
-  using variant::variant;
+struct LevelDataValue : public std::variant<int, bool, float, std::string, GeneratorType,
+GameType, BlockPos, unsigned int, std::unique_ptr<CompoundTag>> {
+	using variant::variant;
 };
 
 namespace LevelDataKeys {
@@ -55,136 +54,136 @@ extern MCAPI StringKey SPAWN_POS;
 // ref: LevelData::getTagData
 class LevelData {
 public:
-  AdventureSettings mAdventureSettings;
-  WorldTemplateLevelData mWorldTemplateLevelData;
-  GameRules mGameRules;
-  Abilities mAbilities;
-  std::string mLevelName;
-  int mStorageVersion;
-  GameVersion mMinCompatibleClientVersion;
-  int mNetworkVersion;
-  SemVersion mInventoryVersion;
-  Tick mCurrentTick;
-  bool mHasSpawnPos;
-  BlockPos mLimitedWorldOrigin;
-  int mDayCycleTime;
-  uint64_t mLastPlayedTime;
-  unsigned mServerChunkTickRange;
-  float mRainLevel;
-  unsigned mRainTime;
-  float mLightningLevel;
-  unsigned mLightningTime;
-  unsigned mNetherScale;
-  GameVersion mLastOpenedWithVersion;
-  GameType mGameType;
-  bool mForceGameType;
-  bool mSpawnMobs;
-  Json::Value mFlatworldGeneratorOptions;
-  int mWorldStartCount;
-  bool mAchievementsDisabled;
-  EducationEditionOffer mEducationEditionOffer;
-  bool mEducationFeaturesEnabled;
-  bool mSingleUseWorld;
-  bool mConfirmedPlatformLockedContent;
-  bool mMultiplayerGameIntent;
-  bool mIsMultiplayerGame;
-  bool mLANBroadcastIntent;
-  bool mLANBroadcast;
-  int mXBLBroadcastIntent;
-  int mXBLBroadcastMode;
-  int mPlatformBroadcastIntent;
-  int mPlatformBroadcastMode;
-  bool mCommandsEnabled;
-  bool mTexturepacksRequired;
-  bool mLockedBehaviorPack;
-  bool mLockedResourcePack;
-  bool mIsFromLockedTemplate;
-  std::string mEducationProductId;
-  bool mUseMsaGamertagsOnly;
-  bool mBonusChestEnabled;
-  bool mBonusChestSpawned;
-  bool mStartWithMapEnabled;
-  bool mMapsCenteredToOrigin;
-  bool mRequiresCopiedPackRemovalCheck;
-  bool mOnlySpawnV1Villagers;
-  NetherWorldType mNetherType;
-  SpawnSettings mSpawnSettings;
-  std::unordered_map<StringKey, LevelDataValue> mKV, mAltKV;
-  std::string mBiomeOverride;
+	AdventureSettings mAdventureSettings;
+	WorldTemplateLevelData mWorldTemplateLevelData;
+	GameRules mGameRules;
+	Abilities mAbilities;
+	std::string mLevelName;
+	int mStorageVersion;
+	GameVersion mMinCompatibleClientVersion;
+	int mNetworkVersion;
+	SemVersion mInventoryVersion;
+	Tick mCurrentTick;
+	bool mHasSpawnPos;
+	BlockPos mLimitedWorldOrigin;
+	int mDayCycleTime;
+	uint64_t mLastPlayedTime;
+	unsigned mServerChunkTickRange;
+	float mRainLevel;
+	unsigned mRainTime;
+	float mLightningLevel;
+	unsigned mLightningTime;
+	unsigned mNetherScale;
+	GameVersion mLastOpenedWithVersion;
+	GameType mGameType;
+	bool mForceGameType;
+	bool mSpawnMobs;
+	Json::Value mFlatworldGeneratorOptions;
+	int mWorldStartCount;
+	bool mAchievementsDisabled;
+	EducationEditionOffer mEducationEditionOffer;
+	bool mEducationFeaturesEnabled;
+	bool mSingleUseWorld;
+	bool mConfirmedPlatformLockedContent;
+	bool mMultiplayerGameIntent;
+	bool mIsMultiplayerGame;
+	bool mLANBroadcastIntent;
+	bool mLANBroadcast;
+	int mXBLBroadcastIntent;
+	int mXBLBroadcastMode;
+	int mPlatformBroadcastIntent;
+	int mPlatformBroadcastMode;
+	bool mCommandsEnabled;
+	bool mTexturepacksRequired;
+	bool mLockedBehaviorPack;
+	bool mLockedResourcePack;
+	bool mIsFromLockedTemplate;
+	std::string mEducationProductId;
+	bool mUseMsaGamertagsOnly;
+	bool mBonusChestEnabled;
+	bool mBonusChestSpawned;
+	bool mStartWithMapEnabled;
+	bool mMapsCenteredToOrigin;
+	bool mRequiresCopiedPackRemovalCheck;
+	bool mOnlySpawnV1Villagers;
+	NetherWorldType mNetherType;
+	SpawnSettings mSpawnSettings;
+	std::unordered_map<StringKey, LevelDataValue> mKV, mAltKV;
+	std::string mBiomeOverride;
 
 private:
-  template <typename T> T const *_extractValue(StringKey const &) const;
+	template <typename T> T const *_extractValue(StringKey const &) const;
 
 public:
-  inline LevelDataValue const *getValue(StringKey const &key) const {
-    if (auto kv = mKV.find(key); kv != mKV.end()) return &kv->second;
-    if (auto kv = mAltKV.find(key); kv != mAltKV.end()) return &kv->second;
-    return nullptr;
-  }
-  template <typename T> inline T const *extractValue(StringKey const &key) const {
-    auto val = getValue(key);
-    return std::get_if<T>(val);
-  }
-  template <typename T> inline void setValue(StringKey const &key, T value) { mKV[key] = LevelDataValue(value); }
+	inline LevelDataValue const *getValue(StringKey const &key) const {
+		if (auto kv = mKV.find(key); kv != mKV.end()) return &kv->second;
+		if (auto kv = mAltKV.find(key); kv != mAltKV.end()) return &kv->second;
+		return nullptr;
+	}
+	template <typename T> inline T const *extractValue(StringKey const &key) const {
+		auto val = getValue(key);
+		return std::get_if<T>(val);
+	}
+	template <typename T> inline void setValue(StringKey const &key, T value) { mKV[key] = LevelDataValue(value); }
 
-  inline BlockPos getSpawnPos() const {
-    if (auto value = extractValue<BlockPos>(LevelDataKeys::SPAWN_POS))
-      return *value;
-    else
-      return BlockPos::ZERO;
-  }
-  inline void setSpawnPos(BlockPos const &pos) { setValue(LevelDataKeys::SPAWN_POS, pos); }
+	inline BlockPos getSpawnPos() const {
+		if (auto value = extractValue<BlockPos>(LevelDataKeys::SPAWN_POS))
+			return *value;
+		else
+			return BlockPos::ZERO;
+	}
+	inline void setSpawnPos(BlockPos const &pos) { setValue(LevelDataKeys::SPAWN_POS, pos); }
 
-  inline GameType getGameType() const {
-    if (auto value = extractValue<::GameType>(LevelDataKeys::GAME_TYPE))
-      return *value;
-    else
-      return GameType::Survival;
-  }
-  inline void setGameType(GameType type) { setValue(LevelDataKeys::GAME_TYPE, type); }
+	inline GameType getGameType() const {
+		if (auto value = extractValue<::GameType>(LevelDataKeys::GAME_TYPE))
+			return *value;
+		else
+			return GameType::Survival;
+	}
+	inline void setGameType(GameType type) { setValue(LevelDataKeys::GAME_TYPE, type); }
 
-  inline unsigned getSeed() const {
-    if (auto value = extractValue<unsigned>(LevelDataKeys::SEED))
-      return *value;
-    else
-      return 0;
-  }
-  inline void setSeed(unsigned seed) { setValue(LevelDataKeys::SEED, seed); }
+	inline unsigned getSeed() const {
+		if (auto value = extractValue<unsigned>(LevelDataKeys::SEED))
+			return *value;
+		else
+			return 0;
+	}
+	inline void setSeed(unsigned seed) { setValue(LevelDataKeys::SEED, seed); }
 
-  inline GeneratorType getWorldGenerator() const {
-    if (auto value = extractValue<GeneratorType>(LevelDataKeys::GENERATOR))
-      return *value;
-    else
-      return GeneratorType::Overworld;
-  }
-  inline void setWorldGenerator(GeneratorType seed) { setValue(LevelDataKeys::SEED, seed); }
+	inline GeneratorType getWorldGenerator() const {
+		if (auto value = extractValue<GeneratorType>(LevelDataKeys::GENERATOR))
+			return *value;
+		else
+			return GeneratorType::Overworld;
+	}
+	inline void setWorldGenerator(GeneratorType seed) { setValue(LevelDataKeys::SEED, seed); }
 
-  inline int getLimitedWorldWidth() const {
-    if (auto value = extractValue<int>(LevelDataKeys::LIMITED_WORLD_WIDTH))
-      return *value;
-    else
-      return 0;
-  }
-  inline void setLimitedWorldWidth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_WIDTH, value); }
+	inline int getLimitedWorldWidth() const {
+		if (auto value = extractValue<int>(LevelDataKeys::LIMITED_WORLD_WIDTH))
+			return *value;
+		else
+			return 0;
+	}
+	inline void setLimitedWorldWidth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_WIDTH, value); }
 
-  inline int getLimitedWorldDepth() const {
-    if (auto value = extractValue<int>(LevelDataKeys::LIMITED_WORLD_DEPTH))
-      return *value;
-    else
-      return 0;
-  }
-  inline void setLimitedWorldDepth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_DEPTH, value); }
+	inline int getLimitedWorldDepth() const {
+		if (auto value = extractValue<int>(LevelDataKeys::LIMITED_WORLD_DEPTH))
+			return *value;
+		else
+			return 0;
+	}
+	inline void setLimitedWorldDepth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_DEPTH, value); }
 
-  int getSpawnDimension() const { return mSpawnSettings.dim; }
-  void setSpawnDimension(int v) { mSpawnSettings.dim = v; }
+	int getSpawnDimension() const { return mSpawnSettings.dim; }
+	void setSpawnDimension(int v) { mSpawnSettings.dim = v; }
 
-  DEF_FIELD_RW(unsigned, Seed);
-  DEF_FIELD_RW(GeneratorType, WorldGenerator);
-  DEF_FIELD_RW(int, LimitedWorldWidth);
-  DEF_FIELD_RW(int, LimitedWorldDepth);
-  DEF_FIELD_RW(BlockPos, SpawnPos);
-  DEF_FIELD_RW(GameType, GameType);
-  DEF_FIELD_RW(int, SpawnDimension);
+	DEF_FIELD_RW(unsigned, Seed);
+	DEF_FIELD_RW(GeneratorType, WorldGenerator);
+	DEF_FIELD_RW(int, LimitedWorldWidth);
+	DEF_FIELD_RW(int, LimitedWorldDepth);
+	DEF_FIELD_RW(BlockPos, SpawnPos);
+	DEF_FIELD_RW(GameType, GameType);
+	DEF_FIELD_RW(int, SpawnDimension);
 };
 
 static_assert(offsetof(LevelData, mGameRules) == 288);

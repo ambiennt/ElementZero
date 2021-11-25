@@ -3,8 +3,8 @@
 #include <string>
 
 class CommandRawText {
-  std::string text;
+	std::string text;
 
 public:
-  inline std::string const &getText() const { return text; }
+	inline std::string const &getText() const { return text; }
 };

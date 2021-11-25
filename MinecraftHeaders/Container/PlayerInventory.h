@@ -12,21 +12,21 @@ class HudContainerManagerModel;
 
 class PlayerInventory : public ContainerSizeChangeListener, public ContainerContentChangeListener {
 public:
-  int32_t selectedSlot = 0;
-  ItemStack item;
-  ContainerID selectedContainerId = ContainerID::Inventory;
-  std::unique_ptr<Inventory> inventory;
-  std::vector<ItemStack> complexItems;
-  std::weak_ptr<HudContainerManagerModel> model;
+	int32_t selectedSlot = 0;
+	ItemStack item;
+	ContainerID selectedContainerId = ContainerID::Inventory;
+	std::unique_ptr<Inventory> inventory;
+	std::vector<ItemStack> complexItems;
+	std::weak_ptr<HudContainerManagerModel> model;
 
-  struct SlotData {
-    ContainerID mContainerId;
-    int32_t mSlot;
-  };
+	struct SlotData {
+		ContainerID mContainerId;
+		int32_t mSlot;
+	};
 
-  MCAPI void ContainerSizeChanged(int) override;
-  MCAPI void ContainerContentChanged(int) override;
+	MCAPI void ContainerSizeChanged(int) override;
+	MCAPI void ContainerContentChanged(int) override;
 
-  MCAPI void createTransactionContext(
-      std::function<void(Container &, int, const ItemStack &, const ItemStack &)>, std::function<void()>);
+	MCAPI void createTransactionContext(
+			std::function<void(Container &, int, const ItemStack &, const ItemStack &)>, std::function<void()>);
 };

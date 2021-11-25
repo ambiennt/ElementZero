@@ -5,12 +5,12 @@
 
 class ModalFormRequestPacket : public Packet {
 public:
-  unsigned int id;
-  std::string content;
+	unsigned int id;
+	std::string content;
 
-  inline ~ModalFormRequestPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~ModalFormRequestPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };

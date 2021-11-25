@@ -5,15 +5,15 @@
 #include "UnverifiedCertificate.h"
 #include "../dll.h"
 
-#include "../Actor/Skin/persona.h"
+#include "../Actor/Skin/Persona.h"
 #include <unordered_map>
 
 class ConnectionRequest {
 public:
-    std::unique_ptr<UnverifiedCertificate> mCertificateData;
-    std::unique_ptr<Certificate>           mCertificate;
-    std::unique_ptr<WebToken>              mRawToken;
-    uint8_t                                mClientSubId;
+	std::unique_ptr<UnverifiedCertificate> mCertificateData;
+	std::unique_ptr<Certificate>           mCertificate;
+	std::unique_ptr<WebToken>              mRawToken;
+	uint8_t                                mClientSubId;
 
 	MCAPI ConnectionRequest(class ConnectionRequest const&);
 	MCAPI static class ConnectionRequest fromString(std::string const&);
@@ -48,8 +48,8 @@ static_assert(sizeof(ConnectionRequest) == 32);
 
 class SubClientConnectionRequest {
 public:
-    std::unique_ptr<UnverifiedCertificate> mCertificateData;
-    std::unique_ptr<Certificate>           mCertificate;
-    std::unique_ptr<WebToken>              mRawToken;
-    uint8_t                                mClientSubId;
+	std::unique_ptr<UnverifiedCertificate> mCertificateData;
+	std::unique_ptr<Certificate>           mCertificate;
+	std::unique_ptr<WebToken>              mRawToken;
+	uint8_t                                mClientSubId;
 };

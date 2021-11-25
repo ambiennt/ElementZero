@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct GeneratorType {
+enum class GeneratorType {
 	Legacy           = 0,
 	Overworld        = 1,
 	Flat             = 2,

@@ -4,6 +4,6 @@
 
 class ContentIdentity {
 public:
-  mce::UUID uuid;
-  bool valid{};
+	mce::UUID uuid;
+	bool valid{};
 };

@@ -5,7 +5,7 @@
 
 class GameMode {
 public:
-  Player* mPlayer;
+	Player* mPlayer;
 
-  MCAPI virtual ~GameMode();
+	MCAPI virtual ~GameMode();
 };

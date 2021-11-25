@@ -5,7 +5,7 @@
 
 class LevelSettings {
 public:
-    unsigned int seed;
-    GameType gameType;
-    Difficulty difficulty;
+	unsigned int seed;
+	GameType gameType;
+	Difficulty difficulty;
 };

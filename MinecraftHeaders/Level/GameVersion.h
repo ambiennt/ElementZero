@@ -5,8 +5,8 @@
 
 class GameVersion {
 public:
-  unsigned Major{}, Minor{}, Patch{}, Revision{}, Beta{};
-  std::string cache;
+	unsigned Major{}, Minor{}, Patch{}, Revision{}, Beta{};
+	std::string cache;
 };
 
 static_assert(offsetof(GameVersion, cache) == 24);

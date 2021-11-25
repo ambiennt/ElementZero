@@ -6,12 +6,12 @@
 
 class BlockEventPacket : public Packet {
 public:
-  BlockPos pos;
-  int a = 0, b = 0;
+	BlockPos mPos;
+	int32_t mB0 = 0, mB1 = 0; // I have no clue what these are
 
-  inline ~BlockEventPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	inline ~BlockEventPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct GameType {
+enum class GameType {
 	Undefined      = -1,
 	Survival       = 0,
 	Creative       = 1,

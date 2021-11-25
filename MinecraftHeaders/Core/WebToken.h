@@ -3,11 +3,11 @@
 
 class WebToken {
 public:
-    std::string header;
-    Json::Value headerInfo;
-    std::string data;
-    Json::Value dataInfo;
-    std::string signature;
+	std::string header;
+	Json::Value headerInfo;
+	std::string data;
+	Json::Value dataInfo;
+	std::string signature;
 };
 
 static_assert(offsetof(WebToken, header) == 0x0);

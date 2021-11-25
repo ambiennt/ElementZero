@@ -8,38 +8,38 @@
 
 class Facing {
 public:
-  enum class Name : unsigned char {
-    Down             = 0,
-    Up               = 1,
-    North            = 2,
-    South            = 3,
-    West             = 4,
-    East             = 5,
-    Max              = 6,
-    Undefined        = 6,
-    Num_culling_ids  = 7
-  };
+	enum class Name : int8_t {
+		Down             = 0,
+		Up               = 1,
+		North            = 2,
+		South            = 3,
+		West             = 4,
+		East             = 5,
+		Max              = 6,
+		Undefined        = 6,
+		NumCullingIds    = 7
+	};
 
-  struct Plane {
-    MCAPI static class std::vector<unsigned char> HORIZONTAL;
-  };
+	struct Plane {
+		MCAPI static class std::vector<unsigned char> HORIZONTAL;
+	};
 
-  MCAPI static int const *const STEP_X;
-  MCAPI static int const *const STEP_Y;
-  MCAPI static int const *const STEP_Z;
-  MCAPI static class Vec3 const *const NORMAL;
-  MCAPI static unsigned char const *const OPPOSITE_FACING;
-  MCAPI static enum Name const *const BY2DDATA;
-  MCAPI static enum Name const *const DIRECTIONS;
-  MCAPI static class BlockPos const *const DIRECTION;
-  MCAPI static class std::vector<unsigned char> const ALL_FACES;
-  MCAPI static class std::array<class std::vector<unsigned char>, 6> const ALL_EXCEPT;
-  MCAPI static class std::array<class std::vector<unsigned char>, 6> const ALL_EXCEPT_AXIS_Y;
+	MCAPI static int const *const STEP_X;
+	MCAPI static int const *const STEP_Y;
+	MCAPI static int const *const STEP_Z;
+	MCAPI static class Vec3 const *const NORMAL;
+	MCAPI static unsigned char const *const OPPOSITE_FACING;
+	MCAPI static enum Name const *const BY2DDATA;
+	MCAPI static enum Name const *const DIRECTIONS;
+	MCAPI static class BlockPos const *const DIRECTION;
+	MCAPI static class std::vector<unsigned char> const ALL_FACES;
+	MCAPI static class std::array<class std::vector<unsigned char>, 6> const ALL_EXCEPT;
+	MCAPI static class std::array<class std::vector<unsigned char>, 6> const ALL_EXCEPT_AXIS_Y;
 
-  MCAPI static int getStepX(unsigned char);
-  MCAPI static int getStepY(unsigned char);
-  MCAPI static int getStepZ(unsigned char);
-  MCAPI static unsigned char getOpposite(unsigned char);
-  MCAPI static unsigned char fromVec3(class Vec3 const &);
-  MCAPI static gsl::cstring_span<> toString(unsigned char);
+	MCAPI static int getStepX(unsigned char);
+	MCAPI static int getStepY(unsigned char);
+	MCAPI static int getStepZ(unsigned char);
+	MCAPI static unsigned char getOpposite(unsigned char);
+	MCAPI static unsigned char fromVec3(class Vec3 const &);
+	MCAPI static gsl::cstring_span<> toString(unsigned char);
 };

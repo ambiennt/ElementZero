@@ -3,8 +3,8 @@
 #include "../dll.h"
 
 class Potion {
-  MCAPI static int mLastId;
+	MCAPI static int mLastId;
 
 public:
-  inline static int getLastId() { return mLastId; }
+	inline static int getLastId() { return mLastId; }
 };

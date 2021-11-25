@@ -39,13 +39,15 @@ TInstanceHook(
     for (auto &param : ovd.params) {
       union {
         void *pointer;
-        decltype(param.parser) parser;
+        decltype(param.mParser) mParser;
       } u;
-      u.parser = param.parser;
-      LOGV("\t%c %s[%s] %d(%d) +%d(%d) @%p") % (param.optional ? '+' : '-') % param.name %
-          (param.desc ? param.desc : "") % param.tid.value % (int) param.type % param.offset % param.flag_offset %
-          u.pointer;
-      if (param.unk56 != -1 || param.pad73) LOGW("\t\tunk56 %d pad73 %d") % param.unk56 % param.pad73;
+      u.mParser = param.mParser;
+      LOGV("\t%c %s[%s] %d(%d) +%d(%d) @%p") % (param.mIsOptional ? '+' : '-') % param.mName %
+          (param.mEnumNameOrPostfix ? param.mEnumNameOrPostfix : "") % param.mTypeIndex.value %
+          (int)param.mParamType % param.mOffset % param.mSetOffset % u.pointer;
+      if (param.mEnumOrPostfixSymbol != -1 || (param.mOptions > CommandParameterOption::None)) {
+        LOGW("\t\tmEnumOrPostfixSymbol %d mOptions %d") % param.mEnumOrPostfixSymbol % (int8_t)param.mOptions;
+      }
     }
   }
   return original(this, signature, ovd);

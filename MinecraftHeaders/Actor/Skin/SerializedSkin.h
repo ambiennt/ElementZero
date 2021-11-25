@@ -6,7 +6,7 @@
 
 #include "AnimatedImageData.h"
 #include "SerializedPersonaPieceHandle.h"
-#include "persona.h"
+#include "Persona.h"
 #include "TintMapColor.h"
 #include "../../Core/Color.h"
 #include "../../Core/mce.h"
@@ -20,67 +20,71 @@ class BinaryStream;
 
 class SerializedSkin {
 public:
-  enum struct TrustedFlag : char { UNSET, NO, YES };
+	enum class TrustedSkinFlag : int8_t {
+		UNSET = 0,
+		NO    = 1,
+		YES   = 2
+	};
 
-  std::string skin_id, name, skin_resource_patch, geometry_name;
-  mce::Image texture, cape_texture;
-  std::vector<AnimatedImageData> animated_image_data;
-  Json::Value geometry_data, geometry_data_mutable;
-  std::string animation_data, cape_id;
-  bool premium_skin, persona_skin, cape_on_classic_skin;
-  std::vector<SerializedPersonaPieceHandle> persona_pieces;
-  std::string arm_size;
-  std::unordered_map<PieceType, TintMapColor> piece_tint_colors;
-  Color skin_color;
-  TrustedFlag trusted_flag;
+	std::string skin_id, name, skin_resource_patch, geometry_name;
+	mce::Image texture, cape_texture;
+	std::vector<AnimatedImageData> animated_image_data;
+	Json::Value geometry_data, geometry_data_mutable;
+	std::string animation_data, cape_id;
+	bool premium_skin, persona_skin, cape_on_classic_skin;
+	std::vector<SerializedPersonaPieceHandle> persona_pieces;
+	std::string arm_size;
+	std::unordered_map<PieceType, TintMapColor> piece_tint_colors;
+	Color skin_color;
+	TrustedSkinFlag trusted_flag;
 
 #pragma region methods
-  MCAPI SerializedSkin();
-  MCAPI SerializedSkin(SerializedSkin const &);
-  MCAPI SerializedSkin(ConnectionRequest const &);
-  MCAPI SerializedSkin(SubClientConnectionRequest const &);
+	MCAPI SerializedSkin();
+	MCAPI SerializedSkin(SerializedSkin const &);
+	MCAPI SerializedSkin(ConnectionRequest const &);
+	MCAPI SerializedSkin(SubClientConnectionRequest const &);
 
-  MCAPI SerializedSkin &operator=(SerializedSkin const &);
+	MCAPI SerializedSkin &operator=(SerializedSkin const &);
 
-  MCAPI void read(ReadOnlyBinaryStream &);
-  MCAPI void write(BinaryStream &);
-  MCAPI void updateGeometryName();
+	MCAPI void read(ReadOnlyBinaryStream &);
+	MCAPI void write(BinaryStream &);
+	MCAPI void updateGeometryName();
 
-  inline std::string const &getName() const { return name; }
-  inline bool getIsPersona() const { return persona_skin; }
-  inline Json::Value const &getGeometryData() const { return geometry_data; }
-  inline Json::Value const &getGeometryDataMutable() const { return geometry_data_mutable; }
-  inline mce::Image const &getCapeImageData() const { return cape_texture; }
-  inline bool isTrustedSkin() const { return trusted_flag == TrustedFlag::YES; }
-  inline Color const &getSkinColor() { return skin_color; }
+	inline std::string const &getName() const { return name; }
+	inline bool getIsPersona() const { return persona_skin; }
+	inline Json::Value const &getGeometryData() const { return geometry_data; }
+	inline Json::Value const &getGeometryDataMutable() const { return geometry_data_mutable; }
+	inline mce::Image const &getCapeImageData() const { return cape_texture; }
+	inline bool isTrustedSkin() const { return trusted_flag == TrustedSkinFlag::YES; }
+	inline Color const &getSkinColor() { return skin_color; }
 
-  inline void setCapeId(std::string const &str) {
-    cape_id = str;
-    name    = skin_id + str;
-  }
+	inline void setCapeId(std::string const &str) {
+		cape_id = str;
+		name    = skin_id + str;
+	}
 
-  inline void setCapeImageData(mce::Image const *ptr) {
-    if (ptr)
-      cape_texture = ptr->clone();
-    else
-      cape_texture = {};
-  }
+	inline void setCapeImageData(mce::Image const *ptr) {
+		if (ptr)
+			cape_texture = ptr->clone();
+		else
+			cape_texture = {};
+	}
 
-  inline void setImageData(mce::Image const *ptr) {
-    if (ptr)
-      texture = ptr->clone();
-    else
-      texture = {};
-  }
+	inline void setImageData(mce::Image const *ptr) {
+		if (ptr)
+			texture = ptr->clone();
+		else
+			texture = {};
+	}
 
-  inline bool setIsPersonaCapeOnClassicSkin(bool value) { return cape_on_classic_skin = value; }
+	inline bool setIsPersonaCapeOnClassicSkin(bool value) { return cape_on_classic_skin = value; }
 
-  inline float getAnimationFrames(AnimatedTextureType type) const {
-    for (auto &item : animated_image_data) {
-      if (item.type == type) return item.frame;
-    }
-    return 1.0f;
-  }
+	inline float getAnimationFrames(AnimatedTextureType type) const {
+		for (auto &item : animated_image_data) {
+			if (item.type == type) return item.frame;
+		}
+		return 1.0f;
+	}
 #pragma endregion
 };
 

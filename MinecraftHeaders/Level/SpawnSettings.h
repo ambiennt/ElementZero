@@ -4,7 +4,7 @@
 
 class SpawnSettings {
 public:
-  short type = 0;
-  std::string mValue = "plains";
-  int dim;
+	short type = 0;
+	std::string mValue = "plains";
+	int dim;
 };

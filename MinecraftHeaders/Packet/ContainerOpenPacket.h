@@ -9,10 +9,10 @@
 
 class ContainerOpenPacket : public Packet {
 public:
-  ContainerID id     = ContainerID::Invalid;
-  ContainerType type = (ContainerType) 0;
-  BlockPos pos;
-  ActorUniqueID actor_id;
+  ContainerID mContainerId = ContainerID::Invalid;
+  ContainerType mType = ContainerType::CONTAINER;
+  BlockPos mPos;
+  ActorUniqueID mEntityUniqueID;
 
   inline ~ContainerOpenPacket() {}
   MCAPI virtual MinecraftPacketIds getId() const;
@@ -21,7 +21,7 @@ public:
   MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(ContainerOpenPacket, id) == 40);
-static_assert(offsetof(ContainerOpenPacket, type) == 41);
-static_assert(offsetof(ContainerOpenPacket, pos) == 44);
-static_assert(offsetof(ContainerOpenPacket, actor_id) == 56);
+static_assert(offsetof(ContainerOpenPacket, mContainerId) == 40);
+static_assert(offsetof(ContainerOpenPacket, mType) == 41);
+static_assert(offsetof(ContainerOpenPacket, mPos) == 44);
+static_assert(offsetof(ContainerOpenPacket, mEntityUniqueID) == 56);

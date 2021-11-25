@@ -7,22 +7,23 @@
 
 class InteractPacket : public Packet {
 public:
-  enum struct Action : char {
-    invalid        = 0,
-    stop_riding    = 3,
-    mouse          = 4, //InteractUpdate
-    npc_open       = 5,
-    open_container = 6
-  };
-  Action action = Action::mouse;
-  ActorRuntimeID actor;
-  Vec3 pos;
 
-  inline ~InteractPacket() {}
-  MCAPI virtual MinecraftPacketIds getId() const;
-  MCAPI virtual std::string getName() const;
-  MCAPI virtual void write(BinaryStream &) const;
-  MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	enum class Action : int8_t {
+		StopRiding     = 3,
+		InteractUpdate = 4, // mouse
+		NpcOpen        = 5,
+		OpenInventory  = 6
+	};
+
+	Action action = Action::InteractUpdate;
+	ActorRuntimeID mTargetId;
+	Vec3 mPos;
+
+	inline ~InteractPacket() {}
+	MCAPI virtual MinecraftPacketIds getId() const;
+	MCAPI virtual std::string getName() const;
+	MCAPI virtual void write(BinaryStream &) const;
+	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
 static_assert(sizeof(CraftingEventPacket) == 0x48);

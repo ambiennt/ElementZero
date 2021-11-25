@@ -10,9 +10,16 @@ class Dimension;
 
 class ChangeDimensionRequest {
 public:
-  int unk0 = 0;
-  AutomaticID<Dimension, int> from, to;
-  Vec3 pos;
-  bool flag1 = false, flag2 = false;
-  std::unique_ptr<CompoundTag> nbt;
+
+	enum class State {
+		PrepareRegion     = 0,
+		WaitingForChunks  = 1,
+		WaitingForRespawn = 2
+	};
+
+	State mState = State::PrepareRegion;
+	AutomaticID<Dimension, int32_t> mFromDimensionId, mToDimensionId;
+	Vec3 mPos;
+	bool mUsePortal, mRespawn;
+	std::unique_ptr<CompoundTag> mAgentTag;
 };

@@ -1,11 +1,16 @@
 #pragma once
 
 #include "../dll.h"
+#include "Item.h"
+#include "../Block/Block.h"
+#include <modutils.h>
+
+#include <memory>
 
 class ItemDescriptor {
 public:
-    std::weak_ptr<class Item> mItem{};
-    class Block* mBlock{};
-    unsigned short mAuxValue{};
-    bool mValid{};
+	BUILD_ACCESS_MUT(std::weak_ptr<class Item>, mItem, 0x0);
+	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x8);
+	BUILD_ACCESS_MUT(int16_t, mAuxValue, 0x10);
+	BUILD_ACCESS_MUT(bool, mValid, 0x12);
 };

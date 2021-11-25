@@ -22,7 +22,7 @@ struct MobSpawnHerdInfo {
 };
 
 struct MobSpawnerPermutation {
-	char pad[0x8];
+	char pad[0x8]; // WeighedRandom::WeighedRandomItem
 	ActorDefinitionIdentifier mId;
 };
 

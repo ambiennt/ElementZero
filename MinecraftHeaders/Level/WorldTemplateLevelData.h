@@ -6,9 +6,9 @@
 
 class WorldTemplateLevelData {
 public:
-  ContentIdentity mContentIdentity;
-  PackIdVersion mPackIdVersion;
-  SemVersion mBaseGameVersion;
-  bool mFromWorldTemplate;
-  bool mWorldTemplateOptionLocked;
+	ContentIdentity mContentIdentity;
+	PackIdVersion mPackIdVersion;
+	SemVersion mBaseGameVersion;
+	bool mFromWorldTemplate;
+	bool mWorldTemplateOptionLocked;
 };
