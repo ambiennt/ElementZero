@@ -84,7 +84,7 @@ inline unsigned numChannels(ImageFormat format) {
 
 class Image {
 	inline Image(ImageFormat format, unsigned width, unsigned height, ImageUsage usage, Blob &&data)
-			: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
+		: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
 
 public:
 	ImageFormat format;

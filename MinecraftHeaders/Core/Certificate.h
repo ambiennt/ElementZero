@@ -13,11 +13,11 @@ public:
 	bool                         isValid;
 
 	MCAPI Certificate(class Certificate const&);
-	MCAPI __int64 getExpirationDate(void) const;
-	MCAPI class Json::Value getExtraData(std::string const&, class Json::Value const&) const;
+	MCAPI int64_t getExpirationDate(void) const;
+	MCAPI class Json::Value getExtraData(std::string const& key, class Json::Value const& defaultValue) const;
 	MCAPI std::string getIdentityPublicKey(void) const;
-	MCAPI __int64 getNotBeforeDate(void) const;
+	MCAPI int64_t getNotBeforeDate(void) const;
 	MCAPI bool isCertificateAuthority(void) const;
-	MCAPI bool validate(__int64);
+	MCAPI bool validate(int64_t currentTime);
 	MCAPI ~Certificate(void);
 };

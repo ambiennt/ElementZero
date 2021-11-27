@@ -30,7 +30,7 @@ public:
 	MCAPI std::vector<class SerializedPersonaPieceHandle> getPersonaPieces(void) const;
 	MCAPI std::string getSelfSignedId(void) const;
 	MCAPI std::string getSkinAnimationData(void) const;
-	//MCAPI class mce::Color getSkinColor(void) const; // todo
+	//MCAPI class mce::Color getSkinColor(void) const; // TODO
 	MCAPI std::vector<uint8_t> getSkinData(void) const;
 	MCAPI std::string getSkinGeometry(void) const;
 	MCAPI std::string getSkinId(void) const;
@@ -38,7 +38,7 @@ public:
 	MCAPI std::string getTenantId(void) const;
 	MCAPI bool isPersonaSkin(void) const;
 	MCAPI std::string toString(void);
-	MCAPI bool verify(class std::vector<std::string> const&, int64_t);
+	MCAPI bool verify(class std::vector<std::string> const& trustedKeys, int64_t currentTime);
 	MCAPI bool verifySelfSigned(void);
 	MCAPI std::unordered_map<enum persona::PieceType, class TintMapColor> getPieceTintColors(void) const;
 	MCAPI ~ConnectionRequest(void);

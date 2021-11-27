@@ -248,8 +248,8 @@ public:
 	virtual void breaksFallingBlocks() const;
 	virtual void blockedByShield(class ActorDamageSource const &, class Actor &);
 	virtual void moveRelative(float, float, float, float);
-	virtual void teleportTo(class Vec3 const &, bool, int, int, struct ActorUniqueID const &);
-	virtual bool tryTeleportTo(class Vec3 const &, bool, bool, int, int);
+	virtual void teleportTo(class Vec3 const &pos, bool shouldStopRiding, int cause, int entityType, struct ActorUniqueID const &destinationEntityId); // cause, entityType, and destinationEntityId are unused
+	virtual bool tryTeleportTo(class Vec3 const &pos, bool landOnBlock, bool avoidLiquid, int cause, int entityType); // cause and entityType are unused
 	virtual void chorusFruitTeleport(class Vec3 &);
 	virtual void lerpTo(class Vec3 const &, class Vec2 const &, int);
 	virtual void lerpMotion(class Vec3 const &);
