@@ -51,5 +51,6 @@ public:
 	std::unique_ptr<UnverifiedCertificate> mCertificateData;
 	std::unique_ptr<Certificate>           mCertificate;
 	std::unique_ptr<WebToken>              mRawToken;
-	uint8_t                                mClientSubId;
 };
+
+static_assert(sizeof(SubClientConnectionRequest) == 24);

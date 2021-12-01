@@ -24,7 +24,7 @@ public:
 	}
 
 	inline ServerPlayer* getServerPlayer(NetworkIdentifier const & netId) {
-			return _getServerPlayer(netId, 0);
+		return _getServerPlayer(netId, 0);
 	}
 	
 	BASEAPI std::string &GetMotd();
@@ -69,5 +69,5 @@ public:
 	BUILD_ACCESS_MUT(std::unique_ptr<class GameSpecificNetEventCallback>, mGameSpecificNetEventCallback, 0x3B8);
 
 private:
-	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const&, uint8_t);
+	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const&, uint8_t subId);
 };

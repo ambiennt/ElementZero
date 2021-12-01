@@ -8,9 +8,9 @@
 
 class Certificate {
 public:
-	UnverifiedCertificate        unverified;
-	std::unique_ptr<Certificate> parent;
-	bool                         isValid;
+	UnverifiedCertificate        mUnverifiedCertificate;
+	std::unique_ptr<Certificate> mParentCertificate;
+	bool                         mIsValid;
 
 	MCAPI Certificate(class Certificate const&);
 	MCAPI int64_t getExpirationDate(void) const;
@@ -21,3 +21,8 @@ public:
 	MCAPI bool validate(int64_t currentTime);
 	MCAPI ~Certificate(void);
 };
+
+static_assert(offsetof(Certificate, mUnverifiedCertificate) == 0x0);
+static_assert(offsetof(Certificate, mParentCertificate) == 0x88);
+static_assert(offsetof(Certificate, mIsValid) == 0x90);
+static_assert(sizeof(Certificate) == 0x98);

@@ -19,8 +19,8 @@ enum class PlayerActionType {
 	STOP_SPRINT              = 10,
 	START_SNEAK              = 11,
 	STOP_SNEAK               = 12,
-	DIMENSION_CHANGE_REQUEST = 13, // deprecated
-	DIMENSION_CHANGE_ACK     = 14, // acknowledgement
+	DIMENSION_CHANGE_REQUEST = 13, // sent when dying in a different dimension
+	DIMENSION_CHANGE_ACK     = 14, // sent when spawning in a different dimension to tell the server we spawned
 	START_GLIDE              = 15,
 	STOP_GLIDE               = 16,
 	BUILD_DENIED             = 17,

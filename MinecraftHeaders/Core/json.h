@@ -147,6 +147,8 @@ public:
 	MCAPI bool operator<(const Value &other) const;
 	MCAPI bool operator==(const Value &other) const;
 
+	// the symbol does require a data type as a parameter, this isn't a typo
+	// its a default fallback!
 	MCAPI std::string asString(std::string const &) const;
 	MCAPI Int asInt(Int) const;
 	MCAPI UInt asUInt(UInt) const;
