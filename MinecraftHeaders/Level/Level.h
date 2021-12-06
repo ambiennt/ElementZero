@@ -579,7 +579,7 @@ public:
 	MCAPI void removeListener(class LevelListener &);
 	MCAPI struct ActorUniqueID expandMapByID(struct ActorUniqueID, bool);
 	MCAPI void potionSplash(class Vec3 const &, class Color const &, bool);
-	MCAPI class Actor *fetchEntity(struct ActorUniqueID, bool) const;
+	MCAPI class Actor *fetchEntity(struct ActorUniqueID entityId, bool getRemoved) const;
 	MCAPI void unregisterTemporaryPointer(class _TickPtr &);
 	MCAPI bool destroyBlock(class BlockSource &, class BlockPos const &, bool);
 	MCAPI bool extinguishFire(class BlockSource &, class BlockPos const &, unsigned char);

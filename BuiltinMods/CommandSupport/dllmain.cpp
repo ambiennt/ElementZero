@@ -25,9 +25,10 @@ Json::Value Mod::CommandSupport::ExecuteCommand(std::unique_ptr<CustomCommandOri
   return result;
 }
 
-THook(void, "?setup@ChangeSettingCommand@@SAXAEAVCommandRegistry@@@Z", CommandRegistry *registry) {
-  original(registry);
+THook(void*, "??0CommandRegistry@@QEAA@XZ", CommandRegistry *registry) {
+  auto ret = original(registry);
   (Mod::CommandSupport::GetInstance().*emitter)(SIG("loaded"), registry);
+  return ret;
 }
 
 short &Mod::CommandSupport::type_id_count() {

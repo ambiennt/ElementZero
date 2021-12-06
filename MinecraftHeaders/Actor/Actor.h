@@ -749,7 +749,7 @@ public:
 	BUILD_ACCESS_MUT(int, mLimitedLifeTicks, 0x514);
 	BUILD_ACCESS_MUT(int, mForceVisibleTimerTicks, 0x518);
 	BUILD_ACCESS_MUT(float, mRidingExitDistance, 0x51C);
-	BUILD_ACCESS_MUT(std::string, mFilteredNameTag, 0x520);
+	BUILD_ACCESS_MUT(std::string, mFilteredNameTag, 0x520); // idk why but this is always empty for players
 	BUILD_ACCESS_MUT(class ActorTerrainInterlockData, mTerrainInterlockData, 0x540);
 	//BUILD_ACCESS_MUT(float, mArmorDropChance[4], 0x558); // default: 25% for each armor piece
 	//BUILD_ACCESS_MUT(float, mHandDropChance[2], 0x568); // default: 25% chance for mainhand and offhand

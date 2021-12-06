@@ -332,7 +332,7 @@ public:
 	BUILD_ACCESS_MUT(std::vector<int32_t>, mOceanBiomes, 0x7E0);
 	BUILD_ACCESS_MUT(bool, mCastawaySent, 0x7F8);
 	BUILD_ACCESS_MUT(enum Player::DimensionState, mDimensionState, 0x7FC);
-	BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800); // use mServerAuthoritativeMovement in Level instead
+	BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800); // check this along with mServerAuthoritativeMovement in Level
 	BUILD_ACCESS_MUT(int32_t, mScore, 0x804); // no clue what this is for
 	BUILD_ACCESS_MUT(float, mBob, 0x80C);
 	BUILD_ACCESS_MUT(bool, mHandsBusy, 0x810);
@@ -340,7 +340,7 @@ public:
 	BUILD_ACCESS_MUT(enum BuildPlatform, mBuildPlatform, 0x838);
 	BUILD_ACCESS_MUT(class Ability, mAbilities, 0x840);
 	BUILD_ACCESS_MUT(const class NetworkIdentifier, mOwner, 0x980);
-	BUILD_ACCESS_MUT(std::string, mUniqueName, 0xA18); // can this be spoofed? 
+	BUILD_ACCESS_MUT(std::string, mUniqueName, 0xA18); // seems to be in the form of a hash
 	BUILD_ACCESS_MUT(std::string, mServerId, 0xA38);
 	BUILD_ACCESS_MUT(std::string, mSelfSignedId, 0xA58);
 	BUILD_ACCESS_MUT(std::string, mPlatformOfflineId, 0xA78);

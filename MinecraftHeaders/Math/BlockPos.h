@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Vec3.h"
+#include <hook.h>
+
 #include <limits>
 
 class BlockPos {
@@ -17,6 +19,12 @@ public:
 	constexpr bool operator==(BlockPos const &rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
 	constexpr bool operator!=(BlockPos const &rhs) const noexcept { return !(*this == rhs); }
 	operator Vec3() { return {(float) x, (float) y, (float) z}; }
+
+	inline BlockPos getBlockPos(const Vec3& currPos) {
+    	BlockPos pos;
+    	CallServerClassMethod<void>("??0BlockPos@@QEAA@AEBVVec3@@@Z", &pos, currPos);
+    	return pos;
+	}
 };
 
 inline BlockPos BlockPos::MIN = {
