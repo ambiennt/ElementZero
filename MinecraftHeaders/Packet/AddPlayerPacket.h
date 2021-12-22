@@ -7,6 +7,7 @@
 #include "../Core/Packet.h"
 #include "../Core/DataItem.h"
 #include "../Core/mce.h"
+#include "../Core/BuildPlatform.h"
 #include "../Math/Vec3.h"
 #include "../Math/Vec2.h"
 #include "../Item/ItemStack.h"
@@ -19,21 +20,21 @@
 
 class AddPlayerPacket : public Packet {
 public:
-	std::vector<ActorLink> links;
-	std::string username;
-	mce::UUID uuid;
-	ActorUniqueID uid;
-	ActorRuntimeID rid;
-	std::string platform_online_id;
-	Vec3 pos, speed;
-	Vec2 rot;
-	float head_yaw = 0.0f;
-	ItemStack selected_item;
-	std::vector<std::unique_ptr<DataItem>> data_items;
-	Abilities abilities;
-	std::string device_id;
-	int build_platform          = 0;
-	SynchedActorData *synched_data = nullptr;
+	std::vector<ActorLink> mLinks;
+	std::string mName;
+	mce::UUID mUuid;
+	ActorUniqueID mEntityId;
+	ActorRuntimeID mRuntimeId;
+	std::string mPlatformOnlineId;
+	Vec3 mPos, mVelocity;
+	Vec2 mRot;
+	float mYHeadRot = 0.0f;
+	ItemStack mSelectedItem; // mHeldItem
+	std::vector<std::unique_ptr<DataItem>> mDataItems; // mUnpack
+	Abilities mAbilities;
+	std::string mDeviceId;
+	BuildPlatform mBuildPlatform = BuildPlatform::Unknown;
+	SynchedActorData *mEntityData = nullptr;
 
 	inline ~AddPlayerPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

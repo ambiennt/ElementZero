@@ -8,15 +8,15 @@
 
 class UpdateBlockPacket : public Packet {
 public:
-	BlockPos pos;
-	uint32_t runtimeId;
-	uint8_t flags;
-	uint32_t dataLayerId;
+	BlockPos mPos;
+	uint32_t mRuntimeId;
+	uint8_t mUpdateFlags;
+	uint32_t mDataLayerId;
 
 	inline ~UpdateBlockPacket() {}
 
 	MCAPI UpdateBlockPacket(void);
-	MCAPI UpdateBlockPacket(BlockPos const &pos, unsigned int dataLayerId, class Block const &block, unsigned char flags);
+	MCAPI UpdateBlockPacket(BlockPos const &pos, uint32_t dataLayerId, class Block const &block, uint8_t flags);
 
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

@@ -314,6 +314,14 @@ public:
 			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
 	}
 
+	inline bool dropItem(ItemStack const &item, bool randomly) {
+    	return CallServerClassMethod<bool>("?drop@Player@@UEAA_NAEBVItemStack@@_N@Z", this, &item, false);
+	}
+
+	inline bool addItem(ItemStack &item) {
+    	return CallServerClassMethod<bool>("?add@Player@@UEAA_NAEAVItemStack@@@Z", this, &item);
+	}
+
 	//a more reliable way to get pos delta for players
 	Vec3 getPosDelta() {
 		Vec3 posDelta;

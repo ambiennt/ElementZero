@@ -27,13 +27,13 @@ struct MobSpawnerPermutation {
 };
 
 struct SpawnConditions {
-	bool isOnSurface;
-	bool isInWater;
-	bool isInLava;
-	bool isUnderground;
-	uint64_t delayEndWorldAge;
-	int32_t rawBrightness;
-	BlockPos pos;
+	bool mIsOnSurface;
+	bool mIsInWater;
+	bool mIsInLava;
+	bool mIsUnderground;
+	uint64_t mDelayEndWorldAge;
+	int32_t mRawBrightness;
+	BlockPos mPos;
 };
 
 class MobSpawnRules {

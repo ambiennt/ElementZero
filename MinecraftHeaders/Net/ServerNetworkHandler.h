@@ -42,7 +42,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mRequireTrustedAuthentication, 0xE0);
 	BUILD_ACCESS_MUT(bool, mHasDisplayedPackErrors, 0xE1);
 	BUILD_ACCESS_MUT(class NetworkIdentifier, mMyId, 0xE8);
-	BUILD_ACCESS_MUT(const int, mMaxChunkRadius, 0x180);
+	BUILD_ACCESS_MUT(const int32_t, mMaxChunkRadius, 0x180);
 	BUILD_ACCESS_MUT(class MinecraftCommands *, mMinecraftCommands, 0x188);
 	BUILD_ACCESS_MUT(class IMinecraftApp *, mApp, 0x190);
 	BUILD_ACCESS_MUT(class TextFilteringProcessor *, mTextFilteringProcessor, 0x198);
@@ -59,7 +59,7 @@ public:
 	BUILD_ACCESS_MUT(std::string, mServerType, 0x278);
 	BUILD_ACCESS_MUT(std::string, mMultiplayerCorrelationId, 0x298);
 	BUILD_ACCESS_MUT(std::vector<std::string>, mTrustedKeys, 0x2B8);
-	BUILD_ACCESS_MUT(int, mMaxNumPlayers, 0x2D0);
+	BUILD_ACCESS_MUT(int32_t, mMaxNumPlayers, 0x2D0);
 	BUILD_ACCESS_MUT(std::unordered_set<class mce::UUID>, mKnownEmotePieceIdLookup, 0x2D8);
 	BUILD_ACCESS_MUT(std::vector<class mce::UUID>, mKnownEmotePieceIds, 0x318);
 	/*BUILD_ACCESS_MUT(

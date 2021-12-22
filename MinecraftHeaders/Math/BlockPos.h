@@ -21,9 +21,9 @@ public:
 	operator Vec3() { return {(float) x, (float) y, (float) z}; }
 
 	inline BlockPos getBlockPos(const Vec3& currPos) {
-    	BlockPos pos;
-    	CallServerClassMethod<void>("??0BlockPos@@QEAA@AEBVVec3@@@Z", &pos, currPos);
-    	return pos;
+		BlockPos pos;
+		CallServerClassMethod<void>("??0BlockPos@@QEAA@AEBVVec3@@@Z", &pos, currPos);
+		return pos;
 	}
 };
 
