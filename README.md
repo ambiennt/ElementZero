@@ -8,11 +8,9 @@
 
 Run Windows version of BDS in Linux with mod support (Yes, it also can be run in Windows)
 
-## Installation and usage instructions :point_right: [Wiki](https://github.com/Element-0/ElementZero/wiki)
+## NOTICE
 
-## NOTICE!
-
-This fork of ElementZero is currently being updates for BDS version 1.16.20.03 (Windows) ONLY. Note that version 1.16.20.03 shares the same protcol version as version 1.16.40.02.
+This fork of ElementZero is currently being updated for BDS version 1.16.20.03 (Windows) ONLY. Note that version 1.16.20.03 shares the same protcol version as version 1.16.40.02, so clients with either version may join.
 
 
 ## Features
@@ -31,32 +29,39 @@ Q: Can the Windows version run directly under Wine?<br>
 A: No, because Microsoft uses Chakra.dll, which contains a lot of references to private dlls. (It also prevents you from running on systems prior to Windows 10.)
 
 Q: How does it work?<br>
-A: I created a dll that simply forwards all APIs to the open source version of Chakra engine i.e. ChakraCore. And this version can run directly under Wine.
+A: A DLL was created that simply forwards all APIs to the open source version of Chakra engine i.e. ChakraCore. This version can run directly under Wine.
 
 
-## Build and install (optional)
+## Server setup
 
-0. Download bedrock dedicated server binary
-1. Generate bedrock_server_mod.lib (see below), or use the one from the most recent ElementZero release (version-specific)
-2. Install vcpkg and install dependencies (see below)
-3. Build it with Visual Studio 2019 (or use CMake manually see .githubn/workflows/ci.yaml)
-4. Copy Dist/* to bds folder (or use [symlink](https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/))
-5. Run bedrock_server_mod.exe
+1. Download bedrock dedicated server binary for [1.16.20.03](https://minecraft.azureedge.net/bin-win/bedrock-server-1.16.20.03.zip) and extract to a folder
+2. Download the latest release of ElementZero from the [releases page](https://github.com/ambiennt/ElementZero/releases/)
+3. Copy the contents of the ElementZero release to your server folder
+4. Run bedrock_server_mod.exe to start server instance. bedrock_server.exe and the bedrock_server.pdb are not required to be in your server folder
+5. Configure your server mods after running bedrock_server_mod.exe once to generate the custom.yaml file
 
 ## Visual Studio 2019 workloads and components
 
-0. Microsoft.VisualStudio.Workload.NativeDesktop
-1. Microsoft.VisualStudio.Workload.ManagedDesktop
-2. Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-3. Microsoft.VisualStudio.Component.Windows10SDK.18362
-4. Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Llvm.Clang
+1. Microsoft.VisualStudio.Workload.NativeDesktop
+2. Microsoft.VisualStudio.Workload.ManagedDesktop
+3. Microsoft.VisualStudio.Component.VC.Tools.x86.x64
+4. Microsoft.VisualStudio.Component.Windows10SDK.18362
+5. Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Llvm.Clang
 
-## How to use vcpkg
+## How to set up a development environment (beginner friendly)
 
-0. Install vcpkg in source tree `cd vcpkg && bootstrap-vcpkg.bat`
-1. Install dependencies by `vcpkg\vcpkg.exe install @vcpkg.txt` (run in $(SolutionDir))
+1. Make sure you have all the above workloads and components installed via the Visual Studio Installer
+2. Run `git clone https://github.com/ambiennt/ElementZero.git` in your desired repository directory
+3. Open the repository in Visual Studio, and create a `Lib` folder in the root of the repository
+4. In the `.\Lib` folder, copy [these 3 files](https://github.com/ambiennt/ElementZeroLib) inside the directory
+4. Open the developer command prompt, and `cd` to `.\ElementZero>` ($(SolutionDir))
+4. Run `git submodule update --init --recursive` to install dependencies
+5. In `.\ElementZero>` ($(SolutionDir)), run `cd vcpkg && bootstrap-vcpkg.bat` to install vcpkg in source tree
+6. In `.\ElementZero>` ($(SolutionDir)), install vcpkg dependencies by `vcpkg\vcpkg.exe install @vcpkg.txt`; this may take some time
+7. In the Visual Studio solution explorer, right click CMakeLists.txt in `.\ElementZero>` ($(SolutionDir)) and click `generate CMake cache`; this may take some time
+8. You are now set up! For release builds, it is recommended to set the build type to `Release` and `rebuild all` before starting custom mod development
 
-## How to get bedrock_server_mod.lib
+## How to generate lib files yourself (optional)
 
 0. Download and install [EatPdb](https://github.com/CodeHz/EatPdb)
 1. Copy $(SolutionDir)\eatpdb.yaml to bds folder
