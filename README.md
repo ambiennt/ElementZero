@@ -16,9 +16,9 @@ This fork of ElementZero is currently being updated for BDS version 1.16.20.03 (
 ## Features
 
 0. Compatiable with official BDS
-1. And support behavior pack with custom item/recipes/scripts (* vanilla server *does* support them, but disabled in code)
+1. And support behavior pack with custom item/recipes/scripts (*vanilla BDS *does* support them, but its disabled in code)
 2. Can be run in Windows and Linux (with Wine)
-3. Native modding support, with one of the most robust BDS SDKs to date
+3. Native modding support with C++, high performance mods, and a very robust SDK
 
 ## FAQ
 
@@ -57,8 +57,8 @@ A: A DLL was created that simply forwards all APIs to the open source version of
 4. Open the developer command prompt, and `cd` to `.\ElementZero>` ($(SolutionDir))
 4. Run `git submodule update --init --recursive` to install dependencies
 5. In `.\ElementZero>` ($(SolutionDir)), run `cd vcpkg && bootstrap-vcpkg.bat` to install vcpkg in source tree
-6. In `.\ElementZero>` ($(SolutionDir)), install vcpkg dependencies by `vcpkg\vcpkg.exe install @vcpkg.txt`; this may take some time
-7. In the Visual Studio solution explorer, right click CMakeLists.txt in `.\ElementZero>` ($(SolutionDir)) and click `generate CMake cache`; this may take some time
+6. In `.\ElementZero>` ($(SolutionDir)), install vcpkg dependencies by `vcpkg\vcpkg.exe install @vcpkg.txt`. This may take some time
+7. In the Visual Studio solution explorer, right click CMakeLists.txt in `.\ElementZero` ($(SolutionDir)) and click `Generate Cache`. This may take some time
 8. You are now set up! For release builds, it is recommended to set the build type to `Release` and `rebuild all` before starting custom mod development
 
 ## How to generate lib files yourself (optional)
