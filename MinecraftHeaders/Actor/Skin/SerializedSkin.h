@@ -6,7 +6,7 @@
 
 #include "AnimatedImageData.h"
 #include "SerializedPersonaPieceHandle.h"
-#include "Persona.h"
+#include "persona.h"
 #include "TintMapColor.h"
 #include "../../Core/Color.h"
 #include "../../Core/mce.h"

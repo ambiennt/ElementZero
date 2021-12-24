@@ -5,7 +5,7 @@
 #include "UnverifiedCertificate.h"
 #include "../dll.h"
 
-#include "../Actor/Skin/Persona.h"
+#include "../Actor/Skin/persona.h"
 #include <unordered_map>
 
 class ConnectionRequest {

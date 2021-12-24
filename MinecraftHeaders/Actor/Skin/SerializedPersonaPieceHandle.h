@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Persona.h"
+#include "persona.h"
 #include "../../Core/mce.h"
 
 class SerializedPersonaPieceHandle {

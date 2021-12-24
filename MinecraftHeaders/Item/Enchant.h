@@ -15,7 +15,7 @@ class EnchantmentInstance;
 
 class Enchant {
 public:
-	enum class Type {
+	enum class Type : uint8_t {
 		protection            = 0,
 		fire_protection       = 1,
 		feather_falling       = 2,
@@ -122,6 +122,7 @@ class EnchantUtils {
 public:
 	MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int);
 	MCAPI static bool applyEnchant(class ItemStackBase&, EnchantmentInstance const&, bool allowNonVanilla);
+	MCAPI static int32_t getEnchantLevel(Enchant::Type enchantType, ItemStackBase const& stack);
 	inline static char const *getEnchantName(Enchant::Type type) {
 		switch (type) {
 			case Enchant::Type::protection: return "protection";

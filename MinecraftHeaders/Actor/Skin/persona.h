@@ -1,6 +1,6 @@
 #pragma once
 
-inline namespace persona {
+inline namespace persona { // (lowercase p)
 	
 	enum class AnimatedTextureType {
 		none                      = 0,
