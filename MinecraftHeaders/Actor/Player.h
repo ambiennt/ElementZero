@@ -315,11 +315,11 @@ public:
 	}
 
 	inline bool dropItem(ItemStack const &item, bool randomly) {
-    	return CallServerClassMethod<bool>("?drop@Player@@UEAA_NAEBVItemStack@@_N@Z", this, &item, false);
+		return CallServerClassMethod<bool>("?drop@Player@@UEAA_NAEBVItemStack@@_N@Z", this, &item, false);
 	}
 
 	inline bool addItem(ItemStack &item) {
-    	return CallServerClassMethod<bool>("?add@Player@@UEAA_NAEAVItemStack@@@Z", this, &item);
+		return CallServerClassMethod<bool>("?add@Player@@UEAA_NAEAVItemStack@@@Z", this, &item);
 	}
 
 	//a more reliable way to get pos delta for players
@@ -340,7 +340,7 @@ public:
 	BUILD_ACCESS_MUT(std::vector<int32_t>, mOceanBiomes, 0x7E0);
 	BUILD_ACCESS_MUT(bool, mCastawaySent, 0x7F8);
 	BUILD_ACCESS_MUT(enum Player::DimensionState, mDimensionState, 0x7FC);
-	BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800); // check this along with mServerAuthoritativeMovement in Level
+	BUILD_ACCESS_MUT(bool, mServerHasMovementAuthority, 0x800); // check mServerAuthoritativeMovement in Level instead
 	BUILD_ACCESS_MUT(int32_t, mScore, 0x804); // no clue what this is for
 	BUILD_ACCESS_MUT(float, mBob, 0x80C);
 	BUILD_ACCESS_MUT(bool, mHandsBusy, 0x810);

@@ -280,10 +280,11 @@ public:
 	virtual bool getIgnoresDestroyPermissions(class Actor &, class BlockPos const &) const;
 	virtual void neighborChanged(class BlockSource &, class BlockPos const &, class BlockPos const &) const;
 	virtual bool getSecondPart(class BlockSource &, class BlockPos const &, class BlockPos &) const;
-	virtual int getResourceCount(class Random &, class Block const &, int) const;
-	virtual class ItemInstance getResourceItem(class Random &, class Block const &, int) const;
+	virtual int getResourceCount(class Random &random, class Block const &block, int32_t bonusLootLevel) const;
+	virtual class ItemInstance getResourceItem(class Random &random, class Block const& block, int32_t bonusLootLevel) const;
 	virtual class ItemInstance asItemInstance(class BlockSource &, class BlockPos const &, class Block const &) const;
-	virtual void spawnResources(class BlockSource &, class BlockPos const &, class Block const &, float, int) const;
+	virtual void spawnResources(
+		class BlockSource &region, class BlockPos const &pos, class Block const &block, std::vector<class Item const*> *outItems, float explosionRadius, int32_t bonusLootLevel, bool allowRandomness) const;
 	virtual void trySpawnResourcesOnExplosion(
 			class BlockSource &, class BlockPos const &, class Block const &, std::vector<class Item const *> *, float, int,
 			bool) const;
@@ -362,8 +363,13 @@ public:
 	virtual class Block const *tryLegacyUpgrade(unsigned short) const;
 	virtual bool dealsContactDamage(class Actor const &, class Block const &, bool) const;
 
-	BUILD_ACCESS(unsigned short, BlockID, 268);
-	BUILD_ACCESS(class Block **, Block, 514);
 	template <typename T> MCAPI T getState(class ItemState const &, unsigned short) const;
 	class Block const &getDefaultState(void) const;
+
+	// TODO - more fields
+	BUILD_ACCESS_MUT(int32_t, mFlameOdds, 0x100);
+	BUILD_ACCESS_MUT(int32_t, mBurnOdds, 0x104);
+	BUILD_ACCESS_MUT(uint16_t, mBlockID, 0x10C); // NewBlockID?
+
+	BUILD_ACCESS_MUT(class Block **, Block, 0x202);
 };

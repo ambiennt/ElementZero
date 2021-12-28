@@ -97,6 +97,6 @@ TClasslessInstanceHook(void, "?forEachIn@ResourcePack@@QEBAXAEBVPath@Core@@V?$fu
 }
 
 THook(void, "?write@ResourcePacksInfoPacket@@UEBAXAEAVBinaryStream@@@Z", ResourcePacksInfoPacket &pkt, BinaryStream &stream) {
-  pkt.data.mHasExceptions = settings.CoResourcePack;
+  pkt.mData.mForceServerPacks = settings.CoResourcePack;
   original(pkt, stream);
 }

@@ -1,22 +1,34 @@
 #pragma once
 
-#include <functional>
 #include "../Core/Packet.h"
+#include "../Core/PackIdVersion.h"
 #include "../dll.h"
 
-struct ResourcePacksInfoData {
-	bool mTexturePackRequired;
-	bool mHasScripts;
-	bool mHasExceptions;
-	char pad[0x35];
+#include <modutils.h>
+
+struct ResourcePackInfoData {
+	BUILD_ACCESS_MUT(struct PackIdVersion, mPackIdVersion, 0x0);
+	BUILD_ACCESS_MUT(uint64_t, mPackSize, 0x88);
+	BUILD_ACCESS_MUT(std::string, mContentKey, 0x90);
+	BUILD_ACCESS_MUT(std::string, mSubpackName, 0xB0);
+	BUILD_ACCESS_MUT(class ContentIdentity, mContentIdentity, 0xD0);
+	BUILD_ACCESS_MUT(bool, mHasScripts, 0xE8); // client scripts
+	// whether client will be forced to download the resource pack or not (this differs from mTexturePackRequired in ResourcePacksInfoData
+	// because the clien't can still use their own texture packs alongside the forced one from the server
+	BUILD_ACCESS_MUT(bool, mForceServerPacks, 0xE9); // mHasExceptions
 };
 
-static_assert(offsetof(ResourcePacksInfoData, mHasExceptions) == 0x2);
-static_assert(sizeof(ResourcePacksInfoData) == 0x38);
+struct ResourcePacksInfoData {
+	BUILD_ACCESS_MUT(bool, mTexturePackRequired, 0x0);
+	BUILD_ACCESS_MUT(bool, mHasScripts, 0x1);
+	BUILD_ACCESS_MUT(bool, mForceServerPacks, 0x2); // mHasExceptions
+	BUILD_ACCESS_MUT(std::vector<struct ResourcePackInfoData>, mAddOnPacks, 0x8); // behaviors
+	BUILD_ACCESS_MUT(std::vector<struct ResourcePackInfoData>, mTexturePacks, 0x20); // resources
+};
 
 class ResourcePacksInfoPacket : public Packet {
 public:
-	ResourcePacksInfoData data;
+	ResourcePacksInfoData mData;
 
 	inline ~ResourcePacksInfoPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
@@ -25,5 +37,4 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(ResourcePacksInfoPacket, data) == 0x28);
-static_assert(sizeof(ResourcePacksInfoPacket) == 0x60);
+static_assert(offsetof(ResourcePacksInfoPacket, mData) == 0x28);
