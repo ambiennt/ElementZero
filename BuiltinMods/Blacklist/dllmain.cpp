@@ -207,7 +207,10 @@ TClasslessInstanceHook(bool,
   BlacklistEntry const &id, BlacklistEntry *&it) {
 
   bool onlineMode = LocateService<ServerNetworkHandler>()->mRequireTrustedAuthentication;
-  if (!onlineMode || (onlineMode && id.xuid.empty())) return false;
+  if (onlineMode) {
+    if (id.xuid.empty()) return true;
+  }
+  else return false;
 
   if (cached) {
     if (cached->first) {
