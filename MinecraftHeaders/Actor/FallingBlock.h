@@ -20,7 +20,7 @@ public:
 	BUILD_ACCESS_MUT(int32_t, mFallDamageMax, 0x634);
 	BUILD_ACCESS_MUT(int32_t, mFallDamageAmount, 0x638);
 	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mFallingBlockSerId, 0x640);
-	BUILD_ACCESS_MUT(class NewBlockID, mFallingBlockId, 0x648);
-	BUILD_ACCESS_MUT(uint16_t, mFallingBlockData, 0x64A);
+	BUILD_ACCESS_MUT(uint16_t, mFallingBlockId, 0x648); // class NewBlockID
+	BUILD_ACCESS_MUT(uint16_t, mFallingBlockAux, 0x64A); // mFallingBlockData
 };
 
