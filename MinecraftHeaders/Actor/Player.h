@@ -309,7 +309,7 @@ public:
 	MCAPI void clearRespawnPosition(void);
 	MCAPI void recheckSpawnPosition(void);
 
-	inline class ItemStack const& getPlayerUIItem() {
+	inline class ItemStack const& getPlayerUIItem(void) {
 		return CallServerClassMethod<class ItemStack const&>(
 			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
 	}
@@ -323,7 +323,7 @@ public:
 	}
 
 	//a more reliable way to get pos delta for players
-	Vec3 getPosDelta() {
+	inline Vec3 getPosDelta(void) {
 		Vec3 posDelta;
 		const auto& prevPos = this->getPosOld();
 		const auto& currPos = this->getPos();

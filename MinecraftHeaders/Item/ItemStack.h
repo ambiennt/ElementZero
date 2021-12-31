@@ -39,21 +39,25 @@ protected:
 	static std::string const TAG_STORE_CAN_PLACE_ON;
 
 public:
-	std::weak_ptr<class Item> mItem{};
-	std::unique_ptr<CompoundTag> mUserData;
-	uint16_t mBlockState{};
-	uint16_t mAuxValue{};
-	uint8_t mCount{};
-	bool mValid{};
-	std::chrono::steady_clock::time_point mPickupTime{};
-	bool mShowPickUp{};
-	bool mWasPickedUp{};
-	std::vector<class BlockLegacy *> mCanPlaceOn;
-	uint64_t mCanPlaceOnHash{};
-	std::vector<BlockLegacy *> mCanDestroy;
-	uint64_t mCanDestroyHash{};
-	struct Tick mBlockingTick;
-	std::unique_ptr<class ItemInstance> mChargedItem;
+
+	BUILD_ACCESS_MUT(class Item*, mItem, 0x8); // class WeakPtr<class Item>
+	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mUserData, 0x10);
+	BUILD_ACCESS_MUT(uint16_t, mBlockState, 0x18);
+	BUILD_ACCESS_MUT(uint16_t, mAuxValue, 0x20);
+	BUILD_ACCESS_MUT(uint8_t, mCount, 0x22);
+	BUILD_ACCESS_MUT(bool, mValid, 0x23);
+
+	using pickupTime1000000000 = std::chrono::time_point<std::chrono::steady_clock, std::chrono::duration<int64_t, std::ratio<1, 1000000000>>>;
+	BUILD_ACCESS_MUT(pickupTime1000000000, mPickupTime, 0x28);
+
+	BUILD_ACCESS_MUT(bool, mShowPickUp, 0x30);
+	BUILD_ACCESS_MUT(bool, mWasPickedUp, 0x31);
+	BUILD_ACCESS_MUT(std::vector<class BlockLegacy *>, mCanPlaceOn, 0x38);
+	BUILD_ACCESS_MUT(uint64_t, mCanPlaceOnHash, 0x50);
+	BUILD_ACCESS_MUT(std::vector<class BlockLegacy *>, mCanDestroy, 0x58);
+	BUILD_ACCESS_MUT(uint64_t, mCanDestroyHash, 0x70);
+	BUILD_ACCESS_MUT(struct Tick, mBlockingTick, 0x78);
+	BUILD_ACCESS_MUT(std::unique_ptr<class ItemInstance>, mChargedItem, 0x80);
 
 	MCAPI virtual ~ItemStackBase();
 
@@ -117,15 +121,7 @@ public:
 	MCAPI void hurtAndBreak(int, class Actor *);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
 
-	inline unsigned char getStackSize() const { return mCount; }
-	AS_FIELD(short, Id, getId);
-	AS_FIELD(short, Aux, getAuxValue);
-	AS_FIELD(int, IdAux, getIdAux);
-	AS_FIELD(std::string, Name, getName);
-	AS_FIELD(std::string, HoverName, getHoverName);
-	AS_FIELD(std::string, RawNameId, getRawNameId);
-	AS_FIELD(std::string, DescriptionId, getDescriptionId);
-	DEF_FIELD_RW(std::string, CustomName);
+	inline uint8_t getStackSize() const { return mCount; }
 
 	inline std::vector<std::string> getCustomLore() const {
 		std::vector<std::string> ret;
@@ -139,7 +135,7 @@ public:
 		return ret;
 	}
 
-	DEF_FIELD_RW(std::vector<std::string>, CustomLore);
+	//DEF_FIELD_RW(std::vector<std::string>, CustomLore);
 
 	MCAPI bool operator!=(ItemStackBase const &rhs) const;
 	MCAPI operator bool() const;
@@ -166,9 +162,11 @@ public:
 };
 class ItemStack : public ItemStackBase {
 public:
-	class ItemStackNetIdVariant mNetIdVariant;
+
+	BUILD_ACCESS_MUT(class ItemStackNetIdVariant, mNetIdVariant, 0x88);
 
 	MCAPI static ItemStack const EMPTY_ITEM;
+
 	MCAPI ItemStack();
 	ItemStack(Item const &item) : ItemStackBase(item) {}
 	MCAPI ItemStack(Item const &, int);
@@ -182,6 +180,3 @@ public:
 	MCAPI void reinit(Item const &, int, int);
 	MCAPI void reinit(BlockLegacy const &, int);
 };
-
-static_assert(sizeof(ItemStackBase) == 0x88);
-static_assert(sizeof(ItemStack) == 0x90);

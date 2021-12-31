@@ -584,7 +584,7 @@ public:
 	MCAPI void loadEntityFlags(class CompoundTag const &, class DataLoadHelper &);
 	MCAPI void testForCollidableMobs(class BlockSource &, class AABB const &, std::vector<class AABB> &);
 	MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
-	//MCAPI class ItemStack* getOffhandSlot(void) const; // idk why it says undefined symbol
+	//MCAPI const class ItemStack* getOffhandSlot(void) const; // idk why it says undefined symbol
 
 	template <typename T> MCAPI T *tryGetComponent(void);
 	template <typename T> MCAPI T const *tryGetComponent(void) const;
@@ -610,8 +610,11 @@ public:
 	BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
 	BUILD_ACCESS_MUT(class VariantParameterList, mInitParams, 0x48);
 	BUILD_ACCESS_MUT(bool, mForceInitMethodToSpawnOnReload, 0xC8);
-	//BUILD_ACCESS_MUT(class AutomaticID<class Dimension, int>, mDimensionId, 0xCC);
-	BUILD_ACCESS_MUT(int, mDimensionId, 0xCC);
+
+	//using dimensionId = class AutomaticID<class Dimension, int;
+	//BUILD_ACCESS_MUT(dimensionId, mDimensionId, 0xCC);
+	BUILD_ACCESS_MUT(int32_t, mDimensionId, 0xCC); // its just easier to use an int directly
+
 	BUILD_ACCESS_MUT(bool, mAdded, 0xD0);
 	BUILD_ACCESS_MUT(class ActorDefinitionGroup *, mDefinitions, 0xD8);
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDescriptor>, mCurrentDescription, 0xE0);
@@ -624,9 +627,12 @@ public:
 	BUILD_ACCESS_MUT(class ChunkPos, mChunkPos, 0x118);
 	BUILD_ACCESS_MUT(class Vec3, mRenderPos, 0x120);
 	BUILD_ACCESS_MUT(class Vec2, mRenderRot, 0x12C);
-	BUILD_ACCESS_MUT(int, mAmbientSoundTime, 0x134);
-	BUILD_ACCESS_MUT(int, mLastHurtByPlayerTime, 0x138);
-	//BUILD_ACCESS_MUT(uint8_t, mCategories[4], 0x13C); // _BYTE in ida? idk
+	BUILD_ACCESS_MUT(int32_t, mAmbientSoundTime, 0x134);
+	BUILD_ACCESS_MUT(int32_t, mLastHurtByPlayerTime, 0x138);
+
+	using uint8Arr4 = uint8_t[4];
+	BUILD_ACCESS_MUT(uint8Arr4, mCategories, 0x13C); // _BYTE in ida? idk
+
 	BUILD_ACCESS_MUT(class SynchedActorData, mEntityData, 0x140);
 	BUILD_ACCESS_MUT(std::unique_ptr<class SpatialActorNetworkData>, mNetworkData, 0x160);
 	BUILD_ACCESS_MUT(class Vec3, mSentDelta, 0x168);
@@ -672,24 +678,24 @@ public:
 	BUILD_ACCESS_MUT(class Vec2, mMouthOffset, 0x250);
 	BUILD_ACCESS_MUT(class Vec3, mDropOffset, 0x25C);
 	BUILD_ACCESS_MUT(bool, mFirstTick, 0x268);
-	BUILD_ACCESS_MUT(int, mTickCount, 0x26C);
-	BUILD_ACCESS_MUT(int, mInvulnerableTime, 0x270);
-	BUILD_ACCESS_MUT(int, mLastHealth, 0x274);
+	BUILD_ACCESS_MUT(int32_t, mTickCount, 0x26C);
+	BUILD_ACCESS_MUT(int32_t, mInvulnerableTime, 0x270);
+	BUILD_ACCESS_MUT(int32_t, mLastHealth, 0x274);
 	BUILD_ACCESS_MUT(bool, mFallDamageImmune, 0x278);
 	BUILD_ACCESS_MUT(bool, mHurtMarked, 0x279);
 	BUILD_ACCESS_MUT(bool, mWasHurtLastFrame, 0x27A);
 	BUILD_ACCESS_MUT(bool, mInvulnerable, 0x27B);
-	BUILD_ACCESS_MUT(int, mOnFireTicks, 0x27C);
-	BUILD_ACCESS_MUT(int, mFlameTexFrameIndex, 0x280);
-	BUILD_ACCESS_MUT(int, mClientSideFireTransitionStartTick, 0x284);
+	BUILD_ACCESS_MUT(int32_t, mOnFireTicks, 0x27C);
+	BUILD_ACCESS_MUT(int32_t, mFlameTexFrameIndex, 0x280);
+	BUILD_ACCESS_MUT(int32_t, mClientSideFireTransitionStartTick, 0x284);
 	BUILD_ACCESS_MUT(float, mFlameFrameIncrementTime, 0x288);
 	BUILD_ACCESS_MUT(bool, mOnHotBlock, 0x28C);
 	BUILD_ACCESS_MUT(bool, mClientSideFireTransitionLatch, 0x28D);
 	BUILD_ACCESS_MUT(bool, mAlwaysFireImmune, 0x28E);
-	BUILD_ACCESS_MUT(int, mPortalCooldown, 0x290);
+	BUILD_ACCESS_MUT(int32_t, mPortalCooldown, 0x290);
 	BUILD_ACCESS_MUT(class BlockPos, mPortalBlockPos, 0x294);
 	BUILD_ACCESS_MUT(enum PortalAxis, mPortalEntranceAxis, 0x2A0);
-	BUILD_ACCESS_MUT(int, mInsidePortalTime, 0x2A4);
+	BUILD_ACCESS_MUT(int32_t, mInsidePortalTime, 0x2A4);
 	BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mRiderIDs, 0x2A8);
 	BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mRiderIDsToRemove, 0x2C0);
 	BUILD_ACCESS_MUT(struct ActorUniqueID, mRidingID, 0x2D8);
@@ -704,7 +710,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mTeleportedThisTick, 0x2F6);
 	BUILD_ACCESS_MUT(bool, mForceSendMotionPacket, 0x2F7);
 	BUILD_ACCESS_MUT(float, mSoundVolume, 0x2F8);
-	BUILD_ACCESS_MUT(int, mShakeTime, 0x2FC); // for arrows
+	BUILD_ACCESS_MUT(int32_t, mShakeTime, 0x2FC); // for arrows
 	BUILD_ACCESS_MUT(float, mWalkAnimSpeedMultiplier, 0x300); // set to 1.5x when hurt
 	BUILD_ACCESS_MUT(float, mWalkAnimSpeedO, 0x304);
 	BUILD_ACCESS_MUT(float, mWalkAnimSpeed, 0x308);
@@ -738,7 +744,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mLootDropped, 0x4D9);
 	BUILD_ACCESS_MUT(bool, mPersistingTrade, 0x4DA);
 	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mPersistingTradeOffers, 0x4E0);
-	BUILD_ACCESS_MUT(int, mPersistingTradeRiches, 0x4E8);
+	BUILD_ACCESS_MUT(int32_t, mPersistingTradeRiches, 0x4E8);
 	BUILD_ACCESS_MUT(class ActorRuntimeID, mRuntimeID, 0x4F0);
 	BUILD_ACCESS_MUT(class Color, mHurtColor, 0x4F8); // r 1.0, g 0.0, b 0.0, a 0.6
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDiffList>, mDefinitionList, 0x508);
@@ -746,13 +752,18 @@ public:
 	BUILD_ACCESS_MUT(bool, mEnforceRiderRotationLimit, 0x511);
 	BUILD_ACCESS_MUT(bool, mIsStuckItem, 0x512);
 	BUILD_ACCESS_MUT(bool, mIsSafeToSleepNear, 0x513);
-	BUILD_ACCESS_MUT(int, mLimitedLifeTicks, 0x514);
-	BUILD_ACCESS_MUT(int, mForceVisibleTimerTicks, 0x518);
+	BUILD_ACCESS_MUT(int32_t, mLimitedLifeTicks, 0x514);
+	BUILD_ACCESS_MUT(int32_t, mForceVisibleTimerTicks, 0x518);
 	BUILD_ACCESS_MUT(float, mRidingExitDistance, 0x51C);
 	BUILD_ACCESS_MUT(std::string, mFilteredNameTag, 0x520); // idk why but this is always empty for players
 	BUILD_ACCESS_MUT(class ActorTerrainInterlockData, mTerrainInterlockData, 0x540);
-	//BUILD_ACCESS_MUT(float, mArmorDropChance[4], 0x558); // default: 25% for each armor piece
-	//BUILD_ACCESS_MUT(float, mHandDropChance[2], 0x568); // default: 25% chance for mainhand and offhand
+
+	using floatArr4 = float[4];
+	BUILD_ACCESS_MUT(floatArr4, mArmorDropChance, 0x558); // default: 25% for each armor piece
+
+	using floatArr2 = float[2];
+	BUILD_ACCESS_MUT(floatArr2, mHandDropChance, 0x568); // default: 25% chance for mainhand and offhand
+
 	BUILD_ACCESS_MUT(bool, mIsKnockedBackOnDeath, 0x570); // does not work on players
 	BUILD_ACCESS_MUT(bool, mUpdateEffects, 0x571);
 	BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mArmorContainer, 0x578);
@@ -768,8 +779,8 @@ public:
 	BUILD_ACCESS_MUT(bool, mWasInBubbleColumn, 0x5A7);
 	BUILD_ACCESS_MUT(bool, mIsExperimental, 0x5A8);
 	BUILD_ACCESS_MUT(bool, mWasInWallLastTick, 0x5A9);
-	BUILD_ACCESS_MUT(int, mTicksInWall, 0x5AC);
-	BUILD_ACCESS_MUT(int, mDamageNearbyMobsTick, 0x5B0); // riptide / spin attack
+	BUILD_ACCESS_MUT(int32_t, mTicksInWall, 0x5AC);
+	BUILD_ACCESS_MUT(int32_t, mDamageNearbyMobsTick, 0x5B0); // riptide / spin attack
 	BUILD_ACCESS_MUT(enum SpawnRuleEnum, mSpawnRulesEnum, 0x5B4);
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActionQueue>, mActionQueue, 0x5B8);
 	BUILD_ACCESS_MUT(class MolangVariableMap, mMolangVariables, 0x5C0);

@@ -184,14 +184,34 @@ public:
 
 	BASEAPI bool getAllowOffhand() const;
 	DEF_FIELD_RW(bool, AllowOffhand);
-	BUILD_ACCESS(short, Id, 112);
-	BUILD_ACCESS(std::string, RawNameId, 152);
-	BUILD_ACCESS(class HashedString *, FullItemName, 216);
-	BUILD_ACCESS(class BlockLegacy *, LegacyBlock, 376);
-	BUILD_ACCESS(enum CreativeItemCategory, CreativeCategory, 384);
-	BUILD_ACCESS(class FoodItemComponent *, Food, 400);
-	BUILD_ACCESS(class SeedItemComponent *, Seed, 408);
-	BUILD_ACCESS(class CameraItemComponent *, Camera, 416);
-};
 
-class EnderPearlItem : public Item {};
+	BUILD_ACCESS_MUT(std::string, m_textureAtlasFile, 0x8);
+	BUILD_ACCESS_MUT(int32_t, m_frameCount, 0x28);
+	BUILD_ACCESS_MUT(bool, m_animatesInToolbar, 0x2C);
+	BUILD_ACCESS_MUT(bool, mIsMirroredArt, 0x2D);
+	BUILD_ACCESS_MUT(enum UseAnimation, mUseAnim, 0x2E);
+	BUILD_ACCESS_MUT(const char*, mHoverTextColorFormat, 0x30);
+	BUILD_ACCESS_MUT(const struct TextureUVCoordinateSet*, mIconTexture, 0x38);
+	BUILD_ACCESS_MUT(const class TextureAtlasItem*, mIconAtlas, 0x40);
+	BUILD_ACCESS_MUT(bool, mUsesRenderingAdjustment, 0x48);
+	BUILD_ACCESS_MUT(class Vec3, mRenderingAdjTrans, 0x4C);
+	BUILD_ACCESS_MUT(class Vec3, mRenderingAdjRot, 0x58);
+	BUILD_ACCESS_MUT(float, mRenderingAdjScale, 0x64);
+	BUILD_ACCESS_MUT(uint8_t, m_maxStackSize, 0x68);
+	BUILD_ACCESS_MUT(int16_t, mId, 0x6A);
+	BUILD_ACCESS_MUT(std::string, mDescriptionId, 0x70);
+	BUILD_ACCESS_MUT(std::string, mRawNameId, 0x90);
+	BUILD_ACCESS_MUT(std::string, mNamespace, 0xB0);
+	BUILD_ACCESS_MUT(class HashedString, mFullName, 0xD0);
+	BUILD_ACCESS_MUT(int16_t, mMaxDamage, 0xF8);
+	//BUILD_ACCESS_MUT(int16_t, _bf_fa, 0xFA); // some random bit flags about the item, like fire resistant or is glint, idk?
+	BUILD_ACCESS_MUT(int32_t, mMaxUseDuration, 0xFC);
+	BUILD_ACCESS_MUT(class BaseGameVersion, mMinRequiredBaseGameVersion, 0x100);
+	BUILD_ACCESS_MUT(class BlockLegacy*, mLegacyBlock, 0x170);
+	BUILD_ACCESS_MUT(enum CreativeItemCategory, mCreativeCategory, 0x178);
+	BUILD_ACCESS_MUT(class Item *, mCraftingRemainingItem, 0x180);
+	BUILD_ACCESS_MUT(std::unique_ptr<class FoodItemComponent>, mFoodComponent, 0x188);
+	BUILD_ACCESS_MUT(std::unique_ptr<class SeedItemComponent>, mSeedComponent, 0x190);
+	BUILD_ACCESS_MUT(std::unique_ptr<class CameraItemComponent>, mCameraComponent, 0x198);
+	BUILD_ACCESS_MUT(std::vector<std::function<void __cdecl(void)>>, mOnResetBAIcallbacks, 0x1A0);
+};

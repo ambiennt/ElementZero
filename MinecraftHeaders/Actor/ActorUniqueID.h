@@ -5,7 +5,7 @@
 
 struct ActorUniqueID {
 public:
-	uint64_t value = 0;
+	uint64_t value = 0; // mRawId
 
 	MCAPI static ActorUniqueID const INVALID_ID;
 

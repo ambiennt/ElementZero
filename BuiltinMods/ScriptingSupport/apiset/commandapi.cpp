@@ -35,7 +35,7 @@ static JsValueRef DumpCommandOrigin(CommandOrigin const &orig) {
     if (auto player = db.Find((Player *) entity); player) { obj["player"] = *player; }
   }
   obj["name"] = orig.getName();
-  if (auto dim = orig.getDimension(); dim) obj["dimension"] = dim->DimensionId.value;
+  if (auto dim = orig.getDimension(); dim) obj["dimension"] = dim->mDimensionId;
   obj["permission"]   = (int) orig.getPermissionsLevel();
   obj["worldBuilder"] = orig.isWorldBuilder();
   obj["blockpos"]     = VecToJs(orig.getBlockPosition());

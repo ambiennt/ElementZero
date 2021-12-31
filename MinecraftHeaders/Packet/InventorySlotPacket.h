@@ -21,4 +21,6 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(sizeof(InventorySlotPacket) == 0xC0);
+static_assert(offsetof(InventorySlotPacket, container_id) == 0x28);
+static_assert(offsetof(InventorySlotPacket, slot) == 0x2C);
+static_assert(offsetof(InventorySlotPacket, item) == 0x30);

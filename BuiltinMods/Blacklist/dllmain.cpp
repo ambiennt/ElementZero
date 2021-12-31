@@ -211,7 +211,7 @@ TClasslessInstanceHook(bool,
     if (id.xuid.empty()) return true;
   }
   else return false;
-
+  
   if (cached) {
     if (cached->first) {
       it = cached->second;

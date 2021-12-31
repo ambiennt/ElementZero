@@ -17,6 +17,9 @@
 #include "../Item/SimpleClientNetId.h"
 #include "../dll.h"
 
+#include <modutils.h>
+
+
 class ReadOnlyBinaryStream;
 class BinaryStream;
 class ItemStack;
@@ -46,9 +49,18 @@ enum class InventorySourceType {
 
 class InventorySource {
 public:
-	InventorySourceType type = InventorySourceType::Invalid;
+	enum class InventorySourceFlags {
+		NoFlag                  = 0,
+		WorldInteraction_Random = 1
+	};
+
+	//BUILD_ACCESS_MUT(enum InventorySourceType, type, 0x0); // mType
+	//BUILD_ACCESS_MUT(enum ContainerID, container, 0x4); // mContainerId
+	//BUILD_ACCESS_MUT(enum InventorySourceFlags, flags, 0x8); // mFlags
+	
+	InventorySourceType type = InventorySourceType::Invalid; // keep as normal fields so we can use initializer lists
 	ContainerID container    = ContainerID::Invalid;
-	enum class InventorySourceFlags { NoFlag, WorldInteraction_Random } flags;
+	InventorySourceFlags flags;
 
 	inline InventorySource(ContainerID id) : container(id) {}
 	inline InventorySource(InventorySourceType type) : type(type) {}
@@ -74,6 +86,10 @@ public:
 	}
 };
 
+static_assert(offsetof(InventorySource, type) == 0x0);
+static_assert(offsetof(InventorySource, container) == 0x4);
+static_assert(offsetof(InventorySource, flags) == 0x8);
+
 namespace std {
 template <> struct hash<InventorySource> {
 	constexpr uint64_t operator()(InventorySource const &source) const noexcept {
@@ -84,18 +100,21 @@ template <> struct hash<InventorySource> {
 
 class InventoryAction {
 public:
-	InventorySource source;
-	unsigned int slot = 0;
-	ItemStack from, to;
+
+	BUILD_ACCESS_MUT(class InventorySource, source, 0x0); // mSource
+	BUILD_ACCESS_MUT(uint32_t, slot, 0xC); // mSlot
+	BUILD_ACCESS_MUT(ItemStack, from, 0x10); // mFromItem
+	BUILD_ACCESS_MUT(ItemStack, to, 0xA0); // mToItem
 };
 
 class InventoryTransactionItemGroup {
 public:
-	unsigned short itemId  = 0;
-	unsigned short itemAux = 0;
-	std::unique_ptr<CompoundTag> tag;
-	int count          = 0;
-	bool overflow      = false;
+
+	BUILD_ACCESS_MUT(int32_t, itemId, 0x0); // mItemId
+	BUILD_ACCESS_MUT(int32_t, itemAux, 0x4); // mItemAux
+	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, tag, 0x8); // mTag
+	BUILD_ACCESS_MUT(int32_t, count, 0x10); // mCount
+	BUILD_ACCESS_MUT(bool, overflow, 0x14); // mOverflow
 
 	MCAPI InventoryTransactionItemGroup(ItemStack const &, int);
 	inline ~InventoryTransactionItemGroup() {}
@@ -103,8 +122,11 @@ public:
 
 class InventoryTransaction {
 public:
-	std::unordered_map<InventorySource, std::vector<InventoryAction>> actions;
-	std::vector<InventoryTransactionItemGroup> items;
+
+	using actionMap = std::unordered_map<class InventorySource, std::vector<class InventoryAction>>;
+	BUILD_ACCESS_MUT(actionMap, actions, 0x0); // mActions
+
+	BUILD_ACCESS_MUT(std::vector<class InventoryTransactionItemGroup>, items, 0x40); // mContents
 
 	MCAPI void addAction(InventoryAction const &);
 	MCAPI InventoryTransactionError executeFull(Player &, bool) const;
@@ -127,18 +149,18 @@ public:
 	}
 };
 
-static_assert(offsetof(InventoryTransaction, items) == 64);
-
 class ComplexInventoryTransaction {
 public:
-	enum class Type : unsigned {
+	enum class Type {
 		NORMAL            = 0,
 		MISMATCH          = 1,
 		ITEM_USE          = 2,
 		ITEM_USE_ON_ACTOR = 3,
-		RELEASE_ITEM      = 4,
-	} type;
-	InventoryTransaction data;
+		RELEASE_ITEM      = 4
+	};
+
+	BUILD_ACCESS_MUT(enum Type, type, 0x8); // mType
+	BUILD_ACCESS_MUT(class InventoryTransaction, data, 0x10); // mTransaction
 
 	inline virtual ~ComplexInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -147,17 +169,21 @@ public:
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
 
-static_assert(sizeof(ComplexInventoryTransaction) == 104);
-
 class ItemUseInventoryTransaction : public ComplexInventoryTransaction {
 public:
-	enum class Type { USE_ITEM_ON, USE_ITEM, DESTROY } actionType;
-	NetworkBlockPosition pos;
-	uint32_t block_runtime_id;
-	BlockFace face;
-	uint32_t slot;
-	ItemStack itemInHand;
-	Vec3 playerPos, clickPos;
+	enum class ActionType {
+		PLACE   = 0,
+		USE     = 1,
+		DESTROY = 2
+	};
+
+	BUILD_ACCESS_MUT(enum ActionType, actionType, 0x68); // mActionType
+	BUILD_ACCESS_MUT(class BlockPos, pos, 0x6C); // mPos (NetworkBlockPosition)
+	BUILD_ACCESS_MUT(uint32_t, block_runtime_id, 0x78); // mTargetBlockRuntimeId
+	BUILD_ACCESS_MUT(uint8_t, face, 0x7C); // mFace
+	BUILD_ACCESS_MUT(int32_t, slot, 0x80); // mSlot
+	BUILD_ACCESS_MUT(class ItemStack, itemInHand, 0x88); // mItemInHand
+	BUILD_ACCESS_MUT(class Vec3, clickPos, 0x124); // mClickPos
 
 	inline virtual ~ItemUseInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -166,18 +192,21 @@ public:
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
 
-static_assert(offsetof(ItemUseInventoryTransaction, itemInHand) == 136);
-static_assert(offsetof(ItemUseInventoryTransaction, playerPos) == 280);
-static_assert(offsetof(ItemUseInventoryTransaction, clickPos) == 292);
-static_assert(sizeof(ItemUseInventoryTransaction) == 304);
-
 class ItemUseOnActorInventoryTransaction : public ComplexInventoryTransaction {
 public:
-	ActorRuntimeID actorId;
-	int actionType;
-	uint32_t slot;
-	ItemStack itemInHand;
-	Vec3 playerPos, clickPos;
+
+	enum class ActionType {
+		INTERACT      = 0,
+		ATTACK        = 1,
+		ITEM_INTERACT = 2
+	};
+
+	BUILD_ACCESS_MUT(class ActorRuntimeID, actorId, 0x68); // mRuntimeId
+	BUILD_ACCESS_MUT(enum ActionType, actionType, 0x70); // mActionType
+	BUILD_ACCESS_MUT(int32_t, slot, 0x74); // mSlot
+	BUILD_ACCESS_MUT(class ItemStack, itemInHand, 0x78); // mItemInHand
+	BUILD_ACCESS_MUT(class Vec3, playerPos, 0x108); // mPlayerPos
+	BUILD_ACCESS_MUT(class Vec3, clickPos, 0x114); // mClickPos
 
 	inline virtual ~ItemUseOnActorInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -186,15 +215,18 @@ public:
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
 
-static_assert(offsetof(ItemUseOnActorInventoryTransaction, playerPos) == 264);
-static_assert(offsetof(ItemUseOnActorInventoryTransaction, clickPos) == 276);
-
 class ItemReleaseInventoryTransaction : public ComplexInventoryTransaction {
 public:
-	int actionType;
-	uint32_t slot;
-	ItemStack itemInHand;
-	Vec3 playerPos;
+
+	enum class ActionType {
+		RELEASE = 0,
+		USE     = 1
+	};
+
+	BUILD_ACCESS_MUT(ActionType, actionType, 0x68); // mActionType
+	BUILD_ACCESS_MUT(int32_t, slot, 0x6C); // mSlot
+	BUILD_ACCESS_MUT(class ItemStack, itemInHand, 0x70); // mItemInHand
+	BUILD_ACCESS_MUT(class Vec3, playerPos, 0x100); // mPlayerPos
 
 	inline virtual ~ItemReleaseInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -202,5 +234,3 @@ public:
 	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
-
-static_assert(offsetof(ItemReleaseInventoryTransaction, playerPos) == 256);

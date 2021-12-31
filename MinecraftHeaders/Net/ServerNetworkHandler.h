@@ -3,6 +3,7 @@
 #include <hook.h>
 #include <modutils.h>
 #include "../Actor/ServerPlayer.h"
+#include "../Core/PackIdVersion.h"
 #include "NetworkIdentifier.h"
 #include "../dll.h"
 
@@ -16,14 +17,14 @@ public:
 
 	class Client;
 
-	MCAPI void disconnectClient(NetworkIdentifier const &, uint8_t subid, std::string const &reason, bool skipMessage);
+	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subid, std::string const &reason, bool skipMessage);
 	MCAPI void updateServerAnnouncement();
 
-	void forceDisconnectClient(Player *player, bool skipMessage) {
+	inline void forceDisconnectClient(Player *player, bool skipMessage) {
 		CallServerClassMethod<void>("?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", this, player, skipMessage);
 	}
 
-	inline ServerPlayer* getServerPlayer(NetworkIdentifier const & netId) {
+	inline ServerPlayer* getServerPlayer(NetworkIdentifier const& netId) {
 		return _getServerPlayer(netId, 0);
 	}
 	
@@ -46,9 +47,10 @@ public:
 	BUILD_ACCESS_MUT(class MinecraftCommands *, mMinecraftCommands, 0x188);
 	BUILD_ACCESS_MUT(class IMinecraftApp *, mApp, 0x190);
 	BUILD_ACCESS_MUT(class TextFilteringProcessor *, mTextFilteringProcessor, 0x198);
-	/*BUILD_ACCESS_MUT(
-		std::unique_ptr<class ClientBlobCache::Server::ActiveTransfersManager,
-		std::default_delete<class ClientBlobCache::Server::ActiveTransfersManager>>, mClientCacheManager, 0x1A0);*/
+
+	//using clientManagerPtr = std::unique_ptr<class ClientBlobCache::Server::ActiveTransfersManager>;
+	//BUILD_ACCESS_MUT(clientManagerPtr, mClientCacheManager, 0x1A0);
+
 	BUILD_ACCESS_MUT(std::unique_ptr<class ClassroomModeNetworkHandler>, mCompanionHandler,  0x1A8);
 	BUILD_ACCESS_MUT(std::string, mTenantId, 0x1B0);
 	BUILD_ACCESS_MUT(std::string, mShareableIdentityToken, 0x1D0);
@@ -62,12 +64,17 @@ public:
 	BUILD_ACCESS_MUT(int32_t, mMaxNumPlayers, 0x2D0);
 	BUILD_ACCESS_MUT(std::unordered_set<class mce::UUID>, mKnownEmotePieceIdLookup, 0x2D8);
 	BUILD_ACCESS_MUT(std::vector<class mce::UUID>, mKnownEmotePieceIds, 0x318);
-	/*BUILD_ACCESS_MUT(
-		std::unordered_map<class NetworkIdentifier, std::unique_ptr<class ServerNetworkHandler::Client>>, mClients, 0x330);*/
+
+	using clientMap = std::unordered_map<class NetworkIdentifier, std::unique_ptr<class ServerNetworkHandler::Client>>;
+	BUILD_ACCESS_MUT(clientMap, mClients, 0x330);
+
 	BUILD_ACCESS_MUT(bool, mIsTrial, 0x370);
-	//BUILD_ACCESS_MUT(std::unordered_map<class PackIdVersion, std::string>, mPackIdToContentKey, 0x378);
+
+	using packIdKeyMap = std::unordered_map<struct PackIdVersion, std::string>;
+	BUILD_ACCESS_MUT(packIdKeyMap, mPackIdToContentKey, 0x378);
+
 	BUILD_ACCESS_MUT(std::unique_ptr<class GameSpecificNetEventCallback>, mGameSpecificNetEventCallback, 0x3B8);
 
 private:
-	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const&, uint8_t subId);
+	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
 };

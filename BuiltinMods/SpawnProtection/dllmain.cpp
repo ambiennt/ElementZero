@@ -77,17 +77,17 @@ void checkInventoryTransaction(Mod::PlayerEntry const &entry, ComplexInventoryTr
 		case ComplexInventoryTransaction::Type::ITEM_USE: {
 			auto &data = (ItemUseInventoryTransaction const &) transaction;
 			switch (data.actionType) {
-			case ItemUseInventoryTransaction::Type::USE_ITEM_ON:
+			case ItemUseInventoryTransaction::ActionType::PLACE:
 				if (!Check(entry.player, data.pos.x, data.pos.z)) {
-					auto &legacy  = entry.player->mRegion->getBlock(data.pos).LegacyBlock;
-					if (!legacy.isInteractiveBlock() || legacy.mBlockID == VanillaBlockTypes::mItemFrame->mBlockID || entry.player->isSneaking()) {
+					auto legacy  = entry.player->mRegion->getBlock(data.pos).mLegacyBlock;
+					if (!legacy->isInteractiveBlock() || legacy->mBlockID == VanillaBlockTypes::mItemFrame->mBlockID || entry.player->isSneaking()) {
 						data.onTransactionError(*entry.player, InventoryTransactionError::StateMismatch);
 						token("Blocked by SpawnProtection");
 					}
 				}
 				break;
-			case ItemUseInventoryTransaction::Type::USE_ITEM: break;
-			case ItemUseInventoryTransaction::Type::DESTROY:
+			case ItemUseInventoryTransaction::ActionType::USE: break;
+			case ItemUseInventoryTransaction::ActionType::DESTROY:
 				if (!Check(entry.player, data.pos.x, data.pos.z)) {
 					data.onTransactionError(*entry.player, InventoryTransactionError::StateMismatch);
 					token("Blocked by SpawnProtection");

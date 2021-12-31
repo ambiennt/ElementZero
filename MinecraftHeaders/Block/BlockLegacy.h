@@ -87,7 +87,10 @@ enum class Flip {
 	DontRotate       = 5
 };
 
-enum class FertilizerType { Bonemeal, Rapid };
+enum class FertilizerType {
+	Bonemeal = 0,
+	Rapid    = 1
+};
 
 enum class BlockShape {
 	INVISIBLE                  = -0x1,
@@ -186,24 +189,20 @@ public:
 	virtual class Block const &getStateFromLegacyData(unsigned short) const;
 	virtual class std::shared_ptr<class BlockActor> newBlockEntity(class BlockPos const &, class Block const &) const;
 	virtual class Block const *getNextBlockPermutation(class Block const &) const;
-	virtual bool getCollisionShape(
-			class AABB &, class Block const &, class BlockSource &, class BlockPos const &, class Actor *) const;
+	virtual bool getCollisionShape(class AABB &, class Block const &, class BlockSource &, class BlockPos const &, class Actor *) const;
 	virtual bool isObstructingChests(class BlockSource &, class BlockPos const &) const;
 	virtual class Vec3 randomlyModifyPosition(class BlockPos const &, int &) const;
 	virtual class Vec3 randomlyModifyPosition(class BlockPos const &) const;
 	virtual void addAABBs(
-			class Block const &, class BlockSource &, class BlockPos const &, class AABB const *,
-			std::vector<class AABB> &) const;
-	virtual class AABB const &
-	getAABB(class BlockSource &, class BlockPos const &, class Block const &, class AABB &, bool) const;
+		class Block const &, class BlockSource &, class BlockPos const &, class AABB const *, std::vector<class AABB> &) const;
+	virtual class AABB const &getAABB(class BlockSource &, class BlockPos const &, class Block const &, class AABB &, bool) const;
 	virtual bool addCollisionShapes(
-			class Block const &, class BlockSource &, class BlockPos const &, class AABB const *, std::vector<class AABB> &,
-			class Actor *) const;
+		class Block const &, class BlockSource &, class BlockPos const &, class AABB const *, std::vector<class AABB> &, class Actor *) const;
 	virtual class AABB const &getOutline(class BlockSource &, class BlockPos const &, class AABB &) const;
 	virtual bool getLiquidClipVolume(class BlockSource &, class BlockPos const &, class AABB &) const;
 	virtual void onProjectileHit(class BlockSource &, class BlockPos const &, class Actor const &) const;
 	virtual bool liquidCanFlowIntoFromDirection(
-			unsigned char, std::function<class Block const &(class BlockPos const &)> const &, class BlockPos const &) const;
+		unsigned char, std::function<class Block const &(class BlockPos const &)> const &, class BlockPos const &) const;
 	virtual struct Brightness getLightEmission(class Block const &) const;
 	virtual bool shouldRandomTick() const;
 	virtual bool hasVariableLighting() const;
@@ -212,7 +211,7 @@ public:
 	virtual bool canProvideSupport(class Block const &, unsigned char, enum BlockSupportType) const;
 	virtual bool canConnect(class Block const &, unsigned char, class Block const &) const;
 	virtual void getConnectedDirections(
-			class Block const &, class BlockPos const &, class BlockSource &, bool &, bool &, bool &, bool &) const;
+		class Block const &, class BlockPos const &, class BlockSource &, bool &, bool &, bool &, bool &) const;
 	virtual bool isCropBlock() const;
 	virtual bool isStemBlock() const;
 	virtual bool isContainerBlock() const;
@@ -273,7 +272,7 @@ public:
 	virtual bool mayPlace(class BlockSource &, class BlockPos const &) const;
 	virtual bool mayPlaceOn(class BlockSource &, class BlockPos const &) const;
 	virtual bool tryToPlace(
-			class BlockSource &, class BlockPos const &, class Block const &, struct ActorBlockSyncMessage const *) const;
+		class BlockSource &, class BlockPos const &, class Block const &, struct ActorBlockSyncMessage const *) const;
 	virtual bool breaksFallingBlocks(class Block const &) const;
 	virtual void destroy(class BlockSource &, class BlockPos const &, class Block const &, class Actor *) const;
 	virtual bool playerWillDestroy(class Player &, class BlockPos const &, class Block const &) const;
@@ -286,15 +285,12 @@ public:
 	virtual void spawnResources(
 		class BlockSource &region, class BlockPos const &pos, class Block const &block, std::vector<class Item const*> *outItems, float explosionRadius, int32_t bonusLootLevel, bool allowRandomness) const;
 	virtual void trySpawnResourcesOnExplosion(
-			class BlockSource &, class BlockPos const &, class Block const &, std::vector<class Item const *> *, float, int,
-			bool) const;
+		class BlockSource &, class BlockPos const &, class Block const &, std::vector<class Item const *> *, float, int, bool) const;
 	virtual bool spawnBurnResources(class BlockSource &, float, float, float) const;
 	virtual float getExplosionResistance(class Actor *) const;
-	virtual class HitResult
-	clip(class BlockSource &, class BlockPos const &, class Vec3 const &, class Vec3 const &, bool) const;
+	virtual class HitResult clip(class BlockSource &, class BlockPos const &, class Vec3 const &, class Vec3 const &, bool) const;
 	virtual bool use(class Player &, class BlockPos const &) const;
-	virtual class Block const &
-	getPlacementBlock(class Actor &, class BlockPos const &, unsigned char, class Vec3 const &, int) const;
+	virtual class Block const &getPlacementBlock(class Actor &, class BlockPos const &, unsigned char, class Vec3 const &, int) const;
 	virtual int calcVariant(class BlockSource &, class BlockPos const &) const;
 	virtual bool isAttachedTo(class BlockSource &, class BlockPos const &, class BlockPos &) const;
 	virtual bool attack(class Player *, class BlockPos const &) const;
@@ -305,8 +301,7 @@ public:
 	virtual int getExperienceDrop(class Random &) const;
 	virtual bool canBeBuiltOver(class BlockSource &, class BlockPos const &) const;
 	virtual void triggerEvent(class BlockSource &, class BlockPos const &, int, int) const;
-	virtual void executeEvent(
-			class BlockSource &, class BlockPos const &, class Block const &, std::string const &, class Actor &) const;
+	virtual void executeEvent(class BlockSource &, class BlockPos const &, class Block const &, std::string const &, class Actor &) const;
 	virtual bool hasTag(class BlockSource &, class BlockPos const &, class Block const &, std::string const &) const;
 	virtual struct MobSpawnerData const *getMobToSpawn(struct SpawnConditions const &, class BlockSource &) const;
 	virtual class Color getMapColor(class BlockSource &, class BlockPos const &) const;
@@ -316,8 +311,7 @@ public:
 	virtual float calcGroundFriction(class Mob &, class BlockPos const &) const;
 	virtual bool canHaveExtraData() const;
 	virtual bool hasComparatorSignal() const;
-	virtual int
-	getComparatorSignal(class BlockSource &, class BlockPos const &, class Block const &, unsigned char) const;
+	virtual int getComparatorSignal(class BlockSource &, class BlockPos const &, class Block const &, unsigned char) const;
 	virtual bool canSlide(class BlockSource &, class BlockPos const &) const;
 	virtual bool canSpawnAt(class BlockSource const &, class BlockPos const &) const;
 	virtual bool notifySpawnedAt(class BlockSource &, class BlockPos const &) const;
@@ -334,8 +328,7 @@ public:
 	virtual enum BlockRenderLayer getRenderLayer(class Block const &, class BlockSource &, class BlockPos const &) const;
 	virtual int getExtraRenderLayers() const;
 	virtual float getShadeBrightness() const;
-	virtual class AABB const &
-	getVisualShapeInWorld(class Block const &, class BlockSource &, class BlockPos const &, class AABB &, bool) const;
+	virtual class AABB const &getVisualShapeInWorld(class Block const &, class BlockSource &, class BlockPos const &, class AABB &, bool) const;
 	virtual class AABB const &getVisualShape(class Block const &, class AABB &, bool) const;
 	virtual class AABB const &getUIShape(class Block const &, class AABB &) const;
 	virtual int telemetryVariant(class BlockSource &, class BlockPos const &) const;
@@ -364,7 +357,7 @@ public:
 	virtual bool dealsContactDamage(class Actor const &, class Block const &, bool) const;
 
 	template <typename T> MCAPI T getState(class ItemState const &, unsigned short) const;
-	class Block const &getDefaultState(void) const;
+	MCAPI class Block const &getDefaultState(void) const;
 
 	// TODO - more fields
 	BUILD_ACCESS_MUT(int32_t, mFlameOdds, 0x100);

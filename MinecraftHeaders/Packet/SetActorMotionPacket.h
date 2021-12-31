@@ -7,8 +7,8 @@
 
 class SetActorMotionPacket : public Packet {
 public:
-	ActorRuntimeID rid; // 0x28
-	Vec3 motion;        // 0x30
+	ActorRuntimeID mRuntimeId; // 0x28
+	Vec3 mMotion;              // 0x30
 
 	inline ~SetActorMotionPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
@@ -17,5 +17,5 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(SetActorMotionPacket, rid) == 40);
-static_assert(offsetof(SetActorMotionPacket, motion) == 48);
+static_assert(offsetof(SetActorMotionPacket, mRuntimeId) == 0x28);
+static_assert(offsetof(SetActorMotionPacket, mMotion) == 0x30);
