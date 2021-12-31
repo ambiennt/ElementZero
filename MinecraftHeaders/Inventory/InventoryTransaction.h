@@ -10,11 +10,12 @@
 #include "../Core/ContainerID.h"
 #include "../Container/ContainerEnumName.h"
 #include "../Math/NetworkBlockPosition.h"
-#include "../Math/BlockFace.h"
 #include "../Actor/Player.h"
 #include "../Actor/ActorRuntimeID.h"
 #include "../Item/ItemStack.h"
 #include "../Item/SimpleClientNetId.h"
+#include "../Math/Vec3.h"
+#include "../Math/BlockPos.h"
 #include "../dll.h"
 
 #include <modutils.h>
@@ -54,10 +55,6 @@ public:
 		WorldInteraction_Random = 1
 	};
 
-	//BUILD_ACCESS_MUT(enum InventorySourceType, type, 0x0); // mType
-	//BUILD_ACCESS_MUT(enum ContainerID, container, 0x4); // mContainerId
-	//BUILD_ACCESS_MUT(enum InventorySourceFlags, flags, 0x8); // mFlags
-	
 	InventorySourceType type = InventorySourceType::Invalid; // keep as normal fields so we can use initializer lists
 	ContainerID container    = ContainerID::Invalid;
 	InventorySourceFlags flags;
@@ -101,32 +98,40 @@ template <> struct hash<InventorySource> {
 class InventoryAction {
 public:
 
-	BUILD_ACCESS_MUT(class InventorySource, source, 0x0); // mSource
-	BUILD_ACCESS_MUT(uint32_t, slot, 0xC); // mSlot
-	BUILD_ACCESS_MUT(ItemStack, from, 0x10); // mFromItem
-	BUILD_ACCESS_MUT(ItemStack, to, 0xA0); // mToItem
+	InventorySource source; // 0x0
+	uint32_t slot; // 0xC - idk why this is unsigned
+	ItemStack from, to; // 0x10, 0xA0
 };
+
+static_assert(offsetof(InventoryAction, source) == 0x0);
+static_assert(offsetof(InventoryAction, slot) == 0xC);
+static_assert(offsetof(InventoryAction, from) == 0x10);
+static_assert(offsetof(InventoryAction, to) == 0xA0);
 
 class InventoryTransactionItemGroup {
 public:
 
-	BUILD_ACCESS_MUT(int32_t, itemId, 0x0); // mItemId
-	BUILD_ACCESS_MUT(int32_t, itemAux, 0x4); // mItemAux
-	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, tag, 0x8); // mTag
-	BUILD_ACCESS_MUT(int32_t, count, 0x10); // mCount
-	BUILD_ACCESS_MUT(bool, overflow, 0x14); // mOverflow
+	int32_t itemId; // 0x0
+	int32_t itemAux; // 0x4
+	std::unique_ptr<CompoundTag> tag; // 0x8
+	int32_t count; // 0x10
+	bool overflow; // 0x14
 
 	MCAPI InventoryTransactionItemGroup(ItemStack const &, int);
 	inline ~InventoryTransactionItemGroup() {}
 };
 
+static_assert(offsetof(InventoryTransactionItemGroup, itemId) == 0x0);
+static_assert(offsetof(InventoryTransactionItemGroup, itemAux) == 0x4);
+static_assert(offsetof(InventoryTransactionItemGroup, tag) == 0x8);
+static_assert(offsetof(InventoryTransactionItemGroup, count) == 0x10);
+static_assert(offsetof(InventoryTransactionItemGroup, overflow) == 0x14);
+
 class InventoryTransaction {
 public:
 
-	using actionMap = std::unordered_map<class InventorySource, std::vector<class InventoryAction>>;
-	BUILD_ACCESS_MUT(actionMap, actions, 0x0); // mActions
-
-	BUILD_ACCESS_MUT(std::vector<class InventoryTransactionItemGroup>, items, 0x40); // mContents
+	std::unordered_map<class InventorySource, std::vector<class InventoryAction>> actions; // 0x0
+	std::vector<class InventoryTransactionItemGroup> items; // 0x40
 
 	MCAPI void addAction(InventoryAction const &);
 	MCAPI InventoryTransactionError executeFull(Player &, bool) const;
@@ -149,6 +154,9 @@ public:
 	}
 };
 
+static_assert(offsetof(InventoryTransaction, actions) == 0x0);
+static_assert(offsetof(InventoryTransaction, items) == 0x40);
+
 class ComplexInventoryTransaction {
 public:
 	enum class Type {
@@ -159,8 +167,8 @@ public:
 		RELEASE_ITEM      = 4
 	};
 
-	BUILD_ACCESS_MUT(enum Type, type, 0x8); // mType
-	BUILD_ACCESS_MUT(class InventoryTransaction, data, 0x10); // mTransaction
+	Type type; // 0x8
+	InventoryTransaction data; // 0x10
 
 	inline virtual ~ComplexInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -168,6 +176,9 @@ public:
 	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
+
+static_assert(offsetof(ComplexInventoryTransaction, type) == 0x8);
+static_assert(offsetof(ComplexInventoryTransaction, data) == 0x10);
 
 class ItemUseInventoryTransaction : public ComplexInventoryTransaction {
 public:
@@ -177,13 +188,13 @@ public:
 		DESTROY = 2
 	};
 
-	BUILD_ACCESS_MUT(enum ActionType, actionType, 0x68); // mActionType
-	BUILD_ACCESS_MUT(class BlockPos, pos, 0x6C); // mPos (NetworkBlockPosition)
-	BUILD_ACCESS_MUT(uint32_t, block_runtime_id, 0x78); // mTargetBlockRuntimeId
-	BUILD_ACCESS_MUT(uint8_t, face, 0x7C); // mFace
-	BUILD_ACCESS_MUT(int32_t, slot, 0x80); // mSlot
-	BUILD_ACCESS_MUT(class ItemStack, itemInHand, 0x88); // mItemInHand
-	BUILD_ACCESS_MUT(class Vec3, clickPos, 0x124); // mClickPos
+	ActionType actionType; // 0x68
+	BlockPos pos; // 0x6C
+	uint32_t block_runtime_id; // 0x78
+	uint8_t face; // 0x7C
+	int32_t slot; // 0x80
+	ItemStack itemInHand; // 0x88
+	Vec3 playerPos, clickPos; // 0x124
 
 	inline virtual ~ItemUseInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -191,6 +202,15 @@ public:
 	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
+
+static_assert(offsetof(ItemUseInventoryTransaction, actionType) == 0x68);
+static_assert(offsetof(ItemUseInventoryTransaction, pos) == 0x6C);
+static_assert(offsetof(ItemUseInventoryTransaction, block_runtime_id) == 0x78);
+static_assert(offsetof(ItemUseInventoryTransaction, face) == 0x7C);
+static_assert(offsetof(ItemUseInventoryTransaction, slot) == 0x80);
+static_assert(offsetof(ItemUseInventoryTransaction, itemInHand) == 0x88);
+static_assert(offsetof(ItemUseInventoryTransaction, playerPos) == 0x118);
+static_assert(offsetof(ItemUseInventoryTransaction, clickPos) == 0x124);
 
 class ItemUseOnActorInventoryTransaction : public ComplexInventoryTransaction {
 public:
@@ -201,12 +221,11 @@ public:
 		ITEM_INTERACT = 2
 	};
 
-	BUILD_ACCESS_MUT(class ActorRuntimeID, actorId, 0x68); // mRuntimeId
-	BUILD_ACCESS_MUT(enum ActionType, actionType, 0x70); // mActionType
-	BUILD_ACCESS_MUT(int32_t, slot, 0x74); // mSlot
-	BUILD_ACCESS_MUT(class ItemStack, itemInHand, 0x78); // mItemInHand
-	BUILD_ACCESS_MUT(class Vec3, playerPos, 0x108); // mPlayerPos
-	BUILD_ACCESS_MUT(class Vec3, clickPos, 0x114); // mClickPos
+	ActorRuntimeID actorId; // 0x68
+	ActionType actionType; // 0x70
+	int32_t slot; // 0x74
+	ItemStack itemInHand; // 0x78
+	Vec3 playerPos, clickPos; // 0x108, 0x114
 
 	inline virtual ~ItemUseOnActorInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -214,6 +233,13 @@ public:
 	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
+
+static_assert(offsetof(ItemUseOnActorInventoryTransaction, actorId) == 0x68);
+static_assert(offsetof(ItemUseOnActorInventoryTransaction, actionType) == 0x70);
+static_assert(offsetof(ItemUseOnActorInventoryTransaction, slot) == 0x74);
+static_assert(offsetof(ItemUseOnActorInventoryTransaction, itemInHand) == 0x78);
+static_assert(offsetof(ItemUseOnActorInventoryTransaction, playerPos) == 0x108);
+static_assert(offsetof(ItemUseOnActorInventoryTransaction, clickPos) == 0x114);
 
 class ItemReleaseInventoryTransaction : public ComplexInventoryTransaction {
 public:
@@ -223,10 +249,10 @@ public:
 		USE     = 1
 	};
 
-	BUILD_ACCESS_MUT(ActionType, actionType, 0x68); // mActionType
-	BUILD_ACCESS_MUT(int32_t, slot, 0x6C); // mSlot
-	BUILD_ACCESS_MUT(class ItemStack, itemInHand, 0x70); // mItemInHand
-	BUILD_ACCESS_MUT(class Vec3, playerPos, 0x100); // mPlayerPos
+	ActionType actionType; // 0x68
+	int32_t slot; // 0x6C
+	ItemStack itemInHand; // 0x70
+	Vec3 playerPos; // 0x100
 
 	inline virtual ~ItemReleaseInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
@@ -234,3 +260,8 @@ public:
 	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
 	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
+
+static_assert(offsetof(ItemReleaseInventoryTransaction, actionType) == 0x68);
+static_assert(offsetof(ItemReleaseInventoryTransaction, slot) == 0x6C);
+static_assert(offsetof(ItemReleaseInventoryTransaction, itemInHand) == 0x70);
+static_assert(offsetof(ItemReleaseInventoryTransaction, playerPos) == 0x100);

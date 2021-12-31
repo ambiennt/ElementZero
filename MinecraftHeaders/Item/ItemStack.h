@@ -40,9 +40,26 @@ protected:
 
 public:
 
-	BUILD_ACCESS_MUT(class Item*, mItem, 0x8); // class WeakPtr<class Item>
+	Item* mItem; // 0x8
+	std::unique_ptr<CompoundTag> mUserData; // 0x10
+	const Block* mBlock; // 0x18
+	uint16_t mAuxValue; // 0x20
+	uint8_t mCount; // 0x22
+	bool mValid; // 0x23
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::duration<int64_t, std::ratio<1, 1000000000>>> mPickupTime; // 0x28
+	bool mShowPickUp; // 0x30
+	bool mWasPickedUp; // 0x31
+	std::vector<BlockLegacy *> mCanPlaceOn; // 0x38
+	uint64_t mCanPlaceOnHash; // 0x50
+	std::vector<BlockLegacy *> mCanDestroy; // 0x58
+	uint64_t mCanDestroyHash; // 0x70
+	Tick mBlockingTick; // 0x78
+	std::unique_ptr<class ItemInstance> mChargedItem; // 0x80
+
+	// causing crashes for some reason
+	/*BUILD_ACCESS_MUT(class Item*, mItem, 0x8); // class WeakPtr<class Item>
 	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mUserData, 0x10);
-	BUILD_ACCESS_MUT(uint16_t, mBlockState, 0x18);
+	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x18);
 	BUILD_ACCESS_MUT(uint16_t, mAuxValue, 0x20);
 	BUILD_ACCESS_MUT(uint8_t, mCount, 0x22);
 	BUILD_ACCESS_MUT(bool, mValid, 0x23);
@@ -57,7 +74,7 @@ public:
 	BUILD_ACCESS_MUT(std::vector<class BlockLegacy *>, mCanDestroy, 0x58);
 	BUILD_ACCESS_MUT(uint64_t, mCanDestroyHash, 0x70);
 	BUILD_ACCESS_MUT(struct Tick, mBlockingTick, 0x78);
-	BUILD_ACCESS_MUT(std::unique_ptr<class ItemInstance>, mChargedItem, 0x80);
+	BUILD_ACCESS_MUT(std::unique_ptr<class ItemInstance>, mChargedItem, 0x80);*/
 
 	MCAPI virtual ~ItemStackBase();
 
@@ -135,8 +152,6 @@ public:
 		return ret;
 	}
 
-	//DEF_FIELD_RW(std::vector<std::string>, CustomLore);
-
 	MCAPI bool operator!=(ItemStackBase const &rhs) const;
 	MCAPI operator bool() const;
 
@@ -163,7 +178,8 @@ public:
 class ItemStack : public ItemStackBase {
 public:
 
-	BUILD_ACCESS_MUT(class ItemStackNetIdVariant, mNetIdVariant, 0x88);
+	class ItemStackNetIdVariant mNetIdVariant; // 0x88
+	//BUILD_ACCESS_MUT(class ItemStackNetIdVariant, mNetIdVariant, 0x88);
 
 	MCAPI static ItemStack const EMPTY_ITEM;
 
@@ -180,3 +196,17 @@ public:
 	MCAPI void reinit(Item const &, int, int);
 	MCAPI void reinit(BlockLegacy const &, int);
 };
+
+static_assert(offsetof(ItemStackBase, mItem) == 0x8);
+static_assert(offsetof(ItemStackBase, mAuxValue) == 0x20);
+static_assert(offsetof(ItemStackBase, mPickupTime) == 0x28);
+static_assert(offsetof(ItemStackBase, mShowPickUp) == 0x30);
+static_assert(offsetof(ItemStackBase, mCanPlaceOnHash) == 0x50);
+static_assert(offsetof(ItemStackBase, mCanDestroy) == 0x58);
+static_assert(offsetof(ItemStackBase, mCanDestroyHash) == 0x70);
+static_assert(offsetof(ItemStackBase, mChargedItem) == 0x80);
+
+static_assert(offsetof(ItemStack, mNetIdVariant) == 0x88);
+
+static_assert(sizeof(ItemStackBase) == 0x88);
+static_assert(sizeof(ItemStack) == 0x90);

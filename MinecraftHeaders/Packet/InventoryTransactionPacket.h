@@ -24,4 +24,6 @@ public:
 };
 
 static_assert(offsetof(InventoryTransactionPacket, mLegacyRequestId) == 0x28);
+static_assert(offsetof(InventoryTransactionPacket, mLegacySetItemSlots) == 0x30);
 static_assert(offsetof(InventoryTransactionPacket, mTransaction) == 0x48);
+static_assert(offsetof(InventoryTransactionPacket, mIsClientSide) == 0x50);
