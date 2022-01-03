@@ -24,8 +24,10 @@ DEFAULT_SETTINGS(settings);
 
 
 THook(void, "?initialize@CrashHandler@@SAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@00@Z",
-    std::string const &serverId, std::string const crashUploadUri, std::string const &sessionId) {
-    LOGI("Crash report endpoint replaced to %s") % settings.URI;
+    std::string const &serverId, std::string const &crashUploadUri, std::string const &sessionId) {
+    if (!settings.disableCrashReportHttpRequest) {
+        LOGI("Crash report endpoint replaced to %s") % settings.URI;
+    }
     original(serverId, settings.URI, sessionId);
 }
 

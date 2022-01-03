@@ -4,15 +4,15 @@
 
 class RandomizableBlockActorContainerBase : public BlockActor {
 public:
-	std::string lootTable;
-	int         lootTableSeed;
+	std::string mLootTable; // 0xD0
+	int32_t mLootTableSeed; // 0xF0
 
 	virtual ~RandomizableBlockActorContainerBase(void);
 	virtual void load(class Level&, class CompoundTag const&, class DataLoadHelper&) override;
 	virtual bool save(class CompoundTag&) const override;
 };
 
-static_assert(offsetof(RandomizableBlockActorContainerBase, lootTable) == 208);
-static_assert(offsetof(RandomizableBlockActorContainerBase, lootTableSeed) == 240);
+static_assert(offsetof(RandomizableBlockActorContainerBase, mLootTable) == 0xD0);
+static_assert(offsetof(RandomizableBlockActorContainerBase, mLootTableSeed) == 0xF0);
 
-static_assert(sizeof(RandomizableBlockActorContainerBase) == 248);
+static_assert(sizeof(RandomizableBlockActorContainerBase) == 0xF8);

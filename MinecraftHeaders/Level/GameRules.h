@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 
+#include "GameRulesIndex.h"
+
 class GameRule {
 public:
 	enum struct Type : char {

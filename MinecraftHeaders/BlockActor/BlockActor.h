@@ -5,7 +5,11 @@
 #include <vector>
 
 #include "../Math/Vec3.h"
+#include "../Math/AABB.h"
+#include "../Block/Block.h"
 #include "BlockActorType.h"
+#include "BlockActorRendererId.h"
+
 #include "../dll.h"
 
 #include <modutils.h>
@@ -14,13 +18,25 @@ class BlockActor {
 	char unknown[200];
 
 public:
-	BUILD_ACCESS_MUT(class Block, Block, 16);
-	BUILD_ACCESS_MUT(unsigned int, RepairCost_, 40);
-	BUILD_ACCESS_MUT(Vec3, BlockPos, 44);
-	BUILD_ACCESS_MUT(class AABB, AABB, 56);
-	BUILD_ACCESS_MUT(enum BlockActorType, Type, 84);
-	BUILD_ACCESS_MUT(std::string, CustomName_, 96);
-	BUILD_ACCESS_MUT(bool, Movable, 165);
+	BUILD_ACCESS_MUT(int32_t, mTickCount, 0x8);
+	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x10);
+	BUILD_ACCESS_MUT(float, mDestroyTimer, 0x18);
+	BUILD_ACCESS_MUT(class Vec3, mDestroyDirection, 0x1C);
+	BUILD_ACCESS_MUT(float, mDestroyProgress, 0x28);
+	BUILD_ACCESS_MUT(class BlockPos, mPosition, 0x2C);
+	BUILD_ACCESS_MUT(class AABB, mAABB, 0x38);
+	BUILD_ACCESS_MUT(const enum BlockActorType, mType, 0x54);
+	BUILD_ACCESS_MUT(enum BlockActorRendererId, mRendererId, 0x58);
+	BUILD_ACCESS_MUT(std::string, mCustomName, 0x60);
+	BUILD_ACCESS_MUT(std::string, mFilteredCustomName, 0x80);
+	BUILD_ACCESS_MUT(int32_t, mRepairCost, 0xA0);
+	BUILD_ACCESS_MUT(bool, mClientSideOnly, 0xA4);
+	BUILD_ACCESS_MUT(bool, mIsMovable, 0xA5);
+	BUILD_ACCESS_MUT(bool, mSaveCustomName, 0xA6);
+	BUILD_ACCESS_MUT(bool, mCanRenderCustomName, 0xA7);
+	BUILD_ACCESS_MUT(const float, mSignShadowRadius, 0xA8);
+	BUILD_ACCESS_MUT(class ActorTerrainInterlockData, mTerrainInterlockData, 0xB0);
+	BUILD_ACCESS_MUT(bool, mChanged, 0xC8);
 
 	MCAPI BlockActor(enum BlockActorType, class BlockPos const &, std::string const &);
 	virtual ~BlockActor();

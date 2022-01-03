@@ -1,6 +1,7 @@
 #pragma once
 
-enum class GameRuleIds {
+enum class GameRulesIndex {
+	Invalid                 = -1,
 	CommandBlockOutput      = 0,
 	DoDaylightCycle         = 1,
 	DoEntityDrops           = 2,
@@ -30,8 +31,9 @@ enum class GameRuleIds {
 	SpawnRadius             = 26,
 	ShowTags                = 27,
 	VanillaGameRuleCount    = 28,
-	GlobalMute              = 29,
-	AllowDestructiveObjects = 30,
+	GlobalMute              = 28, // these are the same
+	AllowDestructiveObjects = 29,
+	AllowMobs               = 30,
 	CodeBuilder             = 31,
 	EducationGameRuleCount  = 32
 };

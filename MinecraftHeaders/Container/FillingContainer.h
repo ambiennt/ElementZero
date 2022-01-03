@@ -10,8 +10,8 @@
 
 class FillingContainer : public Container {
 public:
-	std::vector<ItemStack> data;
-	Player *player;
+	std::vector<ItemStack> mItems; // 0xE0
+	Player *mPlayer; // 0xF8
 
 	MCAPI FillingContainer(Player *, int, ContainerType);
 
@@ -28,5 +28,5 @@ public:
 	MCAPI std::unique_ptr<ListTag> save();
 };
 
-static_assert(offsetof(FillingContainer, data) == 224);
-static_assert(offsetof(FillingContainer, player) == 248);
+static_assert(offsetof(FillingContainer, mItems) == 0xE0);
+static_assert(offsetof(FillingContainer, mPlayer) == 0xF8);

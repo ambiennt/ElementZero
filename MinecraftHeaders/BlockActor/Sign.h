@@ -27,7 +27,10 @@ public:
 	};
 
 	struct CachedMessageData {
-		//BUILD_ACCESS_MUT(struct SignBlockActor::CachedLineData[4], mLineData, 0x0);
+
+		using lineDataArr4 = struct SignBlockActor::CachedLineData[4];
+		BUILD_ACCESS_MUT(lineDataArr4, mLineData, 0x0);
+
 		BUILD_ACCESS_MUT(uint32_t, mNumLines, 0xA0);
 		BUILD_ACCESS_MUT(std::string, mFilteredMessage, 0xA8);
 		BUILD_ACCESS_MUT(const void*, mCachedFontCompare, 0xC8); // no clue what this is

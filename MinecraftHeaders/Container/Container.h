@@ -20,15 +20,16 @@ class ItemDescriptor;
 
 class Container {
 public:
-	ContainerType type;
-	std::unordered_set<ContainerContentChangeListener *> content_change_listeners;
-	std::unordered_set<ContainerSizeChangeListener *> content_size_listeners;
-	std::deque<std::function<void(Container &, int, ItemStack const &, ItemStack const &)>> transactions;
-	std::string custom_name;
-	bool has_custom_name;
-	//SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0> container_runtime_id;
+	ContainerType mContainerType; // 0x8
+	ContainerType mGameplayContainerType; // 0x9
+	std::unordered_set<ContainerContentChangeListener *> mContentChangeListeners; // 0x10
+	std::unordered_set<ContainerSizeChangeListener *> mSizeChangeListeners; // 0x50
+	std::deque<std::function<void(Container &, int, ItemStack const &, ItemStack const &)>> mTransactionContextStack; // 0x90
+	std::string mName; // 0xB8
+	bool mHasCustomName; // 0xD8
+	uint32_t mContainerRuntimeId = 0; // 0xDC - SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0>
 
-	MCAPI Container(ContainerType);
+	MCAPI Container(enum ContainerType);
 	virtual ~Container();
 	virtual void init();
 	virtual void serverInitItemStackIds(int, int, std::function<void(int, ItemStack const &)>);
@@ -66,7 +67,9 @@ public:
 	MCAPI void triggerTransactionChange(int, ItemStack const&, ItemStack const&);
 };
 
-static_assert(offsetof(Container, type) == 0x8);
-static_assert(offsetof(Container, content_change_listeners) == 0x10);
-static_assert(offsetof(Container, content_size_listeners) == 0x50);
-static_assert(offsetof(Container, custom_name) == 0xB8);
+static_assert(offsetof(Container, mContainerType) == 0x8);
+static_assert(offsetof(Container, mContentChangeListeners) == 0x10);
+static_assert(offsetof(Container, mSizeChangeListeners) == 0x50);
+static_assert(offsetof(Container, mTransactionContextStack) == 0x90);
+static_assert(offsetof(Container, mName) == 0xB8);
+static_assert(offsetof(Container, mHasCustomName) == 0xD8);

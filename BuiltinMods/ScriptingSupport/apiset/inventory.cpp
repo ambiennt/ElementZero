@@ -61,19 +61,19 @@ using namespace Mod::Scripting;
 static ModuleRegister reg("ez:inventory", [](JsObjectWrapper native) -> std::string {
   native["getOffHandItem"] = +[](Mod::PlayerEntry entry) {
     auto &container = entry.player->getHandContainer();
-    return ToJs(container.data[1]);
+    return ToJs(container.mItems[1]);
   };
   native["getEquipmentItems"] = +[](Mod::PlayerEntry entry) {
     auto &container = entry.player->getEquipmentContainer();
-    return ToJsArray(container.data);
+    return ToJsArray(container.mItems);
   };
   native["getInventoryItems"] = +[](Mod::PlayerEntry entry) {
     auto &container = *entry.player->getInventory().inventory;
-    return ToJsArray(container.data);
+    return ToJsArray(container.mItems);
   };
   native["getEnderChestItems"] = +[](Mod::PlayerEntry entry) {
     auto &container = *entry.player->getEnderChestContainer();
-    return ToJsArray(container.data);
+    return ToJsArray(container.mItems);
   };
   return R"js(
     export const getOffHandItem = import.meta.native.getOffHandItem;

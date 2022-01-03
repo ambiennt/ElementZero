@@ -6,8 +6,10 @@
 
 class SimpleContainer : public Container {
 public:
-	int size;
-	std::vector<ItemStack> data;
+
+	int32_t mSize; // 0xE0
+	std::vector<ItemStack> mItems; // 0xE8
+
 	MCAPI SimpleContainer(std::string const &, bool, int);
 	MCAPI ~SimpleContainer() override;
 	MCAPI virtual ItemStack const &getItem(int) const override;
@@ -17,3 +19,6 @@ public:
 	MCAPI virtual void startOpen(Player &) override;
 	MCAPI virtual void stopOpen(Player &) override;
 };
+
+static_assert(offsetof(SimpleContainer, mSize) == 0xE0);
+static_assert(offsetof(SimpleContainer, mItems) == 0xE8);

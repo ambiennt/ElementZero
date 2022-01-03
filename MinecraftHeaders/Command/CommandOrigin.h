@@ -31,7 +31,7 @@ struct CommandOriginData;
 class Level;
 class Dimension;
 class Actor;
-enum class AbilitiesIndex;
+enum class AbilitiesIndex : int16_t;
 class NetworkIdentifier;
 namespace Json {
 class Value;

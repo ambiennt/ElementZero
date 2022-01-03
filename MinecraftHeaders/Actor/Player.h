@@ -346,7 +346,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mHandsBusy, 0x810);
 	BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
 	BUILD_ACCESS_MUT(enum BuildPlatform, mBuildPlatform, 0x838);
-	BUILD_ACCESS_MUT(class Ability, mAbilities, 0x840);
+	BUILD_ACCESS_MUT(class Abilities, mAbilities, 0x840);
 	BUILD_ACCESS_MUT(const class NetworkIdentifier, mOwner, 0x980);
 	BUILD_ACCESS_MUT(std::string, mUniqueName, 0xA18); // seems to be in the form of a hash
 	BUILD_ACCESS_MUT(std::string, mServerId, 0xA38);

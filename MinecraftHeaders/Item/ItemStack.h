@@ -40,7 +40,7 @@ protected:
 
 public:
 
-	Item* mItem; // 0x8
+	Item* mItem; // 0x8 - WeakPtr<Item>
 	std::unique_ptr<CompoundTag> mUserData; // 0x10
 	const Block* mBlock; // 0x18
 	uint16_t mAuxValue; // 0x20

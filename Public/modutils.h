@@ -25,6 +25,10 @@ template <typename Ret, typename Type> Ret &direct_access(Type *type, size_t off
   return *u.target;
 }
 
+// use BUILD_ACCESS_MUT as a macro for a mutable instance of a field (like you would with direct_access)
+// its useful so you don't have to worry about padding when filling in fields from classes
+// if your class is small and/or has mostly primitive types then I would suggest defining fields normally
+
 #define AS_FIELD(type, name, fn) __declspec(property(get = fn)) type name
 #define DEF_FIELD_RW(type, name) __declspec(property(get = get##name, put = set##name)) type name
 

@@ -5,7 +5,8 @@
 
 class RandomizableBlockActorFillingContainer : public RandomizableBlockActorContainerBase, public FillingContainer {
 public:
-	MCAPI RandomizableBlockActorFillingContainer(enum BlockActorType, std::string const&, class BlockPos const&, int, enum ContainerType);
+	MCAPI RandomizableBlockActorFillingContainer(
+		enum BlockActorType blockEntityType, std::string const& id, class BlockPos const& pos, int numTotalSlots, enum ContainerType containerType);
 
 	virtual ~RandomizableBlockActorFillingContainer();
 	virtual void setContainerChanged(int) override;

@@ -5,30 +5,7 @@
 
 #include "../Command/CommandPermissionLevel.h"
 #include "PlayerPermissionLevel.h"
-
-enum class AbilitiesIndex {
-	Invalid              = -1,
-	Build                = 0,
-	Mine                 = 1,
-	DoorsAndSwitches     = 2,
-	OpenContainers       = 3,
-	AttackPlayers        = 4,
-	AttackMobs           = 5,
-	OperatorCommands     = 6,
-	Teleport             = 7,
-	ExposedAbilityCount  = 8,
-	Invulnerable         = 8,
-	Flying               = 9,
-	MayFly               = 10,
-	Instabuild           = 11,
-	Lightning            = 12,
-	FlySpeed             = 13,
-	WalkSpeed            = 14,
-	Muted                = 15,
-	WorldBuilder         = 16,
-	NoClip               = 17,
-	AbilityCount         = 18
-};
+#include "AbilitiesIndex.h"
 
 class PermissionsHandler {
 public:
@@ -38,14 +15,14 @@ public:
 
 class Ability {
 public:
-	enum class Type : char {
+	enum class Type {
 		Invalid  = 0,
 		Unset    = 1,
 		Boolean  = 2,
 		Float    = 3
 	};
 
-	enum class Options : char {
+	enum class Options : int8_t {
 		None                         = 0,
 		NoSave                       = 1,
 		CommandExposed               = 2,
@@ -67,9 +44,9 @@ public:
 
 class Abilities {
 public:
-	std::unique_ptr<PermissionsHandler> mPermissionsHandler;
-	std::array<Ability, 18> Abilities;
-	std::array<Ability, 8> CustomAbilities;
+	std::unique_ptr<PermissionsHandler> mPermissionsHandler; // 0x0
+	std::array<Ability, 18> Abilities; // 0x8
+	std::array<Ability, 8> CustomAbilities; // 0xE0
 
 	MCAPI static class std::array<char const*, 18> ABILITY_NAMES;
 	MCAPI static std::string const TAG;
@@ -79,3 +56,7 @@ public:
 	MCAPI void setPlayerPermissions(enum PlayerPermissionLevel);
 	MCAPI void _registerAbilities();
 };
+
+static_assert(offsetof(Abilities, mPermissionsHandler) == 0x0);
+static_assert(offsetof(Abilities, Abilities) == 0x8);
+static_assert(offsetof(Abilities, CustomAbilities) == 0xE0);

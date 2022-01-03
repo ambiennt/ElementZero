@@ -6,6 +6,7 @@
 #include <RakNet/RakPeer.h>
 #include <Actor/ServerPlayer.h>
 #include <Net/NetworkIdentifier.h>
+#include <Net/ServerNetworkHandler.h>
 #include <Core/ExtendedCertificate.h>
 
 #include <SQLiteCpp/SQLiteCpp.h>
@@ -183,7 +184,9 @@ TClasslessInstanceHook(
     stmt_login.exec();
   } catch (...) {
     LOGV("illegal connection from %s (name: %s)") % address % name;
-    player->kick();
+    if (LocateService<ServerNetworkHandler>()->mRequireTrustedAuthentication) {
+      player->kick();
+    }
   }
   return std::move(player);
 }

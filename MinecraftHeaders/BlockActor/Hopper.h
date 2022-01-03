@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Math/BlockPos.h"
+
 class Hopper {
 public:
 	int mCooldownTime;

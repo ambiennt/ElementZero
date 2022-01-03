@@ -2,7 +2,7 @@
 
 #include "SimpleContainer.h"
 
-class PlayerUIContainer : public SimpleContainer {
+class PlayerUIContainer : public SimpleContainer { // no fields
 public:
 
 };
