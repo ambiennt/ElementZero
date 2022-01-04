@@ -8,8 +8,9 @@
 class SetActorMotionPacket : public Packet {
 public:
 	ActorRuntimeID mRuntimeId; // 0x28
-	Vec3 mMotion;              // 0x30
+	Vec3 mMotion = Vec3::ZERO; // 0x30
 
+	SetActorMotionPacket(ActorRuntimeID rid, Vec3 motion) : mRuntimeId(rid), mMotion(motion) {}
 	inline ~SetActorMotionPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

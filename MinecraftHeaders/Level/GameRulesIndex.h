@@ -31,7 +31,7 @@ enum class GameRulesIndex {
 	SpawnRadius             = 26,
 	ShowTags                = 27,
 	VanillaGameRuleCount    = 28,
-	GlobalMute              = 28, // these are the same
+	GlobalMute              = 28, // both are 28
 	AllowDestructiveObjects = 29,
 	AllowMobs               = 30,
 	CodeBuilder             = 31,

@@ -9,7 +9,7 @@
 #include "CommandPermissionLevel.h"
 #include "../dll.h"
 
-enum class CommandOriginType : char {
+enum class CommandOriginType : int8_t {
 	Player                  = 0,
 	CommandBlock            = 1,
 	MinecartCommandBlock    = 2,
@@ -24,7 +24,7 @@ enum class CommandOriginType : char {
 	ActorServer             = 11,
 	Precompiled             = 12,
 	GameMaster              = 13,
-	Script                  = 14,
+	Script                  = 14
 };
 
 struct CommandOriginData;

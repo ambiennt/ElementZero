@@ -86,7 +86,10 @@ public:
 	BUILD_ACCESS_MUT(struct ActorUniqueID, mTargetID, 0x1F0);
 	BUILD_ACCESS_MUT(class Vec3, mTargetDelta, 0x1F8);
 	BUILD_ACCESS_MUT(int32_t, mFlightSteps, 0x204);
-	//BUILD_ACCESS_MUT(int8_t, mCurrentMoveDirection[4], 0x208); // byte array
+
+	using int8Arr4 = int8_t[4];
+	BUILD_ACCESS_MUT(int8Arr4, mCurrentMoveDirection, 0x208);
+
 	BUILD_ACCESS_MUT(bool, mShouldBounce, 0x20C);
 	BUILD_ACCESS_MUT(uint32_t, mCurrentDelay, 0x210);
 	BUILD_ACCESS_MUT(bool, mWaitingForServer, 0x214);

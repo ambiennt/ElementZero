@@ -1,6 +1,6 @@
 #pragma once
 
-enum class AbilitiesIndex : int16_t { // idk why this is an int16
+enum class AbilitiesIndex : int16_t { // this is actually an int16 in bds
 	Invalid              = -1,
 	Build                = 0,
 	Mine                 = 1,
@@ -11,7 +11,7 @@ enum class AbilitiesIndex : int16_t { // idk why this is an int16
 	OperatorCommands     = 6,
 	Teleport             = 7,
 	ExposedAbilityCount  = 8,
-	Invulnerable         = 8,
+	Invulnerable         = 8, // both are 8
 	Flying               = 9,
 	MayFly               = 10,
 	Instabuild           = 11,

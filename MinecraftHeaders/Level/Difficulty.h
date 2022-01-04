@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct Difficulty {
+enum class Difficulty {
 	Peaceful  = 0,
 	Easy      = 1,
 	Normal    = 2,
