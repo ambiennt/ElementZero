@@ -8,6 +8,7 @@
 #include "../Level/Tick.h"
 #include "../Core/json.h"
 #include "../Core/NBT.h"
+#include "../Core/WeakPtr.h"
 #include "ItemStackNetIdVariant.h"
 #include "../dll.h"
 
@@ -40,7 +41,7 @@ protected:
 
 public:
 
-	Item* mItem; // 0x8 - WeakPtr<Item>
+	WeakPtr<Item> mItem; // 0x8
 	std::unique_ptr<CompoundTag> mUserData; // 0x10
 	const Block* mBlock; // 0x18
 	uint16_t mAuxValue; // 0x20
