@@ -185,6 +185,19 @@ public:
 	BASEAPI bool getAllowOffhand() const;
 	DEF_FIELD_RW(bool, AllowOffhand);
 
+	enum class Flags {
+		IsGlint = 1,
+		mHandEquipped = 2,
+		mIsStackedByData = 3,
+		mRequiresWorldBuilder=  4,
+		mExplodable = 5,
+		mFireResistant = 6,
+		mShouldDespawn = 7,
+		mAllowOffhand = 8,
+		mIgnoresPermissions = 9,
+		mExperimental = 10
+	};
+
 	BUILD_ACCESS_MUT(std::string, m_textureAtlasFile, 0x8);
 	BUILD_ACCESS_MUT(int32_t, m_frameCount, 0x28);
 	BUILD_ACCESS_MUT(bool, m_animatesInToolbar, 0x2C);
@@ -204,7 +217,7 @@ public:
 	BUILD_ACCESS_MUT(std::string, mNamespace, 0xB0);
 	BUILD_ACCESS_MUT(class HashedString, mFullName, 0xD0);
 	BUILD_ACCESS_MUT(int16_t, mMaxDamage, 0xF8);
-	//BUILD_ACCESS_MUT(int16_t, _bf_fa, 0xFA); // some random bit flags about the item, like fire resistant or is glint, idk?
+	BUILD_ACCESS_MUT(int16_t, mFlags, 0xFA); // bit flags - use Item::hasBitFlag(enum Item::Flags) to test
 	BUILD_ACCESS_MUT(int32_t, mMaxUseDuration, 0xFC);
 	BUILD_ACCESS_MUT(class BaseGameVersion, mMinRequiredBaseGameVersion, 0x100);
 	BUILD_ACCESS_MUT(class BlockLegacy*, mLegacyBlock, 0x170);
@@ -213,5 +226,9 @@ public:
 	BUILD_ACCESS_MUT(std::unique_ptr<class FoodItemComponent>, mFoodComponent, 0x188);
 	BUILD_ACCESS_MUT(std::unique_ptr<class SeedItemComponent>, mSeedComponent, 0x190);
 	BUILD_ACCESS_MUT(std::unique_ptr<class CameraItemComponent>, mCameraComponent, 0x198);
-	BUILD_ACCESS_MUT(std::vector<std::function<void __cdecl(void)>>, mOnResetBAIcallbacks, 0x1A0);
+	BUILD_ACCESS_MUT(std::vector<std::function<void (void)>>, mOnResetBAIcallbacks, 0x1A0);
+
+	inline bool hasBitFlag(enum Item::Flags flag) {
+		return this->mFlags & (uint32_t)flag;
+	}
 };

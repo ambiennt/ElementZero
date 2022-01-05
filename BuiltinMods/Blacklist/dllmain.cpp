@@ -12,7 +12,6 @@
 
 #include <base/log.h>
 #include <mods/CommandSupport.h>
-#include <Net/ServerNetworkHandler.h>
 
 #include "settings.h"
 #include "global.h"
@@ -205,12 +204,6 @@ TClasslessInstanceHook(
 TClasslessInstanceHook(bool,
   "?isBlocked@Blacklist@@AEBA_NAEBUEntry@1@AEAV?$_Vector_const_iterator@V?$_Vector_val@U?$_Simple_types@UEntry@Blacklist@@@std@@@std@@@std@@@Z",
   BlacklistEntry const &id, BlacklistEntry *&it) {
-
-  bool onlineMode = LocateService<ServerNetworkHandler>()->mRequireTrustedAuthentication;
-  if (onlineMode) {
-    if (id.xuid.empty()) return true;
-  }
-  else return false;
   
   if (cached) {
     if (cached->first) {
@@ -221,7 +214,7 @@ TClasslessInstanceHook(bool,
   }
 
   auto &name = *(std::string *) ((char *) &id + 192); // HACK
-  auto xuid  = std::stoll(id.xuid);
+  auto xuid  = id.xuid.empty() ? 0 : std::stoll(id.xuid);
   auto uuid  = (char const *) &id.uuid;
 
   if (queryForUUID(uuid, name, it) || queryForXUID(xuid, name, it)) goto logip;

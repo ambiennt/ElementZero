@@ -18,7 +18,7 @@ public:
 	class Client;
 
 	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subid, std::string const &reason, bool skipMessage);
-	MCAPI void updateServerAnnouncement();
+	MCAPI void updateServerAnnouncement(void);
 
 	inline void forceDisconnectClient(Player *player, bool skipMessage) {
 		CallServerClassMethod<void>("?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", this, player, skipMessage);
