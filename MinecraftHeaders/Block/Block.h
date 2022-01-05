@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Core/NBT.h"
+#include "../Core/WeakPtr.h"
 #include "BlockLegacy.h"
 #include "../dll.h"
 
@@ -10,11 +11,11 @@ class Block {
 
 public:
 
-	BUILD_ACCESS_MUT(const uint16_t, mAux, 0x8); // mData
-	BUILD_ACCESS_MUT(class BlockLegacy*, mLegacyBlock, 0x10); // class WeakPtr<class BlockLegacy>
-	BUILD_ACCESS_MUT(class CompoundTag, mSerializationId, 0x18);
-	BUILD_ACCESS_MUT(uint32_t, mRuntimeId, 0x30);
-	BUILD_ACCESS_MUT(bool, mHasRuntimeId, 0x34);
+	uint16_t mAux; // mData (const) - 0x8
+	WeakPtr<BlockLegacy> mLegacyBlock; // 0x10
+	CompoundTag mSerializationId; // 0x18
+	uint32_t mRuntimeId; // 0x30
+	bool mHasRuntimeId; // 0x34
 
 	MCAPI virtual ~Block();
 	MCAPI virtual enum BlockRenderLayer getRenderLayer() const;
@@ -33,3 +34,9 @@ public:
 	MCAPI std::string toDebugString(void) const;
 	MCAPI unsigned int getStateMask(class ItemState const &) const;
 };
+
+static_assert(offsetof(Block, mAux) == 0x8);
+static_assert(offsetof(Block, mLegacyBlock) == 0x10);
+static_assert(offsetof(Block, mSerializationId) == 0x18);
+static_assert(offsetof(Block, mRuntimeId) == 0x30);
+static_assert(offsetof(Block, mHasRuntimeId) == 0x34);

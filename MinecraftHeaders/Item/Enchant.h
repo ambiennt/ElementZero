@@ -56,14 +56,15 @@ public:
 		num_enchantments      = 37,
 		invalid_enchantment   = 38
 	};
-	enum struct Frequency {
+
+	enum class Frequency {
 		VeryRare         = 1,
 		Rare             = 3,
 		Uncommon         = 10,
 		Common           = 30
 	};
 
-	enum struct Slot {
+	enum class Slot {
 		ALL              = -1,
 		NONE             = 0,
 		ARMOR_HEAD       = 1,

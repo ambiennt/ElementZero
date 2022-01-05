@@ -11,9 +11,9 @@ enum class EnchantResultType : int8_t {
 };
 
 struct EnchantResult {
-	EnchantResultType result;
-	size_t enchantIdx;
-	int level;
+	EnchantResultType result; // 0x0
+	uint64_t enchantIdx; // 0x8
+	int32_t level; // 0x10
 };
 
 static_assert(offsetof(EnchantResult, enchantIdx) == 0x8);
