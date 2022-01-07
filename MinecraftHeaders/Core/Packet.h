@@ -16,10 +16,13 @@ enum class Compressibility {
 	Incompressible  = 1
 };
 
+enum class StreamReadResult {
+	Malformed = 0,
+	Valid     = 1
+};
+
 enum class MinecraftPacketIds;
-enum class StreamReadResult;
-enum class ExtendedStreamReadResult;
-enum class MinecraftPacketIds;
+enum class ExtendedStreamReadResult; // actually a struct
 class BinaryStream;
 class ReadOnlyBinaryStream;
 

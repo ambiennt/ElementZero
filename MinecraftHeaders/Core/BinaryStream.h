@@ -10,7 +10,7 @@
 class ReadOnlyBinaryStream {
 public:
 	size_t read_pointer{};
-	bool unk;
+	bool mHasOverflowed;
 	std::string ownbuf, *pbuf;
 	ReadOnlyBinaryStream(std::string &&buffer) : ownbuf(std::move(buffer)), pbuf{&ownbuf} {}
 	MCAPI ReadOnlyBinaryStream(std::string const &buffer, bool owned);

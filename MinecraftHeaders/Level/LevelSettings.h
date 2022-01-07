@@ -7,6 +7,7 @@
 #include "GeneratorType.h"
 #include "Abilities.h"
 #include "GameRules.h"
+#include "../Core/Social.h"
 #include "../dll.h"
 
 #include <optional>
@@ -34,8 +35,8 @@ public:
 	BUILD_ACCESS_MUT(bool, mConfirmedPlatformLockedContent, 0x60);
 	BUILD_ACCESS_MUT(bool, mMultiplayerGameIntent, 0x61);
 	BUILD_ACCESS_MUT(bool, mLANBroadcastIntent, 0x62);
-	BUILD_ACCESS_MUT(int32_t, mXBLBroadcastIntent, 0x64); // enum Social::GamePublishSetting
-	BUILD_ACCESS_MUT(int32_t, mPlatformBroadcastIntent, 0x68); // enum Social::GamePublishSetting
+	BUILD_ACCESS_MUT(enum Social::GamePublishSetting, mXBLBroadcastIntent, 0x64);
+	BUILD_ACCESS_MUT(enum Social::GamePublishSetting, mPlatformBroadcastIntent, 0x68);
 	BUILD_ACCESS_MUT(bool, mCommandsEnabled, 0x6C);
 	BUILD_ACCESS_MUT(bool, mTexturePacksRequired, 0x6D);
 	BUILD_ACCESS_MUT(bool, mHasLockedBehaviorPack, 0x6E);

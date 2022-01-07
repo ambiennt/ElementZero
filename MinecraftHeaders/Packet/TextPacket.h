@@ -32,6 +32,7 @@ public:
 	bool translated;
 	std::string xuid;
 	std::string platformId;
+
 	template <TextPacketType type, bool translated = true>
 	static inline TextPacket createTextPacket(std::string content) {
 		TextPacket pkt;
@@ -75,5 +76,7 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(TextPacket, type) == 40);
-static_assert(offsetof(TextPacket, platformId) == 176);
+static_assert(offsetof(TextPacket, type) == 0x28);
+static_assert(offsetof(TextPacket, source) == 0x30);
+static_assert(offsetof(TextPacket, args) == 0x70);
+static_assert(offsetof(TextPacket, platformId) == 0xB0);

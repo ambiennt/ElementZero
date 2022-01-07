@@ -8,6 +8,7 @@
 #include "../Core/SemVersion.h"
 #include "../Core/NBT.h"
 #include "../Core/StringKey.h"
+#include "../Core/Social.h"
 #include "../Math/BlockPos.h"
 #include "AdventureSettings.h"
 #include "WorldTemplateLevelData.h"
@@ -89,10 +90,10 @@ public:
 	bool mIsMultiplayerGame;
 	bool mLANBroadcastIntent;
 	bool mLANBroadcast;
-	int mXBLBroadcastIntent;
-	int mXBLBroadcastMode;
-	int mPlatformBroadcastIntent;
-	int mPlatformBroadcastMode;
+	Social::GamePublishSetting mXBLBroadcastIntent;
+	Social::GamePublishSetting mXBLBroadcastMode;
+	Social::GamePublishSetting mPlatformBroadcastIntent;
+	Social::GamePublishSetting mPlatformBroadcastMode;
 	bool mCommandsEnabled;
 	bool mTexturepacksRequired;
 	bool mLockedBehaviorPack;
