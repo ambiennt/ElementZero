@@ -84,9 +84,9 @@ public:
     }
     auto pos = it->target->getPos();
     auto dim = it->target->getDimensionId();
-    pos.y -= 1;
+    pos.y -= 1.62f;
     auto source = it->source;
-    source->teleport(pos, {0}, dim);
+    source->teleport(pos, Vec3::ZERO, dim);
     ClearTimeOut(it->token);
     container.get<1>().erase(it);
     output.success("commands.tpaccept.success", {source});

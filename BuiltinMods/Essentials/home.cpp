@@ -17,7 +17,7 @@ public:
       output.error("commands.home.error");
       return;
     }
-    source->teleport(pos, {0}, 0);
+    source->teleport(pos, Vec3::ZERO, 0);
     output.success("commands.home.success");
   }
   static void setup(CommandRegistry *registry) {
@@ -45,7 +45,7 @@ public:
       output.error("commands.spawn.error.not.set");
       return;
     }
-    source->teleport(pos, {0}, 0);
+    source->teleport(pos, Vec3::ZERO, 0);
     output.success("commands.spawn.success");
   }
   static void setup(CommandRegistry *registry) {

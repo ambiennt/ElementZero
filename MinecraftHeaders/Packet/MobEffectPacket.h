@@ -6,12 +6,19 @@
 
 class MobEffectPacket : public Packet {
 public:
-	ActorRuntimeID runtime_id;
-	int effect_duration_ticks;
-	int event_id;
-	int effect_id;
-	int effect_amplifier;
-	bool show_particles;
+
+	enum class Event : uint8_t {
+		Add = 1,
+		Update = 2,
+		Remove = 3
+	};
+
+	ActorRuntimeID mRuntimeId;
+	int32_t mEffectDurationTicks;
+	Event mEventId;
+	int32_t mEffectId;
+	int32_t mEffectAmplifier;
+	bool mShowParticles;
 
 	inline ~MobEffectPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

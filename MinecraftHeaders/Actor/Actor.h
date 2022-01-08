@@ -594,11 +594,11 @@ public:
 			"?getEntityName@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AEBVActor@@@Z", this);
 	}
 
-	void teleport(Vec3 target, Vec3 const &old, AutomaticID<Dimension, int> dim, RelativeFloat yaw = {0},
-		RelativeFloat pitch = {0}, int flag = 0, ActorUniqueID const &id = ActorUniqueID::INVALID_ID) {
+	void teleport(Vec3 destination, Vec3 const &facePosition, AutomaticID<Dimension, int> destinationDimension,
+		RelativeFloat yaw = {0}, RelativeFloat pitch = {0}, int commandVersion = 0, ActorUniqueID const &id = ActorUniqueID::INVALID_ID) {
 		CallServerClassMethod<void>(
 			"?teleport@TeleportCommand@@SAXAEAVActor@@VVec3@@PEAV3@V?$AutomaticID@VDimension@@H@@VRelativeFloat@@4HAEBUActorUniqueID@@@Z",
-			this, target, &old, dim, yaw, pitch, flag, &id);
+			this, destination, &facePosition, destinationDimension, yaw, pitch, commandVersion, &id);
 	}
 
 	inline ItemStack* getOffhandSlot() const {

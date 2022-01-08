@@ -3,14 +3,19 @@
 #include "Vec2.h"
 #include <cmath>
 
+#define PI 3.141592654
+#define RAD 0.017453292
+
 class Vec3 {
 public:
 	float x = 0.0f, y = 0.0f, z = 0.0f;
 	// For ABI
-	inline ~Vec3() {}
 
 	static Vec3 ZERO;
 
+	Vec3();
+	Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+	inline ~Vec3() {}
 	Vec3 &operator=(Vec3 const&) = default;
 	Vec3 operator+(Vec3 const &rhs) const noexcept { return {x + rhs.x, y + rhs.y, z + rhs.z}; }
 	constexpr bool operator==(Vec3 const &rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
@@ -18,8 +23,8 @@ public:
 
 	inline Vec3 directionFromRotation(Vec2 const& rot) {
 
-		float x = (float)(rot.x * -0.017453292);
-		float y = (float)(rot.y * -0.017453292) - 3.141592654;
+		float x = (float)(rot.x * -RAD);
+		float y = (float)(rot.y * -RAD) - PI;
 
 		float f1 = cos(y);
 		float f2 = sin(y);
