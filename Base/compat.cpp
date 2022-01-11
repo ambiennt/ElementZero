@@ -100,9 +100,9 @@ THook(void*,
   void *subid, void *uuid, void *deviceId, void *certificate, void *platformId, void *platformOnlineId) {
 
   auto ret = original(player, level, packetSender, playerGameType, owner, subid, uuid, deviceId, certificate, platformId, platformOnlineId);
-  auto& unusedVec = direct_access<Vec3>(ret, 0xB24); // Player::mFirstPersonLatestHandOffset (store a pointer here at unused field)
+  auto& unusedVec = direct_access<Vec3>(player, 0xB24); // Player::mFirstPersonLatestHandOffset (store a pointer here at unused field)
   unusedVec.x = unusedVec.y = unusedVec.z = 0;
-  direct_access<EZPlayerFields*>(ret, 0xB24) = new EZPlayerFields();
+  direct_access<EZPlayerFields*>(player, 0xB24) = new EZPlayerFields();
   return ret;
 }
 
