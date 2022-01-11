@@ -1,4 +1,5 @@
 #include <Actor/Player.h>
+#include <Math/Vec3.h>
 #include <Core/Minecraft.h>
 #include <Container/SimpleContainer.h>
 #include <Command/CommandOutput.h>
@@ -90,6 +91,31 @@ std::string &Player::getClientPlatformOnlineId() const {
 // RaidBossComponent::_sendBossEvent
 unsigned char Player::getClientSubId() const {
   return direct_access<unsigned char>(this, 3520); // verified
+}
+
+// custom player fields setup
+THook(void*,
+  "??0Player@@QEAA@AEAVLevel@@AEAVPacketSender@@W4GameType@@AEBVNetworkIdentifier@@EVUUID@mce@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$unique_ptr@VCertificate@@U?$default_delete@VCertificate@@@std@@@8@55@Z",
+  Player* player, void *level, void *packetSender, void *playerGameType, void *owner,
+  void *subid, void *uuid, void *deviceId, void *certificate, void *platformId, void *platformOnlineId) {
+
+  auto ret = original(player, level, packetSender, playerGameType, owner, subid, uuid, deviceId, certificate, platformId, platformOnlineId);
+  auto& unusedVec = direct_access<Vec3>(ret, 0xB24); // Player::mFirstPersonLatestHandOffset (store a pointer here at unused field)
+  unusedVec.x = unusedVec.y = unusedVec.z = 0;
+  direct_access<EZPlayerFields*>(ret, 0xB24) = new EZPlayerFields();
+  return ret;
+}
+
+THook(void*, "??1Player@@UEAA@XZ", Player* player) {
+
+  auto pf = direct_access<EZPlayerFields*>(player, 0xB24);
+  delete pf; // clean up to be safe because idk what bds does with this field
+  pf = nullptr;
+  return original(player);
+}
+
+struct EZPlayerFields* Player::getEZPlayerFields() const {
+  return direct_access<struct EZPlayerFields*>(this, 0xB24);
 }
 
 #pragma endregion

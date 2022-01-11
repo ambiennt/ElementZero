@@ -19,6 +19,10 @@
 #include "../Packet/LevelChunkPacket.h"
 #include "../dll.h"
 
+// add custom player fields here
+struct EZPlayerFields {
+};
+
 class Packet;
 class ServerPlayer;
 class NetworkIdentifier;
@@ -334,14 +338,15 @@ public:
 		return posDelta;
 	}
 
+	// fill LevelChunkPacket with empty values except for cache setting
 	inline void crashClient(void) {
 		LevelChunkPacket badPkt;
-		badPkt.mCacheEnabled = -0x1;
+		badPkt.mCacheEnabled = true;
 		this->sendNetworkPacket(badPkt);
 	}
 
 	// some fields still missing
-	BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);
+	BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);  // first field in Player
 	BUILD_ACCESS_MUT(bool, mAteKelp, 0x7D4);
 	BUILD_ACCESS_MUT(int32_t, mLastBiome, 0x7D8); // I guess biome ids are ints
 	BUILD_ACCESS_MUT(std::vector<int32_t>, mOceanBiomes, 0x7E0);
@@ -373,15 +378,18 @@ public:
 	BUILD_ACCESS_MUT(std::unique_ptr<class ChunkViewSource>, mSpawnChunkSource, 0xB10);
 	BUILD_ACCESS_MUT(std::unique_ptr<class BlockSource>, mOwnedBlockSource, 0xB18);
 	BUILD_ACCESS_MUT(bool, mUpdateMobs, 0xB20); // whether or not the player can tick nearby mobs?
-	BUILD_ACCESS_MUT(class Vec3, mFirstPersonLatestHandOffset, 0xB24); // some remnants of client stuff
+	//BUILD_ACCESS_MUT(class Vec3, mFirstPersonLatestHandOffset, 0xB24); // some remnants of client stuff (REPLACED BY EZPlayerFields)
 	BUILD_ACCESS_MUT(class Vec3, mCapePosOld, 0xB30);
 	BUILD_ACCESS_MUT(class vec3, mCapePos, 0xB3C);
 	BUILD_ACCESS_MUT(float, mDistanceSinceTraveledEvent, 0xB54);
 	BUILD_ACCESS_MUT(std::shared_ptr<class IContainerManager>, mContainerManager, 0xB60);
 	BUILD_ACCESS_MUT(std::unique_ptr<class PlayerInventory>, mInventory, 0xB70);
 	BUILD_ACCESS_MUT(class SerializedSkin, mSkin, 0xB78);
-	//BUILD_ACCESS_MUT(std::vector<class ItemInstance>, mCreativeItemList, 0xD48);
-	//BUILD_ACCESS_MUT(std::array<std::vector<class ItemGroup>, 4>, mFilteredCreativeItemList, 0xD60);
+	BUILD_ACCESS_MUT(std::vector<class ItemInstance>, mCreativeItemList, 0xD48);
+
+	using filteredCreativeItemList = std::array<std::vector<class ItemGroup>, 4>;
+	BUILD_ACCESS_MUT(filteredCreativeItemList, mFilteredCreativeItemList, 0xD60);
+
 	BUILD_ACCESS_MUT(uint8_t, mClientSubId, 0xDC0);
 	BUILD_ACCESS_MUT(std::string, mPlatformOnlineId, 0xDC8);
 	BUILD_ACCESS_MUT(enum Player::SpawnPositionState, mSpawnPositionState, 0xDE8);
@@ -393,9 +401,10 @@ public:
 	BUILD_ACCESS_MUT(bool, mHasSeenCredits, 0xE50);
 	BUILD_ACCESS_MUT(class StopWatch, mRespawnStopwatchSearching, 0xE58);
 	BUILD_ACCESS_MUT(class Vec3, mRespawnOriginalPosition, 0xE88);
-	// can also be written like how dimension Id is done in ../Level/Dimension.h
+
 	//BUILD_ACCESS_MUT(AutomaticID<class Dimension, int>, mRespawnOriginalDimension, 0xE94);
 	BUILD_ACCESS_MUT(int32_t, mRespawnOriginalDimension, 0xE94);
+
 	BUILD_ACCESS_MUT(bool, mRespawnReady, 0xE98);
 	BUILD_ACCESS_MUT(std::string, mRespawnMessage, 0xEA0);
 	BUILD_ACCESS_MUT(bool, mCheckBed, 0xEC0); // idk what this is
@@ -457,13 +466,18 @@ public:
 	BUILD_ACCESS_MUT(bool, mR5DataRecoverComplete, 0x1EBC); // mojang...
 	BUILD_ACCESS_MUT(std::string, mDeviceId, 0x1EC0);
 	BUILD_ACCESS_MUT(bool, mFlagClientForBAIReset, 0x1EE0); // idk what this is
-	BUILD_ACCESS_MUT(class BedHelper, mBedHelper, 0x1EE4);
+	BUILD_ACCESS_MUT(class BedHelper, mBedHelper, 0x1EE4); // last field in Player, ends at 0x1F0C (0x1EE4 + 0x28)
 
 	// ServerPlayer begins here
+	// some fields still missing
+	BUILD_ACCESS_MUT(class NetworkHandler*, mNetworkHandler, 0x1F10); // first field in ServerPlayer
 	BUILD_ACCESS_MUT(class InventoryMenu, mInventoryMenu, 0x20D8);
+	BUILD_ACCESS_MUT(bool, mLocalPlayerInitialized, 0x2123); // in response to SetLocalPlayerAsInitializedPacket, use Player::isPlayerInitialized() instead
 	BUILD_ACCESS_MUT(enum InputMode, mCurrentInputMode, 0x21A8);
 	BUILD_ACCESS_MUT(enum PlayMode, mPlayMode, 0x21AC);
+	BUILD_ACCESS_MUT(enum ContainerID, mContainerCounter, 0x2118);
 	BUILD_ACCESS_MUT(int32_t, mClientViewRadius, 0x211C); // max render distance
+	BUILD_ACCESS_MUT(class PlayerMovementTelemetryData, mMovementData, 0x21B0); // last field in ServerPlayer, ends at 0x21C0 (0x21B0 + 0x10)
 
 	BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
 	BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);
@@ -475,6 +489,7 @@ public:
 	BUILD_ACCESS_COMPAT(std::string &, PlatformOfflineId);
 	BUILD_ACCESS_COMPAT(std::string &, ClientPlatformOnlineId);
 	BUILD_ACCESS_COMPAT(unsigned char, ClientSubId);
+	BUILD_ACCESS_COMPAT(struct EZPlayerFields*, EZPlayerFields);
 
 	BASEAPI void kick();
 };

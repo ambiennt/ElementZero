@@ -1,8 +1,8 @@
 #pragma once
 
-enum class CommandFlagValue : int8_t {
+enum class CommandFlagValue : int8_t { // bit flags?
 	None        = 0, // Visible
-	Usage       = 1, 
+	Usage       = 1, // makes the command color blue like gametest?
 	Visibility2 = 2, // HiddenFromCommandBlockOrigin 
 	Visibility4 = 4, // HiddenFromPlayerOrigin
 	Visibility6 = 6, // Hidden
@@ -39,4 +39,5 @@ constexpr inline CommandFlag CommandFlagCheat       = {CommandFlagValue::Cheat};
 - requires operator AND cheats (ex: /give):         flag 1: 0, flag 2: 0, permission level: 1
 - server console only (ex: /whitelist):             flag 1: 0, flag 2: 0, permission level: 4
 - does NOT require operator or cheats (ex: /me):    flag 1: 64, flag 2: 0, permission level: 0
+- requires operator AND cheats, and shows as light blue color (ex: /gametest): flag 1: 1, flag 2: 0, permission level: 1
 */

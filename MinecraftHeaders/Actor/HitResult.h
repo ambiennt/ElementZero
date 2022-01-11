@@ -3,7 +3,8 @@
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
 #include "Actor.h"
-#include "modutils.h"
+
+#include <modutils.h>
 #include "../dll.h"
 
 enum class HitResultType {

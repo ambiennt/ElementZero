@@ -794,7 +794,9 @@ public:
 	BUILD_ACCESS_COMPAT(class Dimension *, Dimension);
 };
 
+// CLASS SIZE RANGES:
+// account for vtables at start of each class (8 bytes), then first field after
 // ACTOR: 0x0 - 0x620
 // MOB: 0x620 - 0x7D0
-// PLAYER: 0x7D0 - 0x1F20
-// SERVERPLAYER: 0x1F20 - 0x21D0
+// PLAYER: 0x7D0 - 0x1F10
+// SERVERPLAYER: 0x1F10 - 0x21C0

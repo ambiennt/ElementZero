@@ -4,12 +4,34 @@
 #include <memory>
 #include <vector>
 #include "Actor.h"
+#include "../Core/Color.h"
+#include "../Core/HashedString.h"
 #include "../dll.h"
+
+class AttributeBuff;
+class AttributeModifier;
 
 class MobEffect {
 public:
 
-	MCAPI MobEffect(int, std::string const&, std::string const&, bool, int, int, std::string const&, bool);
+	const uint32_t mId; // 0x8
+	bool mIsHarmful; // 0xC
+	Color mColor; // 0x10
+	std::string mDescriptionId; // 0x20
+	int32_t mIcon; // 0x40
+	float mDurationModifier; // 0x44
+	bool mIsDisabled; // 0x48
+	std::string mResourceName; // 0x50
+	std::string mIconName; // 0x70
+	bool mEffectVisible; // 0x90
+	HashedString mComponentName; // 0x98
+	std::shared_ptr<class Amplifier> mValueAmplifier; // 0xC0
+	std::shared_ptr<class Amplifier> mDurationAmplifier; // 0xD0
+	std::vector<std::pair<class Attribute const*, std::shared_ptr<class AttributeBuff>>> mAttributeBuffs; // 0xE0
+	std::vector<std::pair<class Attribute const*, std::shared_ptr<class AttributeModifier>>> mAttributeModifiers; // 0xF8
+
+	MCAPI MobEffect(int32_t id, std::string const& resourceName, std::string const& locName,
+		bool isHarmful, int32_t color, int32_t icon, std::string const& iconName, bool drawParticles);
 
 	virtual ~MobEffect(void);
 	virtual void applyEffects(class Actor*, int, int) const;
@@ -68,3 +90,32 @@ public:
 	MCAPI static class MobEffect* WEAKNESS;
 	MCAPI static class MobEffect* WITHER;
 };
+
+static_assert(offsetof(MobEffect, mDurationModifier) == 0x44);
+static_assert(offsetof(MobEffect, mIconName) == 0x70);
+static_assert(offsetof(MobEffect, mValueAmplifier) == 0xC0);
+static_assert(offsetof(MobEffect, mDurationAmplifier) == 0xD0);
+static_assert(offsetof(MobEffect, mAttributeBuffs) == 0xE0);
+static_assert(offsetof(MobEffect, mAttributeModifiers) == 0xF8);
+
+class MobEffectInstance {
+public:
+	int32_t mId; // 0x0
+	int32_t mDuration; // 0x4
+	int32_t mDurationEasy; // 0x8
+	int32_t mDurationNormal; // 0xC
+	int32_t mDurationHard; // 0x10
+	int32_t mAmplifier; // 0x14
+	bool mDisplayOnScreenTextureAnimation; // 0x18 - ex: hero of the village animation
+	bool mAmbient; // 0x19
+	bool mNoCounter; // 0x1A
+	bool mEffectVisible; // 0x1C
+
+	MCAPI static MobEffectInstance NO_EFFECT;
+	static const int32_t MAX_AMPLIFIER_COUNT = 5;
+};
+
+static_assert(offsetof(MobEffectInstance, mDurationHard) == 0x10);
+static_assert(offsetof(MobEffectInstance, mDisplayOnScreenTextureAnimation) == 0x18);
+static_assert(offsetof(MobEffectInstance, mEffectVisible) == 0x1B);
+static_assert(sizeof(MobEffectInstance) == 0x1C);

@@ -11,8 +11,7 @@ public:
 		uint64_t mBlobId;
 	};
 
-	//bool mCacheEnabled;
-	int8_t mCacheEnabled; // 0x28
+	bool mCacheEnabled; // 0x28
 	char wtf[0x7];
 	ChunkPos mPos; // 0x30
 	std::string mSerializedChunk; // 0x38
