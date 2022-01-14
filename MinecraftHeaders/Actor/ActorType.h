@@ -140,7 +140,10 @@ enum class ActorType {
 	Strider              = 0x137D
 };
 
-enum class ActorTypeNamespaceRules { ReturnWithoutNamespace, ReturnWithNamespace };
+enum class ActorTypeNamespaceRules {
+	ReturnWithoutNamespace = 0,
+	ReturnWithNamespace    = 1
+};
 
 MCAPI void forEachEntityType(std::function<bool(ActorType, std::string const &)>);
 MCAPI ActorType EntityTypeFromString(std::string const &);

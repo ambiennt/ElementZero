@@ -28,7 +28,7 @@ public:
 		return _getServerPlayer(netId, 0);
 	}
 	
-	BASEAPI std::string &GetMotd();
+	BASEAPI std::string &getMotd();
 
 	BUILD_ACCESS_MUT(class GameCallBacks *, mGameCallbacks, 0x30);
 	BUILD_ACCESS_MUT(class Level *, mLevel, 0x38);

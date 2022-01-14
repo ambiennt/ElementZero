@@ -34,7 +34,7 @@ public:
       output.error("commands.generic.error.invalidPlayer", {"/spawn"});
       return;
     }
-    auto &level = LocateService<Level>()->GetLevelDataWrapper();
+    auto &level = LocateService<Level>()->getLevelDataWrapper();
     if (!level->mHasSpawnPos) {
       output.error("commands.spawn.error.not.set");
       return;

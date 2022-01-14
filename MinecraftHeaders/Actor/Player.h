@@ -6,6 +6,7 @@
 
 #include "Actor.h"
 #include "Mob.h"
+#include "ActorType.h"
 #include "../Core/ExtendedCertificate.h"
 #include "../Container/PlayerInventory.h"
 #include "../Container/EnderChestContainer.h"
@@ -21,6 +22,12 @@
 
 // add custom player fields here
 struct EZPlayerFields {
+	uint64_t mLastUhcHeadEatTimestamp = 0;
+	uint64_t mBucketCooldownTimestamp = 0;
+	bool mShouldCancelBucketPickup = false;
+	ActorType mLastHurtByDamager = ActorType::Undefined; // differs from mLastHurtBy because this includes projectiles/child entities
+	uint64_t mLastAttackedActorTimestamp = 0;
+	bool mHasResetSprint = false; // if true, player should administer bonus knockback to other players
 };
 
 class Packet;

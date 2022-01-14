@@ -57,26 +57,6 @@ public:
 	Tick mBlockingTick; // 0x78
 	std::unique_ptr<class ItemInstance> mChargedItem; // 0x80
 
-	// causing crashes for some reason
-	/*BUILD_ACCESS_MUT(class Item*, mItem, 0x8); // class WeakPtr<class Item>
-	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mUserData, 0x10);
-	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x18);
-	BUILD_ACCESS_MUT(uint16_t, mAuxValue, 0x20);
-	BUILD_ACCESS_MUT(uint8_t, mCount, 0x22);
-	BUILD_ACCESS_MUT(bool, mValid, 0x23);
-
-	using pickupTime1000000000 = std::chrono::time_point<std::chrono::steady_clock, std::chrono::duration<int64_t, std::ratio<1, 1000000000>>>;
-	BUILD_ACCESS_MUT(pickupTime1000000000, mPickupTime, 0x28);
-
-	BUILD_ACCESS_MUT(bool, mShowPickUp, 0x30);
-	BUILD_ACCESS_MUT(bool, mWasPickedUp, 0x31);
-	BUILD_ACCESS_MUT(std::vector<class BlockLegacy *>, mCanPlaceOn, 0x38);
-	BUILD_ACCESS_MUT(uint64_t, mCanPlaceOnHash, 0x50);
-	BUILD_ACCESS_MUT(std::vector<class BlockLegacy *>, mCanDestroy, 0x58);
-	BUILD_ACCESS_MUT(uint64_t, mCanDestroyHash, 0x70);
-	BUILD_ACCESS_MUT(struct Tick, mBlockingTick, 0x78);
-	BUILD_ACCESS_MUT(std::unique_ptr<class ItemInstance>, mChargedItem, 0x80);*/
-
 	MCAPI virtual ~ItemStackBase();
 
 	MCAPI bool isNull(void) const;
@@ -92,10 +72,10 @@ public:
 
 	MCAPI std::string toString(void) const;
 
-	MCAPI short getId(void) const;
-	MCAPI int getIdAux(void) const;
+	MCAPI short getId(void) const; // item id
+	MCAPI int getIdAux(void) const; // assume item id x 65536
 	MCAPI class Item const *getItem(void) const;
-	MCAPI short getAuxValue(void) const;
+	MCAPI short getAuxValue(void) const; // example: dye has aux values 0-15 (same as mAuxValue)
 	MCAPI class ItemDescriptor getDescriptor(void) const;
 	MCAPI unsigned char getMaxStackSize(void) const;
 	MCAPI class ItemEnchants constructItemEnchantsFromUserData(void) const;
@@ -110,7 +90,7 @@ public:
 	MCAPI bool hasSameAuxValue(class ItemStackBase const &) const;
 	MCAPI bool hasSameUserData(class ItemStackBase const &) const;
 
-	MCAPI void set(int);
+	MCAPI void set(const int32_t amount);
 	MCAPI void setNull(void);
 	MCAPI void setChargedItem(class ItemInstance const &, bool);
 	MCAPI void setCustomName(std::string const &);
@@ -180,7 +160,6 @@ class ItemStack : public ItemStackBase {
 public:
 
 	class ItemStackNetIdVariant mNetIdVariant; // 0x88
-	//BUILD_ACCESS_MUT(class ItemStackNetIdVariant, mNetIdVariant, 0x88);
 
 	MCAPI static ItemStack const EMPTY_ITEM;
 

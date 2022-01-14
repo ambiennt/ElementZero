@@ -6,6 +6,7 @@
 #include "ActorType.h"
 #include "ActorUniqueID.h"
 #include "SynchedActorData.h"
+#include "Attribute.h"
 #include "../Math/Vec3.h"
 #include "../Container/SimpleContainer.h"
 #include "../Core/AutomaticID.h"
@@ -604,8 +605,12 @@ public:
 	inline ItemStack* getOffhandSlot() const {
 		return CallServerClassMethod<ItemStack*>("?getOffhandSlot@Actor@@QEBAAEBVItemStack@@XZ", this);
 	}
+
+	AttributeInstance* getAttributeInstanceFromId(AttributeIds id) {
+		return this->mAttributes->getMutableInstance((uint32_t) id);
+	}
 	
-	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // probably some legacy field
+	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // idk what this is, probably some legacy field?
 	BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);
 	BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
 	BUILD_ACCESS_MUT(class VariantParameterList, mInitParams, 0x48);

@@ -44,7 +44,7 @@ static Mod::Scheduler::Token tok;
 
 void handler(Mod::Scheduler::Token) {
   auto handler       = LocateService<ServerNetworkHandler>();
-  handler->GetMotd() = state.GetNext();
+  handler->getMotd() = state.GetNext();
   handler->updateServerAnnouncement();
 }
 

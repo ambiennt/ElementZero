@@ -67,8 +67,9 @@ class ActorEventPacket : public Packet {
 public:
 	ActorRuntimeID mRuntimeId;
 	ActorEvent mEventId;
-	int mData; // idk what this is for
+	int mData; // depends on event id
 
+	ActorEventPacket(ActorRuntimeID rid, ActorEvent event, int32_t data) : mRuntimeId(rid), mEventId(event), mData(data) {}
 	inline ~ActorEventPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

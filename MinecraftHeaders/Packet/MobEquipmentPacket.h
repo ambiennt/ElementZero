@@ -8,15 +8,15 @@
 
 class MobEquipmentPacket : public Packet {
 public:
-	ActorRuntimeID runtime_id;
-	ItemStack item;
-	int inventory_slot                = 0;
-	int hotbar_slot                   = 0;
-	bool is_server_side               = false;
-	ContainerID container_id          = ContainerID::Invalid;
-	unsigned char slot_byte           = 0;
-	unsigned char selected_slot_byte  = 0;
-	unsigned char container_id_byte   = 0;
+	ActorRuntimeID mRuntimeId; // 0x28
+	ItemStack mItem; // 0x30
+	int32_t mInventorysSlot   = 0; // 0xC0
+	int32_t mSelectedSlot     = 0; // 0xC4 - hotbar slot
+	bool mIsServerSide        = false; // 0xC8
+	ContainerID mContainerId  = ContainerID::Invalid; // 0xC9
+	uint8_t mSlotByte         = 0; // 0xCA
+	uint8_t mSelectedSlotByte = 0; // 0xCB
+	uint8_t mContainerIdByte  = 0; // 0xCC
 
 	inline ~MobEquipmentPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
@@ -24,3 +24,7 @@ public:
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
+
+static_assert(offsetof(MobEquipmentPacket, mInventorysSlot) == 0xC0);
+static_assert(offsetof(MobEquipmentPacket, mContainerIdByte) == 0xCC);
+static_assert(sizeof(MobEquipmentPacket) == 0xD0);

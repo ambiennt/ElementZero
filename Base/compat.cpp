@@ -96,8 +96,8 @@ unsigned char Player::getClientSubId() const {
 // custom player fields setup
 THook(void*,
   "??0Player@@QEAA@AEAVLevel@@AEAVPacketSender@@W4GameType@@AEBVNetworkIdentifier@@EVUUID@mce@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$unique_ptr@VCertificate@@U?$default_delete@VCertificate@@@std@@@8@55@Z",
-  Player* player, void *level, void *packetSender, void *playerGameType, void *owner,
-  void *subid, void *uuid, void *deviceId, void *certificate, void *platformId, void *platformOnlineId) {
+  Player* player, void *level, void *packetSender, int32_t playerGameType, void *owner,
+  const uint8_t subid, void *uuid, void *deviceId, void *certificate, void *platformId, void *platformOnlineId) {
 
   auto ret = original(player, level, packetSender, playerGameType, owner, subid, uuid, deviceId, certificate, platformId, platformOnlineId);
   auto& unusedVec = direct_access<Vec3>(player, 0xB24); // Player::mFirstPersonLatestHandOffset (store a pointer here at unused field)
@@ -126,11 +126,11 @@ void NetworkIdentifier::kick(std::string const &reason) const {
 
 void Player::kick() { LocateService<ServerNetworkHandler>()->forceDisconnectClient(this, true); }
 
-std::string &ServerNetworkHandler::GetMotd() { return direct_access<std::string>(this, 600); } // verified
+std::string &ServerNetworkHandler::getMotd() { return direct_access<std::string>(this, 600); } // verified
 
 void CommandOutput::success() { direct_access<bool>(this, 40) = true; }
 
-uint64_t Level::GetServerTick() {
+uint64_t Level::getServerTick() {
   return CallServerClassMethod<ValueHolder<uint64_t>>("?getCurrentServerTick@Level@@UEBA?BUTick@@XZ", this);
 }
 
@@ -142,7 +142,7 @@ ActorUniqueID Level::getNewUniqueID() const {
 // RaidBossComponent::_sendBossEvent
 PacketSender &Level::getPacketSender() const { return *direct_access<PacketSender *>(this, 2240); } // verified
 
-LevelDataWrapper &Level::GetLevelDataWrapper() { return direct_access<LevelDataWrapper>(this, 544); } // verified
+LevelDataWrapper &Level::getLevelDataWrapper() { return direct_access<LevelDataWrapper>(this, 544); } // verified
 
 template <> Minecraft *LocateService<Minecraft>() {
   return *GetServerSymbol<Minecraft *>("?mGame@ServerCommand@@1PEAVMinecraft@@EA");

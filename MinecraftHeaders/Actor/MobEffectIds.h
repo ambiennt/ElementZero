@@ -1,6 +1,7 @@
 #pragma once
 
-enum class MobEffectIds {
+enum class MobEffectIds : uint32_t {
+	Empty = 0,
 	Speed = 1,
 	Slowness = 2,
 	Haste = 3,

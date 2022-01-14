@@ -6,6 +6,7 @@
 #include "Actor.h"
 #include "../Core/Color.h"
 #include "../Core/HashedString.h"
+#include "MobEffectIds.h"
 #include "../dll.h"
 
 class AttributeBuff;
@@ -14,7 +15,7 @@ class AttributeModifier;
 class MobEffect {
 public:
 
-	const uint32_t mId; // 0x8
+	const MobEffectIds mId; // 0x8 (actually a uint32_t)
 	bool mIsHarmful; // 0xC
 	Color mColor; // 0x10
 	std::string mDescriptionId; // 0x20
@@ -58,7 +59,7 @@ public:
 	MCAPI static void shutdownEffects(void);
 	MCAPI class std::vector<std::pair<class Attribute const*, std::shared_ptr<class AttributeModifier>>> const& viewAttributeModifiers(void) const;
 
-	//MCAPI static class mce::Color const DEFAULT_COLOR;
+	// MCAPI static class mce::Color const DEFAULT_COLOR;
 	MCAPI static class MobEffect* ABSORPTION;
 	MCAPI static class MobEffect* BAD_OMEN;
 	MCAPI static class MobEffect* DAMAGE_BOOST;
@@ -100,19 +101,32 @@ static_assert(offsetof(MobEffect, mAttributeModifiers) == 0xF8);
 
 class MobEffectInstance {
 public:
-	int32_t mId; // 0x0
-	int32_t mDuration; // 0x4
-	int32_t mDurationEasy; // 0x8
-	int32_t mDurationNormal; // 0xC
-	int32_t mDurationHard; // 0x10
-	int32_t mAmplifier; // 0x14
-	bool mDisplayOnScreenTextureAnimation; // 0x18 - ex: hero of the village animation
-	bool mAmbient; // 0x19
-	bool mNoCounter; // 0x1A
-	bool mEffectVisible; // 0x1C
+	MobEffectIds mId        = MobEffectIds::Empty; // 0x0 (actually a uint32_t)
+	int32_t mDuration       = 0; // 0x4 - in ticks
+	int32_t mDurationEasy   = 0; // 0x8 - in ticks
+	int32_t mDurationNormal = 0; // 0xC - in ticks
+	int32_t mDurationHard   = 0; // 0x10 - in ticks
+	int32_t mAmplifier      = 0; // 0x14
+	bool mDisplayOnScreenTextureAnimation = false; // 0x18 - ex: hero of the village animation
+	bool mAmbient           = false; // 0x19 - not sure what this does
+	bool mNoCounter         = false; // 0x1A - unlimited duration? needs testing
+	bool mEffectVisible     = true; // 0x1C - show effect particle
 
 	MCAPI static MobEffectInstance NO_EFFECT;
 	static const int32_t MAX_AMPLIFIER_COUNT = 5;
+
+	MobEffectInstance(
+		MobEffectIds id, int32_t dur, int32_t durEasy, int32_t durNormal, int32_t durHard,
+		int32_t amplifier, bool displayAnim, bool ambient, bool noCounter, bool visible) :
+		mId(id), mDuration(dur), mDurationEasy(durEasy), mDurationNormal(durNormal), mDurationHard(durHard), mAmplifier(amplifier),
+		mDisplayOnScreenTextureAnimation(displayAnim), mAmbient(ambient), mNoCounter(noCounter), mEffectVisible(visible) {}
+	MobEffectInstance(MobEffectIds id, int32_t dur, int32_t amplifier, bool visible) {
+		mId = id;
+		mDuration = mDurationEasy = mDurationNormal = mDurationHard = dur;
+		mAmplifier = amplifier;
+		mEffectVisible = visible;
+	}
+	MobEffectInstance(MobEffectIds id) : mId(id) {}
 };
 
 static_assert(offsetof(MobEffectInstance, mDurationHard) == 0x10);

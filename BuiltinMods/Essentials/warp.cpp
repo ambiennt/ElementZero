@@ -134,7 +134,7 @@ Mod::Essentials::WarpSystem::GetWarp(mce::UUID const &uuid, std::string const &n
   if (stmt.executeStep()) {
     auto dim = stmt.getColumn(0).getInt();
     auto x   = (float) stmt.getColumn(1).getDouble();
-    auto y   = (float) stmt.getColumn(2).getDouble() - 1;
+    auto y   = (float) stmt.getColumn(2).getDouble() - 1.62f;
     auto z   = (float) stmt.getColumn(3).getDouble();
     Vec3 pos = {x, y, z};
     return {{name, true, dim, pos}};
