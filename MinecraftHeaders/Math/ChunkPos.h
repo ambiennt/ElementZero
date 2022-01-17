@@ -14,14 +14,14 @@ public:
 	ChunkPos(int32_t x, int32_t z) : x(x), z(z) {}
 	inline ~ChunkPos() {}
 	inline ChunkPos(BlockPos const& bp) {
-		this->x = bp.x >> 4;
-		this->z = bp.z >> 4;
+		this->x = bp.x % 16;
+		this->z = bp.z % 16;
 	}
 	inline ChunkPos(Vec3 const& vec) {
 		BlockPos bp;
 		bp.getBlockPos(vec);
-		this->x = bp.x >> 4;
-		this->z = bp.z >> 4;
+		this->x = bp.x % 16;
+		this->z = bp.z % 16;
 	}
 };
 

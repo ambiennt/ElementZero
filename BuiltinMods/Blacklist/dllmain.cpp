@@ -214,7 +214,7 @@ TClasslessInstanceHook(bool,
   }
 
   auto &name = *(std::string *) ((char *) &id + 192); // HACK
-  auto xuid  = id.xuid.empty() ? 0 : std::stoll(id.xuid);
+  auto xuid  = id.xuid.empty() ? 0 : std::stoull(id.xuid);
   auto uuid  = (char const *) &id.uuid;
 
   if (queryForUUID(uuid, name, it) || queryForXUID(xuid, name, it)) goto logip;

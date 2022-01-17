@@ -123,11 +123,17 @@ TClasslessInstanceHook(
   std::string displayName = it->name;
   Mod::CallbackToken<std::string> token;
   (Mod::Chat::GetInstance().*emitter)(SIG("chat"), *it, displayName, content, token);
-  if (token) {
+
+  logChat(*it, content);
+  
+  // send to client directly in event subscription instead
+  if (token) return;
+  /*if (token) {
     auto packet = TextPacket::createTranslatedMessageWithParams("chat.blocked", {*token});
     player->sendNetworkPacket(packet);
     return;
-  }
+  }*/
+
   TextPacket packet;
   packet = TextPacket::createTextPacket<TextPacketType::SystemMessage>(
     displayName, settings.namePrefix + displayName + settings.nameSuffix + " " + content, std::to_string(it->xuid));
@@ -136,5 +142,4 @@ TClasslessInstanceHook(
     p.sendNetworkPacket(packet);
     return true;
   });
-  logChat(*it, content);
 } catch (...) {}

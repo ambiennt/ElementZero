@@ -173,15 +173,6 @@ static_assert(offsetof(AttributeInstance, mListeners) == 0x48);
 static_assert(offsetof(AttributeInstance, mDelegate) == 0x60);
 static_assert(offsetof(AttributeInstance, currentVal) == 0x84);
 
-class HealthAttributeDelegate : public AttributeInstanceDelegate {
-public:
-	uint32_t mTickCounter; // 0x18
-	Mob* mMob; // 0x20
- };
-static_assert(offsetof(HealthAttributeDelegate, mTickCounter) == 0x18);
-static_assert(offsetof(HealthAttributeDelegate, mMob) == 0x20);
-static_assert(sizeof(HealthAttributeDelegate) == 0x28);
-
 class BaseAttributeMap {
 public:
 	std::unordered_map<uint32_t, AttributeInstance> mInstanceMap; // 0x0
@@ -191,3 +182,12 @@ public:
 };
 static_assert(offsetof(BaseAttributeMap, mDirtyAttributes) == 0x40);
 static_assert(sizeof(BaseAttributeMap) == 0x58);
+
+class HealthAttributeDelegate : public AttributeInstanceDelegate {
+public:
+	uint32_t mTickCounter; // 0x18
+	Mob* mMob; // 0x20
+ };
+static_assert(offsetof(HealthAttributeDelegate, mTickCounter) == 0x18);
+static_assert(offsetof(HealthAttributeDelegate, mMob) == 0x20);
+static_assert(sizeof(HealthAttributeDelegate) == 0x28);

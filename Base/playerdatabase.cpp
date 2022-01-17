@@ -161,7 +161,8 @@ TClasslessInstanceHook(
   auto sadd    = id->getRealAddress();
   auto address = sadd.ToString();
   try {
-    auto xuid = std::stoull(ExtendedCertificate::getXuid(cert));
+    std::string xuidStr = ExtendedCertificate::getXuid(cert);
+    auto xuid = xuidStr.empty() ? 0 : std::stoull(xuidStr);
     LOGV("%s joined (from %s)") % name % address;
     auto ref = container->emplace(Mod::PlayerEntry{player.get(), name, xuid, uuid, *id});
     (db.*emitter<"joined"_sig>) (SIG("joined"), *ref.first);

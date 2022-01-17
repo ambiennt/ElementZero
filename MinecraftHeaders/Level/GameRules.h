@@ -47,10 +47,11 @@ public:
 
 	MCAPI class GameRule& _registerRule(void);
 	MCAPI void _registerRules(void);
-	//MCAPI void _setRule(int32_t* ruleType, union GameRule::Value value, enum GameRule::Type type, bool returnPacket, bool *pValueValidated, bool *pValueChanged, struct GameRule::ValidationError *errorOutput);
+	/*MCAPI void _setRule(
+		int32_t* ruleType, union GameRule::Value value, enum GameRule::Type type, bool returnPacket,
+		bool *pValueValidated, bool *pValueChanged, struct GameRule::ValidationError *errorOutput);*/
 	MCAPI std::unique_ptr<class GameRulesChangedPacket> createAllGameRulesPacket(void);
 	MCAPI void deserializeRules(struct GameRulesChangedPacketData const &ruleData);
-	//MCAPI bool getBool(int32_t* ruleType);
 	//MCAPI bool getBool(int32_t* ruleType);
 	//MCAPI int32_t getInt(int32_t* ruleType);
 	//MCAPI const class GameRule* getRule(int32_t* ruleType);
@@ -60,6 +61,15 @@ public:
 	MCAPI void setTagData(class CompoundTag const& tag);
 
 	MCAPI static int32_t const MAX_FUNCTIONCOMMANDLIMIT = 10000;
+	static uint32_t const DEFAULT_PLAYER_SPAWN_RADIUS   = 5;
+	static uint32_t const MIN_PLAYER_SPAWN_RADIUS       = 0;
+	static uint32_t const MAX_PLAYER_SPAWN_RADIUS       = 128;
+	static int32_t const MAX_RANDOMTICKSPEED            = 4096;
+	static int32_t const DEFAULT_RANDOMTICKSPEED        = 1;
+
+	inline bool getBool(GameRulesIndex id) {
+		return CallServerClassMethod<bool>("?getBool@GameRules@@QEBA_NUGameRuleId@@@Z", this, &id);
+	}
 };
 
 static_assert(offsetof(GameRule, value) == 0x4);

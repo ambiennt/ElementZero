@@ -30,12 +30,12 @@ SynchedActorData &Actor::getEntityData() const {
 
 // Actor::Actor
 SimpleContainer &Actor::getEquipmentContainer() const {
-  return direct_access<SimpleContainer>(this, 1400); // verified
+  return *direct_access<std::unique_ptr<SimpleContainer>>(this, 1400).get(); // verified
 }
 
 // Actor::Actor
 SimpleContainer &Actor::getHandContainer() const {
-return direct_access<SimpleContainer>(this, 1408); // verified
+  return *direct_access<std::unique_ptr<SimpleContainer>>(this, 1408).get(); // verified
 }
 
 // xref to Actor::transferTickingArea
@@ -44,7 +44,7 @@ class Dimension *Actor::getDimension() const {
 }
 
 // Player::Player
-class EnderChestContainer * Player::getEnderChestContainer() const {
+class EnderChestContainer *Player::getEnderChestContainer() const {
     return direct_access<std::unique_ptr<class EnderChestContainer>>(this, 4032).get(); // verified
 }
 

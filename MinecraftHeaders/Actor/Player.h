@@ -22,12 +22,14 @@
 
 // add custom player fields here
 struct EZPlayerFields {
-	uint64_t mLastUhcHeadEatTimestamp = 0;
-	uint64_t mBucketCooldownTimestamp = 0;
-	bool mShouldCancelBucketPickup = false;
+	uint64_t mLastUhcHeadEatTimestamp = 0; // the tick when the player last ate a head/golden head 
+	uint64_t mBucketCooldownTimestamp = 0; // the tick when the player last placed a bucket of liquid
+	bool mShouldCancelBucketPickup = false; // whether or not the player can pick up liquid, used to fix MCPE-100598
 	ActorType mLastHurtByDamager = ActorType::Undefined; // differs from mLastHurtBy because this includes projectiles/child entities
-	uint64_t mLastAttackedActorTimestamp = 0;
+	uint64_t mLastAttackedActorTimestamp = 0; // the tick when the player last attacked an actor 
 	bool mHasResetSprint = false; // if true, player should administer bonus knockback to other players
+	float mHealthOld = 0.0f; // heatlh value from the previous tick
+	float mAbsorptionOld = 0.0f; // absorption value from the previous tick
 };
 
 class Packet;
@@ -296,7 +298,7 @@ public:
 	MCAPI int getXpNeededForNextLevel(void) const;
 	MCAPI float getDestroySpeed(class Block const &) const;
 	MCAPI float getDestroyProgress(class Block const &) const;
-	MCAPI class ItemStack const &getSelectedItem(void) const;
+	MCAPI class ItemStack const &getSelectedItem(void) const; // does this not work?
 	MCAPI class ItemStack const &getCurrentActiveShield(void) const;
 	MCAPI class EnderChestContainer *getEnderChestContainer(void);
 	MCAPI void updateTeleportDestPos(void);

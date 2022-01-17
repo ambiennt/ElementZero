@@ -598,7 +598,7 @@ public:
 			class SoundPlayer &, std::unique_ptr<class LevelStorage>, class IMinecraftEventing &, bool, class Scheduler &,
 			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
 			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);
-
+	
 	BUILD_ACCESS(class BlockPalette *, GlobalBlockPalette, 1856);
 
 	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData
