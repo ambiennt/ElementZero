@@ -17,9 +17,38 @@ public:
 	Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 	inline ~Vec3() {}
 	Vec3 &operator=(Vec3 const&) = default;
-	Vec3 operator+(Vec3 const &rhs) const noexcept { return {x + rhs.x, y + rhs.y, z + rhs.z}; }
+	Vec3 operator+(Vec3 const &rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
+	Vec3 operator-(Vec3 const &rhs) const noexcept { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
+	Vec3 operator*(float factor) const noexcept {
+		return { x * factor, y * factor, z * factor };
+	}
+	Vec3 operator/(float factor) const noexcept {
+		if (factor == 0.f) return Vec3::ZERO;
+		float inv = 1.f / factor;
+		return { x * inv, y * inv, z * inv };
+	}
+	Vec3 &operator*=(float factor) {
+		x *= factor;
+		y *= factor;
+		z *= factor;
+		return *this;
+	}
+
 	constexpr bool operator==(Vec3 const &rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
 	constexpr bool operator!=(Vec3 const &rhs) const noexcept { return !(*this == rhs); }
+
+	inline void normalize(void) {
+		float l  = 1.f / sqrt(x * x + y * y + z * z);
+		x *= l;
+		y *= l;
+		z *= l;
+	}
+
+	inline void normalizeXZ(void) {
+		float l  = 1.f / sqrt(x * x + z * z);
+		x *= l;
+		z *= l;
+	}
 
 	inline Vec3 directionFromRotation(Vec2 const& rot) {
 

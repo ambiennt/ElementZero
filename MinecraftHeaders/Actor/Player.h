@@ -15,6 +15,7 @@
 #include "../Core/AutomaticID.h"
 #include "../Core/VanillaDimensions.h"
 #include "../Command/CommandPermissionLevel.h"
+#include "../Level/PlayerPermissionLevel.h"
 #include "../Level/GameType.h"
 #include "../Level/Abilities.h"
 #include "../Packet/LevelChunkPacket.h"
@@ -28,6 +29,8 @@ struct EZPlayerFields {
 	ActorType mLastHurtByDamager = ActorType::Undefined; // differs from mLastHurtBy because this includes projectiles/child entities
 	uint64_t mLastAttackedActorTimestamp = 0; // the tick when the player last attacked an actor 
 	bool mHasResetSprint = false; // if true, player should administer bonus knockback to other players
+	Vec3 mRawPos = Vec3::ZERO; // use this value for more accuracy of current pos (sometimes BDS pos zeroes out)
+	Vec3 mRawPosOld = Vec3::ZERO; // used this value for more accuracy of pos from last tick
 	float mHealthOld = 0.0f; // heatlh value from the previous tick
 	float mAbsorptionOld = 0.0f; // absorption value from the previous tick
 };
@@ -323,24 +326,33 @@ public:
 	MCAPI void clearRespawnPosition(void);
 	MCAPI void recheckSpawnPosition(void);
 
+	// custom methods
 	inline class ItemStack const& getPlayerUIItem(void) {
 		return CallServerClassMethod<class ItemStack const&>(
-			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &direct_access<class SimpleContainer>(this, 0x1078), PlayerUISlot::CursorSelected);
+			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &this->mPlayerUIContainer, PlayerUISlot::CursorSelected);
 	}
 
 	inline bool dropItem(ItemStack const &item, bool randomly) {
-		return CallServerClassMethod<bool>("?drop@Player@@UEAA_NAEBVItemStack@@_N@Z", this, &item, false);
+		return CallServerClassMethod<bool>("?drop@Player@@UEAA_NAEBVItemStack@@_N@Z", this, &item, randomly);
 	}
 
 	inline bool addItem(ItemStack &item) {
 		return CallServerClassMethod<bool>("?add@Player@@UEAA_NAEAVItemStack@@@Z", this, &item);
 	}
 
+	inline class Vec3 const& getRawPos(void) {
+		return this->EZPlayerFields->mRawPos;
+	}
+
+	inline class Vec3 const& getRawPosOld(void) {
+		return this->EZPlayerFields->mRawPosOld;
+	}
+
 	// a more reliable way to get pos delta for players
-	inline Vec3 getPosDelta(void) {
+	inline Vec3 getRawPosDelta(void) {
 		Vec3 posDelta;
-		const auto& prevPos = this->getPosOld();
-		const auto& currPos = this->getPos();
+		const auto& prevPos = this->getRawPosOld();
+		const auto& currPos = this->getRawPos();
 		posDelta.x = currPos.x - prevPos.x;
 		posDelta.y = currPos.y - prevPos.y;
 		posDelta.z = currPos.z - prevPos.z;
@@ -354,6 +366,19 @@ public:
 		this->sendNetworkPacket(badPkt);
 	}
 
+	inline bool isOperator(void) {
+		return (this->getCommandPermissionLevel() >= CommandPermissionLevel::GameMasters);
+	}
+
+	inline enum PlayerPermissionLevel getPlayerPermissionLevel(void) {
+		return this->mAbilities.mPermissionsHandler->mPlayerPermissions;
+	}
+
+	inline bool isInCreativeOrCreativeViewerMode(void) {
+		return ((this->mPlayerGameType == GameType::Creative) || (this->mPlayerGameType == GameType::CreativeViewer));
+	}
+
+	// player fields
 	// some fields still missing
 	BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);  // first field in Player
 	BUILD_ACCESS_MUT(bool, mAteKelp, 0x7D4);
@@ -399,7 +424,7 @@ public:
 	using filteredCreativeItemList = std::array<std::vector<class ItemGroup>, 4>;
 	BUILD_ACCESS_MUT(filteredCreativeItemList, mFilteredCreativeItemList, 0xD60);
 
-	BUILD_ACCESS_MUT(uint8_t, mClientSubId, 0xDC0);
+	BUILD_ACCESS_MUT(uint8_t, mClientSubId, 0xDC0); // for the other xbox splitscreen player, if not using splitscreen assume its 0
 	BUILD_ACCESS_MUT(std::string, mPlatformOnlineId, 0xDC8);
 	BUILD_ACCESS_MUT(enum Player::SpawnPositionState, mSpawnPositionState, 0xDE8);
 	BUILD_ACCESS_MUT(class Vec3, mSpawnPositioningTestPosition, 0xDF0);

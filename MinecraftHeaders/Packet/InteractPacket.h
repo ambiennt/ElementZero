@@ -15,7 +15,7 @@ public:
 		OpenInventory  = 6
 	};
 
-	Action action = Action::InteractUpdate;
+	Action mAction = Action::InteractUpdate;
 	ActorRuntimeID mTargetId;
 	Vec3 mPos;
 

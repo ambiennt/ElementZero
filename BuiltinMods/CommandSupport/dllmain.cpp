@@ -20,7 +20,7 @@ Json::Value Mod::CommandSupport::ExecuteCommand(std::unique_ptr<CustomCommandOri
 
   origin->result = &result;
   auto ctx       = CommandContext::create(command, std::move(origin));
-  LocateService<MinecraftCommands>()->executeCommand(std::move(ctx), false);
+  LocateService<MinecraftCommands>()->executeCommand(std::move(ctx), true);
 
   return result;
 }

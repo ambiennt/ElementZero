@@ -39,6 +39,9 @@ class Value;
 
 class CommandOrigin {
 public:
+
+	mce::UUID mUUID; // 0x8
+	
 	virtual ~CommandOrigin() {}
 	virtual std::string const &getRequestId() const            = 0;
 	virtual std::string getName() const                        = 0;

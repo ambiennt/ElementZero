@@ -40,4 +40,7 @@ constexpr inline CommandFlag CommandFlagCheat       = {CommandFlagValue::Cheat};
 - server console only (ex: /whitelist):             flag 1: 0, flag 2: 0, permission level: 4
 - does NOT require operator or cheats (ex: /me):    flag 1: 64, flag 2: 0, permission level: 0
 - requires operator AND cheats, and shows as light blue color (ex: /gametest): flag 1: 1, flag 2: 0, permission level: 1
+- requires operator but NOT cheats, and shows as light blue color: flag 1: 64, flag 2: 1, permission level: 1
+
+- it doesn't matter if you flip the 1st and 2nd command flag, the command will still behave the same
 */

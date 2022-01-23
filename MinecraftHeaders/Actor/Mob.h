@@ -147,6 +147,7 @@ public:
 	MCAPI float calcMoveRelativeSpeed(enum TravelType);
 	MCAPI bool checkTotemDeathProtection(class ActorDamageSource const &);
 
+	// mob fields
 	BUILD_ACCESS_MUT(float, mYBodyRot, 0x620);
 	BUILD_ACCESS_MUT(float, mYBodyRotOld, 0x624);
 	BUILD_ACCESS_MUT(float, mYHeadRot, 0x628);

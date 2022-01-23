@@ -47,7 +47,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mBonusChestEnabled, 0x73);
 	BUILD_ACCESS_MUT(bool, mStartWithMapEnabled, 0x74);
 	BUILD_ACCESS_MUT(int32_t, mServerChunkTickRange, 0x78);
-	BUILD_ACCESS_MUT(bool, mForceExperimentalGameplay, 0xC);
+	BUILD_ACCESS_MUT(bool, mForceExperimentalGameplay, 0x7C);
 	BUILD_ACCESS_MUT(bool, mIsFromWorldTemplate, 0x7D);
 	BUILD_ACCESS_MUT(bool, mIsWorldTemplateOptionLocked, 0x7E);
 	BUILD_ACCESS_MUT(bool, mSpawnV1Villagers, 0x7F);

@@ -198,6 +198,7 @@ static_assert(offsetof(LevelData, mLimitedWorldOrigin) == 860);
 static_assert(offsetof(LevelData, mDayCycleTime) == 872);
 static_assert(offsetof(LevelData, mServerChunkTickRange) == 888);
 static_assert(offsetof(LevelData, mSingleUseWorld) == 1005);
+static_assert(offsetof(LevelData, mCommandsEnabled) == 0x404);
 static_assert(offsetof(LevelData, mEducationProductId) == 1040);
 static_assert(offsetof(LevelData, mNetherType) == 1079);
 static_assert(offsetof(LevelData, mSpawnSettings) == 1080);

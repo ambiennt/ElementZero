@@ -8,5 +8,5 @@ struct MCRESULT;
 
 class MinecraftCommands {
 public:
-	MCAPI MCRESULT executeCommand(std::shared_ptr<CommandContext> ctx, bool print) const;
+	MCAPI MCRESULT executeCommand(std::shared_ptr<CommandContext> context, bool suppressOutput) const;
 };

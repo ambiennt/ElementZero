@@ -589,7 +589,8 @@ public:
 
 	template <typename T> MCAPI T *tryGetComponent(void);
 	template <typename T> MCAPI T const *tryGetComponent(void) const;
-
+	
+	// custom methods
 	inline std::string getEntityName() const {
 		return CallServerFunction<std::string>(
 			"?getEntityName@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AEBVActor@@@Z", this);
@@ -610,6 +611,7 @@ public:
 		return this->mAttributes->getMutableInstance((uint32_t) id);
 	}
 	
+	// actor fields
 	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // idk what this is, probably some legacy field?
 	BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);
 	BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
@@ -623,7 +625,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mAdded, 0xD0);
 	BUILD_ACCESS_MUT(class ActorDefinitionGroup *, mDefinitions, 0xD8);
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDescriptor>, mCurrentDescription, 0xE0);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8);
+	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8); // maps to Actor::getUniqueID
 	BUILD_ACCESS_MUT(std::shared_ptr<class RopeSystem>, mLeashRopeSystem, 0xF0);
 	BUILD_ACCESS_MUT(class Vec2, mRot, 0x100);
 	BUILD_ACCESS_MUT(class Vec2, mRotPrev, 0x108);
