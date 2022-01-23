@@ -329,7 +329,7 @@ public:
 	// custom methods
 	inline class ItemStack const& getPlayerUIItem(void) {
 		return CallServerClassMethod<class ItemStack const&>(
-			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", &this->mPlayerUIContainer, PlayerUISlot::CursorSelected);
+			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", (SimpleContainer*)(&this->mPlayerUIContainer), PlayerUISlot::CursorSelected);
 	}
 
 	inline bool dropItem(ItemStack const &item, bool randomly) {
