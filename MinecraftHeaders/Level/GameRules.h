@@ -37,6 +37,7 @@ public:
 	bool default_set    = false; // 0x29
 	bool requires_cheat = false; // 0x2A
 	std::function<void (GameRule &)> mTagNotFoundCallback; // 0x30
+	std::function<bool (GameRule::Value const &, GameRule::ValidationError *)> mValidateValueCallback; // 0x70
 };
 
 class GameRules {
@@ -73,7 +74,7 @@ public:
 	}
 
 	inline bool hasRule(GameRulesIndex id) {
-		return ((((int) id) >= 0) && (((int) id) < (int)(this->rules.size())));
+		return ((((int) id) >= 0) && (((int) id) < (int)(&this->rules.back() - &this->rules.front())));
 	}
 };
 
@@ -81,3 +82,7 @@ static_assert(offsetof(GameRule, value) == 0x4);
 static_assert(offsetof(GameRule, name) == 0x8);
 static_assert(offsetof(GameRule, use_in_command) == 0x28);
 static_assert(offsetof(GameRule, mTagNotFoundCallback) == 0x30);
+static_assert(offsetof(GameRule, mValidateValueCallback) == 0x70);
+
+static_assert(sizeof(GameRule) == 0xB0);
+static_assert(sizeof(GameRules) == 0x18);

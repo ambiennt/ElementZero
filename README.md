@@ -58,7 +58,7 @@ A: A DLL was created that simply forwards all APIs to the open source version of
 4. Run `git submodule update --init --recursive` to install dependencies
 5. In `.\ElementZero>` ($(SolutionDir)), run `cd vcpkg && bootstrap-vcpkg.bat` to install vcpkg in source tree
 6. In `.\ElementZero>` ($(SolutionDir)), install vcpkg dependencies by `vcpkg\vcpkg.exe install @vcpkg.txt`. This may take some time
-7. In the Visual Studio solution explorer, right click CMakeLists.txt in `.\ElementZero` ($(SolutionDir)) and click `Generate Cache`. This may take some time
+7. In the Visual Studio solution explorer, right click CMakeLists.txt in `.\ElementZero` ($(SolutionDir)) and click `Configure Cache`. This may take some time
 8. You are now set up! For release builds, it is recommended to set the build type to `Release` and `rebuild all` before starting custom mod development
 
 ## How to generate lib files yourself (optional)
