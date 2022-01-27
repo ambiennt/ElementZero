@@ -15,9 +15,9 @@ public:
 		OpenInventory  = 6
 	};
 
-	Action mAction = Action::InteractUpdate;
-	ActorRuntimeID mTargetId;
-	Vec3 mPos;
+	Action mAction = Action::InteractUpdate; // 0x28
+	ActorRuntimeID mTargetId; // 0x30
+	Vec3 mPos; // 0x38
 
 	inline ~InteractPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
@@ -26,4 +26,6 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(sizeof(CraftingEventPacket) == 0x48);
+static_assert(offsetof(InteractPacket, mTargetId) == 0x30);
+static_assert(offsetof(InteractPacket, mPos) == 0x38);
+static_assert(sizeof(InteractPacket) == 0x48);

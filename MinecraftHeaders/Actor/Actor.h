@@ -391,8 +391,8 @@ public:
 	virtual void checkFallDamage(float, bool);
 	virtual void causeFallDamage(float);
 	virtual void handleFallDistanceOnServer(float, bool);
-	virtual void playSynchronizedSound(enum LevelSoundEvent, class Vec3 const &, class Block const &, bool);
-	virtual void playSynchronizedSound(enum LevelSoundEvent, class Vec3 const &, int, bool);
+	virtual void playSynchronizedSound(enum LevelSoundEvent, class Vec3 const &, class Block const &, bool isGlobal);
+	virtual void playSynchronizedSound(enum LevelSoundEvent, class Vec3 const &, int data, bool isGlobal);
 	virtual void onSynchedDataUpdate(int);
 	virtual bool canAddRider(class Actor &) const;
 	virtual bool canPickupItem(ItemStack const &) const;
@@ -421,7 +421,7 @@ public:
 	virtual class AnimationComponent &getAnimationComponent(void);
 	virtual void openContainerComponent(class Player &);
 	virtual void swing(void);
-	virtual void useItem(class ItemStack &, enum ItemUseMethod, bool);
+	virtual void useItem(class ItemStack &, enum ItemUseMethod, bool consumeItem);
 	virtual bool hasOutputSignal(unsigned char) const;
 	virtual int getOutputSignal() const;
 	virtual void getDebugText(std::vector<std::string> &);

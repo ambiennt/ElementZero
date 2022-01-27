@@ -24,8 +24,9 @@ public:
 		CallServerClassMethod<void>("?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", this, player, skipMessage);
 	}
 
-	inline ServerPlayer* getServerPlayer(NetworkIdentifier const& netId) {
-		return _getServerPlayer(netId, 0);
+	inline ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
+		return CallServerClassMethod<ServerPlayer*>("?_getServerPlayer@ServerNetworkHandler@@AEAAPEAVServerPlayer@@AEBVNetworkIdentifier@@E@Z",
+			this, netId, subId);
 	}
 	
 	BASEAPI std::string &getMotd();
@@ -74,7 +75,4 @@ public:
 	BUILD_ACCESS_MUT(packIdKeyMap, mPackIdToContentKey, 0x378);
 
 	BUILD_ACCESS_MUT(std::unique_ptr<class GameSpecificNetEventCallback>, mGameSpecificNetEventCallback, 0x3B8);
-
-private:
-	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
 };

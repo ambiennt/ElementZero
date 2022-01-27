@@ -6,7 +6,7 @@
 ![platform](https://img.shields.io/badge/platform-win--x64%20%7C%20wine--linux--x64-green?style=for-the-badge)</a><br>
 <a href="https://github.com/Element-0/ElementZero/releases/latest">![Latest Tag](https://img.shields.io/github/v/tag/Element-0/ElementZero?label=LATEST%20TAG&style=for-the-badge)![GitHub Releases (by Asset)](https://img.shields.io/github/downloads/Element-0/ElementZero/latest/total?style=for-the-badge)</a><br>
 
-Run Windows version of BDS in Linux with mod support (Yes, it also can be run in Windows)
+Run Windows version of BDS in Windows/Linux with built-in mod support
 
 ## NOTICE
 
@@ -15,10 +15,10 @@ This fork of ElementZero is currently being updated for BDS version 1.16.20.03 (
 
 ## Features
 
-0. Compatiable with official BDS
-1. And support behavior pack with custom item/recipes/scripts (*vanilla BDS *does* support them, but its disabled in code)
-2. Can be run in Windows and Linux (with Wine)
-3. Native modding support with C++, high performance mods, and a very robust SDK
+1. Compatiable with official BDS
+2. And support behavior pack with custom item/recipes/scripts (*vanilla BDS *does* support them, but its disabled in code)
+3. Can be run in Windows and Linux (with Wine)
+4. Native modding support with C++, high performance mods, and a very robust SDK
 
 ## FAQ
 
@@ -26,7 +26,7 @@ Q: Why not use a native Linux version?<br>
 A: The Windows version has noticeable performance improvements, even when running under Wine.
 
 Q: Can the Windows version run directly under Wine?<br>
-A: No, because Microsoft uses Chakra.dll, which contains a lot of references to private dlls. (It also prevents you from running on systems prior to Windows 10.)
+A: No, because Microsoft uses Chakra.dll, which contains a lot of references to private DLLs. (It also prevents you from running on systems prior to Windows 10.)
 
 Q: How does it work?<br>
 A: A DLL was created that simply forwards all APIs to the open source version of Chakra engine i.e. ChakraCore. This version can run directly under Wine.
@@ -40,7 +40,7 @@ A: A DLL was created that simply forwards all APIs to the open source version of
 4. Run bedrock_server_mod.exe to start server instance. bedrock_server.exe and the bedrock_server.pdb are not required to be in your server folder
 5. Configure your server mods after running bedrock_server_mod.exe once to generate the custom.yaml file
 
-## Visual Studio 2019 workloads and components
+## Visual Studio 2019 (or 2022) workloads and components
 
 1. Microsoft.VisualStudio.Workload.NativeDesktop
 2. Microsoft.VisualStudio.Workload.ManagedDesktop
@@ -63,11 +63,12 @@ A: A DLL was created that simply forwards all APIs to the open source version of
 
 ## How to generate lib files yourself (optional)
 
-0. Download and install [EatPdb](https://github.com/CodeHz/EatPdb)
-1. Copy $(SolutionDir)\eatpdb.yaml to bds folder
-2. Run `eatpdb exec eatpdb.yaml`
-3. Open `x64 Native Tools Command Prompt for VS 2019`, then run `lib /def:bedrock_server_mod.def /machine:x64`
-4. Copy bedrock_server_mod.lib, addition_symbols.db, bedrock_server_mod.exe to $(SolutionDir)Lib\
+1. Download and install [EatPdb](https://github.com/CodeHz/EatPdb)
+2. Copy $(SolutionDir)\eatpdb.yaml to a temporary folder
+3. Copy `bedrock_server.exe` and `bedrock_server.pdb` to the temporary folder
+3. In a command prompt, run `eatpdb exec eatpdb.yaml` to generate `bedrock_server_mod.exe` and `addition_symbols.db`
+4. Open `x64 Native Tools Command Prompt for VS 2019` (or 2022), then in the temporary folder directory run `lib /def:bedrock_server_mod.def /machine:x64`
+5. Copy bedrock_server_mod.lib, addition_symbols.db, bedrock_server_mod.exe to $(SolutionDir)Lib\
 
 ## LICENSE
 

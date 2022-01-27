@@ -107,9 +107,9 @@ HMODULE GetLoadedMod(const char *name) {
 static void doLoadLib(YAML::Node &cfg_node, ModLibrary const &lib);
 
 void loadMods(YAML::Node &cfg_node) {
-  LOGI("Starting loading mods");
+  LOGI("Starting to load mods");
   std::error_code ec;
-  for (directory_iterator next("Mods", directory_options::follow_directory_symlink, ec), end; next != end; ++next) {
+  for (directory_iterator next("mods", directory_options::follow_directory_symlink, ec), end; next != end; ++next) {
     if (next->is_regular_file() && next->path().extension() == ".dll") {
       const auto cfgkey = next->path().stem().string();
       auto subcfg       = cfg_node[cfgkey];
@@ -153,7 +153,7 @@ void loadMods(YAML::Node &cfg_node) {
     }
   }
   if (ec) {
-    LOGE("Warning: Cannot open Mods folder: %s") % ec.message();
+    LOGE("Warning: Cannot open mods folder: %s") % ec.message();
     return;
   }
   auto curproc = GetCurrentProcess();

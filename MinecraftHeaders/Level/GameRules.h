@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "GameRulesIndex.h"
+#include "../dll.h"
 
 class GameRule {
 public:
@@ -69,6 +70,10 @@ public:
 
 	inline bool getBool(GameRulesIndex id) {
 		return CallServerClassMethod<bool>("?getBool@GameRules@@QEBA_NUGameRuleId@@@Z", this, &id);
+	}
+
+	inline bool hasRule(GameRulesIndex id) {
+		return ((((int) id) >= 0) && (((int) id) < (int)(this->rules.size())));
 	}
 };
 

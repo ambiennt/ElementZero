@@ -90,9 +90,8 @@ static void WriteToCommandError(CommandOutput &outp, JsValueRef data) {
   }
 }
 
-static CommandRegistry *mCommandRegistry;
-
-struct SlashCommand : Command {
+// this slash command handling works fine but its all just unnecessary in my opinion
+/*struct SlashCommand : Command {
   CommandRawText content;
 
   void execute(const CommandOrigin &orig, CommandOutput &outp) override {
@@ -111,7 +110,6 @@ struct SlashCommand : Command {
   }
 
   static void setup(CommandRegistry *registry) {
-    mCommandRegistry = registry;
     using namespace commands;
     registry->registerCommand(
         "!", "commands.slash.description", CommandPermissionLevel::Any, CommandFlagCheat, CommandFlagNone);
@@ -125,13 +123,20 @@ TClasslessInstanceHook(
     std::string &input) {
   if (input._Starts_with("/!")) { input.replace(0, 2, "/slash "); }
   return original(this, input);
+}*/
+
+static CommandRegistry *mCommandRegistry;
+
+static void initializeCommands(CommandRegistry *registry) {
+  mCommandRegistry = registry;
+  //SlashCommand::setup(registry);
 }
 
 static struct CommandInit {
-  CommandInit() { Mod::CommandSupport::GetInstance().AddListener(SIG("loaded"), SlashCommand::setup); }
+  CommandInit() {
+    Mod::CommandSupport::GetInstance().AddListener(SIG("loaded"), &initializeCommands);
+  }
 } xinit;
-
-struct CustomCommand;
 
 struct CommandDataDefinition {
   std::string name;
@@ -183,7 +188,7 @@ struct EnumCommandDataDefinition : BaseCommandDataDefinition<int> {
     if (auto it = tidmap.find(enumname); it != tidmap.end())
       id = it->second;
     else
-      throw std::runtime_error{"enum not found"};
+      throw std::runtime_error{"Enum not found"};
   }
   CommandParameterData generate(size_t offset) override {
     return {
@@ -335,7 +340,7 @@ static CommandDataHolder *GenCommandDataHolder(JsValueRef arr, JsValueRef func) 
   auto len = args["length"].get<int>();
   for (int i = 0; i < len; i++) {
     auto tmp = args[i];
-    if (tmp.type() != JsObject) throw std::runtime_error{"type mismatch"};
+    if (tmp.type() != JsObject) throw std::runtime_error{"Type mismatch"};
     JsObjectWrapper arg{*tmp};
     auto type = arg["type"].get<std::string>();
     auto name = arg["name"].get<std::string>();
@@ -358,17 +363,18 @@ static CommandDataHolder *GenCommandDataHolder(JsValueRef arr, JsValueRef func) 
     } else if (type == "entities") {
       holder->add(std::make_unique<SelectorCommandDataDefinition<Actor>>(name, opt));
     } else
-      throw std::runtime_error{"unsupported type: " + type};
+      throw std::runtime_error{"Unsupported type: " + type};
   }
   return holder.release();
 }
 
 static ModuleRegister reg("ez:command", [](JsObjectWrapper native) -> std::string {
   native["executeCommand"] = +[](std::string const &command) {
+    auto origin = std::make_unique<Mod::CustomCommandOrigin>();
     return ToJs(
-        Mod::CommandSupport::GetInstance().ExecuteCommand(std::make_unique<Mod::CustomCommandOrigin>(), command));
+        Mod::CommandSupport::GetInstance().ExecuteCommand(std::move(origin), command));
   };
-  native["setSlashCommandHandler"] = +[](JsValueRef handler) { holder = handler; };
+  //native["setSlashCommandHandler"] = +[](JsValueRef handler) { holder = handler; };
   native["registerCommand"]        = +[](std::string const &name, std::string const &desc, int permission) {
     mCommandRegistry->registerCommand(
         name, desc.c_str(), (CommandPermissionLevel) permission, CommandFlagCheat, CommandFlagNone);
@@ -381,19 +387,26 @@ static ModuleRegister reg("ez:command", [](JsObjectWrapper native) -> std::strin
         name, FuncPack::create(holder), holder->getCommandParameterData(sizeof(CustomCommand)));
   };
   native["addEnum"] = +[](std::string const &name, Json::Value arr) {
-    if (!arr.isArray()) throw std::runtime_error{"require array as argument"};
+    if (!arr.isArray()) throw std::runtime_error{"Requires array as argument"};
     std::vector<std::pair<std::string, int>> parsed;
     int i = 0;
     for (auto &item : arr) {
-      if (!item.isString()) throw std::runtime_error{"require string[]"};
+      if (!item.isString()) throw std::runtime_error{"Requires string[]"};
       parsed.emplace_back(item.asString("unk"), i++);
     }
     auto id = commands::addCustomEnum(mCommandRegistry, name.c_str(), parsed);
     EnumCommandDataDefinition::tidmap.emplace(name, id);
   };
-  return R"js(
+  /*return R"js(
     export const executeCommand = import.meta.native.executeCommand;
     export const setSlashCommandHandler = import.meta.native.setSlashCommandHandler;
+    export const registerAlias = import.meta.native.registerAlias;
+    export const registerCommand = import.meta.native.registerCommand;
+    export const registerOverride = import.meta.native.registerOverride;
+    export const addEnum = import.meta.native.addEnum;
+  )js";*/
+  return R"js(
+    export const executeCommand = import.meta.native.executeCommand;
     export const registerAlias = import.meta.native.registerAlias;
     export const registerCommand = import.meta.native.registerCommand;
     export const registerOverride = import.meta.native.registerOverride;

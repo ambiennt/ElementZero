@@ -10,6 +10,7 @@
 #include "../Core/ExtendedCertificate.h"
 #include "../Container/PlayerInventory.h"
 #include "../Container/EnderChestContainer.h"
+#include "../Container/PlayerUIContainer.h"
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
 #include "../Core/AutomaticID.h"
@@ -378,6 +379,10 @@ public:
 		return ((this->mPlayerGameType == GameType::Creative) || (this->mPlayerGameType == GameType::CreativeViewer));
 	}
 
+	inline class Inventory* getRawInventoryPtr(void) {
+		return this->mInventory->inventory.get();
+	}
+
 	// player fields
 	// some fields still missing
 	BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);  // first field in Player
@@ -495,7 +500,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mUsedPotion, 0x1CDA);
 	BUILD_ACCESS_MUT(int32_t, mBounceHeight, 0x1CDC);
 	BUILD_ACCESS_MUT(class SkinAdjustments, mSkinAdjustments, 0x1CE0);
-	BUILD_ACCESS_MUT(class SerializedSkin, mSerializedSkin, 0x1CE8); // idk how this differs from mSkin
+	BUILD_ACCESS_MUT(class SerializedSkin, mSerializedSkin, 0x1CE8); // idk how this differs from mSkin, mSkin seems to be used instead
 	BUILD_ACCESS_MUT(int32_t, mScanForDolphinTimer, 0x1EB8);
 	BUILD_ACCESS_MUT(bool, mR5DataRecoverComplete, 0x1EBC); // mojang...
 	BUILD_ACCESS_MUT(std::string, mDeviceId, 0x1EC0);

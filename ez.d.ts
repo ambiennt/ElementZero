@@ -164,11 +164,12 @@ declare module "ez:command" {
     data: string
   ): { statusMessage: string;[key: string]: any };
 
+  // this slash command handling works fine but its all just unnecessary in my opinion
   /**
    * Set command handler for special `/!` command
    * @param handler handler function
    */
-  export function setSlashCommandHandler(handler: (this: CommandOrigin, input: string) => string): void;
+  //export function setSlashCommandHandler(handler: (this: CommandOrigin, input: string) => string): void;
 
   /**
    * Register custom command

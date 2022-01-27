@@ -602,4 +602,5 @@ public:
 	BUILD_ACCESS(class BlockPalette *, GlobalBlockPalette, 1856);
 
 	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData
+	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
 };
