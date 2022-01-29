@@ -74,7 +74,7 @@ public:
 	}
 
 	inline bool hasRule(GameRulesIndex id) {
-		return ((((int) id) >= 0) && (((int) id) < (int)(&this->rules.back() - &this->rules.front())));
+		return ((((int) id) >= 0) && (((int) id) < (int)(this->rules.size())));
 	}
 };
 

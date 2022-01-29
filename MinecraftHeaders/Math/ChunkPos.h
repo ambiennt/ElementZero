@@ -11,17 +11,17 @@ public:
 	static ChunkPos ZERO;
 
 	ChunkPos();
-	ChunkPos(int32_t x, int32_t z) : x(x), z(z) {}
 	inline ~ChunkPos() {}
-	inline ChunkPos(BlockPos const& bp) {
-		this->x = bp.x % 16;
-		this->z = bp.z % 16;
+	ChunkPos(int32_t x, int32_t z) : x(x), z(z) {}
+	ChunkPos(BlockPos const& bp) : x((int)(bp.x % 16)), z((int)(bp.z % 16)) {}
+    ChunkPos(const ChunkPos &rhs) {
+		this->x = rhs.x;
+		this->z = rhs.z;
 	}
-	inline ChunkPos(Vec3 const& vec) {
-		BlockPos bp;
-		bp.getBlockPos(vec);
-		this->x = bp.x % 16;
-		this->z = bp.z % 16;
+	ChunkPos(Vec3 const& vec) {
+		BlockPos bp(vec);
+		this->x = (int)(bp.x % 16);
+		this->z = (int)(bp.z % 16);
 	}
 };
 

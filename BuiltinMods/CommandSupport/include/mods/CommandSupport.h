@@ -72,8 +72,8 @@ template <> COMMANDAPI typeid_t<CommandRegistry> CommandSupport::GetParameterTyp
 class CustomCommandOrigin : public CommandOrigin {
 public:
   std::string name;
-  BlockPos pos                 = {0, 0, 0};
-  Vec3 worldPosition           = {0, 0, 0};
+  BlockPos pos                 = BlockPos::ZERO;
+  Vec3 worldPosition           = Vec3::ZERO;
   Dimension *dim               = nullptr;
   Actor *actor                 = nullptr;
   CommandPermissionLevel level = CommandPermissionLevel::Internal;

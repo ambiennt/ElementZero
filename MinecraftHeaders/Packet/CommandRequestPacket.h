@@ -6,10 +6,11 @@
 
 class CommandRequestPacket : public Packet {
 public:
-	std::string command;
-	CommandOriginData data;
-	bool internalSource = false;
+	std::string mCommand; // 0x28
+	CommandOriginData mOrigin; // 0x48
+	bool mIsInternalSource = false; // 0x88 - if the command is run from within the server?
 
+	CommandRequestPacket(std::string cmd, CommandOriginData origin, bool isInternal) : mCommand(cmd), mOrigin(origin), mIsInternalSource(isInternal) {}
 	inline ~CommandRequestPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
@@ -17,7 +18,7 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(CommandRequestPacket, command) == 0x28);
-static_assert(offsetof(CommandRequestPacket, data) == 0x48);
-static_assert(offsetof(CommandRequestPacket, internalSource) == 0x88);
+static_assert(offsetof(CommandRequestPacket, mCommand) == 0x28);
+static_assert(offsetof(CommandRequestPacket, mOrigin) == 0x48);
+static_assert(offsetof(CommandRequestPacket, mIsInternalSource) == 0x88);
 static_assert(sizeof(CommandRequestPacket) == 0x90);

@@ -15,6 +15,11 @@ public:
 
 	Vec3();
 	Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+	Vec3(const Vec3& rhs) {
+		this->x = rhs.x;
+		this->y = rhs.y;
+		this->z = rhs.z;
+	}
 	inline ~Vec3() {}
 	Vec3 &operator=(Vec3 const&) = default;
 	Vec3 operator+(Vec3 const &rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }

@@ -17,7 +17,7 @@ enum class PlayStatus {
 class PlayStatusPacket : public Packet {
 public:
 
-	PlayStatus mPlayStatus;
+	PlayStatus mPlayStatus; // 0x28
 
 	inline ~PlayStatusPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

@@ -8,6 +8,7 @@
 #include "SynchedActorData.h"
 #include "Attribute.h"
 #include "../Math/Vec3.h"
+#include "../Math/BlockPos.h"
 #include "../Container/SimpleContainer.h"
 #include "../Core/AutomaticID.h"
 #include "../Core/Util.h"
@@ -609,6 +610,11 @@ public:
 
 	inline AttributeInstance* getAttributeInstanceFromId(AttributeIds id) {
 		return this->mAttributes->getMutableInstance((uint32_t) id);
+	}
+
+	inline class BlockPos getBlockPos(void) {
+		BlockPos bp(this->getPos());
+		return bp;
 	}
 	
 	// actor fields

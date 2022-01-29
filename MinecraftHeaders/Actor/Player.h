@@ -383,6 +383,12 @@ public:
 		return this->mInventory->inventory.get();
 	}
 
+	inline class Vec3 getPosNormalized(void) {
+		Vec3 vec(this->getPos());
+		vec.y -= 1.62f;
+		return vec;
+	}
+
 	// player fields
 	// some fields still missing
 	BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);  // first field in Player

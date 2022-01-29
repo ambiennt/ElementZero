@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 class Vec2 {
 public:
 	float x = 0.0f, y = 0.0f;
@@ -9,6 +11,10 @@ public:
 
 	Vec2();
 	Vec2(float x, float y) : x(x), y(y) {}
+	Vec2(const Vec2& rhs) {
+		this->x = rhs.x;
+		this->y = rhs.y;
+	}
 	inline ~Vec2() {}
 	Vec2 &operator=(Vec2 const&) = default;
 	Vec2 operator+(Vec2 const &rhs) const noexcept { return {x + rhs.x, y + rhs.y}; }

@@ -370,9 +370,8 @@ static CommandDataHolder *GenCommandDataHolder(JsValueRef arr, JsValueRef func) 
 
 static ModuleRegister reg("ez:command", [](JsObjectWrapper native) -> std::string {
   native["executeCommand"] = +[](std::string const &command) {
-    auto origin = std::make_unique<Mod::CustomCommandOrigin>();
     return ToJs(
-        Mod::CommandSupport::GetInstance().ExecuteCommand(std::move(origin), command));
+        Mod::CommandSupport::GetInstance().ExecuteCommand(std::make_unique<Mod::CustomCommandOrigin>(), command));
   };
   //native["setSlashCommandHandler"] = +[](JsValueRef handler) { holder = handler; };
   native["registerCommand"]        = +[](std::string const &name, std::string const &desc, int permission) {
