@@ -27,7 +27,7 @@ public:
 	Vec3 operator*(float factor) const noexcept {
 		return { x * factor, y * factor, z * factor };
 	}
-	Vec3 operator/(float factor) const noexcept {
+	Vec3 operator/(float factor) {
 		if (factor == 0.f) return Vec3::ZERO;
 		float inv = 1.f / factor;
 		return { x * inv, y * inv, z * inv };

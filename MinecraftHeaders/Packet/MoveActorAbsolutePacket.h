@@ -5,19 +5,19 @@
 #include "../Actor/ActorRuntimeID.h"
 #include "../dll.h"
 
-enum class Flags : uint8_t { 
-	GROUND     = 0x1,
-	TELEPORT   = 0x2,
-	FORCE_MOVE = 0x4
-};
-
 class MoveActorAbsolutePacket : public Packet {
 public:
 
+	enum class Flags : uint8_t { 
+		GROUND     = 0x1,
+		TELEPORT   = 0x2,
+		FORCE_MOVE = 0x4
+	};
+
 	ActorRuntimeID mRuntimeId;
-	uint8_t mFlags = 0x1; // Flags::GROUND, mHeader - MoveActorAbsoluteData::Header
+	uint8_t mFlags = 0x2; // MoveActorAbsolutePacket::Flags = Flags::GROUND; (actually a MoveActorAbsoluteData::Header in BDS)
 	Vec3 mPos;
-	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
+	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0; // mRotYHead is always 0 for non-mobs
 
 	inline ~MoveActorAbsolutePacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

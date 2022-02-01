@@ -261,7 +261,7 @@ TClasslessInstanceHook(
   for (auto hook : Reloadables) {
     auto content = mods[hook.name];
     if (!content.IsMap()) {
-      LOGE("Reload failed for mod %s: not found section for mod") % hook.name;
+      LOGE("Reload failed for mod %s: cannot find section for mod") % hook.name;
       continue;
     }
     if (!content["enabled"].as<bool>(false)) {

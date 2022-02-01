@@ -186,10 +186,10 @@ public:
 	DEF_FIELD_RW(bool, AllowOffhand);
 
 	enum class Flags {
-		IsGlint = 1,
+		mIsGlint = 1,
 		mHandEquipped = 2,
 		mIsStackedByData = 3,
-		mRequiresWorldBuilder=  4,
+		mRequiresWorldBuilder = 4,
 		mExplodable = 5,
 		mFireResistant = 6,
 		mShouldDespawn = 7,

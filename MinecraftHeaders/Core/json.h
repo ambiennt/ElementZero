@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include <modutils.h>
 #include "../dll.h"
 
 namespace Json {
@@ -55,6 +56,8 @@ class Value {
 	friend class ValueIteratorBase;
 
 public:
+	BUILD_ACCESS_MUT(int16_t, unknownBitFlags, 0x8);
+	
 	class CZString {
 	public:
 		enum DuplicationPolicy { noDuplication = 0, duplicate, duplicateOnCopy };

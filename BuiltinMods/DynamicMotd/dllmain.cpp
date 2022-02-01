@@ -19,7 +19,7 @@ struct Settings {
 } settings;
 
 DEFAULT_SETTINGS(settings);
-DEF_LOGGER("DynamicMotd");
+DEF_LOGGER("DynamicMOTD");
 
 class MotdState {
   std::vector<std::string>::iterator it;

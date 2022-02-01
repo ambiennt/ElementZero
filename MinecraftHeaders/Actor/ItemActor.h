@@ -1,8 +1,8 @@
 #pragma once
 
-#include <modutils.h>
 #include "../Item/ItemStack.h"
 #include "Actor.h"
+#include <modutils.h>
 
 class ItemActor : public Actor {
 public:

@@ -5,7 +5,7 @@
 
 class ShowProfilePacket : public Packet {
 public:
-	std::string xuid;
+	std::string mPlayerXUID; // 0x28
 
 	inline ~ShowProfilePacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

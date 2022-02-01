@@ -7,6 +7,7 @@
 #include "ActorUniqueID.h"
 #include "SynchedActorData.h"
 #include "Attribute.h"
+#include "MobEffect.h"
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
 #include "../Container/SimpleContainer.h"
@@ -615,6 +616,14 @@ public:
 	inline class BlockPos getBlockPos(void) {
 		BlockPos bp(this->getPos());
 		return bp;
+	}
+
+	inline bool hasAnyEffects(void) {
+		if (this->mMobEffects.size() <= 0) return false;
+		for (auto& effect : this->mMobEffects) {
+			if (effect != MobEffectInstance::NO_EFFECT) return true;
+		}
+		return false;
 	}
 	
 	// actor fields

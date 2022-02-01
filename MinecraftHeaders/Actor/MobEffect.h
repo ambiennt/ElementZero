@@ -3,12 +3,13 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "Actor.h"
 #include "../Core/Color.h"
 #include "../Core/HashedString.h"
 #include "MobEffectIds.h"
 #include "../dll.h"
+#include <hook.h>
 
+class Actor;
 class AttributeBuff;
 class AttributeModifier;
 
@@ -33,7 +34,6 @@ public:
 
 	MCAPI MobEffect(int32_t id, std::string const& resourceName, std::string const& locName,
 		bool isHarmful, int32_t color, int32_t icon, std::string const& iconName, bool drawParticles);
-
 	virtual ~MobEffect(void);
 	virtual void applyEffects(class Actor*, int, int) const;
 	virtual void removeEffects(class Actor*);
@@ -112,7 +112,7 @@ public:
 	bool mNoCounter         = false; // 0x1A - unlimited duration? needs testing
 	bool mEffectVisible     = true; // 0x1C - show effect particle
 
-	MCAPI static MobEffectInstance NO_EFFECT;
+	MCAPI static const MobEffectInstance NO_EFFECT;
 	static const int32_t MAX_AMPLIFIER_COUNT = 5;
 
 	MobEffectInstance(
@@ -121,12 +121,19 @@ public:
 		mId(id), mDuration(dur), mDurationEasy(durEasy), mDurationNormal(durNormal), mDurationHard(durHard), mAmplifier(amplifier),
 		mDisplayOnScreenTextureAnimation(displayAnim), mAmbient(ambient), mNoCounter(noCounter), mEffectVisible(visible) {}
 	MobEffectInstance(MobEffectIds id, int32_t dur, int32_t amplifier, bool visible) {
-		mId = id;
-		mDuration = mDurationEasy = mDurationNormal = mDurationHard = dur;
-		mAmplifier = amplifier;
-		mEffectVisible = visible;
+		this->mId = id;
+		this->mDuration = this->mDurationEasy = this->mDurationNormal = this->mDurationHard = dur;
+		this->mAmplifier = amplifier;
+		this->mEffectVisible = visible;
 	}
 	MobEffectInstance(MobEffectIds id) : mId(id) {}
+
+	bool operator==(MobEffectInstance const &rhs) {
+		return (this->mId == rhs.mId);
+	}
+	bool operator!=(MobEffectInstance const &rhs) {
+		return (this->mId != rhs.mId);
+	}
 };
 
 static_assert(offsetof(MobEffectInstance, mDurationHard) == 0x10);

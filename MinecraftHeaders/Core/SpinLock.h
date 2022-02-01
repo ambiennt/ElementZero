@@ -12,10 +12,8 @@ public:
 	uint32_t mOwnerRefCount; // 0x18
 
 	MCAPI SpinLock();
-	//MCAPI ~SpinLock(void) const;
+	inline ~SpinLock();
 	MCAPI uint64_t _getThreadId(void) const;
 	MCAPI void lock(void) const;
-	MCAPI void unlock(void) const;
-	//MCAPI bool try_lock(void) const;
-	//MCAPI bool try_lock(uint64_t) const;
+	MCAPI void unlock(void) const;;
 };

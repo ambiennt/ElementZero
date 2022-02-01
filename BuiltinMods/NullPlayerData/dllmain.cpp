@@ -19,8 +19,6 @@ inline struct Settings {
 
 DEFAULT_SETTINGS(settings);
 
-
-
 TClasslessInstanceHook(void, "?save@LevelStorage@@QEAAXAEAVActor@@@Z", Player &player) {
-  if (settings.bypass_op && player.getCommandPermissionLevel() > CommandPermissionLevel::Any) original(this, player);
+  if (settings.bypass_op && player.isOperator()) original(this, player);
 }
