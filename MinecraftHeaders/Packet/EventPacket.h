@@ -7,7 +7,7 @@
 // useless packet, used for client telemetry
 class EventPacket : public Packet {
 public:
-	
+
 	enum class Type {
 		Achievement = 0x0,
 		Interaction = 0x1,
