@@ -83,7 +83,7 @@ public:
 };
 
 struct MobSpawnerData {
-	char pad[0x8];
+	char pad[0x8]; // WeighedRandom::WeighedRandomItem
 	ActorDefinitionIdentifier mIdentifier;
 	MobSpawnRules mSpawnRules;
 	std::function<void(std::vector<Mob *> &, Random &)> mOnSpawnHerd;

@@ -9,6 +9,15 @@
 
 class MovePlayerPacket : public Packet {
 public:
+
+	enum class TeleportCause {
+		Unknown = 0,
+		Projectile = 1,
+		ChorusFruit = 2,
+		Command = 3,
+		Behavior = 4
+	};
+
 	ActorRuntimeID mRuntimeId;
 	Vec3 mPos;
 	Vec2 mRot;
@@ -16,8 +25,8 @@ public:
 	Player::PositionMode mPositionMode;
 	bool mOnGround;
 	ActorRuntimeID mRidingActorId;
-	int mTeleportCause;
-	int mSourceEntityType;
+	TeleportCause mTeleportCause = TeleportCause::Unknown;
+	int mSourceEntityType = 0;
 
 	inline ~MovePlayerPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

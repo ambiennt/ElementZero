@@ -71,14 +71,23 @@ public:
 	inline auto getSpan() const { return gsl::make_span(data(), size()); }
 };
 
-enum ImageFormat { NONE, RGB, RGBA };
-enum ImageUsage : char { unknown, sRGB, data };
+enum ImageFormat {
+	NONE    = 0,
+	RGB     = 1,
+	RGBA    = 2
+};
+
+enum ImageUsage : int8_t {
+	unknown = 0,
+	sRGB    = 1,
+	data    = 2
+};
 
 inline unsigned numChannels(ImageFormat format) {
 	switch (format) {
-	case RGB: return 3;
-	case RGBA: return 4;
-	default: return 0;
+		case ImageFormat::RGB:  return 3;
+		case ImageFormat::RGBA: return 4;
+		default:                return 0;
 	}
 }
 
@@ -87,10 +96,10 @@ class Image {
 		: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
 
 public:
-	ImageFormat format;
-	unsigned width, height;
-	ImageUsage usage;
-	Blob data;
+	ImageFormat format; // 0x0
+	unsigned width, height; // 0x4, 0x8
+	ImageUsage usage; // 0xC
+	Blob data; // 0x10
 	inline Image(Blob &&data) : data(std::move(data)) {}
 	inline Image(unsigned width, unsigned height, ImageFormat format, ImageUsage usage)
 			: format(format), width(width), height(height), usage(usage) {}
@@ -123,6 +132,9 @@ public:
 	inline void setRawImage(Blob &&buffer) { data = std::move(buffer); }
 };
 
-static_assert(offsetof(Image, data) == 16);
+static_assert(offsetof(Image, data) == 0x10);
+static_assert(offsetof(Image, format) == 0x0);
+static_assert(offsetof(Image, usage) == 0xC);
+static_assert(sizeof(Image) == 0x20);
 
 } // namespace mce

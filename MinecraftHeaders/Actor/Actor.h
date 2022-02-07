@@ -564,7 +564,7 @@ public:
 	MCAPI void sendMotionToServer(void);
 	MCAPI void sendActorDefinitionEventTriggered(std::string const &);
 	MCAPI void _sendDirtyActorData(void);
-	//MCAPI void forEachLeashedActor(std::function<void(gsl::not_null<class Actor *>)>);
+	//MCAPI void forEachLeashedActor(class std::function<void (class gsl::not_null<class Actor* >)>);
 	MCAPI bool shouldOrphan(class BlockSource &);
 	MCAPI bool onLadder(bool) const;
 	MCAPI void reload(void);
@@ -587,7 +587,6 @@ public:
 	MCAPI void loadEntityFlags(class CompoundTag const &, class DataLoadHelper &);
 	MCAPI void testForCollidableMobs(class BlockSource &, class AABB const &, std::vector<class AABB> &);
 	MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
-	//MCAPI const class ItemStack* getOffhandSlot(void) const; // idk why it says undefined symbol
 
 	template <typename T> MCAPI T *tryGetComponent(void);
 	template <typename T> MCAPI T const *tryGetComponent(void) const;

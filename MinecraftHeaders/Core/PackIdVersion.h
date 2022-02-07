@@ -17,11 +17,12 @@ enum struct PackType {
 };
 
 struct PackIdVersion {
-	mce::UUID uuid;
-	SemVersion version;
-	PackType type;
+	mce::UUID mUUID; // 0x0
+	SemVersion mVersion; // 0x10
+	PackType mPackType; // 0x80
 };
 
-static_assert(offsetof(PackIdVersion, uuid) == 0x0);
-static_assert(offsetof(PackIdVersion, version) == 0x10);
-static_assert(offsetof(PackIdVersion, type) == 0x80);
+static_assert(offsetof(PackIdVersion, mUUID) == 0x0);
+static_assert(offsetof(PackIdVersion, mVersion) == 0x10);
+static_assert(offsetof(PackIdVersion, mPackType) == 0x80);
+static_assert(sizeof(PackIdVersion) == 0x88);

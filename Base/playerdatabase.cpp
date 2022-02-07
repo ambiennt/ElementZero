@@ -8,6 +8,7 @@
 #include <Net/NetworkIdentifier.h>
 #include <Net/ServerNetworkHandler.h>
 #include <Core/ExtendedCertificate.h>
+#include <Core/ConnectionRequest.h>
 
 #include <SQLiteCpp/SQLiteCpp.h>
 #include <sqlite3.h>
@@ -153,18 +154,17 @@ TClasslessInstanceHook(
     std::unique_ptr<ServerPlayer>,
     "?createNewPlayer@ServerNetworkHandler@@QEAA?AV?$unique_ptr@VServerPlayer@@U?$default_delete@VServerPlayer@@@std@@@"
     "std@@AEBVNetworkIdentifier@@AEBVConnectionRequest@@@Z",
-    NetworkIdentifier *id, void *req) {
-  auto player  = original(this, id, req);
+    NetworkIdentifier *netId, ConnectionRequest const& req) {
+  auto player  = original(this, netId, req);
   auto &cert   = player->getCertificate();
   auto uuid    = ExtendedCertificate::getIdentity(cert);
   auto name    = ExtendedCertificate::getIdentityName(cert);
-  auto sadd    = id->getRealAddress();
+  auto sadd    = netId->getRealAddress();
   auto address = sadd.ToString();
   try {
-    std::string xuidStr = ExtendedCertificate::getXuid(cert);
-    auto xuid = xuidStr.empty() ? 0 : std::stoull(xuidStr);
+    uint64_t xuid = req.getXuidAsUInt64();
     LOGV("%s joined (from %s)") % name % address;
-    auto ref = container->emplace(Mod::PlayerEntry{player.get(), name, xuid, uuid, *id});
+    auto ref = container->emplace(Mod::PlayerEntry{player.get(), name, xuid, uuid, *netId});
     (db.*emitter<"joined"_sig>) (SIG("joined"), *ref.first);
     static SQLite::Statement stmt_user{*sqldb, "INSERT OR REPLACE INTO user VALUES (?, ?, ?)"};
     static SQLite::Statement stmt_login{*sqldb, "INSERT INTO login (uuid, address) VALUES (?, ?)"};
@@ -193,7 +193,7 @@ TClasslessInstanceHook(
 }
 
 TClasslessInstanceHook(
-    void, "?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", Player *player, bool flag) {
+    void, "?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", Player *player, bool skipMessage) {
   if (auto it = container->find(player); it != container->end()) {
     LOGV("%s left") % it->name;
     static SQLite::Statement stmt_logout{*sqldb, "INSERT INTO logout (uuid) VALUES (?)"};
@@ -206,7 +206,7 @@ TClasslessInstanceHook(
     (db.*emitter<"left"_sig>) (SIG("left"), *it);
     auxm->erase(player);
     container->erase(it);
-    original(this, player, flag);
+    original(this, player, skipMessage);
   }
 }
 

@@ -15,7 +15,7 @@ public:
 	};
 
 	ActorRuntimeID mRuntimeId;
-	uint8_t mFlags = 0x2; // MoveActorAbsolutePacket::Flags = Flags::GROUND; (actually a MoveActorAbsoluteData::Header in BDS)
+	uint8_t mFlags = 0x1; // MoveActorAbsolutePacket::Flags = Flags::GROUND; (actually a MoveActorAbsoluteData::Header in BDS)
 	Vec3 mPos;
 	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0; // mRotYHead is always 0 for non-mobs
 

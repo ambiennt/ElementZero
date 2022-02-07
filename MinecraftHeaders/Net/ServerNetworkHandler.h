@@ -59,7 +59,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mAllowIncoming, 0x240);
 	BUILD_ACCESS_MUT(class mce::UUID, mHostPlayerId, 0x248);
 	BUILD_ACCESS_MUT(std::string, mServerName, 0x258);
-	BUILD_ACCESS_MUT(std::string, mServerType, 0x278);
+	BUILD_ACCESS_MUT(std::string, mServerType, 0x278); // defaults to "normal", can also be "realms"
 	BUILD_ACCESS_MUT(std::string, mMultiplayerCorrelationId, 0x298);
 	BUILD_ACCESS_MUT(std::vector<std::string>, mTrustedKeys, 0x2B8);
 	BUILD_ACCESS_MUT(int32_t, mMaxNumPlayers, 0x2D0);

@@ -6,6 +6,7 @@
 #include "../Core/buffer_span.h"
 #include "../Actor/ActorType.h"
 #include "../Block/ActorBlockSyncMessage.h"
+#include "Brightness.h"
 #include "../dll.h"
 
 #include <hook.h>

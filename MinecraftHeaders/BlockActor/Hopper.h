@@ -1,15 +1,8 @@
 #pragma once
 
-#include "../Math/BlockPos.h"
-
 class Hopper {
 public:
-	int mCooldownTime;
+	int32_t mCooldownTime;
 	bool mTransferredFromChestMinecart, mIsEntity;
-	int mMoveItemSpeed;
-};
-
-class HopperComponent : public Hopper {
-public:
-	BlockPos mLastPosition;
+	int32_t mMoveItemSpeed;
 };

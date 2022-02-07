@@ -1,8 +1,9 @@
+#pragma once
+
 #include <hook.h>
 #include "ActorUniqueID.h"
 #include "ActorType.h"
 #include "ActorCategory.h"
-#include <cstring>
 
 enum class ActorDamageCause {
 	None             = -1,
@@ -73,7 +74,7 @@ public:
 
 class ActorDamageByBlockSource : public ActorDamageSource {
 public:
-	BUILD_ACCESS_MUT(class block*, mBlock, 0x10);
+	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x10);
 };
 
 class ActorDamageByChildActorSource : public ActorDamageByActorSource {

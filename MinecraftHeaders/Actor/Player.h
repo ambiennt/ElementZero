@@ -307,7 +307,7 @@ public:
 	MCAPI class EnderChestContainer *getEnderChestContainer(void);
 	MCAPI void updateTeleportDestPos(void);
 	MCAPI void updateInventoryTransactions(void);
-	MCAPI void updateSkin(class SerializedSkin const &, int);
+	MCAPI void updateSkin(class SerializedSkin const &, int clientSubID); // client side function, has no effect on server
 	MCAPI void setAgent(class Agent *);
 	MCAPI void setRespawnPosition(class BlockPos const &, bool);
 	MCAPI void setBedRespawnPosition(class BlockPos const &);
@@ -429,7 +429,7 @@ public:
 	BUILD_ACCESS_MUT(float, mDistanceSinceTraveledEvent, 0xB54);
 	BUILD_ACCESS_MUT(std::shared_ptr<class IContainerManager>, mContainerManager, 0xB60);
 	BUILD_ACCESS_MUT(std::unique_ptr<class PlayerInventory>, mInventory, 0xB70);
-	BUILD_ACCESS_MUT(class SerializedSkin, mSkin, 0xB78);
+	BUILD_ACCESS_MUT(class SerializedSkin, mSkin, 0xB78); // use this to read and write to the player skin
 	BUILD_ACCESS_MUT(std::vector<class ItemInstance>, mCreativeItemList, 0xD48);
 
 	using filteredCreativeItemList = std::array<std::vector<class ItemGroup>, 4>;
@@ -506,7 +506,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mUsedPotion, 0x1CDA);
 	BUILD_ACCESS_MUT(int32_t, mBounceHeight, 0x1CDC);
 	BUILD_ACCESS_MUT(class SkinAdjustments, mSkinAdjustments, 0x1CE0);
-	BUILD_ACCESS_MUT(class SerializedSkin, mSerializedSkin, 0x1CE8); // idk how this differs from mSkin, mSkin seems to be used instead
+	BUILD_ACCESS_MUT(class SerializedSkin, mSerializedSkin, 0x1CE8); // mSkin (0xB78) seems to be used instead - do not use this field
 	BUILD_ACCESS_MUT(int32_t, mScanForDolphinTimer, 0x1EB8);
 	BUILD_ACCESS_MUT(bool, mR5DataRecoverComplete, 0x1EBC); // mojang...
 	BUILD_ACCESS_MUT(std::string, mDeviceId, 0x1EC0);

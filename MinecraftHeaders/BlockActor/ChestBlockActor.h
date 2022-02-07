@@ -41,7 +41,6 @@ public:
 	BUILD_ACCESS_MUT(bool, mNotifyPlayersOnChange, 0x278);
 
 	MCAPI ChestBlockActor(enum BlockActorType type, std::string const& id, enum BlockActorRendererId renderId, class BlockPos const& pos, bool isTrapped);
-	virtual ~ChestBlockActor();
 
 	MCAPI void _closeChest(class BlockSource &region, class Player *player);
 	MCAPI bool _detectBlockObstruction(class BlockSource &region);

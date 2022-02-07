@@ -9,6 +9,7 @@ public:
 	bool mSkipMessage; // 0x28
 	std::string mMessage; // 0x30
 
+	DisconnectPacket(bool skipMsg, std::string msg) : mSkipMessage(skipMsg), mMessage(msg) {}
 	inline ~DisconnectPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

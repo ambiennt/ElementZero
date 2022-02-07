@@ -3,6 +3,7 @@
 #include "Certificate.h"
 #include "WebToken.h"
 #include "UnverifiedCertificate.h"
+#include "ExtendedCertificate.h"
 #include "../dll.h"
 
 #include "../Actor/Skin/persona.h"
@@ -42,6 +43,21 @@ public:
 	MCAPI bool verifySelfSigned(void);
 	MCAPI std::unordered_map<enum persona::PieceType, class TintMapColor> getPieceTintColors(void) const;
 	MCAPI ~ConnectionRequest(void);
+
+	inline uint32_t getTitleId(void) {
+		// make as a string first because asUInt() seems to always fail
+		std::string const& titleIdStr = this->mCertificate->getExtraData("titleId", "").asString("");
+		if (titleIdStr.empty()) return 0;
+		for (const char& c : titleIdStr) {
+			if (!std::isdigit(c)) return 0;
+		}
+		return (uint32_t)(std::stoull(titleIdStr));
+	}
+
+	inline uint64_t getXuidAsUInt64(void) const {
+		std::string xuidStr = ExtendedCertificate::getXuid(*this->mCertificate.get());
+		return (xuidStr.empty() ? 0 : std::stoull(xuidStr));
+	}
 };
 
 static_assert(sizeof(ConnectionRequest) == 32);

@@ -74,9 +74,9 @@ TInstanceHook(
   *(RakNet::RakPeer **) ((char *) this + 280) = nullptr;
 }
 
-THook(void, "??0RakPeer@RakNet@@QEAA@XZ", RakNet::RakPeer *self) {
+THook(void*, "??0RakPeer@RakNet@@QEAA@XZ", RakNet::RakPeer *self) {
   if (!mRakPeer) mRakPeer = self;
-  original(self);
+  return original(self);
 }
 
 static bool stopping = false;
@@ -84,8 +84,7 @@ static bool stopping = false;
 THook(void *, "??R?$default_delete@VConsoleInputReader@@@std@@QEBAXPEAVConsoleInputReader@@@Z", void *self, char *s) {
   auto &thrd = *((std::thread *) (s + 88));
   if (thrd.joinable()) thrd.detach();
-  auto ret = original(self, s);
-  return ret;
+  return original(self, s);
 }
 
 static BOOL ConsoleCtrlHandler(DWORD type) {

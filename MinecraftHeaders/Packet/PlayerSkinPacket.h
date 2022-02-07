@@ -11,6 +11,8 @@ public:
 	SerializedSkin mSkin;
 	std::string mLocalizedNewSkinName, mLocalizedOldSkinName;
 
+	PlayerSkinPacket(mce::UUID uuid, SerializedSkin skin, std::string newName, std::string oldName) :
+		mUUID(uuid), mSkin(skin), mLocalizedNewSkinName(newName), mLocalizedOldSkinName(oldName) {}
 	inline ~PlayerSkinPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
