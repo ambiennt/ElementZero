@@ -144,5 +144,5 @@ public:
 
 	MCAPI void setSaved(void);
 	MCAPI void setUnsaved(void);
-	MCAPI bool hasEntity(class WeakEntityRef);
+	MCAPI bool hasEntity(class Actor&);
 };

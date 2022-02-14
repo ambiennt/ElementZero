@@ -389,6 +389,17 @@ public:
 		return vec;
 	}
 
+	inline class Vec3 getPosOldNormalized(void) {
+		Vec3 vec(this->getPosOld());
+		vec.y -= 1.62f;
+		return vec;
+	}
+
+	// use this to get a mutable instance of the player's held item
+	inline class ItemStack& getSelectedItemMutable(void) {
+		return *CallServerClassMethod<class ItemStack*>("?getSelectedItem@Player@@QEBAAEBVItemStack@@XZ", this);
+	}
+
 	// player fields
 	// some fields still missing
 	BUILD_ACCESS_MUT(int32_t, mCastawayTimer, 0x7D0);  // first field in Player
@@ -479,7 +490,10 @@ public:
 	BUILD_ACCESS_MUT(class PlayerSpawnRandomizer, mSpawnRandomizer, 0x11A8); // this is 0x10 bytes smaller in the public 1.16.20 BDS
 
 	// note to self: shift every offset back 0x10 bytes from here and below
-	BUILD_ACCESS_MUT(std::unique_ptr<class ItemStackNetManagerBase>, mItemStackNetManager, 0x1BD8); // calling methods on this prints garbage for some reason
+	BUILD_ACCESS_MUT(int32_t, mLastLevelUpTime, 0x1C40);
+	BUILD_ACCESS_MUT(int32_t, mPlayerLevelChanged, 0x1C44);
+	BUILD_ACCESS_MUT(int32_t, mPreviousLevelRequirement, 0x1C48);
+	BUILD_ACCESS_MUT(std::unique_ptr<class ItemStackNetManagerBase>, mItemStackNetManager, 0x1BD8);
 	BUILD_ACCESS_MUT(float, mVRMoveAdjAngle, 0x1BE0);
 	BUILD_ACCESS_MUT(std::shared_ptr<class AnimationComponent>, mUIAnimationComponent, 0x1BE8);
 	BUILD_ACCESS_MUT(std::shared_ptr<class AnimationComponent>, mMapAnimationComponent, 0x1BF8);

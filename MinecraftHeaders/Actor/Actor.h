@@ -599,7 +599,7 @@ public:
 
 	inline void teleport(Vec3 destination, Vec3 const &facePosition, AutomaticID<Dimension, int> destinationDimension,
 		RelativeFloat yaw = {0}, RelativeFloat pitch = {0}, int commandVersion = 0, ActorUniqueID const &id = ActorUniqueID::INVALID_ID) {
-		CallServerClassMethod<void>(
+		CallServerFunction<void>(
 			"?teleport@TeleportCommand@@SAXAEAVActor@@VVec3@@PEAV3@V?$AutomaticID@VDimension@@H@@VRelativeFloat@@4HAEBUActorUniqueID@@@Z",
 			this, destination, &facePosition, destinationDimension, yaw, pitch, commandVersion, &id);
 	}

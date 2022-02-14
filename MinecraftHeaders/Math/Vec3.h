@@ -33,9 +33,9 @@ public:
 		return { x * inv, y * inv, z * inv };
 	}
 	Vec3 &operator*=(float factor) {
-		x *= factor;
-		y *= factor;
-		z *= factor;
+		this->x *= factor;
+		this->y *= factor;
+		this->z *= factor;
 		return *this;
 	}
 
@@ -43,19 +43,19 @@ public:
 	constexpr bool operator!=(Vec3 const &rhs) const noexcept { return !(*this == rhs); }
 
 	inline void normalize(void) {
-		float l  = 1.f / sqrt(x * x + y * y + z * z);
-		x *= l;
-		y *= l;
-		z *= l;
+		float l  = 1.f / sqrtf(x * x + y * y + z * z);
+		this->x *= l;
+		this->y *= l;
+		this->z *= l;
 	}
 
 	inline void normalizeXZ(void) {
-		float l  = 1.f / sqrt(x * x + z * z);
-		x *= l;
-		z *= l;
+		float l = 1.f / sqrtf(x * x + z * z);
+		this->x *= l;
+		this->z *= l;
 	}
 
-	inline Vec3 directionFromRotation(Vec2 const& rot) {
+	static inline Vec3 directionFromRotation(Vec2 const& rot) {
 
 		float x = (float)(rot.x * -RAD);
 		float y = (float)(rot.y * -RAD) - PI;

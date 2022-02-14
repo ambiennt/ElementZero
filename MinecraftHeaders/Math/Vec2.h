@@ -27,8 +27,8 @@ public:
 		return { x * inv, y * inv };
 	}
 	Vec2 &operator*=(float factor) {
-		x *= factor;
-		y *= factor;
+		this->x *= factor;
+		this->y *= factor;
 		return *this;
 	}
 
@@ -36,9 +36,9 @@ public:
 	constexpr bool operator!=(Vec2 const &rhs) const noexcept { return !(*this == rhs); }
 
 	inline void normalize(void) {
-		float l  = 1.f / sqrt(x * x + y * y);
-		x *= l;
-		y *= l;
+		float l  = 1.f / sqrtf(x * x + y * y);
+		this->x *= l;
+		this->y *= l;
 	}
 };
 

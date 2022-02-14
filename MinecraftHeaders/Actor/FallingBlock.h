@@ -3,7 +3,7 @@
 #include <modutils.h>
 #include "Actor.h"
 #include "../Core/NBT.h"
-
+#include "../dll.h"
 #include <memory.h>
 
 class FallingBlock : public Actor {

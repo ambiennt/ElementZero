@@ -55,7 +55,7 @@ public:
 	}
 
 	inline uint64_t getXuidAsUInt64(void) const {
-		std::string xuidStr = ExtendedCertificate::getXuid(*this->mCertificate.get());
+		std::string const& xuidStr = ExtendedCertificate::getXuid(*this->mCertificate.get());
 		return (xuidStr.empty() ? 0 : std::stoull(xuidStr));
 	}
 };

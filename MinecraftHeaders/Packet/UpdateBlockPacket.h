@@ -24,7 +24,7 @@ public:
 
 	BlockPos mPos; // 0x28
 	LayerIds mDataLayerId; // 0x34
-	UpdateFlags mUpdateFlags =| UpdateFlags::NETWORK; // 0x38
+	uint8_t mUpdateFlags = 0x2; // 0x38 - UpdateFlags::NETWORK
 	uint32_t mRuntimeId; // 0x3C - block runtime ID
 
 	inline ~UpdateBlockPacket() {}

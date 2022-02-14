@@ -156,11 +156,10 @@ enum class MinecraftPacketIds {
 	PositionTrackingDBServerBroadcast  = 0x99,
 	PositionTrackingDBClientRequest    = 0x9a,
 	DebugInfo                          = 0x9b,
-	PacketViolationWarning             = 0x9c
-
+	PacketViolationWarning             = 0x9c,
 
 	//1.16.100+ / protocol version 419+ packets
-
+	
 	/*MotionPredictionHints            = 0x9d,
 	AnimateEntity                      = 0x9e,
 	CameraShake                        = 0x9f,
@@ -177,5 +176,10 @@ enum class MinecraftPacketIds {
 	EduUriResourcePacket               = 0xaa,
 	CreatePhotoPacket                  = 0xab,
 	UpdateSubChunkBlocks               = 0xac,
-	PhotoInfoRequest                   = 0xad,*/
+	PhotoInfoRequest                   = 0xad,
+	SubChunk                           = 0xae,
+	SubChunkRequest                    = 0xaf
+	PlayerStartItemCooldown            = 0xb0,
+	ScriptMessage                      = 0xb1,
+	CodeBuilderSource                  = 0xb2,*/
 };

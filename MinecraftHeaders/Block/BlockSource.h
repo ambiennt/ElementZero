@@ -9,7 +9,9 @@
 #include "Brightness.h"
 #include "../dll.h"
 
+#include <modutils.h>
 #include <hook.h>
+#include <thread>
 
 enum class ActorType;
 
@@ -59,12 +61,42 @@ enum class MaterialType {
 	Any                  = 42
 };
 
-enum class TickingQueueType { Internal, Random };
+enum class TickingQueueType {
+	Internal = 0,
+	Random = 1
+};
 
 class BlockSource {
-	char pad[224 - 8];
+private:
+	char pad[0x178 - 0x8];
 
 public:
+	// todo: replace macros with raw fields
+	BUILD_ACCESS_MUT(const std::thread::id, mOwnerThreadID, 0x8);
+	BUILD_ACCESS_MUT(const bool, mAllowUnpopulatedChunks, 0xC);
+	BUILD_ACCESS_MUT(const bool, mPublicSource, 0xD);
+	BUILD_ACCESS_MUT(class Level*, mLevel, 0x10);
+	BUILD_ACCESS_MUT(class ChunkSource*, mChunkSource, 0x18);
+	BUILD_ACCESS_MUT(class Dimension*, mDimension, 0x20);
+	BUILD_ACCESS_MUT(const int16_t, mMaxHeight, 0x28);
+	BUILD_ACCESS_MUT(std::vector<class BlockFetchResult>, mTempBlockFetchResult, 0x30);
+	BUILD_ACCESS_MUT(class BlockPos, mPlaceChunkPos, 0x48);
+	BUILD_ACCESS_MUT(std::vector<class BlockSourceListener*>, mListeners, 0x58);
+	BUILD_ACCESS_MUT(std::vector<class BlockSourceListener*>, mTestOnlyBlockChangeListeners, 0x70);
+
+	using blockPosLevelMap = std::unordered_map<class BlockPos, int32_t>;
+	BUILD_ACCESS_MUT(blockPosLevelMap, mTestOnlySetBlockRecursionLevel, 0x88);
+	BUILD_ACCESS_MUT(blockPosLevelMap, mTestOnlySetExtraBlockRecursionLevel, 0xC8);
+
+	BUILD_ACCESS_MUT(class ChunkPos, mLastChunkPos, 0x108);
+	BUILD_ACCESS_MUT(class LevelChunk*, mLastChunk, 0x110);
+	BUILD_ACCESS_MUT(class BlockTickingQueue*, mRandomTickQueue, 0x118);
+	BUILD_ACCESS_MUT(class BlockTickingQueue*, mTickQueue, 0x120);
+	BUILD_ACCESS_MUT(const struct BrightnessPair, mDefaultBrightness, 0x128);
+	BUILD_ACCESS_MUT(std::vector<class Actor*>, mTempEntityList, 0x130);
+	BUILD_ACCESS_MUT(std::vector<class BlockActor*>, mTempBlockEntityList, 0x148);
+	BUILD_ACCESS_MUT(std::vector<class AABB>, mTempCubeList, 0x160);
+
 	MCAPI BlockSource(class Level &, class Dimension &, class ChunkSource &, bool, bool);
 
 	MCAPI virtual ~BlockSource();
