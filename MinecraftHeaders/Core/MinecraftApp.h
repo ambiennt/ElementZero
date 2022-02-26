@@ -5,6 +5,7 @@
 #include "Automation.h"
 
 class IMinecraftApp {
+public:
 	virtual ~IMinecraftApp();
 	virtual class Minecraft* getPrimaryMinecraft(void);
 	virtual class Automation::AutomationClient getAutomationClient(void);
