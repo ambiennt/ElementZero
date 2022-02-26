@@ -24,7 +24,7 @@
 class Dimension;
 enum class ActorType;
 enum class MaterialType;
-enum class ActorEvent;
+enum class ActorEvent : int8_t;
 enum class ActorDamageCause;
 enum class ItemUseMethod;
 enum class LevelSoundEvent;
@@ -275,7 +275,7 @@ public:
 	virtual bool canExistInPeaceful() const;
 	virtual void setNameTagVisible(bool);
 	virtual std::string const &getNameTag(void) const;
-	virtual unsigned __int64 getNameTagAsHash(void) const;
+	virtual uint64_t getNameTagAsHash(void) const;
 	virtual std::string getFormattedNameTag(void) const;
 	virtual void filterFormattedNameTag(class UIProfanityContext const &);
 	virtual void setNameTag(std::string const &);

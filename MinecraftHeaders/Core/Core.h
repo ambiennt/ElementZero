@@ -22,7 +22,6 @@ public:
 	MCAPI uint32_t _genRandInt32(void);
 	MCAPI double nextGaussian(void);
 	MCAPI void _setSeed(uint32_t seed);
-	//MCAPI int32_t nextInt(int32_t n);
 };
 
 class PathPart {
@@ -40,4 +39,18 @@ template <typename T> class PathBuffer {
 	operator T const &() const noexcept { return value; }
 };
 
+class FilePathManager {
+public:
+	bool mIsDedicatedServer; // 0x0
+	PathBuffer<std::string> mRoot; // 0x8
+	PathBuffer<std::string> mPackagePath; // 0x28
+	PathBuffer<std::string> mDataUrl; // 0x48
+	PathBuffer<std::string> mExternalFilePath; // 0x68
+	PathBuffer<std::string> mTemporaryFilePath; // 0x88
+	PathBuffer<std::string> mCacheFilePath; // 0xA8
+	PathBuffer<std::string> mSettingsPath; // 0xC8
+};
+
 } // namespace Core
+
+static_assert(sizeof(Core::FilePathManager) == 0xE8);

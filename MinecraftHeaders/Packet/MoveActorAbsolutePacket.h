@@ -16,8 +16,8 @@ public:
 
 	ActorRuntimeID mRuntimeId;
 	uint8_t mFlags = 0x1; // MovementFlags::GROUND - (actually a MoveActorAbsoluteData::Header in BDS)
-	Vec3 mPos;
-	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0; // mRotYHead is always 0 for non-mobs
+	Vec3 mPos = Vec3::ZERO;
+	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
 
 	inline ~MoveActorAbsolutePacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

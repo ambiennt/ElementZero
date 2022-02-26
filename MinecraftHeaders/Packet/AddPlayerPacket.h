@@ -26,11 +26,11 @@ public:
 	ActorUniqueID mEntityId;
 	ActorRuntimeID mRuntimeId;
 	std::string mPlatformOnlineId;
-	Vec3 mPos, mVelocity;
-	Vec2 mRot;
-	float mYHeadRot = 0.0f;
-	ItemStack mSelectedItem; // mHeldItem
-	std::vector<std::unique_ptr<DataItem>> mDataItems; // mUnpack
+	Vec3 mPos = Vec3::ZERO, mVelocity = Vec3::ZERO;
+	Vec2 mRot = Vec2::ZERO;
+	float mYHeadRot = 0.f;
+	ItemStack mSelectedItem = ItemStack::EMPTY_ITEM; // mHeldItem
+	std::vector<std::unique_ptr<DataItem>> mDataItems; // mUnpack - seems to be left empty in favor of mEntityData
 	Abilities mAbilities;
 	std::string mDeviceId;
 	BuildPlatform mBuildPlatform = BuildPlatform::Unknown;

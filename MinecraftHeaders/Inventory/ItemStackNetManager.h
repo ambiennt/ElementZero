@@ -49,6 +49,11 @@ public:
 	virtual void onContainerScreenClose(void);
 	virtual void initOpenContainer(class BlockSource&, enum ContainerEnumName, struct ContainerWeakRef const&);
 	virtual void _addLegacyTransactionRequestSetItemSlot(enum ContainerType, int32_t slot);
+
+	inline bool isScreenOpen(void) {
+		auto& ctx = this->mScreenContext;
+		return ctx.mPlayer && (ctx.mScreenContainerType != ContainerType::NONE) && (ctx.mOwner.index() != 0);
+	}
 };
 
 class ItemStackNetManagerServer : public ItemStackNetManagerBase {

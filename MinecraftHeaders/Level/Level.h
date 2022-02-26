@@ -15,7 +15,7 @@ class PacketSender;
 enum class Difficulty;
 enum class GameType;
 enum class BossEventUpdateType;
-enum class ActorEvent;
+enum class ActorEvent : int8_t;
 enum class MaterialType;
 
 enum class LevelEvent {
@@ -157,7 +157,7 @@ enum class LevelSoundEvent {
 	Milk                           = 0x2E,
 	Thunder                        = 0x2F,
 	Explode                        = 0x30,
-	Fire_0                         = 0x31,
+	Fire                           = 0x31,
 	Ignite                         = 0x32,
 	Fuse                           = 0x33,
 	Stare                          = 0x34,

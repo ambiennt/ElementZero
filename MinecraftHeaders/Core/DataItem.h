@@ -34,7 +34,7 @@ template <typename T> struct copyFor {
 
 } // namespace DataTypeMap
 
-namespace ActorDataIDs {
+namespace ActorDataIDs { // enum class ActorDataIDs
 inline constexpr int16_t FLAGS                               = 0;  // LONG
 inline constexpr int16_t HEALTH                              = 1;  // INT (minecart/boat/armor stand)
 inline constexpr int16_t VARIANT                             = 2;  // INT
