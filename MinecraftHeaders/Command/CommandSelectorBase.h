@@ -17,6 +17,7 @@ class Actor;
 struct ActorDefinitionIdentifier;
 
 class CommandSelectorBase {
+private:
 	uint32_t version;                                                                     // 0
 	uint32_t type;                                                                        // 4
 	uint32_t order;                                                                       // 8
@@ -58,3 +59,5 @@ public:
 protected:
 	MCAPI CommandSelectorBase(bool isPlayer);
 };
+
+// static_assert(offsetof(CommandSelectorBase, explicitIdSelector) == 0xA5);

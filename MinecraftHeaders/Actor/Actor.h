@@ -121,7 +121,7 @@ enum class ActorFlags {
 	Critical                    = 13,
 	CanShowName                 = 14, 
 	AlwaysShowName              = 15,
-	NoAI                        = 16, //Immobile flag
+	NoAI                        = 16, // immobile flag
 	Immobile                    = 16,
 	Silent                      = 17,
 	WallClimbing                = 18,
@@ -613,8 +613,7 @@ public:
 	}
 
 	inline class BlockPos getBlockPos(void) {
-		BlockPos bp(this->getPos());
-		return bp;
+		return BlockPos(this->getPos());
 	}
 
 	inline bool hasAnyEffects(void) {

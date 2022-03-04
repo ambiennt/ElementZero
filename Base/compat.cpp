@@ -135,8 +135,8 @@ uint64_t Level::getServerTick() {
 }
 
 ActorUniqueID Level::getNewUniqueID() const {
-  auto &r = direct_access<uint64_t>(this, 408);
-  return ++r;
+  auto &r = this->mLastUniqueID.value;
+  return ActorUniqueID(++r);
 }
 
 // RaidBossComponent::_sendBossEvent

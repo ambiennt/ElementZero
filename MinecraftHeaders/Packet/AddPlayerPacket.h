@@ -20,22 +20,23 @@
 
 class AddPlayerPacket : public Packet {
 public:
-	std::vector<ActorLink> mLinks;
-	std::string mName;
-	mce::UUID mUuid;
-	ActorUniqueID mEntityId;
-	ActorRuntimeID mRuntimeId;
-	std::string mPlatformOnlineId;
+	std::vector<ActorLink> mLinks{};
+	std::string mName{};
+	mce::UUID mUUID{};
+	ActorUniqueID mEntityId{};
+	ActorRuntimeID mRuntimeId{};
+	std::string mPlatformOnlineId{};
 	Vec3 mPos = Vec3::ZERO, mVelocity = Vec3::ZERO;
 	Vec2 mRot = Vec2::ZERO;
 	float mYHeadRot = 0.f;
 	ItemStack mSelectedItem = ItemStack::EMPTY_ITEM; // mHeldItem
-	std::vector<std::unique_ptr<DataItem>> mDataItems; // mUnpack - seems to be left empty in favor of mEntityData
-	Abilities mAbilities;
-	std::string mDeviceId;
+	std::vector<std::unique_ptr<DataItem>> mDataItems{}; // mUnpack - seems to be left empty in favor of mEntityData
+	Abilities mAbilities{};
+	std::string mDeviceId{};
 	BuildPlatform mBuildPlatform = BuildPlatform::Unknown;
 	SynchedActorData *mEntityData = nullptr;
 
+	MCAPI AddPlayerPacket(Player &);
 	inline ~AddPlayerPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

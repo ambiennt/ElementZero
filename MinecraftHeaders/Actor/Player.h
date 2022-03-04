@@ -385,13 +385,13 @@ public:
 
 	inline class Vec3 getPosNormalized(void) {
 		Vec3 vec(this->getPos());
-		vec.y -= 1.62f;
+		vec.y -= this->mHeightOffset;
 		return vec;
 	}
 
 	inline class Vec3 getPosOldNormalized(void) {
 		Vec3 vec(this->getPosOld());
-		vec.y -= 1.62f;
+		vec.y -= this->mHeightOffset;
 		return vec;
 	}
 
@@ -464,6 +464,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mRespawnReady, 0xE98);
 	BUILD_ACCESS_MUT(std::string, mRespawnMessage, 0xEA0);
 	BUILD_ACCESS_MUT(bool, mCheckBed, 0xEC0); // idk what this is
+	BUILD_ACCESS_MUT(bool, mIsInitialSpawnDone, 0xEC1);
 	BUILD_ACCESS_MUT(class ItemStack, mItemInUse, 0xEC8); // why isnt this a pointer?
 	BUILD_ACCESS_MUT(struct PlayerInventory::SlotData, mItemInUseSlot, 0xF58);
 	BUILD_ACCESS_MUT(int32_t, mItemInUseDuration, 0xF60);

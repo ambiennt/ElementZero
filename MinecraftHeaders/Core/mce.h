@@ -7,14 +7,21 @@
 #include "../FakeGSL/span.h"
 #include "../dll.h"
 
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
+#pragma comment(lib, "bcrypt.lib")
+
 namespace mce {
 
 class UUID {
 public:
-	std::uint64_t a = 0, b = 0;
+	uint64_t a = 0, b = 0;
 
 	UUID() {}
-	UUID(std::uint64_t a, std::uint64_t b) : a(a), b(b) {}
+	UUID(uint64_t a, uint64_t b) : a(a), b(b) {}
 	UUID(UUID const &rhs) : a(rhs.a), b(rhs.b) {}
 
 	constexpr inline bool operator==(UUID const &rhs) const noexcept { return a == rhs.a && b == rhs.b; }
@@ -30,6 +37,10 @@ public:
 	MCAPI std::string asString() const;
 	MCAPI static UUID fromString(std::string const &source);
 	MCAPI static UUID EMPTY;
+	static UUID generateUUID(void) {
+		auto temp = boost::uuids::random_generator()();
+		return UUID::fromString(boost::lexical_cast<std::string>(temp));
+	}
 
 	inline bool empty() const noexcept { return a == 0 && b == 0; }
 };

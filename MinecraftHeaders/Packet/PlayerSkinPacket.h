@@ -9,8 +9,9 @@ class PlayerSkinPacket : public Packet {
 public:
 	mce::UUID mUUID;
 	SerializedSkin mSkin;
-	std::string mLocalizedNewSkinName, mLocalizedOldSkinName;
+	std::string mLocalizedNewSkinName{}, mLocalizedOldSkinName{};
 
+	PlayerSkinPacket(mce::UUID uuid, SerializedSkin skin) : mUUID(uuid), mSkin(skin) {}
 	PlayerSkinPacket(mce::UUID uuid, SerializedSkin skin, std::string newName, std::string oldName) :
 		mUUID(uuid), mSkin(skin), mLocalizedNewSkinName(newName), mLocalizedOldSkinName(oldName) {}
 	inline ~PlayerSkinPacket() {}

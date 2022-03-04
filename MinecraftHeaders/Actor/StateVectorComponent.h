@@ -6,7 +6,9 @@
 struct StateVectorComponent {
 	Vec3 mPos;
 	Vec3 mPosPrev;
-	Vec3 mPosDelta; 
+	Vec3 mPosDelta;
+
+	StateVectorComponent &operator=(StateVectorComponent const&) = default;
 };
 
 static_assert(sizeof(StateVectorComponent) == 0x24);

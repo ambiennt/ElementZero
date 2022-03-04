@@ -594,13 +594,16 @@ public:
 		class BlockPos const &, class AutomaticID<class Dimension, int>, int);
 	MCAPI void spawnParticleEffect(std::string const &, class Vec3 const &, class Dimension *);
 	MCAPI void requestPlayerChangeDimension(class Player &, std::unique_ptr<class ChangeDimensionRequest>);
-	MCAPI Level(
-			class SoundPlayer &, std::unique_ptr<class LevelStorage>, class IMinecraftEventing &, bool, class Scheduler &,
+	 
+	MCAPI Level(class SoundPlayer &, std::unique_ptr<class LevelStorage>, class IMinecraftEventing &, bool, class Scheduler &,
 			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
 			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);
 	
 	BUILD_ACCESS(class BlockPalette *, GlobalBlockPalette, 1856);
 
-	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData
+	BUILD_ACCESS_MUT(ActorUniqueID, mLastUniqueID, 0x1A0);
+	BUILD_ACCESS_MUT(std::vector<class Player *>, mActivePlayers, 0x58); // Level::forEachPlayer
 	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
+	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt
+	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData - 0x2090 - 0x28
 };

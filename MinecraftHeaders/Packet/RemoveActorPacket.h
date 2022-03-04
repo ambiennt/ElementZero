@@ -6,7 +6,7 @@
 
 class RemoveActorPacket : public Packet {
 public:
-	ActorUniqueID uid;
+	ActorUniqueID uid; // 0x28
 
 	inline ~RemoveActorPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
