@@ -537,7 +537,11 @@ public:
 	MCAPI float getSpecialMultiplier(AutomaticID<class Dimension, int>);
 	MCAPI class MapItemSavedData *getMapSavedData(struct ActorUniqueID);
 	MCAPI class Dimension *getDimension(class AutomaticID<class Dimension, int>) const;
+
+	// slow func, has to iterate through whole player list and match mce::UUID
+	// EZ player database is probably a lot faster
 	MCAPI std::string const &getPlayerXUID(class mce::UUID const &) const;
+	
 	MCAPI std::string const &getPlayerPlatformOnlineId(class mce::UUID const &) const;
 	BASEAPI ActorUniqueID getNewUniqueID() const;
 	BASEAPI PacketSender &getPacketSender() const;
@@ -604,6 +608,7 @@ public:
 	BUILD_ACCESS_MUT(ActorUniqueID, mLastUniqueID, 0x1A0);
 	BUILD_ACCESS_MUT(std::vector<class Player *>, mActivePlayers, 0x58); // Level::forEachPlayer
 	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
+	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack
 	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt
 	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData - 0x2090 - 0x28
 };

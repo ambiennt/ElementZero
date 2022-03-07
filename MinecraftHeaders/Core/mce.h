@@ -82,13 +82,13 @@ public:
 	inline auto getSpan() const { return gsl::make_span(data(), size()); }
 };
 
-enum ImageFormat {
+enum class ImageFormat {
 	NONE    = 0,
 	RGB     = 1,
 	RGBA    = 2
 };
 
-enum ImageUsage : int8_t {
+enum class ImageUsage : int8_t {
 	unknown = 0,
 	sRGB    = 1,
 	data    = 2
@@ -107,9 +107,9 @@ class Image {
 		: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
 
 public:
-	ImageFormat format; // 0x0
-	unsigned width, height; // 0x4, 0x8
-	ImageUsage usage; // 0xC
+	ImageFormat format{}; // 0x0
+	unsigned width{}, height{}; // 0x4, 0x8
+	ImageUsage usage{}; // 0xC
 	Blob data; // 0x10
 	inline Image(Blob &&data) : data(std::move(data)) {}
 	inline Image(unsigned width, unsigned height, ImageFormat format, ImageUsage usage)

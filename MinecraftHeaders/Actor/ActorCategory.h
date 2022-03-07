@@ -1,6 +1,10 @@
 #pragma once
 
-enum class ActorCategory {
+#include <cstdint>
+
+// this enum is actually an int32_t but doing left shift bitwise
+// operations can cause UB with first bit being the sign
+enum class ActorCategory : uint32_t {
 	None                     = 0,
 	Player                   = 1,
 	Mob                      = 2,

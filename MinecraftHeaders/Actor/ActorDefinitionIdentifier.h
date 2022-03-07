@@ -10,11 +10,10 @@ struct ActorDefinitionIdentifier {
 	std::string mIdentifier;     // 0x20
 	std::string mInitEvent;      // 0x40
 	std::string mFullName;       // 0x60
-	HashedString mCanonicalName; // 0x80
+	HashedString mCanonicalHash; // 0x80 - mCanonicalName
 
-public:
-	inline HashedString const &getCanonicalHash() const { return this->mCanonicalName; }
-	inline std::string const &getCanonicalName() const { return this->mCanonicalName.getString(); }
+	inline HashedString const &getCanonicalHash() const { return this->mCanonicalHash; }
+	inline std::string const &getCanonicalName() const { return this->mCanonicalHash.getString(); }
 	inline std::string const &getFullName() const { return this->mFullName; }
 	inline std::string const &getIdentifier() const { return this->mIdentifier; }
 	inline std::string const &getInitEvent() const { return this->mInitEvent; }

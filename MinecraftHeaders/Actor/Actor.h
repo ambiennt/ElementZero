@@ -4,6 +4,7 @@
 
 #include "ActorRuntimeID.h"
 #include "ActorType.h"
+#include "ActorCategory.h"
 #include "ActorUniqueID.h"
 #include "SynchedActorData.h"
 #include "Attribute.h"
@@ -623,6 +624,10 @@ public:
 		}
 		return false;
 	}
+
+	inline bool hasCategory(ActorCategory category) {
+		return (this->mCategories & (uint32_t)category);
+	}
 	
 	// actor fields
 	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // idk what this is, probably some legacy field?
@@ -650,8 +655,7 @@ public:
 	BUILD_ACCESS_MUT(int32_t, mAmbientSoundTime, 0x134);
 	BUILD_ACCESS_MUT(int32_t, mLastHurtByPlayerTime, 0x138);
 
-	using uint8Arr4 = uint8_t[4];
-	BUILD_ACCESS_MUT(uint8Arr4, mCategories, 0x13C); // _BYTE in ida? idk
+	BUILD_ACCESS_MUT(uint32_t, mCategories, 0x13C); // probably a uint8_t[4] but we can do bitwise operations if left as uint32_t
 
 	BUILD_ACCESS_MUT(class SynchedActorData, mEntityData, 0x140);
 	BUILD_ACCESS_MUT(std::unique_ptr<class SpatialActorNetworkData>, mNetworkData, 0x160);
@@ -676,7 +680,7 @@ public:
 	BUILD_ACCESS_MUT(class AABB *, mLastHitBB, 0x1D0);
 	BUILD_ACCESS_MUT(std::vector<class AABB>, mSubBBs, 0x1D8); // presumably for ender dragon?
 	BUILD_ACCESS_MUT(float, mTerrainSurfaceOffset, 0x1F0);
-	BUILD_ACCESS_MUT(float, mHeightOffset, 0x1F4); // 1.620001 for players
+	BUILD_ACCESS_MUT(float, mHeightOffset, 0x1F4); // 1.62001 for players
 	BUILD_ACCESS_MUT(float, mExplosionOffset, 0x1F8);
 	BUILD_ACCESS_MUT(float, mShadowOffset, 0x1FC);
 	BUILD_ACCESS_MUT(float, mMaxAutoStep, 0x200);

@@ -7,7 +7,7 @@
 class ActorFallPacket : public Packet {
 public:
 	ActorRuntimeID mRuntimeId;
-	float mFallDistance = 0.0f;
+	float mFallDistance = 0.f;
 	bool mInVoid        = false;
 
 	inline ~ActorFallPacket() {}

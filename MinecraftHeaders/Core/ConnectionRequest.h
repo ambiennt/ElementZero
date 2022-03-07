@@ -31,7 +31,7 @@ public:
 	MCAPI std::vector<class SerializedPersonaPieceHandle> getPersonaPieces(void) const;
 	MCAPI std::string getSelfSignedId(void) const;
 	MCAPI std::string getSkinAnimationData(void) const;
-	//MCAPI class mce::Color getSkinColor(void) const; // TODO
+	MCAPI class Color getSkinColor(void) const;
 	MCAPI std::vector<uint8_t> getSkinData(void) const;
 	MCAPI std::string getSkinGeometry(void) const;
 	MCAPI std::string getSkinId(void) const;
