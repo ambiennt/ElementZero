@@ -14,7 +14,7 @@ public:
 		shared--;
 		if (shared > 0) return false;
 		if (value) {
-			auto temp  = value;
+			auto temp = value;
 			value = nullptr;
 			delete temp;
 		}

@@ -57,7 +57,7 @@ public:
 	virtual float getSpeed(void) const;
 	virtual void setSpeed(float);
 	virtual float getJumpPower(void) const;
-	virtual bool hurtEffects(class ActorDamageSource const &, int, bool, bool);
+	virtual bool hurtEffects(class ActorDamageSource const &, int damage, bool knock, bool ignite);
 	virtual int getMeleeWeaponDamageBonus(class Mob *);
 	virtual int getMeleeKnockbackBonus(void);
 	virtual void travel(float, float, float);

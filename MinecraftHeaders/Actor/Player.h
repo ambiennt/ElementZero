@@ -27,7 +27,6 @@ struct EZPlayerFields {
 	uint64_t mLastUhcHeadEatTimestamp = 0; // the tick when the player last ate a head/golden head 
 	uint64_t mBucketCooldownTimestamp = 0; // the tick when the player last placed a bucket of liquid
 	bool mShouldCancelBucketPickup = false; // whether or not the player can pick up liquid, used to fix MCPE-100598
-	ActorType mLastHurtByDamager = ActorType::Undefined; // differs from mLastHurtBy because this includes projectiles/child entities
 	uint64_t mLastAttackedActorTimestamp = 0; // the tick when the player last attacked an actor 
 	bool mHasResetSprint = false; // if true, player should administer bonus knockback to other players
 	Vec3 mRawPos = Vec3::ZERO; // use this value for more accuracy of current pos (sometimes BDS pos zeroes out)
@@ -179,10 +178,6 @@ public:
 		bool mPositionLoadedFromSave;
 	};
 
-	inline ServerPlayer *asServerPlayer() const noexcept {
-		return const_cast<ServerPlayer *>(reinterpret_cast<ServerPlayer const *>(this));
-	}
-
 	enum class SpawnPositionState {
 		InitializeSpawnPositionRandomizer = 0,
 		WaitForClientAck                  = 1,
@@ -302,7 +297,8 @@ public:
 	MCAPI int getXpNeededForNextLevel(void) const;
 	MCAPI float getDestroySpeed(class Block const &) const;
 	MCAPI float getDestroyProgress(class Block const &) const;
-	MCAPI class ItemStack const &getSelectedItem(void) const; // does this not work?
+	MCAPI class ItemStack const &getSelectedItem(void) const;
+	MCAPI void setSelectedItem(class ItemStack const&);
 	MCAPI class ItemStack const &getCurrentActiveShield(void) const;
 	MCAPI class EnderChestContainer *getEnderChestContainer(void);
 	MCAPI void updateTeleportDestPos(void);
@@ -328,24 +324,19 @@ public:
 	MCAPI void recheckSpawnPosition(void);
 
 	// custom methods
-	inline class ItemStack const& getPlayerUIItem(void) {
-		return CallServerClassMethod<class ItemStack const&>(
-			"?getItem@SimpleContainer@@UEBAAEBVItemStack@@H@Z", (SimpleContainer*)(&this->mPlayerUIContainer), PlayerUISlot::CursorSelected);
+	inline ServerPlayer *asServerPlayer() const noexcept {
+		return const_cast<ServerPlayer *>(reinterpret_cast<ServerPlayer const *>(this));
 	}
 
-	inline bool dropItem(ItemStack const &item, bool randomly) {
-		return CallServerClassMethod<bool>("?drop@Player@@UEAA_NAEBVItemStack@@_N@Z", this, &item, randomly);
+	inline class ItemStack const& getPlayerUIItem(void) const {
+		return this->mPlayerUIContainer.getItem((int32_t)PlayerUISlot::CursorSelected);
 	}
 
-	inline bool addItem(ItemStack &item) {
-		return CallServerClassMethod<bool>("?add@Player@@UEAA_NAEAVItemStack@@@Z", this, &item);
-	}
-
-	inline class Vec3 const& getRawPos(void) {
+	inline class Vec3 const& getRawPos(void) const {
 		return this->EZPlayerFields->mRawPos;
 	}
 
-	inline class Vec3 const& getRawPosOld(void) {
+	inline class Vec3 const& getRawPosOld(void) const {
 		return this->EZPlayerFields->mRawPosOld;
 	}
 
@@ -380,24 +371,31 @@ public:
 	}
 
 	inline class Inventory* getRawInventoryPtr(void) {
-		return this->mInventory->inventory.get();
+		return this->mPlayerInventory->mInventory.get();
 	}
 
-	inline class Vec3 getPosNormalized(void) {
-		Vec3 vec(this->getPos());
-		vec.y -= this->mHeightOffset;
-		return vec;
+	inline class Vec3 getPosOldGrounded(void) {
+		Vec3 result(this->getPosOld());
+		result.y -= this->mHeightOffset;
+		return result;
+	}
+	
+	inline class Vec3 getPosGrounded(void) {
+		Vec3 result(this->getPos());
+		result.y -= this->mHeightOffset;
+		return result;
 	}
 
-	inline class Vec3 getPosOldNormalized(void) {
-		Vec3 vec(this->getPosOld());
-		vec.y -= this->mHeightOffset;
-		return vec;
-	}
-
-	// use this to get a mutable instance of the player's held item
-	inline class ItemStack& getSelectedItemMutable(void) {
-		return *CallServerClassMethod<class ItemStack*>("?getSelectedItem@Player@@QEBAAEBVItemStack@@XZ", this);
+	template <typename T> T getAbilityValue(enum AbilitiesIndex index) {
+		const auto& abil = this->mAbilities.mAbilities[(int32_t)index];
+		switch (abil.mType) {
+			case Ability::Type::BooleanType:
+				return static_cast<T>(abil.mValue.mBoolVal);
+			case Ability::Type::FloatType:
+				return static_cast<T>(abil.mValue.mFloatVal);
+			default: return T{};
+		}
+		return T{};
 	}
 
 	// player fields
@@ -439,7 +437,7 @@ public:
 	BUILD_ACCESS_MUT(class vec3, mCapePos, 0xB3C);
 	BUILD_ACCESS_MUT(float, mDistanceSinceTraveledEvent, 0xB54);
 	BUILD_ACCESS_MUT(std::shared_ptr<class IContainerManager>, mContainerManager, 0xB60);
-	BUILD_ACCESS_MUT(std::unique_ptr<class PlayerInventory>, mInventory, 0xB70);
+	BUILD_ACCESS_MUT(std::unique_ptr<class PlayerInventory>, mPlayerInventory, 0xB70); // mInventory
 	BUILD_ACCESS_MUT(class SerializedSkin, mSkin, 0xB78); // use this to read and write to the player skin
 	BUILD_ACCESS_MUT(std::vector<class ItemInstance>, mCreativeItemList, 0xD48);
 

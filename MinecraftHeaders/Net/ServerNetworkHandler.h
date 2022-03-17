@@ -12,26 +12,34 @@
 class Player;
 class NetworkIdentifier;
 
+// note to self:
+// ServerNetworkHandler::handle - for server-bound packets (client sends to server)
+// PacketHandlerDispatcherInstance::handle - for client-bound packets (server to client)
+// or GameSpecificPacketHandlerDispatcherInstance
+
 class ServerNetworkHandler {
+
+	MCAPI void _onPlayerLeft(ServerPlayer *player, bool skipMessage);
+	MCAPI ServerPlayer * _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
+
 public:
 
 	class Client;
 
-	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subid, std::string const &reason, bool skipMessage);
+	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subId, std::string const &reason, bool skipMessage);
 	MCAPI void updateServerAnnouncement(void);
 
-	inline void forceDisconnectClient(Player *player, bool skipMessage) {
-		CallServerClassMethod<void>("?_onPlayerLeft@ServerNetworkHandler@@AEAAXPEAVServerPlayer@@_N@Z", this, player, skipMessage);
+	inline void forceDisconnectClient(ServerPlayer *player, bool skipMessage) {
+		this->_onPlayerLeft(player, skipMessage);
 	}
 
-	inline ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
-		return CallServerClassMethod<ServerPlayer*>("?_getServerPlayer@ServerNetworkHandler@@AEAAPEAVServerPlayer@@AEBVNetworkIdentifier@@E@Z",
-			this, netId, subId);
+	inline ServerPlayer * getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
+		return this->_getServerPlayer(netId, subId);
 	}
 	
 	BASEAPI std::string &getMotd();
 
-	BUILD_ACCESS_MUT(class GameCallBacks *, mGameCallbacks, 0x30);
+	BUILD_ACCESS_MUT(class GameCallbacks *, mGameCallbacks, 0x30);
 	BUILD_ACCESS_MUT(class Level *, mLevel, 0x38);
 	BUILD_ACCESS_MUT(class NetworkHandler *, mNetworkHandler, 0x40);
 	BUILD_ACCESS_MUT(class PrivateKeyManager *, mServerKeys, 0x48);

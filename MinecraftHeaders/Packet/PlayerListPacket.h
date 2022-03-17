@@ -23,15 +23,19 @@ public:
 	MCAPI StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-enum PlayerListPacketType : uint8_t {
+// note to self, byte actions like these can either be signed or unsigned if you know their values will be withing 0-127
+// but generally I would assume it to be unsigned in low level
+// so if you dont have the vanilla enum, use uint8_t
+enum PlayerListPacketType : int8_t {
 	Add    = 0x0,
 	Remove = 0x1
 };
 
 class PlayerListPacket : public Packet {
 public:
+
 	std::vector<PlayerListEntry> mEntries; // 0x28
-	PlayerListPacketType mAction; // 0x40 (actually a byte)
+	PlayerListPacketType mAction; // 0x40
 
 	inline ~PlayerListPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

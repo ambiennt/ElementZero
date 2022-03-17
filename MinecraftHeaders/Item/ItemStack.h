@@ -159,22 +159,21 @@ public:
 class ItemStack : public ItemStackBase {
 public:
 
-	class ItemStackNetIdVariant mNetIdVariant; // 0x88
+	ItemStackNetIdVariant mNetIdVariant; // 0x88
 
 	MCAPI static ItemStack const EMPTY_ITEM;
 
 	MCAPI ItemStack();
-	ItemStack(Item const &item) : ItemStackBase(item) {}
-	MCAPI ItemStack(Item const &, int);
-	ItemStack(Item const &item, int a, int b) : ItemStackBase(item, a, b) {}
-	ItemStack(Item const &item, int a, int b, CompoundTag const *tag) : ItemStackBase(item, a, b, tag) {}
-	ItemStack(BlockLegacy const &block, int a) : ItemStackBase(block, a) {}
-	ItemStack(Block const &block, int a, CompoundTag const *tag) : ItemStackBase(block, a, tag) {}
-	ItemStack(ItemStack const &rhs) : ItemStackBase(rhs) {}
+	MCAPI ItemStack(ItemStack const& rhs);
+	MCAPI ItemStack(Item const &item);
+	MCAPI ItemStack(Item const &item, int count);
+	MCAPI ItemStack(Item const &item, int count, int auxValue);
+	MCAPI ItemStack(Block const &block, int count, CompoundTag const *userData);
+	MCAPI ItemStack(BlockLegacy const &block, int count);
 	MCAPI ~ItemStack();
-	MCAPI static ItemStack fromTag(CompoundTag const &);
-	MCAPI void reinit(Item const &, int, int);
-	MCAPI void reinit(BlockLegacy const &, int);
+	MCAPI static ItemStack fromTag(CompoundTag const &userData);
+	MCAPI void reinit(Item const &item, int count, int auxValue);
+	MCAPI void reinit(BlockLegacy const &block, int count);
 };
 
 static_assert(offsetof(ItemStackBase, mItem) == 0x8);

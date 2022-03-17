@@ -1,7 +1,7 @@
 #pragma once
 
 #include <modutils.h>
-#include "AttributeIds.h"
+#include "AttributeID.h"
 #include "ActorUniqueID.h"
 #include "../Core/HashedString.h"
 #include "../Core/mce.h"

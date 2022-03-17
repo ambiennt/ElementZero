@@ -124,7 +124,7 @@ void NetworkIdentifier::kick(std::string const &reason) const {
   LocateService<ServerNetworkHandler>()->disconnectClient(*this, 0, reason, reason.empty());
 }
 
-void Player::kick() { LocateService<ServerNetworkHandler>()->forceDisconnectClient(this, true); }
+void Player::kick() { LocateService<ServerNetworkHandler>()->forceDisconnectClient(this->asServerPlayer(), true); }
 
 std::string &ServerNetworkHandler::getMotd() { return direct_access<std::string>(this, 600); } // verified
 

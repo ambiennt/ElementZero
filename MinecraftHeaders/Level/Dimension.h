@@ -11,6 +11,7 @@
 #include "../Core/AutomaticID.h"
 #include "LevelListener.h"
 #include "SavedData.h"
+#include "DimensionID.h"
 #include "../dll.h"
 
 class Dimension : public LevelListener, public SavedData {
@@ -31,7 +32,7 @@ public:
 
 	//using dimensionId = AutomaticID<class Dimension, int32_t>;
 	//BUILD_ACCESS_MUT(dimensionId, mDimensionId, 0xC0);
-	BUILD_ACCESS_MUT(int32_t, mDimensionId, 0xC0);
+	BUILD_ACCESS_MUT(enum DimensionID, mDimensionId, 0xC0);
 
 	BUILD_ACCESS_MUT(bool, mUltraWarm, 0xC4);
 	BUILD_ACCESS_MUT(bool, mHasCeiling, 0xC5);

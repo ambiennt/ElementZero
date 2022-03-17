@@ -124,6 +124,7 @@ public:
 	MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int);
 	MCAPI static bool applyEnchant(class ItemStackBase&, EnchantmentInstance const&, bool allowNonVanilla);
 	MCAPI static int32_t getEnchantLevel(Enchant::Type enchantType, ItemStackBase const& stack);
+	MCAPI static void doPostHurtEffects(class Mob &victim, class Mob &attacker);
 	inline static char const *getEnchantName(Enchant::Type type) {
 		switch (type) {
 			case Enchant::Type::protection: return "protection";

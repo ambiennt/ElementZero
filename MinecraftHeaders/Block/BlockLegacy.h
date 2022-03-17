@@ -8,7 +8,7 @@
 
 #include <modutils.h>
 
-enum class BlockRendererLayer {
+enum class BlockRenderLayer {
 	RENDERLAYER_DOUBLE_SIDED                = 0,
 	RENDERLAYER_BLEND                       = 1,
 	RENDERLAYER_OPAQUE                      = 2,
@@ -19,7 +19,8 @@ enum class BlockRendererLayer {
 	RENDERLAYER_ALPHATEST_SINGLE_SIDE       = 7,
 	RENDERLAYER_ENDPORTAL                   = 8,
 	RENDERLAYER_BARRIER                     = 9,
-	RENDERLAYER_STRUCTURE_VOID              = 10
+	RENDERLAYER_STRUCTURE_VOID              = 10,
+	COUNT                                   = 11
 };
 
 enum class BlockSupportType {

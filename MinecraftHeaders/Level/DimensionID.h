@@ -1,6 +1,6 @@
 #pragma once
 
-enum class DimensionIds {
+enum class DimensionID {
 	Overworld = 0,
 	Nether    = 1,
 	TheEnd    = 2,

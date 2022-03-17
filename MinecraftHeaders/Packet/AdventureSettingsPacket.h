@@ -6,6 +6,9 @@
 #include "../Actor/ActorUniqueID.h"
 #include "../dll.h"
 
+struct AdventureSettings;
+class Abilities;
+
 class AdventureSettingsPacket : public Packet {
 public:
 
@@ -43,6 +46,8 @@ public:
 	bool mDefaultLevelAbilities;
 	uint32_t mCustomAbilityCache; // idk what this is
 
+	MCAPI AdventureSettingsPacket(
+		AdventureSettings const& settings, Abilities const& abilities, ActorUniqueID playerIdToSync, bool defaultLevelSettings);
 	inline ~AdventureSettingsPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

@@ -36,7 +36,7 @@ public:
 	constexpr bool operator!=(Vec2 const &rhs) const noexcept { return !(*this == rhs); }
 
 	inline void normalize(void) {
-		float l  = 1.f / sqrtf(x * x + y * y);
+		float l  = 1.f / std::sqrtf(x * x + y * y);
 		this->x *= l;
 		this->y *= l;
 	}

@@ -34,6 +34,5 @@ public:
 	BUILD_ACCESS_MUT(const struct ArmorMaterial, mArmorType, 0x1C8);
 	BUILD_ACCESS_MUT(class TextureAtlasItem, m_uvTextureItem, 0x1D0);
 
-	// todo: more funcs
-	MCAPI virtual bool isFlyEnabled(class ItemInstance const& item);
+	virtual float getArmorKnockbackResistance(void) const;
 };

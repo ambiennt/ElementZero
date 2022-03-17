@@ -38,7 +38,7 @@ TClasslessInstanceHook(LevelData,
 	std::string const &levelId) {
 	auto data                                = original(this, levelId);
 	data.mEducationFeaturesEnabled           = settings.educationFeatures;
-	data.mGameRules.rules[18].value.val_bool = settings.forceExperimentalGameplay;
+	data.mGameRules.mGameRules[(int32_t)GameRulesIndex::Experimental].mValue.mBoolVal = settings.forceExperimentalGameplay;
 	return data;
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 enum class MinecraftPacketIds {
-	KeepAlive                          = 0x0,
+	KeepAlive                          = 0x0, // deprecated
 	Login                              = 0x1,
 	PlayStatus                         = 0x2,
 	ServerToClientHandshake            = 0x3,
@@ -25,7 +25,7 @@ enum class MinecraftPacketIds {
 	UpdateBlock                        = 0x15,
 	AddPainting                        = 0x16,
 	TickSync                           = 0x17,
-	LevelSoundEventV1                  = 0x18,
+	LevelSoundEventV1                  = 0x18, // deprecated
 	LevelEvent                         = 0x19,
 	TileEvent                          = 0x1a,
 	ActorEvent                         = 0x1b,
@@ -121,12 +121,13 @@ enum class MinecraftPacketIds {
 	ScriptCustomEvent                  = 0x75,
 	SpawnParticleEffect                = 0x76,
 	AvailableActorIdentifiers          = 0x77,
+	LevelSoundEventPacketV2            = 0x78, // deprecated
 	NetworkChunkPublisherUpdate        = 0x79,
 	BiomeDefinitionList                = 0x7a,
 	LevelSoundEvent                    = 0x7b,
 	LevelEventGeneric                  = 0x7c,
 	LecternUpdate                      = 0x7d,
-	VideoStreamConnect_DEPRECATED      = 0x7e, // deprecated (mixer)
+	VideoStreamConnect                 = 0x7e, // deprecated (mixer)
 	AddEntity                          = 0x7f, // deprecated
 	RemoveEntity                       = 0x80, // deprecated
 	ClientCacheStatus                  = 0x81,
@@ -134,7 +135,7 @@ enum class MinecraftPacketIds {
 	MapCreateLockedCopy                = 0x83,
 	StructureTemplateDataRequest       = 0x84,
 	StructureTemplateDataResponse      = 0x85,
-	UpdateBlockProperties              = 0x86, //UNUSED_PLS_USE_ME2 - deprecated in later versions
+	UpdateBlockProperties              = 0x86, // deprecated in later versions
 	ClientCacheBlobStatus              = 0x87,
 	ClientCacheMissResponse            = 0x88,
 	EducationSettings                  = 0x89,
@@ -178,7 +179,7 @@ enum class MinecraftPacketIds {
 	UpdateSubChunkBlocks               = 0xac,
 	PhotoInfoRequest                   = 0xad,
 	SubChunk                           = 0xae,
-	SubChunkRequest                    = 0xaf
+	SubChunkRequest                    = 0xaf,
 	PlayerStartItemCooldown            = 0xb0,
 	ScriptMessage                      = 0xb1,
 	CodeBuilderSource                  = 0xb2,*/

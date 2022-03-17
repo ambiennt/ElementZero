@@ -7,6 +7,13 @@
 #include "GameRulesIndex.h"
 #include "../dll.h"
 
+// annoying bloat
+struct GameRuleId {
+	int32_t mId; // NewType<int>
+	GameRuleId(int32_t id) : mId(id) {}
+	GameRuleId() {}
+};
+
 class GameRule {
 public:
 
@@ -17,32 +24,32 @@ public:
 	};
 
 	enum class Type : int8_t {
-		Invalid = 0,
-		Boolean = 1,
-		Integer = 2,
-		Float   = 3
+		Invalid     = 0,
+		BooleanType = 1,
+		IntegerType = 2,
+		FloatType   = 3
 	};
 
 	union Value {
-		bool val_bool;
-		int val_int;
-		float val_float;
+		bool mBoolVal;
+		int32_t mIntVal;
+		float mFloatVal;
 	};
 
-	bool saved = false; // 0x0
-	Type type  = Type::Invalid; // 0x1
-	Value value{}; // 0x4
-	std::string name; // 0x8
-	bool use_in_command = false; // 0x28
-	bool default_set    = false; // 0x29
-	bool requires_cheat = false; // 0x2A
+	bool mShouldSave = false; // 0x0
+	Type mType = Type::Invalid; // 0x1
+	Value mValue{}; // 0x4
+	std::string mName; // 0x8
+	bool mAllowUseInCommand = false; // 0x28
+	bool mIsDefaultSet      = false; // 0x29
+	bool mRequiresCheats    = false; // 0x2A
 	std::function<void (GameRule &)> mTagNotFoundCallback; // 0x30
 	std::function<bool (GameRule::Value const &, GameRule::ValidationError *)> mValidateValueCallback; // 0x70
 };
 
 class GameRules {
 public:
-	std::vector<GameRule> rules; // 0x0
+	std::vector<GameRule> mGameRules; // 0x0
 
 	MCAPI GameRules();
 	MCAPI ~GameRules();
@@ -50,15 +57,15 @@ public:
 	MCAPI class GameRule& _registerRule(void);
 	MCAPI void _registerRules(void);
 	/*MCAPI void _setRule(
-		int32_t* ruleType, union GameRule::Value value, enum GameRule::Type type, bool returnPacket,
+		struct GameRuleId ruleType, union GameRule::Value value, enum GameRule::Type type, bool returnPacket,
 		bool *pValueValidated, bool *pValueChanged, struct GameRule::ValidationError *errorOutput);*/
 	MCAPI std::unique_ptr<class GameRulesChangedPacket> createAllGameRulesPacket(void);
 	MCAPI void deserializeRules(struct GameRulesChangedPacketData const &ruleData);
-	//MCAPI bool getBool(int32_t* ruleType);
-	//MCAPI int32_t getInt(int32_t* ruleType);
-	//MCAPI const class GameRule* getRule(int32_t* ruleType);
+	MCAPI bool getBool(struct gameRuleId ruleType) const;
+	MCAPI int32_t getInt(struct gameRuleId ruleType) const;
+	MCAPI const class GameRule* getRule(struct gameRuleId ruleType) const;
 	MCAPI void getTagData(class CompoundTag const& tag);
-	MCAPI int32_t nameToGameRuleIndex(std::string const& name); // returns struct GameRuleId but just use enum GameRulesIndex
+	MCAPI struct GameRuleId nameToGameRuleIndex(std::string const& name) const; // returns struct GameRuleId but just use enum GameRulesIndex
 	MCAPI void setMarketplaceOverrides(void); // BLOAT
 	MCAPI void setTagData(class CompoundTag const& tag);
 
@@ -69,18 +76,29 @@ public:
 	static int32_t const MAX_RANDOMTICKSPEED            = 4096;
 	static int32_t const DEFAULT_RANDOMTICKSPEED        = 1;
 
-	inline bool getBool(GameRulesIndex id) {
-		return CallServerClassMethod<bool>("?getBool@GameRules@@QEBA_NUGameRuleId@@@Z", this, &id);
+	inline bool hasRule(enum GameRulesIndex id) {
+		return ((((int32_t)id) >= 0) && (((int32_t)id) < (int32_t)(this->mGameRules.size())));
 	}
 
-	inline bool hasRule(GameRulesIndex id) {
-		return ((((int) id) >= 0) && (((int) id) < (int)(this->rules.size())));
+	template <typename T> T getGameRuleValue(enum GameRulesIndex index) {
+		if (!this->hasRule(index)) return T{};
+		const auto& rule = this->mGameRules[(int32_t)index];
+		switch (rule.mType) {
+			case GameRule::Type::BooleanType:
+				return static_cast<T>(rule.mValue.mBoolVal);
+			case GameRule::Type::IntegerType:
+				return static_cast<T>(rule.mValue.mIntVal);
+			case GameRule::Type::FloatType:
+				return static_cast<T>(rule.mValue.mFloatVal);
+			default: return T{};
+		}
+		return T{};
 	}
 };
 
-static_assert(offsetof(GameRule, value) == 0x4);
-static_assert(offsetof(GameRule, name) == 0x8);
-static_assert(offsetof(GameRule, use_in_command) == 0x28);
+static_assert(offsetof(GameRule, mValue) == 0x4);
+static_assert(offsetof(GameRule, mName) == 0x8);
+static_assert(offsetof(GameRule, mAllowUseInCommand) == 0x28);
 static_assert(offsetof(GameRule, mTagNotFoundCallback) == 0x30);
 static_assert(offsetof(GameRule, mValidateValueCallback) == 0x70);
 

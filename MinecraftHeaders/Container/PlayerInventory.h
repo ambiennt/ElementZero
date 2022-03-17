@@ -12,12 +12,12 @@ class HudContainerManagerModel;
 
 class PlayerInventory : public ContainerSizeChangeListener, public ContainerContentChangeListener {
 public:
-	int32_t selectedSlot = 0;
-	ItemStack item;
-	ContainerID selectedContainerId = ContainerID::Inventory;
-	std::unique_ptr<Inventory> inventory;
-	std::vector<ItemStack> complexItems;
-	std::weak_ptr<HudContainerManagerModel> model;
+	int32_t mSelectedSlot = 0; // mSelected
+	ItemStack mInfiniteItem;
+	ContainerID mSelectedContainerId = ContainerID::Inventory;
+	std::unique_ptr<Inventory> mInventory;
+	std::vector<ItemStack> mComplexItems;
+	std::weak_ptr<HudContainerManagerModel> mHudContainerManager;
 
 	struct SlotData {
 		ContainerID mContainerId;

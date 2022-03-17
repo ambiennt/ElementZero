@@ -3,8 +3,8 @@
 #include "Vec2.h"
 #include <cmath>
 
-#define PI 3.141592654
-#define RAD 0.017453292
+#define PI 3.14159265359
+#define RAD 0.01745329251
 
 class Vec3 {
 public:
@@ -43,14 +43,14 @@ public:
 	constexpr bool operator!=(Vec3 const &rhs) const noexcept { return !(*this == rhs); }
 
 	inline void normalize(void) {
-		float l  = 1.f / sqrtf(x * x + y * y + z * z);
+		float l  = 1.f / std::sqrtf(x * x + y * y + z * z);
 		this->x *= l;
 		this->y *= l;
 		this->z *= l;
 	}
 
 	inline void normalizeXZ(void) {
-		float l = 1.f / sqrtf(x * x + z * z);
+		float l = 1.f / std::sqrtf(x * x + z * z);
 		this->x *= l;
 		this->z *= l;
 	}

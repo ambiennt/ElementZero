@@ -558,7 +558,7 @@ public:
 	MCAPI void forEachDimension(std::function<bool(Dimension const &)>);
 
 	MCAPI void broadcastBossEvent(enum BossEventUpdateType);
-	MCAPI void broadcastEntityEvent(class Actor *, enum ActorEvent, int);
+	MCAPI void broadcastActorEvent(class Actor &, enum ActorEvent, int32_t data);
 	MCAPI void broadcastLevelEvent(enum LevelEvent, class Vec3 const &, int, class Player *);
 	MCAPI void broadcastLevelEvent(enum LevelEvent, class CompoundTag const &, class Player *);
 	MCAPI void broadcastDimensionEvent(class BlockSource &, enum LevelEvent, class Vec3 const &, int, class Player *);
@@ -598,7 +598,7 @@ public:
 		class BlockPos const &, class AutomaticID<class Dimension, int>, int);
 	MCAPI void spawnParticleEffect(std::string const &, class Vec3 const &, class Dimension *);
 	MCAPI void requestPlayerChangeDimension(class Player &, std::unique_ptr<class ChangeDimensionRequest>);
-	 
+
 	MCAPI Level(class SoundPlayer &, std::unique_ptr<class LevelStorage>, class IMinecraftEventing &, bool, class Scheduler &,
 			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
 			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);

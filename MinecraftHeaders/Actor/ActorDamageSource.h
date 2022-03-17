@@ -5,6 +5,10 @@
 #include "ActorType.h"
 #include "ActorCategory.h"
 
+class BlockSource;
+class Block;
+class Actor;
+
 enum class ActorDamageCause {
 	None             = -1,
 	Override         = 0,
@@ -41,48 +45,62 @@ class ActorDamageSource {
 public:
 
 	virtual ~ActorDamageSource();
-	virtual bool isEntitySource(void);
-	virtual bool isChildEntitySource(void);
-	virtual bool isBlockSource(void);
-	virtual bool isFire(void);
-	virtual std::string getDeathMessage(void);
-	virtual bool getIsCreative(void);
-	virtual bool getIsWorldBuilder(void);
-	virtual struct ActorUniqueID getEntityUniqueID(void);
-	virtual enum ActorType getEntityType(void)const;
-	virtual enum ActorCategory getEntityCategories(void);
-	virtual bool getDamagingEntityIsCreative(void);
-	virtual bool getDamagingEntityIsWorldBuilder(void);
-	virtual struct ActorUniqueID getDamagingEntityUniqueID(void);
-	virtual enum ActorType getDamagingEntityType(void);
-	virtual enum ActorCategory getDamagingEntityCategories(void);
-	virtual class ActorDamageSource clone(void);
+	virtual bool isEntitySource() const;
+	virtual bool isChildEntitySource() const;
+	virtual bool isBlockSource() const;
+	virtual bool isFire() const;
+	virtual std::pair<std::string, std::vector<std::string>> getDeathMessage(std::string deadName, Actor *dead) const;
+	virtual bool getIsCreative() const;
+	virtual bool getIsWorldBuilder() const;
+	virtual struct ActorUniqueID getEntityUniqueID() const;
+	virtual enum ActorType getEntityType() const;
+	virtual enum ActorCategory getEntityCategories() const;
+	virtual bool getDamagingEntityIsCreative() const;
+	virtual bool getDamagingEntityIsWorldBuilder() const;
+	virtual struct ActorUniqueID getDamagingEntityUniqueID() const;
+	virtual enum ActorType getDamagingEntityType() const;
+	virtual enum ActorCategory getDamagingEntityCategories() const;
+	virtual std::unique_ptr<class ActorDamageSource> clone() const;
 
-	BUILD_ACCESS_MUT(enum ActorDamageCause, mCause, 0x8);
+	ActorDamageCause mCause; // 0x8
 };
 
 class ActorDamageByActorSource : public ActorDamageSource {
 public:
-	BUILD_ACCESS_MUT(class BlockSource*, mRegion, 0x10);
-	BUILD_ACCESS_MUT(bool, mIsWorldBuilder, 0x18);
-	BUILD_ACCESS_MUT(bool, mIsCreative, 0x19);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mActorID, 0x20);
-	BUILD_ACCESS_MUT(enum ActorType, mActorType, 0x28);
-	BUILD_ACCESS_MUT(enum ActorCategory, mActorCategories, 0x2C);
-	BUILD_ACCESS_MUT(std::string, mActorNameTag, 0x30);
+	BlockSource* mRegion; // 0x10
+	bool mIsWorldBuilder; // 0x18
+	bool mIsCreative; // 0x19
+	ActorUniqueID mActorID; // 0x20
+	ActorType mActorType; // 0x28
+	ActorCategory mActorCategories; // 0x2C
+	std::string mActorNameTag; // 0x30
+
+	MCAPI ActorDamageByActorSource(Actor &, ActorDamageCause);
 };
 
 class ActorDamageByBlockSource : public ActorDamageSource {
 public:
-	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x10);
+	const Block* mBlock; // 0x10
+};
+
+class RemovedActorDamageByType : public ActorDamageSource {
+public:
+	ActorType mActorType; // 0x10
 };
 
 class ActorDamageByChildActorSource : public ActorDamageByActorSource {
 public:
-	BUILD_ACCESS_MUT(bool, mDamagingActorIsWorldBuilder, 0x50);
-	BUILD_ACCESS_MUT(bool, mDamagingActorIsCreative, 0x51);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mDamagingActorId, 0x58);
-	BUILD_ACCESS_MUT(enum ActorType, mDamagingActorType, 0x60);
-	BUILD_ACCESS_MUT(enum ActorCategory, mDamagingActorCategories, 0x64);
-	BUILD_ACCESS_MUT(std::string, mDamagingActorNameTag, 0x68);
+	bool mDamagingActorIsWorldBuilder; // 0x50
+	bool mDamagingActorIsCreative; // 0x51
+	ActorUniqueID mDamagingActorId; // 0x58
+	ActorType mDamagingActorType; // 0x60
+	ActorCategory mDamagingActorCategories; // 0x64
+	std::string mDamagingActorNameTag; //  0x68
+
+	MCAPI ActorDamageByChildActorSource(Actor &, ActorDamageCause);
 };
+
+static_assert(offsetof(ActorDamageSource, mCause) == 0x8);
+static_assert(offsetof(ActorDamageByActorSource, mActorCategories) == 0x2C);
+static_assert(offsetof(ActorDamageByBlockSource, mBlock) == 0x10);
+static_assert(offsetof(ActorDamageByChildActorSource, mDamagingActorNameTag) == 0x68);

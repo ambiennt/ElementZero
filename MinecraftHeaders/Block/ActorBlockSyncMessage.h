@@ -4,8 +4,15 @@
 #include "../dll.h"
 
 struct ActorBlockSyncMessage {
-	ActorUniqueID mEntityUniqueID;
-	int8_t mMessage[4];
+
+	enum class MessageId {
+		NONE = 0x0,
+		CREATE = 0x1,
+		DESTROY = 0x2,
+	};
+
+	ActorUniqueID mEntityUniqueID; // 0x0
+	ActorBlockSyncMessage::MessageId mMessage; // 0x8
 };
 
 static_assert(sizeof(ActorBlockSyncMessage) == 0x10);

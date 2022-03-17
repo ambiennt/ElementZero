@@ -15,11 +15,12 @@ public:
 
 class Ability {
 public:
-	enum class Type {
-		Invalid  = 0,
-		Unset    = 1,
-		Boolean  = 2,
-		Float    = 3
+
+	enum class Type : int8_t {
+		Invalid     = 0,
+		Unset       = 1,
+		BooleanType = 2,
+		FloatType   = 3
 	};
 
 	enum class Options : int8_t {
@@ -31,22 +32,20 @@ public:
 	};
 
 	union Value {
-		bool val_bool;
-		float val_float;
-		Value(bool flag) { val_bool = flag; }
-		Value(float val) { val_float = val; }
-		Value() {}
+		bool mBoolVal;
+		float mFloatVal;
 	};
-	Type type = Type::Invalid;
-	Value value{};
-	Options opts = Options::None;
+	
+	Type mType = Type::Invalid;
+	Value mValue{};
+	Options mOptions = Options::None;
 };
 
 class Abilities {
 public:
 	std::unique_ptr<PermissionsHandler> mPermissionsHandler; // 0x0
-	std::array<Ability, 18> Abilities; // 0x8
-	std::array<Ability, 8> CustomAbilities; // 0xE0
+	std::array<Ability, 18> mAbilities; // 0x8
+	std::array<Ability, 8> mCustomAbilityCache; // 0xE0
 
 	MCAPI static class std::array<char const*, 18> ABILITY_NAMES;
 	MCAPI static std::string const TAG;
@@ -58,5 +57,5 @@ public:
 };
 
 static_assert(offsetof(Abilities, mPermissionsHandler) == 0x0);
-static_assert(offsetof(Abilities, Abilities) == 0x8);
-static_assert(offsetof(Abilities, CustomAbilities) == 0xE0);
+static_assert(offsetof(Abilities, mAbilities) == 0x8);
+static_assert(offsetof(Abilities, mCustomAbilityCache) == 0xE0);

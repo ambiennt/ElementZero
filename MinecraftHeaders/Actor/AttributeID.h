@@ -1,6 +1,6 @@
 #pragma once
 
-enum class AttributeIds {
+enum class AttributeID {
 	PlayerHunger                     = 1,
 	PlayerSaturation                 = 2,
 	PlayerExhaustion                 = 3,

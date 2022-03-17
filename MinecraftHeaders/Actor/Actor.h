@@ -6,6 +6,7 @@
 #include "ActorType.h"
 #include "ActorCategory.h"
 #include "ActorUniqueID.h"
+#include "ActorDamageSource.h"
 #include "SynchedActorData.h"
 #include "Attribute.h"
 #include "MobEffect.h"
@@ -30,6 +31,7 @@ enum class ActorDamageCause;
 enum class ItemUseMethod;
 enum class LevelSoundEvent;
 enum class InputMode;
+enum class DimensionID;
 
 enum class SpawnRuleEnum {
 	Undefined     = -1,
@@ -206,6 +208,11 @@ enum class ActorFlags {
 };
 
 class Actor {
+private:
+
+
+protected:
+	MCAPI bool _damageSensorComponentHurt(int32_t &damage, int32_t lastHurt, ActorDamageSource const& source);
 
 public:
 	enum class InitializationMethod {
@@ -345,9 +352,9 @@ public:
 	virtual bool shouldRender(void) const;
 	virtual bool isInvulnerableTo(class ActorDamageSource const &) const;
 	virtual enum ActorDamageCause getBlockDamageCause(class Block const &) const;
-	virtual void actuallyHurt(int, class ActorDamageSource const &, bool);
+	virtual void actuallyHurt(int damage, class ActorDamageSource const &, bool bypassArmor);
 	virtual void animateHurt(void);
-	virtual bool doFireHurt(int);
+	virtual bool doFireHurt(int damage);
 	virtual void onLightningHit(void);
 	virtual void onBounceStarted(BlockPos const &, BlockPos const &);
 	virtual void feed(int);
@@ -434,8 +441,8 @@ public:
 	virtual bool isWorldBuilder(void);
 	virtual bool isCreative() const;
 	virtual bool isAdventure(void) const;
-	virtual bool add(class ItemStack &);
-	virtual bool drop(class ItemStack const &, bool);
+	virtual bool add(class ItemStack &item);
+	virtual bool drop(class ItemStack const &item, bool randomly);
 	virtual bool getInteraction(class Player &, class ActorInteraction &, class Vec3 const &);
 	virtual bool canDestroyBlock(Block const &) const;
 	virtual void setAuxValue(int);
@@ -459,7 +466,7 @@ public:
 	virtual float getNextStep(float);
 	virtual bool canMakeStepSound() const;
 	virtual void outOfWorld(void);
-	virtual bool _hurt(class ActorDamageSource const &, int, bool, bool);
+	virtual bool _hurt(class ActorDamageSource const &, int damage, bool knock, bool ignite);
 	virtual void markHurt(void);
 	virtual void readAdditionalSaveData(class CompoundTag const &, class DataLoadHelper &);
 	virtual void addAdditionalSaveData(class CompoundTag &);
@@ -567,7 +574,7 @@ public:
 	MCAPI void _sendDirtyActorData(void);
 	//MCAPI void forEachLeashedActor(class std::function<void (class gsl::not_null<class Actor* >)>);
 	MCAPI bool shouldOrphan(class BlockSource &);
-	MCAPI bool onLadder(bool) const;
+	MCAPI bool onLadder(void) const;
 	MCAPI void reload(void);
 	MCAPI bool moveChunks(void);
 	MCAPI void dropLeash(bool, bool);
@@ -579,7 +586,7 @@ public:
 	MCAPI class Vec3 _randomHeartPos(void);
 	MCAPI void pickUpItem(class ItemActor &, int);
 	MCAPI int calculateAttackDamage(class Actor &);
-	MCAPI bool hurt(class ActorDamageSource const &, int, bool, bool);
+	MCAPI bool hurt(class ActorDamageSource const &, int damage, bool knock, bool ignite);
 	MCAPI void dropTowards(class ItemStack const &, class Vec3);
 	MCAPI void transferTickingArea(class Dimension &);
 	MCAPI void initEntity(class EntityRegistryOwned &);
@@ -588,6 +595,7 @@ public:
 	MCAPI void loadEntityFlags(class CompoundTag const &, class DataLoadHelper &);
 	MCAPI void testForCollidableMobs(class BlockSource &, class AABB const &, std::vector<class AABB> &);
 	MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
+	MCAPI class ItemStack const& getOffhandSlot(void) const;
 
 	template <typename T> MCAPI T *tryGetComponent(void);
 	template <typename T> MCAPI T const *tryGetComponent(void) const;
@@ -605,12 +613,16 @@ public:
 			this, destination, &facePosition, destinationDimension, yaw, pitch, commandVersion, &id);
 	}
 
-	inline ItemStack* getOffhandSlot() const {
-		return CallServerClassMethod<ItemStack*>("?getOffhandSlot@Actor@@QEBAAEBVItemStack@@XZ", this);
+	inline AttributeInstance* getAttributeInstanceFromId(AttributeID id) {
+		return this->mAttributes->getMutableInstance((uint32_t) id);
 	}
 
-	inline AttributeInstance* getAttributeInstanceFromId(AttributeIds id) {
-		return this->mAttributes->getMutableInstance((uint32_t) id);
+	inline float getHealth(void) {
+		return (float)this->getAttributeInstanceFromId(AttributeID::Health)->currentVal;
+	}
+
+	inline float getAbsorption(void) {
+		return (float)this->getAttributeInstanceFromId(AttributeID::Absorption)->currentVal;
 	}
 
 	inline class BlockPos getBlockPos(void) {
@@ -626,11 +638,11 @@ public:
 	}
 
 	inline bool hasCategory(ActorCategory category) {
-		return (this->mCategories & (uint32_t)category);
+		return ((uint32_t)this->mCategories & (uint32_t)category);
 	}
-	
+
 	// actor fields
-	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // idk what this is, probably some legacy field?
+	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // stupid entt component bloat
 	BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);
 	BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
 	BUILD_ACCESS_MUT(class VariantParameterList, mInitParams, 0x48);
@@ -638,12 +650,12 @@ public:
 
 	//using dimensionId = class AutomaticID<class Dimension, int;
 	//BUILD_ACCESS_MUT(dimensionId, mDimensionId, 0xCC);
-	BUILD_ACCESS_MUT(int32_t, mDimensionId, 0xCC); // its just easier to use an int directly
+	BUILD_ACCESS_MUT(enum DimensionID, mDimensionId, 0xCC); // its just easier to use the enum directly
 
 	BUILD_ACCESS_MUT(bool, mAdded, 0xD0);
 	BUILD_ACCESS_MUT(class ActorDefinitionGroup *, mDefinitions, 0xD8);
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDescriptor>, mCurrentDescription, 0xE0);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8); // maps to Actor::getUniqueID
+	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8); // maps to Actor::getUniqueID, but use the method instead
 	BUILD_ACCESS_MUT(std::shared_ptr<class RopeSystem>, mLeashRopeSystem, 0xF0);
 	BUILD_ACCESS_MUT(class Vec2, mRot, 0x100);
 	BUILD_ACCESS_MUT(class Vec2, mRotPrev, 0x108);
@@ -654,9 +666,7 @@ public:
 	BUILD_ACCESS_MUT(class Vec2, mRenderRot, 0x12C);
 	BUILD_ACCESS_MUT(int32_t, mAmbientSoundTime, 0x134);
 	BUILD_ACCESS_MUT(int32_t, mLastHurtByPlayerTime, 0x138);
-
-	BUILD_ACCESS_MUT(uint32_t, mCategories, 0x13C); // probably a uint8_t[4] but we can do bitwise operations if left as uint32_t
-
+	BUILD_ACCESS_MUT(int32_t, mCategories, 0x13C); // ActorCategory, ida says _BYTE[4]
 	BUILD_ACCESS_MUT(class SynchedActorData, mEntityData, 0x140);
 	BUILD_ACCESS_MUT(std::unique_ptr<class SpatialActorNetworkData>, mNetworkData, 0x160);
 	BUILD_ACCESS_MUT(class Vec3, mSentDelta, 0x168);
@@ -739,7 +749,7 @@ public:
 	BUILD_ACCESS_MUT(float, mWalkAnimSpeedO, 0x304);
 	BUILD_ACCESS_MUT(float, mWalkAnimSpeed, 0x308);
 	BUILD_ACCESS_MUT(float, mWalkAnimPos, 0x30C);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mLegacyUniqueID, 0x310);
+	BUILD_ACCESS_MUT(struct ActorUniqueID, mLegacyUniqueID, 0x310); // DO NOT USE THIS, use the getter/mUniqueID instead
 	BUILD_ACCESS_MUT(bool, mHighlightedThisFrame, 0x318);
 	BUILD_ACCESS_MUT(bool, mInitialized, 0x319);
 	BUILD_ACCESS_MUT(class BlockSource *, mRegion, 0x320);
