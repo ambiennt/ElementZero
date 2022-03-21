@@ -9,7 +9,10 @@
 class FallingBlock : public Actor {
 public:
 
-	enum class State { Falling, WaitRemoval };
+	enum class State {
+		Falling = 0,
+		WaitRemoval = 1
+	};
 
 	BUILD_ACCESS_MUT(bool, mCreative, 0x620);
 	BUILD_ACCESS_MUT(enum State, mState, 0x624);

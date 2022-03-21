@@ -25,9 +25,10 @@ public:
 	Player::PositionMode mPositionMode;
 	bool mOnGround;
 	ActorRuntimeID mRidingActorId;
-	TeleportCause mTeleportCause = TeleportCause::Unknown;
-	int mSourceEntityType = 0;
+	TeleportCause mTeleportCause = TeleportCause::Unknown; // actually an int32_t in bds
+	int32_t mSourceEntityType = 0; // actor type
 
+	MCAPI MovePlayerPacket(Player &player, Player::PositionMode resetPosition, int32_t cause, int32_t sourceEntityType);
 	inline ~MovePlayerPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

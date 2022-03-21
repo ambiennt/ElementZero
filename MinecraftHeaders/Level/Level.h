@@ -559,9 +559,9 @@ public:
 
 	MCAPI void broadcastBossEvent(enum BossEventUpdateType);
 	MCAPI void broadcastActorEvent(class Actor &, enum ActorEvent, int32_t data);
-	MCAPI void broadcastLevelEvent(enum LevelEvent, class Vec3 const &, int, class Player *);
+	MCAPI void broadcastLevelEvent(enum LevelEvent, class Vec3 const &pos, int32_t data, class Player *);
 	MCAPI void broadcastLevelEvent(enum LevelEvent, class CompoundTag const &, class Player *);
-	MCAPI void broadcastDimensionEvent(class BlockSource &, enum LevelEvent, class Vec3 const &, int, class Player *);
+	MCAPI void broadcastDimensionEvent(class BlockSource &, enum LevelEvent, class Vec3 const &, int32_t data, class Player *);
 	MCAPI void broadcastSoundEvent(
 		class BlockSource &, enum LevelSoundEvent, class Vec3 const &, int, struct ActorDefinitionIdentifier const &, bool, bool);
 

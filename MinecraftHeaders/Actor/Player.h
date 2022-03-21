@@ -31,8 +31,8 @@ struct EZPlayerFields {
 	bool mHasResetSprint = false; // if true, player should administer bonus knockback to other players
 	Vec3 mRawPos = Vec3::ZERO; // use this value for more accuracy of current pos (sometimes BDS pos zeroes out)
 	Vec3 mRawPosOld = Vec3::ZERO; // used this value for more accuracy of pos from last tick
-	float mHealthOld = 0.0f; // heatlh value from the previous tick
-	float mAbsorptionOld = 0.0f; // absorption value from the previous tick
+	int32_t mHealthOld = 0; // heatlh value from the previous tick
+	int32_t mAbsorptionOld = 0; // absorption value from the previous tick
 };
 
 class Packet;
@@ -341,7 +341,7 @@ public:
 	}
 
 	// a more reliable way to get pos delta for players
-	inline Vec3 getRawPosDelta(void) {
+	inline Vec3 getRawPosDelta(void) const {
 		Vec3 posDelta;
 		const auto& prevPos = this->getRawPosOld();
 		const auto& currPos = this->getRawPos();
@@ -352,41 +352,41 @@ public:
 	}
 
 	// fill LevelChunkPacket with empty values except for cache setting
-	inline void crashClient(void) {
+	inline void crashClient(void) const {
 		LevelChunkPacket badPkt;
 		badPkt.mCacheEnabled = true;
 		this->sendNetworkPacket(badPkt);
 	}
 
-	inline bool isOperator(void) {
+	inline bool isOperator(void) const {
 		return (this->getCommandPermissionLevel() >= CommandPermissionLevel::GameMasters);
 	}
 
-	inline enum PlayerPermissionLevel getPlayerPermissionLevel(void) {
+	inline enum PlayerPermissionLevel getPlayerPermissionLevel(void) const {
 		return this->mAbilities.mPermissionsHandler->mPlayerPermissions;
 	}
 
-	inline bool isInCreativeOrCreativeViewerMode(void) {
+	inline bool isInCreativeOrCreativeViewerMode(void) const {
 		return ((this->mPlayerGameType == GameType::Creative) || (this->mPlayerGameType == GameType::CreativeViewer));
 	}
 
-	inline class Inventory* getRawInventoryPtr(void) {
+	inline class Inventory* getRawInventoryPtr(void) const {
 		return this->mPlayerInventory->mInventory.get();
 	}
 
-	inline class Vec3 getPosOldGrounded(void) {
+	inline class Vec3 getPosOldGrounded(void) const {
 		Vec3 result(this->getPosOld());
 		result.y -= this->mHeightOffset;
 		return result;
 	}
 	
-	inline class Vec3 getPosGrounded(void) {
+	inline class Vec3 getPosGrounded(void) const {
 		Vec3 result(this->getPos());
 		result.y -= this->mHeightOffset;
 		return result;
 	}
 
-	template <typename T> T getAbilityValue(enum AbilitiesIndex index) {
+	template <typename T> T getAbilityValue(enum AbilitiesIndex index) const {
 		const auto& abil = this->mAbilities.mAbilities[(int32_t)index];
 		switch (abil.mType) {
 			case Ability::Type::BooleanType:

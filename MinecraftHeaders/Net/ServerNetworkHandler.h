@@ -5,6 +5,8 @@
 #include "../Actor/ServerPlayer.h"
 #include "../Core/PackIdVersion.h"
 #include "NetworkIdentifier.h"
+#include "../Core/mce.h"
+
 #include "../dll.h"
 
 #include <mutex>
@@ -21,6 +23,7 @@ class ServerNetworkHandler {
 
 	MCAPI void _onPlayerLeft(ServerPlayer *player, bool skipMessage);
 	MCAPI ServerPlayer * _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
+	MCAPI int32_t _getActiveAndInProgressPlayerCount(mce::UUID excludePlayer) const;
 
 public:
 
@@ -35,6 +38,10 @@ public:
 
 	inline ServerPlayer * getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
 		return this->_getServerPlayer(netId, subId);
+	}
+
+	inline int32_t getActiveAndInProgressPlayerCount(mce::UUID excludePlayer = mce::UUID::EMPTY) const {
+          return this->_getActiveAndInProgressPlayerCount(excludePlayer);
 	}
 	
 	BASEAPI std::string &getMotd();

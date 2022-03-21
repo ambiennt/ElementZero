@@ -10,6 +10,7 @@ public:
 	ActorRuntimeID mRuntimeId; // 0x28
 	Vec3 mMotion = Vec3::ZERO; // 0x30
 
+	SetActorMotionPacket() {};
 	SetActorMotionPacket(ActorRuntimeID rid, Vec3 motion) : mRuntimeId(rid), mMotion(motion) {}
 	inline ~SetActorMotionPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;

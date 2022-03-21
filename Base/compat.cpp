@@ -15,12 +15,6 @@
 
 #include "loader.h"
 
-template <typename Holder> struct ValueHolder {
-  Holder value;
-  ~ValueHolder() {}
-  operator Holder() const { return value; }
-};
-
 #pragma region Player
 
 // ServerPlayer::handleActorPickRequestOnServer
@@ -131,7 +125,7 @@ std::string &ServerNetworkHandler::getMotd() { return direct_access<std::string>
 void CommandOutput::success() { direct_access<bool>(this, 40) = true; }
 
 uint64_t Level::getServerTick() {
-  return CallServerClassMethod<ValueHolder<uint64_t>>("?getCurrentServerTick@Level@@UEBA?BUTick@@XZ", this);
+  return CallServerClassMethod<const struct Tick>("?getCurrentServerTick@Level@@UEBA?BUTick@@XZ", this).value;
 }
 
 ActorUniqueID Level::getNewUniqueID() const {

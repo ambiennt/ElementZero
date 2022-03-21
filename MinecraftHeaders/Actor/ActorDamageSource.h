@@ -63,6 +63,8 @@ public:
 	virtual std::unique_ptr<class ActorDamageSource> clone() const;
 
 	ActorDamageCause mCause; // 0x8
+
+	ActorDamageSource(ActorDamageCause cause) : mCause(cause) {}
 };
 
 class ActorDamageByActorSource : public ActorDamageSource {
@@ -97,7 +99,7 @@ public:
 	ActorCategory mDamagingActorCategories; // 0x64
 	std::string mDamagingActorNameTag; //  0x68
 
-	MCAPI ActorDamageByChildActorSource(Actor &, ActorDamageCause);
+	MCAPI ActorDamageByChildActorSource(Actor &childActor, Actor &parent, ActorDamageCause cause); // example: projectile is child, shooter is parent
 };
 
 static_assert(offsetof(ActorDamageSource, mCause) == 0x8);

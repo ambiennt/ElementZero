@@ -3,6 +3,7 @@
 #include "../Core/Packet.h"
 #include "../Math/Vec3.h"
 #include "../Actor/ActorRuntimeID.h"
+#include "../Actor/Actor.h"
 #include "../dll.h"
 
 class MoveActorAbsolutePacket : public Packet {
@@ -15,10 +16,19 @@ public:
 	};
 
 	ActorRuntimeID mRuntimeId;
-	uint8_t mFlags = 0x1; // MovementFlags::GROUND - (actually a MoveActorAbsoluteData::Header in BDS)
+	uint8_t mFlags = 0x0; // MovementFlags::GROUND - (actually a MoveActorAbsoluteData::Header in BDS)
 	Vec3 mPos = Vec3::ZERO;
 	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
 
+	MoveActorAbsolutePacket() {};
+	MoveActorAbsolutePacket(Actor &actor) {
+		this->mRuntimeId = actor.getRuntimeID();
+		this->mPos = actor.getPos();
+		auto& rot = actor.mRot;
+		this->mRotX = rot.x; this->mRotY = this->mRotYHead = rot.y;
+		this->mFlags |= (actor.mOnGround ? (uint8_t)MovementFlags::GROUND : 0x0) |
+			(actor.mTeleportedThisTick ? (uint8_t)MovementFlags::TELEPORT : 0x0);
+	}
 	inline ~MoveActorAbsolutePacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

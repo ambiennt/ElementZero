@@ -115,6 +115,7 @@ public:
 	MCAPI static const MobEffectInstance NO_EFFECT;
 	static const int32_t MAX_AMPLIFIER_COUNT = 5;
 
+	MobEffectInstance() {};
 	MobEffectInstance(
 		MobEffectIds id, int32_t dur, int32_t durEasy, int32_t durNormal, int32_t durHard,
 		int32_t amplifier, bool displayAnim, bool ambient, bool noCounter, bool visible) :

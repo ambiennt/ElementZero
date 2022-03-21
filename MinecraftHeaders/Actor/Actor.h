@@ -259,8 +259,8 @@ public:
 	virtual void breaksFallingBlocks() const;
 	virtual void blockedByShield(class ActorDamageSource const &, class Actor &);
 	virtual void moveRelative(float, float, float, float);
-	virtual void teleportTo(class Vec3 const &pos, bool shouldStopRiding, int cause, int entityType, struct ActorUniqueID const &destinationEntityId); // cause, entityType, and destinationEntityId are unused
-	virtual bool tryTeleportTo(class Vec3 const &pos, bool landOnBlock, bool avoidLiquid, int cause, int entityType); // cause and entityType are unused
+	virtual void teleportTo(class Vec3 const &pos, bool shouldStopRiding, int cause, int entityType, struct ActorUniqueID const &destinationEntityId); // cause, entityType, and destinationEntityId are unused, entityType is actually ActorType
+	virtual bool tryTeleportTo(class Vec3 const &pos, bool landOnBlock, bool avoidLiquid, int cause, int entityType); // cause and entityType are unused, entityType is actually ActorType
 	virtual void chorusFruitTeleport(class Vec3 &);
 	virtual void lerpTo(class Vec3 const &, class Vec2 const &, int);
 	virtual void lerpMotion(class Vec3 const &);
@@ -412,7 +412,7 @@ public:
 	virtual void tickLeash(void);
 	virtual void sendMotionPacketIfNeeded(void);
 	virtual bool canSynchronizeNewEntity() const;
-	virtual void stopRiding(bool, bool, bool);
+	virtual void stopRiding(bool exitFromRider, bool actorIsBeingDestroyed, bool switchingRides);
 	virtual void startSwimming(void);
 	virtual void stopSwimming(void);
 	virtual void buildDebugInfo(std::string &) const;
@@ -614,22 +614,22 @@ public:
 	}
 
 	inline AttributeInstance* getAttributeInstanceFromId(AttributeID id) {
-		return this->mAttributes->getMutableInstance((uint32_t) id);
+		return this->mAttributes->getMutableInstance((uint32_t)id);
 	}
 
-	inline float getHealth(void) {
-		return (float)this->getAttributeInstanceFromId(AttributeID::Health)->currentVal;
+	inline int32_t getHealth(void) {
+		return (int32_t)this->getAttributeInstanceFromId(AttributeID::Health)->currentVal;
 	}
 
-	inline float getAbsorption(void) {
-		return (float)this->getAttributeInstanceFromId(AttributeID::Absorption)->currentVal;
+	inline int32_t getAbsorption(void) {
+		return (int32_t)this->getAttributeInstanceFromId(AttributeID::Absorption)->currentVal;
 	}
 
-	inline class BlockPos getBlockPos(void) {
+	inline class BlockPos getBlockPos(void) const {
 		return BlockPos(this->getPos());
 	}
 
-	inline bool hasAnyEffects(void) {
+	inline bool hasAnyEffects(void) const {
 		if (this->mMobEffects.size() <= 0) return false;
 		for (auto& effect : this->mMobEffects) {
 			if (effect != MobEffectInstance::NO_EFFECT) return true;
@@ -637,8 +637,20 @@ public:
 		return false;
 	}
 
-	inline bool hasCategory(ActorCategory category) {
+	inline bool hasCategory(ActorCategory category) const {
 		return ((uint32_t)this->mCategories & (uint32_t)category);
+	}
+
+	inline bool isInstanceOfMob(void) const {
+		return this->hasCategory(ActorCategory::Mob);
+	}
+
+	inline bool isInstanceOfPlayer(void) const {
+		return this->hasCategory(ActorCategory::Player);
+	}
+
+	inline bool hasRider(void) const {
+		return (this->mRiderIDs.size() > 0);
 	}
 
 	// actor fields

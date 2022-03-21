@@ -200,8 +200,7 @@ void Instance::createBossActor() {
 }
 
 void Instance::removeBossActor() {
-  RemoveActorPacket pkt;
-  pkt.uid = unqid;
+  RemoveActorPacket pkt(unqid);
   cfg.entry.player->sendNetworkPacket(pkt);
 }
 

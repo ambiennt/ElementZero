@@ -76,11 +76,11 @@ public:
 	static int32_t const MAX_RANDOMTICKSPEED            = 4096;
 	static int32_t const DEFAULT_RANDOMTICKSPEED        = 1;
 
-	inline bool hasRule(enum GameRulesIndex id) {
+	inline bool hasRule(enum GameRulesIndex id) const {
 		return ((((int32_t)id) >= 0) && (((int32_t)id) < (int32_t)(this->mGameRules.size())));
 	}
 
-	template <typename T> T getGameRuleValue(enum GameRulesIndex index) {
+	template <typename T> T getGameRuleValue(enum GameRulesIndex index) const {
 		if (!this->hasRule(index)) return T{};
 		const auto& rule = this->mGameRules[(int32_t)index];
 		switch (rule.mType) {
