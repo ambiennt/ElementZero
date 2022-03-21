@@ -64,6 +64,7 @@ public:
 
 	ActorDamageCause mCause; // 0x8
 
+	ActorDamageSource() {}
 	ActorDamageSource(ActorDamageCause cause) : mCause(cause) {}
 };
 
