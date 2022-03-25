@@ -1,43 +1,43 @@
 #pragma once
 
 #include "Vec3.h"
-#include <hook.h>
+#include "../dll.h"
 
 #include <limits>
 
 class BlockPos {
 public:
-	int x = 0, y = 0, z = 0;
+	int32_t x = 0, y = 0, z = 0;
 	// For ABI
 
-	static BlockPos MIN;
-	static BlockPos MAX;
-	static BlockPos ZERO;
+	static const BlockPos MIN;
+	static const BlockPos MAX;
+	static const BlockPos ZERO;
 
-	BlockPos();
+	BlockPos() {}
 	BlockPos(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
-	//BlockPos(const Vec3& vec) : x((int)(std::floorf(vec.x))), y((int)(std::floorf(vec.y))), z((int)(std::floorf(vec.z))) {}
-	BlockPos(const Vec3& vec) {
-		BlockPos result;
-		CallServerClassMethod<void*>("??0BlockPos@@QEAA@AEBVVec3@@@Z", &result, vec);
-		this->x = result.x;
-		this->y = result.y;
-		this->z = result.z;
-	}
-	BlockPos(const BlockPos& rhs) {
-		this->x = rhs.x;
-		this->y = rhs.y;
-		this->z = rhs.z;
-	}
+	BlockPos(BlockPos const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
+	MCAPI BlockPos(Vec3 const&);
 	inline ~BlockPos() {}
-	BlockPos operator+(BlockPos const &rhs) const noexcept { return {x + rhs.x, y + rhs.y, z + rhs.z}; }
-	constexpr bool operator==(BlockPos const &rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
-	constexpr bool operator!=(BlockPos const &rhs) const noexcept { return !(*this == rhs); }
-	operator Vec3() { return {(float) x, (float) y, (float) z}; }
+
+	BlockPos operator+(BlockPos const &rhs) const {
+		return BlockPos(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);
+	}
+	BlockPos operator-(BlockPos const &rhs) const {
+		return BlockPos(this->x - rhs.x, this->y - rhs.y, this->z - rhs.z);
+	}
+	BlockPos operator*(float factor) const {
+		return BlockPos(this->x * factor, this->y * factor, this->z * factor);
+	}
+	BlockPos operator/(float factor) const {
+		return BlockPos(this->x / factor, this->y / factor, this->z / factor);
+	}
+
+	bool operator==(BlockPos const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
+	bool operator!=(BlockPos const &rhs) const { return !(*this == rhs); }
+	operator Vec3() { return {(float)x, (float)y, (float)z}; }
 };
 
-inline BlockPos BlockPos::MIN = {
-		std::numeric_limits<int>::min(), std::numeric_limits<int>::min(), std::numeric_limits<int>::min()};
-inline BlockPos BlockPos::MAX = {
-		std::numeric_limits<int>::max(), std::numeric_limits<int>::max(), std::numeric_limits<int>::max()};
-inline BlockPos BlockPos::ZERO = {0, 0, 0};
+inline const BlockPos BlockPos::MIN = {std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::min()};
+inline const BlockPos BlockPos::MAX = {std::numeric_limits<int32_t>::max(), std::numeric_limits<int32_t>::max(), std::numeric_limits<int32_t>::max()};
+inline const BlockPos BlockPos::ZERO = {0, 0, 0};

@@ -3,67 +3,93 @@
 #include "Vec2.h"
 #include <cmath>
 
-#define PI 3.14159265359
-#define RAD 0.01745329251
-
 class Vec3 {
 public:
-	float x = 0.0f, y = 0.0f, z = 0.0f;
+	float x = 0.f, y = 0.f, z = 0.f;
 	// For ABI
 
-	static Vec3 ZERO;
+	static const Vec3 ZERO;
 
-	Vec3();
+	Vec3() {}
 	Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
-	Vec3(const Vec3& rhs) {
+	Vec3(Vec3 const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
+	inline ~Vec3() {}
+
+	Vec3 operator+(Vec3 const &rhs) const {
+		return Vec3(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);
+	}
+	Vec3 operator-(Vec3 const &rhs) const {
+		return Vec3(this->x - rhs.x, this->y - rhs.y, this->z - rhs.z);
+	}
+	Vec3 operator*(float factor) const {
+		return Vec3(this->x * factor, this->y * factor, this->z * factor);
+	}
+	Vec3 operator/(float factor) const {
+		return Vec3(this->x / factor, this->y / factor, this->z / factor);
+	}
+	Vec3& operator=(const Vec3& rhs) {
 		this->x = rhs.x;
 		this->y = rhs.y;
 		this->z = rhs.z;
+		return *this;
 	}
-	inline ~Vec3() {}
-	Vec3 &operator=(Vec3 const&) = default;
-	Vec3 operator+(Vec3 const &rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
-	Vec3 operator-(Vec3 const &rhs) const noexcept { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
-	Vec3 operator*(float factor) const noexcept {
-		return { x * factor, y * factor, z * factor };
+	Vec3& operator+=(float factor) {
+		this->x += factor;
+		this->y += factor;
+		this->z += factor;
+		return *this;
 	}
-	Vec3 operator/(float factor) {
-		if (factor == 0.f) return Vec3::ZERO;
-		float inv = 1.f / factor;
-		return { x * inv, y * inv, z * inv };
+	Vec3& operator-=(float factor) {
+		this->x -= factor;
+		this->y -= factor;
+		this->z -= factor;
+		return *this;
 	}
-	Vec3 &operator*=(float factor) {
+	Vec3& operator*=(float factor) {
 		this->x *= factor;
 		this->y *= factor;
 		this->z *= factor;
 		return *this;
 	}
-
-	constexpr bool operator==(Vec3 const &rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
-	constexpr bool operator!=(Vec3 const &rhs) const noexcept { return !(*this == rhs); }
-
-	inline void normalize(void) {
-		float l  = 1.f / std::sqrtf(x * x + y * y + z * z);
-		this->x *= l;
-		this->y *= l;
-		this->z *= l;
+	Vec3& operator/=(float factor) {
+		this->x /= factor;
+		this->y /= factor;
+		this->z /= factor;
+		return *this;
 	}
 
-	inline void normalizeXZ(void) {
-		float l = 1.f / std::sqrtf(x * x + z * z);
+	bool operator==(Vec3 const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
+	bool operator!=(Vec3 const &rhs) const { return !(*this == rhs); }
+
+	inline float length(void) const {
+		return std::sqrtf((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
+	}
+
+	inline Vec3& normalize(void) {
+		float l = this->length();
+		if (l == 0.f) return *this;
+		this->operator*=(1.f / l);
+		return *this;
+	}
+
+	inline Vec3& normalizeXZ(void) {
+		float l = this->length();
+		if (l == 0.f) return *this;
+		l = 1.f / l;
 		this->x *= l;
 		this->z *= l;
+		return *this;
 	}
 
 	static inline Vec3 directionFromRotation(Vec2 const& rot) {
 
-		float x = (float)(rot.x * -RAD);
-		float y = (float)(rot.y * -RAD) - PI;
+		float x = (float)(rot.x * -INV_RADIAN_DEGREES);
+		float y = (float)((rot.y * -INV_RADIAN_DEGREES) - PI);
 
-		float f1 = cos(y);
-		float f2 = sin(y);
-		float f3 = cos(x);
-		float f4 = sin(x);
+		float f1 = std::cosf(y);
+		float f2 = std::sinf(y);
+		float f3 = std::cosf(x);
+		float f4 = std::sinf(x);
 
 		Vec3 result;
 		result.x = f3 * f2;
@@ -73,4 +99,4 @@ public:
 	};
 };
 
-inline Vec3 Vec3::ZERO = {0.0f, 0.0f, 0.0f};
+inline const Vec3 Vec3::ZERO = {0.f, 0.f, 0.f};

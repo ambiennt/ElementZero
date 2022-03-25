@@ -2,44 +2,74 @@
 
 #include <cmath>
 
+#define PI 3.14159265359
+#define TAU 6.28318530718
+#define INV_RADIAN_DEGREES 0.01745329251
+#define RADIAN_DEGREES 57.2957795131
+
 class Vec2 {
 public:
-	float x = 0.0f, y = 0.0f;
+	float x = 0.f, y = 0.f;
 	// For ABI
 
-	static Vec2 ZERO;
+	static const Vec2 ZERO;
 
-	Vec2();
+	Vec2() {}
 	Vec2(float x, float y) : x(x), y(y) {}
-	Vec2(const Vec2& rhs) {
+	Vec2(Vec2 const& rhs) : x(rhs.x), y(rhs.y) {}
+	inline ~Vec2() {}
+
+	Vec2 operator+(Vec2 const &rhs) const {
+		return Vec2(this->x + rhs.x, this->y + rhs.y);
+	}
+	Vec2 operator-(Vec2 const &rhs) const {
+		return Vec2(this->x - rhs.x, this->y - rhs.y);
+	}
+	Vec2 operator*(float factor) const {
+		return Vec2(this->x * factor, this->y * factor);
+	}
+	Vec2 operator/(float factor) const {
+		return Vec2(this->x / factor, this->y / factor);
+	}
+	Vec2& operator=(const Vec2& rhs) {
 		this->x = rhs.x;
 		this->y = rhs.y;
+		return *this;
 	}
-	inline ~Vec2() {}
-	Vec2 &operator=(Vec2 const&) = default;
-	Vec2 operator+(Vec2 const &rhs) const noexcept { return {x + rhs.x, y + rhs.y}; }
-	Vec2 operator*(float factor) const noexcept {
-		return { x * factor, y * factor };
+	Vec2& operator+=(float factor) {
+		this->x += factor;
+		this->y += factor;
+		return *this;
 	}
-	Vec2 operator/(float factor) const noexcept {
-		if (factor == 0.f) return Vec2::ZERO;
-		float inv = 1.f / factor;
-		return { x * inv, y * inv };
+	Vec2& operator-=(float factor) {
+		this->x -= factor;
+		this->y -= factor;
+		return *this;
 	}
-	Vec2 &operator*=(float factor) {
+	Vec2& operator*=(float factor) {
 		this->x *= factor;
 		this->y *= factor;
 		return *this;
 	}
+	Vec2& operator/=(float factor) {
+		this->x /= factor;
+		this->y /= factor;
+		return *this;
+	}
 
-	constexpr bool operator==(Vec2 const &rhs) const noexcept { return x == rhs.x && y == rhs.y; }
-	constexpr bool operator!=(Vec2 const &rhs) const noexcept { return !(*this == rhs); }
+	bool operator==(Vec2 const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y); }
+	bool operator!=(Vec2 const &rhs) const { return !(*this == rhs); }
 
-	inline void normalize(void) {
-		float l  = 1.f / std::sqrtf(x * x + y * y);
-		this->x *= l;
-		this->y *= l;
+	inline float length(void) const {
+		return std::sqrtf((this->x * this->x) + (this->y * this->y));
+	}
+
+	inline Vec2& normalize(void) {
+		float l = this->length();
+		if (l == 0.f) return *this;
+		this->operator*=(1.f / l);
+		return *this;
 	}
 };
 
-inline Vec2 Vec2::ZERO = {0.0f, 0.0f};
+inline const Vec2 Vec2::ZERO = {0.f, 0.f};

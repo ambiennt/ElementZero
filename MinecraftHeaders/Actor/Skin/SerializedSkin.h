@@ -51,7 +51,7 @@ public:
 	MCAPI void updateGeometryName();
 
 	inline std::string const &getName() const { return mFullId; }
-	inline bool getIsPersona() const { return mIsPersona; }
+	inline bool isPersonaSkin() const { return mIsPersona; }
 	inline Json::Value const &getGeometryData() const { return mGeometryData; }
 	inline Json::Value const &getGeometryDataMutable() const { return mGeometryDataMutable; }
 	inline mce::Image const &getCapeImageData() const { return mCapeImage; }

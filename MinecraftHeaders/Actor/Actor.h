@@ -617,12 +617,20 @@ public:
 		return this->mAttributes->getMutableInstance((uint32_t)id);
 	}
 
-	inline int32_t getHealth(void) {
-		return (int32_t)this->getAttributeInstanceFromId(AttributeID::Health)->currentVal;
+	inline float getHealth(void) {
+		return this->getAttributeInstanceFromId(AttributeID::Health)->mCurrentVal;
 	}
 
-	inline int32_t getAbsorption(void) {
-		return (int32_t)this->getAttributeInstanceFromId(AttributeID::Absorption)->currentVal;
+	inline float getAbsorption(void) {
+		return this->getAttributeInstanceFromId(AttributeID::Absorption)->mCurrentVal;
+	}
+
+	inline int32_t getHealthAsInt(void) {
+		return (int32_t)this->getHealth();
+	}
+
+	inline int32_t getAbsorptionAsInt(void) {
+		return (int32_t)this->getAbsorption();
 	}
 
 	inline class BlockPos getBlockPos(void) const {

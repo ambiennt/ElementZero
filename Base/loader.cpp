@@ -250,16 +250,26 @@ void worldHook(std::filesystem::path const &path) {
     } catch (std::exception const &ex) { LOGE("Exception at world hook (%s): %s") % hook.name % ex.what(); }
 }
 
-TClasslessInstanceHook(
-    void, "?execute@ReloadCommand@@UEBAXAEBVCommandOrigin@@AEAVCommandOutput@@@Z", CommandOrigin const &orig,
-    CommandOutput &outp) {
-  original(this, orig, outp);
+
+
+
+
+TClasslessInstanceHook(void, "?execute@ReloadCommand@@UEBAXAEBVCommandOrigin@@AEAVCommandOutput@@@Z",
+  CommandOrigin const &origin, CommandOutput &output) {
+
+  original(this, origin, output);
+
   auto cfg     = readConfig();
   bool changed = !ReadYAML(settings, cfg);
-  if (changed) WriteYAML(settings, cfg);
+  if (changed) {
+    WriteYAML(settings, cfg);
+  }
   auto mods = cfg["mods"];
+
   for (auto hook : Reloadables) {
+
     auto content = mods[hook.name];
+
     if (!content.IsMap()) {
       LOGE("Reload failed for mod %s: cannot find section for mod") % hook.name;
       continue;
@@ -268,11 +278,14 @@ TClasslessInstanceHook(
       LOGE("Reload failed for mod %s: cannot disable in runtime") % hook.name;
       continue;
     }
+
     try {
       hook(content);
-      outp.addToResultList("mods", hook.name);
-
-    } catch (std::exception const &ex) { LOGE("Exception at reload hook (%s): %s") % hook.name % ex.what(); }
+      output.addToResultList("mods", hook.name);
+    }
+    catch (std::exception const &ex) {
+      LOGE("Exception at reload hook (%s): %s") % hook.name % ex.what();
+    }
   }
   writeConfig(cfg);
 }
