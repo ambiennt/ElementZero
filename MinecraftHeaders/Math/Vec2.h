@@ -31,7 +31,7 @@ public:
 	Vec2 operator/(float factor) const {
 		return Vec2(this->x / factor, this->y / factor);
 	}
-	Vec2& operator=(const Vec2& rhs) {
+	Vec2& operator=(Vec2 const &rhs) {
 		this->x = rhs.x;
 		this->y = rhs.y;
 		return *this;

@@ -26,46 +26,45 @@ enum class TextPacketType : int8_t {
 
 class TextPacket : public Packet {
 public:
-	alignas(8) TextPacketType type;
-	std::string source, content;
-	std::vector<std::string> args;
-	bool translated;
-	std::string xuid;
-	std::string platformId;
+	TextPacketType mType;
+	std::string mAuthor;
+	std::string mMessage;
+	std::vector<std::string> mParams;
+	bool mLocalize; // translate the text message to the client's language
+	std::string mXuid;
+	std::string mPlatformId;
 
 	template <TextPacketType type, bool translated = true>
-	static inline TextPacket createTextPacket(std::string content) {
+	static inline TextPacket createTextPacket(std::string const &msg) {
 		TextPacket pkt;
-		pkt.type       = type;
-		pkt.translated = translated;
-		pkt.content    = content;
+		pkt.mType      = type;
+		pkt.mMessage   = msg;
+		pkt.mLocalize = translated;
 		return pkt;
 	}
 	template <TextPacketType type, bool translated = true>
-	static inline TextPacket createTextPacket(std::string source, std::string content) {
+	static inline TextPacket createTextPacket(std::string const &author, std::string const &msg) {
 		TextPacket pkt;
-		pkt.type       = type;
-		pkt.translated = translated;
-		pkt.source     = source;
-		pkt.content    = content;
+		pkt.mType      = type;
+		pkt.mAuthor    = author;
+		pkt.mMessage   = msg;
+		pkt.mLocalize = translated;
 		return pkt;
 	}
 	template <TextPacketType type, bool translated = false>
-	static inline TextPacket createTextPacket(std::string source, std::string content, std::string xuid) {
+	static inline TextPacket createTextPacket(std::string const &author, std::string const &msg, std::string const &xuid) {
 		TextPacket pkt;
-		pkt.type       = type;
-		pkt.translated = translated;
-		pkt.source     = source;
-		pkt.content    = content;
-		pkt.xuid       = xuid;
+		pkt.mType      = type;
+		pkt.mAuthor    = author;
+		pkt.mMessage   = msg;
+		pkt.mLocalize = translated;
+		pkt.mXuid      = xuid;
 		return pkt;
 	}
 	MCAPI static TextPacket createTextObjectMessage(TextObjectRoot const &);
-
-	static inline TextPacket
-	createTranslatedMessageWithParams(std::string const &text, std::initializer_list<std::string> args = {}) {
+	static inline TextPacket createTranslatedMessageWithParams(std::string const &msg, std::initializer_list<std::string> args = {}) {
 		TextObjectRoot root;
-		root.addChild(TextObjectLocalizedTextWithParams::build(text, args));
+		root.addChild(TextObjectLocalizedTextWithParams::build(msg, args));
 		return createTextObjectMessage(root);
 	}
 	inline TextPacket() {}
@@ -76,7 +75,8 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(TextPacket, type) == 0x28);
-static_assert(offsetof(TextPacket, source) == 0x30);
-static_assert(offsetof(TextPacket, args) == 0x70);
-static_assert(offsetof(TextPacket, platformId) == 0xB0);
+static_assert(offsetof(TextPacket, mType) == 0x28);
+static_assert(offsetof(TextPacket, mAuthor) == 0x30);
+static_assert(offsetof(TextPacket, mMessage) == 0x50);
+static_assert(offsetof(TextPacket, mParams) == 0x70);
+static_assert(offsetof(TextPacket, mPlatformId) == 0xB0);

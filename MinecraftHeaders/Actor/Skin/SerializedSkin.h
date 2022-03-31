@@ -50,37 +50,37 @@ public:
 	MCAPI void write(BinaryStream &);
 	MCAPI void updateGeometryName();
 
-	inline std::string const &getName() const { return mFullId; }
-	inline bool isPersonaSkin() const { return mIsPersona; }
-	inline Json::Value const &getGeometryData() const { return mGeometryData; }
-	inline Json::Value const &getGeometryDataMutable() const { return mGeometryDataMutable; }
-	inline mce::Image const &getCapeImageData() const { return mCapeImage; }
-	inline bool isTrustedSkin() const { return mTrustedFlag == TrustedSkinFlag::YES; }
-	inline Color const &getSkinColor() { return mSkinColor; }
+	inline std::string const &getName() const { return this->mFullId; }
+	inline bool isPersonaSkin() const { return this->mIsPersona; }
+	inline Json::Value const &getGeometryData() const { return this->mGeometryData; }
+	inline Json::Value const &getGeometryDataMutable() const { return this->mGeometryDataMutable; }
+	inline mce::Image const &getCapeImageData() const { return this->mCapeImage; }
+	inline bool isTrustedSkin() const { return this->mTrustedFlag == TrustedSkinFlag::YES; }
+	inline Color const &getSkinColor() const { return this->mSkinColor; }
 
 	inline void setCapeId(std::string const &str) {
-		mCapeId = str;
-		mFullId = mId + str;
+		this->mCapeId = str;
+		this->mFullId = this->mId + str;
 	}
 
 	inline void setCapeImageData(mce::Image const *ptr) {
 		if (ptr)
-			mCapeImage = ptr->clone();
+			this->mCapeImage = ptr->clone();
 		else
-			mCapeImage = {};
+			this->mCapeImage = {};
 	}
 
 	inline void setImageData(mce::Image const *ptr) {
 		if (ptr)
-			mSkinImage = ptr->clone();
+			this->mSkinImage = ptr->clone();
 		else
-			mSkinImage = {};
+			this->mSkinImage = {};
 	}
 
-	inline bool setIsPersonaCapeOnClassicSkin(bool value) { return mIsPersonaCapeOnClassicSkin = value; }
+	inline bool setIsPersonaCapeOnClassicSkin(bool value) { return this->mIsPersonaCapeOnClassicSkin = value; }
 
 	inline float getAnimationFrames(AnimatedTextureType type) const {
-		for (auto &item : mSkinAnimatedImages) {
+		for (auto &item : this->mSkinAnimatedImages) {
 			if (item.type == type) return item.frame;
 		}
 		return 1.0f;

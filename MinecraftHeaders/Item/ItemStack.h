@@ -9,7 +9,10 @@
 #include "../Core/json.h"
 #include "../Core/NBT.h"
 #include "../Core/WeakPtr.h"
+#include "../Block/LegacyBlockID.h"
+#include "../Block/Block.h"
 #include "ItemStackNetIdVariant.h"
+#include "ItemRuntimeID.h"
 #include "../dll.h"
 
 #include <hook.h>
@@ -55,7 +58,7 @@ public:
 	std::vector<BlockLegacy *> mCanDestroy; // 0x58
 	uint64_t mCanDestroyHash; // 0x70
 	Tick mBlockingTick; // 0x78
-	std::unique_ptr<class ItemInstance> mChargedItem; // 0x80
+	std::unique_ptr<ItemInstance> mChargedItem; // 0x80
 
 	MCAPI virtual ~ItemStackBase();
 
@@ -153,6 +156,25 @@ public:
 
 	inline bool operator==(ItemStackBase const &rhs) const {
 		return this->matchesItem(rhs);
+	}
+
+	inline bool isBlockItem(void) const {
+		return (this->mBlock->mLegacyBlock.get() != nullptr);
+	}
+
+	inline enum ItemRuntimeID getIdAsEnum(void) const {
+		return (ItemRuntimeID)this->getId();
+	}
+
+	inline uint16_t toBlockId(void) const {
+		if (!this->isBlockItem()) {
+			return (uint16_t)this->getId();
+		}
+		return this->mBlock->mLegacyBlock->mId;
+	}
+
+	inline enum LegacyBlockID toBlockIdAsEnum(void) const {
+		return (LegacyBlockID)this->toBlockId();
 	}
 
 };

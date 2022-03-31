@@ -11,7 +11,7 @@ class Block {
 
 public:
 
-	uint16_t mAux; // mData (const) - 0x8
+	uint16_t mAux; // const uint16_t mData - 0x8
 	WeakPtr<BlockLegacy> mLegacyBlock; // 0x10
 	CompoundTag mSerializationId; // 0x18
 	uint32_t mRuntimeId; // 0x30

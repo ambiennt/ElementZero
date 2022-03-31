@@ -27,7 +27,7 @@ public:
 	Vec3 operator/(float factor) const {
 		return Vec3(this->x / factor, this->y / factor, this->z / factor);
 	}
-	Vec3& operator=(const Vec3& rhs) {
+	Vec3& operator=(Vec3 const& rhs) {
 		this->x = rhs.x;
 		this->y = rhs.y;
 		this->z = rhs.z;

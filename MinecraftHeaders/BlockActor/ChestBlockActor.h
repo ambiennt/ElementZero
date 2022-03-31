@@ -30,7 +30,7 @@ public:
 	BUILD_ACCESS_MUT(float, mOldOpenness, 0x208);
 	BUILD_ACCESS_MUT(bool, mIsOpen, 0x20C);
 	BUILD_ACCESS_MUT(int32_t, mTickInterval, 0x210);
-	BUILD_ACCESS_MUT(uint32_t, mFlags, 0x214); // bit flags - use ChestBlockActor::hasBitFlag(enum ChestBlockActor::Flags)
+	BUILD_ACCESS_MUT(uint32_t, mFlags, 0x214); // bit flags for enum ChestBlockActor::Flags
 	BUILD_ACCESS_MUT(int32_t, mDeferredPairX, 0x218);
 	BUILD_ACCESS_MUT(int32_t, mDeferredPairZ, 0x21C);
 	BUILD_ACCESS_MUT(class ChestBlockActor *, mLargeChestPaired, 0x220);

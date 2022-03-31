@@ -16,10 +16,12 @@
 #include "../Core/AutomaticID.h"
 #include "../Core/VanillaDimensions.h"
 #include "../Command/CommandPermissionLevel.h"
+#include "../Level/Level.h"
 #include "../Level/PlayerPermissionLevel.h"
 #include "../Level/GameType.h"
 #include "../Level/Abilities.h"
 #include "../Packet/LevelChunkPacket.h"
+#include "../Packet/AdventureSettingsPacket.h"
 #include "../dll.h"
 
 // add custom player fields here
@@ -256,7 +258,7 @@ public:
 	virtual void setPlayerGameType(enum GameType);
 	virtual void _crit(class Actor &);
 	virtual class IMinecraftEventing *getEventing(void) const;
-	virtual unsigned char getUserId();
+	virtual uint8_t getUserId();
 	virtual void sendEventPacket(class EventPacket &) const;
 	virtual void addExperience(int);
 	virtual void addLevels(int);
@@ -300,7 +302,8 @@ public:
 	MCAPI class ItemStack const &getSelectedItem(void) const;
 	MCAPI void setSelectedItem(class ItemStack const&);
 	MCAPI class ItemStack const &getCurrentActiveShield(void) const;
-	MCAPI class EnderChestContainer *getEnderChestContainer(void);
+	//MCAPI class EnderChestContainer *getEnderChestContainer(void);
+	//MCAPI class PlayerInventory& getSupplies(void);
 	MCAPI void updateTeleportDestPos(void);
 	MCAPI void updateInventoryTransactions(void);
 	MCAPI void updateSkin(class SerializedSkin const &, int clientSubID); // client side function, has no effect on server
@@ -332,23 +335,20 @@ public:
 		return this->mPlayerUIContainer.getItem((int32_t)PlayerUISlot::CursorSelected);
 	}
 
-	inline class Vec3 const& getRawPos(void) const {
+	inline class Vec3 const& getRawPlayerPos(void) const {
 		return this->EZPlayerFields->mRawPos;
 	}
 
-	inline class Vec3 const& getRawPosOld(void) const {
+	inline class Vec3 const& getRawPlayerPosOld(void) const {
 		return this->EZPlayerFields->mRawPosOld;
 	}
 
 	// a more reliable way to get pos delta for players
-	inline Vec3 getRawPosDelta(void) const {
-		Vec3 posDelta;
-		const auto& prevPos = this->getRawPosOld();
-		const auto& currPos = this->getRawPos();
-		posDelta.x = currPos.x - prevPos.x;
-		posDelta.y = currPos.y - prevPos.y;
-		posDelta.z = currPos.z - prevPos.z;
-		return posDelta;
+	// since for some reason the player pos delta zeroes out or the old and current pos match on the same tick
+	inline class Vec3 getRawPlayerPosDelta(void) const {
+		const auto& prevPos = this->getRawPlayerPosOld();
+		const auto& currPos = this->getRawPlayerPos();
+		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
 	}
 
 	// fill LevelChunkPacket with empty values except for cache setting
@@ -358,44 +358,66 @@ public:
 		this->sendNetworkPacket(badPkt);
 	}
 
+	inline class PlayerInventory& getSupplies(void) const {
+		return *this->mPlayerInventory.get();
+	}
+
+	inline class Inventory& getRawInventory(void) const {
+		return *this->mPlayerInventory->mInventory.get();
+	}
+
+	inline class EnderChestContainer* getEnderChestContainer(void) const {
+		return this->mEnderChestInventory.get();
+	}
+
 	inline bool isOperator(void) const {
 		return (this->getCommandPermissionLevel() >= CommandPermissionLevel::GameMasters);
 	}
 
 	inline enum PlayerPermissionLevel getPlayerPermissionLevel(void) const {
 		return this->mAbilities.mPermissionsHandler->mPlayerPermissions;
+	}	
+
+	inline void syncAbilities(void) const {
+		AdventureSettingsPacket pkt(this->mLevel->getAdventureSettings(), this->mAbilities, this->getUniqueID(), false);
+		this->mLevel->forEachPlayer([&](Player const& p) -> bool {
+        	p.sendNetworkPacket(pkt);
+        	return true;
+    	});
 	}
 
-	inline bool isInCreativeOrCreativeViewerMode(void) const {
-		return ((this->mPlayerGameType == GameType::Creative) || (this->mPlayerGameType == GameType::CreativeViewer));
-	}
-
-	inline class Inventory* getRawInventoryPtr(void) const {
-		return this->mPlayerInventory->mInventory.get();
-	}
-
-	inline class Vec3 getPosOldGrounded(void) const {
-		Vec3 result(this->getPosOld());
-		result.y -= this->mHeightOffset;
-		return result;
-	}
-	
-	inline class Vec3 getPosGrounded(void) const {
-		Vec3 result(this->getPos());
-		result.y -= this->mHeightOffset;
-		return result;
-	}
-
-	template <typename T> T getAbilityValue(enum AbilitiesIndex index) const {
-		const auto& abil = this->mAbilities.mAbilities[(int32_t)index];
-		switch (abil.mType) {
-			case Ability::Type::BooleanType:
-				return static_cast<T>(abil.mValue.mBoolVal);
-			case Ability::Type::FloatType:
-				return static_cast<T>(abil.mValue.mFloatVal);
-			default: return T{};
+	inline void setPlayerPermissionLevel(enum PlayerPermissionLevel level, bool syncToClients) {
+		this->mAbilities.mPermissionsHandler->mPlayerPermissions = level;
+		if (syncToClients) {
+			this->syncAbilities();
 		}
-		return T{};
+	}
+
+	template <typename T> T getAbilityValue(enum AbilitiesIndex index) const;
+	template <> bool getAbilityValue<bool>(enum AbilitiesIndex index) const {
+		const auto& abil = this->mAbilities.mAbilities[(int32_t)index];
+		if (abil.mType == Ability::Type::BooleanType) { return static_cast<bool>(abil.mValue.mBoolVal); }
+		return false;
+	}
+	template <> float getAbilityValue<float>(enum AbilitiesIndex index) const {
+		const auto& abil = this->mAbilities.mAbilities[(int32_t)index];
+		if (abil.mType == Ability::Type::FloatType) { return static_cast<float>(abil.mValue.mFloatVal); }
+		return 0.f;
+	}
+
+	inline void setAbilityValue(enum AbilitiesIndex index, bool flag, bool syncToClients) {
+		auto& abil = this->mAbilities.mAbilities[(int32_t)index];
+		if (abil.mType == Ability::Type::BooleanType) {
+			abil.mValue.mBoolVal = flag;
+			if (syncToClients) { this->syncAbilities(); }
+		}
+	}
+	inline void setAbilityValue(enum AbilitiesIndex index, float value, bool syncToClients) {
+		auto& abil = this->mAbilities.mAbilities[(int32_t)index];
+		if (abil.mType == Ability::Type::FloatType) {
+			abil.mValue.mFloatVal = value;
+			if (syncToClients) { this->syncAbilities(); }
+		}
 	}
 
 	// player fields
@@ -537,8 +559,6 @@ public:
 	BUILD_ACCESS_MUT(int32_t, mClientViewRadius, 0x211C); // max render distance
 	BUILD_ACCESS_MUT(class PlayerMovementTelemetryData, mMovementData, 0x21B0); // last field in ServerPlayer, ends at 0x21C0 (0x21B0 + 0x10)
 
-	BUILD_ACCESS_COMPAT(PlayerInventory &, Inventory);
-	BUILD_ACCESS_COMPAT(class EnderChestContainer *, EnderChestContainer);
 	BUILD_ACCESS_COMPAT(class Certificate &, Certificate);
 	BUILD_ACCESS_COMPAT(class NetworkIdentifier const &, NetworkIdentifier);
 	BUILD_ACCESS_COMPAT(class BlockPos &, SpawnPosition);
@@ -546,7 +566,7 @@ public:
 	BUILD_ACCESS_COMPAT(std::string &, ClientPlatformId);
 	BUILD_ACCESS_COMPAT(std::string &, PlatformOfflineId);
 	BUILD_ACCESS_COMPAT(std::string &, ClientPlatformOnlineId);
-	BUILD_ACCESS_COMPAT(unsigned char, ClientSubId);
+	BUILD_ACCESS_COMPAT(uint8_t, ClientSubId);
 	BUILD_ACCESS_COMPAT(struct EZPlayerFields*, EZPlayerFields);
 
 	BASEAPI void kick();

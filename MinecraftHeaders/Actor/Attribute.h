@@ -156,13 +156,22 @@ public:
 	std::vector<TemporalAttributeBuff> mTemporalBuffs; // 0x30
 	std::vector<AttributeInstanceHandle> mListeners; // 0x48
 	std::shared_ptr<AttributeInstanceDelegate> mDelegate; // 0x60
-private:
-	char unknownGarbage[0x14]; // 0x70
-public:
-	float mCurrentVal; // 0x84
-	float mMin; // 0x88
-	float mMax; // 0x8C
-	float mDefaultVal; // 0x90
+	union {
+		struct {
+			float mDefaultMinValue;
+			float mDefaultMaxValue;
+			float mDefaultValue;
+		};
+		float mDefaultValues[3];
+	};
+	union {
+		struct {
+			float mCurrentMinValue;
+			float mCurrentMaxValue;
+			float mCurrentValue;
+		};
+		float mCurrentValues[3];
+	};
 
 	virtual ~AttributeInstance();
 	virtual void tick(void);
@@ -173,7 +182,7 @@ static_assert(offsetof(AttributeInstance, mModifierList) == 0x18);
 static_assert(offsetof(AttributeInstance, mTemporalBuffs) == 0x30);
 static_assert(offsetof(AttributeInstance, mListeners) == 0x48);
 static_assert(offsetof(AttributeInstance, mDelegate) == 0x60);
-static_assert(offsetof(AttributeInstance, mCurrentVal) == 0x84);
+static_assert(offsetof(AttributeInstance, mCurrentValue) == 0x84);
 
 class BaseAttributeMap {
 public:

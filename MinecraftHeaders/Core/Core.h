@@ -3,26 +3,23 @@
 #include <string>
 #include "../dll.h"
 
-#include <modutils.h>
-
 namespace Core {
 
 class Random {
 public:
-	BUILD_ACCESS_MUT(uint32_t, mSeed, 0x0);
 
-	using arr624 = uint32_t[624];
-	BUILD_ACCESS_MUT(arr624, _mt, 0x4);
-
-	BUILD_ACCESS_MUT(int32_t, _mti, 0x9C4);
-	BUILD_ACCESS_MUT(bool, mHaveNextNextGaussian, 0x9C8);
-	BUILD_ACCESS_MUT(float, mNextNextGaussian, 0x9CC);
-	BUILD_ACCESS_MUT(int32_t, mInitedIdx, 0x9D0);
+	uint32_t mSeed; // 0x0
+	uint32_t _mt[624]; // 0x4
+	int32_t _mti; // 0x9C4
+	bool mHaveNextNextGaussian; // 0x9C8
+	float mNextGuassian; // 0x9CC
+	int32_t mInitedIdx; // 0x9D0
 
 	MCAPI uint32_t _genRandInt32(void);
 	MCAPI double nextGaussian(void);
 	MCAPI void _setSeed(uint32_t seed);
 };
+static_assert(sizeof(Core::Random) == 0x9D4);
 
 class PathPart {
 public:

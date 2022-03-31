@@ -44,7 +44,7 @@ public:
 	MCAPI std::unordered_map<enum persona::PieceType, class TintMapColor> getPieceTintColors(void) const;
 	MCAPI ~ConnectionRequest(void);
 
-	inline uint32_t getTitleId(void) {
+	inline uint32_t getTitleId(void) const {
 		// make as a string first because asUInt() seems to always fail
 		std::string const& titleIdStr = this->mCertificate->getExtraData("titleId", "").asString("");
 		if (titleIdStr.empty()) return 0;

@@ -1,13 +1,21 @@
 #pragma once
 
-#include <memory>
-#include <string>
-
+#include "../Math/Vec3.h"
 #include "../Core/json.h"
+#include "../Core/SemVersion.h"
+#include "../Core/HashedString.h"
 #include "../dll.h"
 
-#include <hook.h>
-#include <modutils.h>
+#include <memory>
+#include <string>
+#include <functional>
+
+struct TextureUVCoordinateSet;
+class TextureAtlasItem;
+class BlockLegacy;
+class FoodItemComponent;
+class SeedItemComponent;
+class CameraItemComponent;
 
 enum class BlockShape;
 
@@ -25,7 +33,7 @@ enum class CooldownType { // custom items can have custom cooldown types
 	Count        = 3
 };
 
-enum class UseAnimation {
+enum class UseAnimation : int8_t {
 	None             = 0,
 	Eat              = 1,
 	Drink            = 2,
@@ -182,9 +190,6 @@ public:
 	MCAPI std::string getSerializedName() const;
 	MCAPI std::string buildDescriptionName(class ItemStackBase const &) const;
 
-	BASEAPI bool getAllowOffhand() const;
-	DEF_FIELD_RW(bool, AllowOffhand);
-
 	enum class Flags {
 		mIsGlint = 1,
 		mHandEquipped = 2,
@@ -198,37 +203,44 @@ public:
 		mExperimental = 10
 	};
 
-	BUILD_ACCESS_MUT(std::string, m_textureAtlasFile, 0x8);
-	BUILD_ACCESS_MUT(int32_t, m_frameCount, 0x28);
-	BUILD_ACCESS_MUT(bool, m_animatesInToolbar, 0x2C);
-	BUILD_ACCESS_MUT(bool, mIsMirroredArt, 0x2D);
-	BUILD_ACCESS_MUT(enum UseAnimation, mUseAnim, 0x2E);
-	BUILD_ACCESS_MUT(const char*, mHoverTextColorFormat, 0x30);
-	BUILD_ACCESS_MUT(const struct TextureUVCoordinateSet*, mIconTexture, 0x38);
-	BUILD_ACCESS_MUT(const class TextureAtlasItem*, mIconAtlas, 0x40);
-	BUILD_ACCESS_MUT(bool, mUsesRenderingAdjustment, 0x48);
-	BUILD_ACCESS_MUT(class Vec3, mRenderingAdjTrans, 0x4C);
-	BUILD_ACCESS_MUT(class Vec3, mRenderingAdjRot, 0x58);
-	BUILD_ACCESS_MUT(float, mRenderingAdjScale, 0x64);
-	BUILD_ACCESS_MUT(uint8_t, m_maxStackSize, 0x68);
-	BUILD_ACCESS_MUT(int16_t, mId, 0x6A);
-	BUILD_ACCESS_MUT(std::string, mDescriptionId, 0x70);
-	BUILD_ACCESS_MUT(std::string, mRawNameId, 0x90);
-	BUILD_ACCESS_MUT(std::string, mNamespace, 0xB0);
-	BUILD_ACCESS_MUT(class HashedString, mFullName, 0xD0);
-	BUILD_ACCESS_MUT(int16_t, mMaxDamage, 0xF8);
-	BUILD_ACCESS_MUT(int16_t, mFlags, 0xFA); // bit flags - use Item::hasBitFlag(enum Item::Flags) to test
-	BUILD_ACCESS_MUT(int32_t, mMaxUseDuration, 0xFC);
-	BUILD_ACCESS_MUT(class BaseGameVersion, mMinRequiredBaseGameVersion, 0x100);
-	BUILD_ACCESS_MUT(class BlockLegacy*, mLegacyBlock, 0x170);
-	BUILD_ACCESS_MUT(enum CreativeItemCategory, mCreativeCategory, 0x178);
-	BUILD_ACCESS_MUT(class Item *, mCraftingRemainingItem, 0x180);
-	BUILD_ACCESS_MUT(std::unique_ptr<class FoodItemComponent>, mFoodComponent, 0x188);
-	BUILD_ACCESS_MUT(std::unique_ptr<class SeedItemComponent>, mSeedComponent, 0x190);
-	BUILD_ACCESS_MUT(std::unique_ptr<class CameraItemComponent>, mCameraComponent, 0x198);
-	BUILD_ACCESS_MUT(std::vector<std::function<void (void)>>, mOnResetBAIcallbacks, 0x1A0);
+	std::string mTextureAtlasFile; // 0x8
+	int32_t mFrameCount; // 0x28
+	bool mAnimatesInToolbar; // 0x2C
+	bool mIsMirroredArt; // 0x2D
+	UseAnimation mUseAnim; // 0x2E
+	const char* mHoverTextColorFormat; // 0x30
+	const TextureUVCoordinateSet* mIconTexture; // 0x38
+	const TextureAtlasItem* mIconAtlas; // 0x40
+	bool mUsesRenderingAdjustment; // 0x48
+	Vec3 mRenderingAdjTrans; // 0x4C
+	Vec3 mRenderingAdjRot; // 0x58
+	float mRenderingAdjScale; // 0x64
+	uint8_t mMaxStackSize; // 0x68
+	int16_t mId; // 0x6A
+	std::string mDescriptionId; // 0x70
+	std::string mRawNameId; // 0x90
+	std::string mNamespace; // 0xB0
+	HashedString mFullName; // 0xD0
+	int16_t mMaxDamage; // 0xF8
+	int16_t mFlags; // 0xFA - bit flags for enum Item::Flags
+	int32_t mMaxUseDuration; // 0xFC
+	BaseGameVersion mMinRequiredBaseGameVersion; // 0x100
+	BlockLegacy* mLegacyBlock; // 0x170
+	CreativeItemCategory mCreativeCategory; // 0x178
+	Item * mCraftingRemainingItem; // 0x180
+	std::unique_ptr<FoodItemComponent> mFoodComponent; // 0x188
+	std::unique_ptr<SeedItemComponent> mSeedComponent; // 0x190
+	std::unique_ptr<CameraItemComponent> mCameraComponent; // 0x198
+	std::vector<std::function<void (void)>> mOnResetBAIcallbacks; // 0x1A0
 
 	inline bool hasBitFlag(enum Item::Flags flag) {
-		return this->mFlags & (uint32_t)flag;
+		return (this->mFlags & (uint16_t)flag);
 	}
 };
+
+static_assert(offsetof(Item, mMaxStackSize) == 0x68);
+static_assert(offsetof(Item, mId) == 0x6A);
+static_assert(offsetof(Item, mRawNameId) == 0x90);
+static_assert(offsetof(Item, mFlags) == 0xFA);
+static_assert(offsetof(Item, mLegacyBlock) == 0x170);
+static_assert(sizeof(Item) == 0x1B8);

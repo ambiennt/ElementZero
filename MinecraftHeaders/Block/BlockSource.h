@@ -6,60 +6,27 @@
 #include "../Core/buffer_span.h"
 #include "../Actor/ActorType.h"
 #include "../Block/ActorBlockSyncMessage.h"
+#include "../Block/Block.h"
+#include "../Math/ChunkPos.h"
+#include "../Math/AABB.h"
 #include "Brightness.h"
+#include "BlockFetchResult.h"
 #include "../dll.h"
 
 #include <modutils.h>
 #include <hook.h>
 #include <thread>
 
-enum class ActorType;
+class Level;
+class LevelChunk;
+class ChunkSource;
+class Dimension;
+class BlockSourceListener;
+class BlockTickingQueue;
 
-enum class MaterialType {
-	Air                  = 0,
-	Dirt                 = 1,
-	Wood                 = 2,
-	Stone                = 3,
-	Metal                = 4,
-	Water                = 5,
-	Lava                 = 6,
-	Leaves               = 7,
-	Plant                = 8,
-	ReplaceablePlant     = 9,
-	Sponge               = 10,
-	Cloth                = 11,
-	Bed                  = 12,
-	Fire                 = 13,
-	Sand                 = 14,
-	Decoration           = 15,
-	Glass                = 16,
-	Explosive            = 17,
-	Ice                  = 18,
-	PackedIce            = 19,
-	TopSnow              = 20,
-	Snow                 = 21,
-	Cactus               = 22,
-	Clay                 = 23,
-	Vegetable            = 24,
-	Portal               = 25,
-	Cake                 = 26,
-	Web                  = 27,
-	RedstoneWire         = 28,
-	Carpet               = 29,
-	BuildableGlass       = 30,
-	Slime                = 31,
-	Piston               = 32,
-	Allow                = 33,
-	Deny                 = 34,
-	Netherwart           = 35,
-	StoneDecoration      = 36,
-	Bubble               = 37,
-	Egg                  = 38,
-	Barrier              = 39,
-	DecorationFlammable  = 40,
-	SurfaceTypeTotal     = 41,
-	Any                  = 42
-};
+enum class ActorType;
+enum class LegacyBlockID : uint16_t;
+enum class MaterialType;
 
 enum class TickingQueueType {
 	Internal = 0,
@@ -67,38 +34,31 @@ enum class TickingQueueType {
 };
 
 class BlockSource {
-private:
-	char pad[0x178 - 0x8];
-
 public:
-	// todo: replace macros with raw fields
-	BUILD_ACCESS_MUT(const std::thread::id, mOwnerThreadID, 0x8);
-	BUILD_ACCESS_MUT(const bool, mAllowUnpopulatedChunks, 0xC);
-	BUILD_ACCESS_MUT(const bool, mPublicSource, 0xD);
-	BUILD_ACCESS_MUT(class Level*, mLevel, 0x10);
-	BUILD_ACCESS_MUT(class ChunkSource*, mChunkSource, 0x18);
-	BUILD_ACCESS_MUT(class Dimension*, mDimension, 0x20);
-	BUILD_ACCESS_MUT(const int16_t, mMaxHeight, 0x28);
-	BUILD_ACCESS_MUT(std::vector<class BlockFetchResult>, mTempBlockFetchResult, 0x30);
-	BUILD_ACCESS_MUT(class BlockPos, mPlaceChunkPos, 0x48);
-	BUILD_ACCESS_MUT(std::vector<class BlockSourceListener*>, mListeners, 0x58);
-	BUILD_ACCESS_MUT(std::vector<class BlockSourceListener*>, mTestOnlyBlockChangeListeners, 0x70);
 
-	using blockPosLevelMap = std::unordered_map<class BlockPos, int32_t>;
-	BUILD_ACCESS_MUT(blockPosLevelMap, mTestOnlySetBlockRecursionLevel, 0x88);
-	BUILD_ACCESS_MUT(blockPosLevelMap, mTestOnlySetExtraBlockRecursionLevel, 0xC8);
-
-	BUILD_ACCESS_MUT(class ChunkPos, mLastChunkPos, 0x108);
-	BUILD_ACCESS_MUT(class LevelChunk*, mLastChunk, 0x110);
-	BUILD_ACCESS_MUT(class BlockTickingQueue*, mRandomTickQueue, 0x118);
-	BUILD_ACCESS_MUT(class BlockTickingQueue*, mTickQueue, 0x120);
-	BUILD_ACCESS_MUT(const struct BrightnessPair, mDefaultBrightness, 0x128);
-	BUILD_ACCESS_MUT(std::vector<class Actor*>, mTempEntityList, 0x130);
-	BUILD_ACCESS_MUT(std::vector<class BlockActor*>, mTempBlockEntityList, 0x148);
-	BUILD_ACCESS_MUT(std::vector<class AABB>, mTempCubeList, 0x160);
+	const std::thread::id mOwnerThreadID; // 0x8
+	const bool mAllowUnpopulatedChunks; // 0xC
+	const bool mPublicSource; // 0xD
+	Level* mLevel; // 0x10
+	ChunkSource* mChunkSource; // 0x18
+	Dimension* mDimension; // 0x20
+	const int16_t mMaxHeight; // 0x28
+	std::vector<BlockFetchResult> mTempBlockFetchResult; // 0x30
+	BlockPos mPlaceChunkPos; // 0x48
+	std::vector<BlockSourceListener*> mListeners; // 0x58
+	std::vector<BlockSourceListener*> mTestOnlyBlockChangeListeners; // 0x70
+	std::unordered_map<BlockPos, int32_t> mTestOnlySetBlockRecursionLevel; // 0x88
+	std::unordered_map<BlockPos, int32_t> mTestOnlySetExtraBlockRecursionLevel; // 0xC8
+	ChunkPos mLastChunkPos; // 0x108
+	LevelChunk* mLastChunk; // 0x110
+	BlockTickingQueue* mRandomTickQueue; // 0x118
+	BlockTickingQueue* mTickQueue; // 0x120
+	const BrightnessPair mDefaultBrightness; // 0x128
+	std::vector<Actor*> mTempEntityList; // 0x130
+	std::vector<BlockActor*> mTempBlockEntityList; // 0x148
+	std::vector<AABB> mTempCubeList; // 0x160
 
 	MCAPI BlockSource(class Level &, class Dimension &, class ChunkSource &, bool, bool);
-
 	MCAPI virtual ~BlockSource();
 
 	MCAPI bool canSeeSky(int, int, int) const;
@@ -189,4 +149,24 @@ public:
 		fetchBlocksInCylinder(class BlockPos const &, unsigned int, unsigned int, std::function<bool(Block const &)>);
 	MCAPI class gsl::span<class BlockFetchResult const>
 		fetchBlocksInCylinderSorted(class BlockPos const &, unsigned int, unsigned int, std::function<bool(Block const &)>);
+
+	enum LegacyBlockID getBlockIdAt(Vec3 const &pos) {
+		return (LegacyBlockID)this->getBlock(BlockPos(pos)).mLegacyBlock->mId;
+	}
+
+	enum LegacyBlockID getBlockIdAt(BlockPos const &pos) {
+		return (LegacyBlockID)this->getBlock(pos).mLegacyBlock->mId;
+	}
+
+	enum LegacyBlockID getBlockIdAt(int32_t x, int32_t y, int32_t z) {
+		return (LegacyBlockID)this->getBlock(BlockPos(x, y, z)).mLegacyBlock->mId;
+	}
 };
+
+static_assert(offsetof(BlockSource, mDimension) == 0x20);
+static_assert(offsetof(BlockSource, mTempBlockFetchResult) == 0x30);
+static_assert(offsetof(BlockSource, mTestOnlyBlockChangeListeners) == 0x70);
+static_assert(offsetof(BlockSource, mLastChunk) == 0x110);
+static_assert(offsetof(BlockSource, mTempEntityList) == 0x130);
+static_assert(offsetof(BlockSource, mTempCubeList) == 0x160);
+static_assert(sizeof(BlockSource) == 0x178);

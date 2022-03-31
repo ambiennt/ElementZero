@@ -3,10 +3,27 @@
 #include <cstdint>
 #include <vector>
 #include <functional>
+#include <array>
+#include <shared_mutex>
+#include <unordered_map>
 
+#include "LegacyBlockID.h"
+#include "Material.h"
+#include "Brightness.h"
+#include "../Math/BlockPos.h"
+#include "../Math/AABB.h"
+#include "../Item/ItemState.h"
+#include "../Item/ItemRuntimeID.h"
+#include "../Core/HashedString.h"
+#include "../Core/Color.h"
+#include "../Core/SemVersion.h"
 #include "../dll.h"
 
-#include <modutils.h>
+class LootComponent;
+
+enum class BlockActorType;
+enum class CreativeItemCategory;
+enum class MaterialType;
 
 enum class BlockRenderLayer {
 	RENDERLAYER_DOUBLE_SIDED                = 0,
@@ -360,10 +377,95 @@ public:
 	template <typename T> MCAPI T getState(class ItemState const &, unsigned short) const;
 	MCAPI class Block const &getDefaultState(void) const;
 
-	// TODO - more fields
-	BUILD_ACCESS_MUT(int32_t, mFlameOdds, 0x100);
-	BUILD_ACCESS_MUT(int32_t, mBurnOdds, 0x104);
-	BUILD_ACCESS_MUT(uint16_t, mBlockID, 0x10C); // NewBlockID?
+	std::string mDescriptionId; // 0x8
+	std::string mRawNameId; // 0x28
+	std::string mNamespace; // 0x48
+	HashedString mFullName; // 0x68
+	bool mFancy; // 0x90
+	BlockRenderLayer mRenderLayer; // 0x94
+	bool mRenderLayerCanRenderAsOpaque; // 0x98
+	uint64_t mProperties; // 0xA0 - mProperties[8], bit flags for enum BlockProperty
+	BlockActorType mBlockEntityType; // 0xA8
+	bool mAnimatedTexture; // 0xAC
+	float mBrightnessGamma; // 0xB0
+	float mThickness; // 0xB4
+	bool mCanSlide; // 0xB8
+	bool mCanInstatick; // 0xB9
+	bool mIsInteraction; // 0xBA
+	float mGravity; // 0xBC
+	const Material *mMaterial; // 0xC0
+	Color mMapColor; // 0xC8
+	float mFriction; // 0xD8
+	bool mHeavy; // 0xDC
+	float mParticleQuantityScalar; // 0xE0
+	float mDestroySpeed; // 0xE4
+	float mExplosionResistance; // 0xE8
+	CreativeItemCategory mCreativeCategory; // 0xEC
+	bool mAllowsRunes; // 0xF0
+	bool mCanBeBrokenFromFalling; // 0xF1
+	bool mSolid; // 0xF2
+	bool mPushesOutItems; // 0xF3
+	bool mIgnoreBlockForInsideCubeRenderer; // 0xF4
+	bool mIsTrapdoor; // 0xF5
+	bool mIsDoor; // 0xF6
+	float mTranslucency; // 0xF8
+	Brightness mLightBlock; // 0xFC
+	Brightness mLightEmission; // 0xFD
+	bool mShouldRandomTick; // 0xFE
+	bool mShouldRandomTickExtraLayer; // 0xFF
+	int32_t mFlameOdds; // 0x100
+	int32_t mBurnOdds; // 0x104
+	bool mIsMobPiece; // 0x108
+	bool mCanBeExtraBlock; // 0x109
+	bool mCanPropagateBrightness; // 0x10A
+	uint16_t mId; // NewBlockID - 0x10C
+	BaseGameVersion mMinRequiredBaseGameVersion; // 0x110
+	bool mExperimental; // 0x180
+	bool mIsVanilla; // 0x181
+	std::unique_ptr<LootComponent> mLootComponent; // 0x188
+	AABB mVisualShape; // 0x190
+	uint32_t mBitsUsed; // 0x1AC
+	uint32_t mTotalBitsUsed; // 0x1B0
+	std::array<ItemStateInstance, 114> mStates; // 0x1B8
+	std::vector<std::unique_ptr<Block>> mBlockPermutations; // 0xFF8
+	const Block *mDefaultState; // 0x1010
+	//Core::Cache<uint16_t, Block const *, Block const *> mLegacyDataLookupTable; // 0x1018
+	std::shared_mutex mAccess; // Core::Cache
+	std::unordered_map<uint16_t, const Block*> mContent; // Core::Cache
 
-	BUILD_ACCESS_MUT(class Block **, Block, 0x202);
+	inline uint16_t getId(void) const {
+		return this->mId;
+	}
+
+	inline enum LegacyBlockID getIdAsEnum(void) const {
+		return (LegacyBlockID)this->getId();
+	}
+
+	inline int16_t toItemId(void) const {
+		if (this->mId > 255) {
+			return (int16_t)(255 - this->mId);
+		}
+		return (int16_t)this->mId;
+	}
+
+	inline enum ItemRuntimeID toItemIdAsEnum(void) const {
+		return (ItemRuntimeID)this->toItemId();
+	}
+
+	inline bool hasBlockProperty(enum BlockProperty property) const {
+		return (this->mProperties & (uint64_t)property);
+	}
+
+	inline enum MaterialType getMaterial(void) const {
+		return this->mMaterial->mType;
+	}
 };
+
+static_assert(offsetof(BlockLegacy, mRawNameId) == 0x28);
+static_assert(offsetof(BlockLegacy, mRenderLayer) == 0x94);
+static_assert(offsetof(BlockLegacy, mProperties) == 0xA0);
+static_assert(offsetof(BlockLegacy, mBlockEntityType) == 0xA8);
+static_assert(offsetof(BlockLegacy, mSolid) == 0xF2);
+static_assert(offsetof(BlockLegacy, mId) == 0x10C);
+static_assert(offsetof(BlockLegacy, mBlockPermutations) == 0xFF8);
+static_assert(sizeof(BlockLegacy) == 0x1060);

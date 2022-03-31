@@ -603,6 +603,14 @@ public:
 			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
 			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);
 	
+	enum GeneratorType getWorldGeneratorType(void) {
+		return this->getLevelDataWrapper()->getWorldGenerator();
+	}
+
+	template <typename T> T getGameRuleValue(enum GameRulesIndex index) {
+		return this->getGameRules().getGameRuleValue<T>(index);
+	}
+
 	BUILD_ACCESS(class BlockPalette *, GlobalBlockPalette, 1856);
 
 	BUILD_ACCESS_MUT(ActorUniqueID, mLastUniqueID, 0x1A0);

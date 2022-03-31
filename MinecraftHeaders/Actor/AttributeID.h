@@ -1,6 +1,6 @@
 #pragma once
 
-enum class AttributeID {
+enum class AttributeID : uint32_t {
 	PlayerHunger                     = 1,
 	PlayerSaturation                 = 2,
 	PlayerExhaustion                 = 3,

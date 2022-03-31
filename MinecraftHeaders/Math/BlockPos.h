@@ -32,6 +32,36 @@ public:
 	BlockPos operator/(float factor) const {
 		return BlockPos(this->x / factor, this->y / factor, this->z / factor);
 	}
+	BlockPos& operator=(BlockPos const &rhs) {
+		this->x = rhs.x;
+		this->y = rhs.y;
+		this->z = rhs.z;
+		return *this;
+	}
+	BlockPos& operator+=(float factor) {
+		this->x += factor;
+		this->y += factor;
+		this->z += factor;
+		return *this;
+	}
+	BlockPos& operator-=(float factor) {
+		this->x -= factor;
+		this->y -= factor;
+		this->z -= factor;
+		return *this;
+	}
+	BlockPos& operator*=(float factor) {
+		this->x *= factor;
+		this->y *= factor;
+		this->z *= factor;
+		return *this;
+	}
+	BlockPos& operator/=(float factor) {
+		this->x /= factor;
+		this->y /= factor;
+		this->z /= factor;
+		return *this;
+	}
 
 	bool operator==(BlockPos const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
 	bool operator!=(BlockPos const &rhs) const { return !(*this == rhs); }

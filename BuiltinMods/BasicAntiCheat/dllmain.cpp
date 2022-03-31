@@ -70,12 +70,12 @@ TClasslessInstanceHook(
   auto &db = Mod::PlayerDatabase::GetInstance();
   auto it  = db.Find(*netid);
   if (!it) return;
-  if (packet->type != TextPacketType::Chat) {
+  if (packet->mType != TextPacketType::Chat) {
     LOGI("\"%s\"(%d) has been detected using: Chat hack") % it->name % it->xuid;
     (mAntiCheat.*EmitDetected)(SIG("detected"), "chat_hack", *it);
     return;
   }
-  if (packet->source != it->name) {
+  if (packet->mAuthor != it->name) {
     LOGI("\"%s\"(%d) has been detected using: Fake name") % it->name % it->xuid;
     (mAntiCheat.*EmitDetected)(SIG("detected"), "fake_name", *it);
     return;

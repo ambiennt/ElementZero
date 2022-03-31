@@ -80,7 +80,7 @@ void checkInventoryTransaction(Mod::PlayerEntry const &entry, ComplexInventoryTr
 			case ItemUseInventoryTransaction::ActionType::PLACE:
 				if (!Check(entry.player, data.pos.x, data.pos.z)) {
 					auto legacy = entry.player->mRegion->getBlock(data.pos).mLegacyBlock.get();
-					if (!legacy->isInteractiveBlock() || legacy->mBlockID == VanillaBlockTypes::mItemFrame->mBlockID || entry.player->isSneaking()) {
+					if (!legacy->isInteractiveBlock() || (legacy->getIdAsEnum() == LegacyBlockID::FRAME) || entry.player->isSneaking()) { // item frame
 						data.onTransactionError(*entry.player, InventoryTransactionError::StateMismatch);
 						token("Blocked by SpawnProtection");
 					}

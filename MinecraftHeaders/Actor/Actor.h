@@ -613,16 +613,16 @@ public:
 			this, destination, &facePosition, destinationDimension, yaw, pitch, commandVersion, &id);
 	}
 
-	inline AttributeInstance* getAttributeInstanceFromId(AttributeID id) {
+	inline AttributeInstance* getMutableAttribute(AttributeID id) {
 		return this->mAttributes->getMutableInstance((uint32_t)id);
 	}
 
 	inline float getHealth(void) {
-		return this->getAttributeInstanceFromId(AttributeID::Health)->mCurrentVal;
+		return this->getMutableAttribute(AttributeID::Health)->mCurrentValue;
 	}
 
 	inline float getAbsorption(void) {
-		return this->getAttributeInstanceFromId(AttributeID::Absorption)->mCurrentVal;
+		return this->getMutableAttribute(AttributeID::Absorption)->mCurrentValue;
 	}
 
 	inline int32_t getHealthAsInt(void) {
@@ -646,7 +646,7 @@ public:
 	}
 
 	inline bool hasCategory(ActorCategory category) const {
-		return ((uint32_t)this->mCategories & (uint32_t)category);
+		return (this->mCategories & (uint32_t)category);
 	}
 
 	inline bool isInstanceOfMob(void) const {
@@ -659,6 +659,27 @@ public:
 
 	inline bool hasRider(void) const {
 		return (this->mRiderIDs.size() > 0);
+	}
+
+	// the pos delta for the mob's position delta in its state vector seems to be inconsistent,
+	// so I think its better to calculate manually
+	// only use this on non-player entities, for players use getRawPlayerPosDelta()
+	inline class Vec3 getRawActorPosDelta(void) const {
+		const auto& prevPos = this->getPosOld();
+		const auto& currPos = this->getPos();
+		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
+	}
+
+	inline class Vec3 getPosOldGrounded(void) const {
+		Vec3 result(this->getPosOld());
+		result.y -= this->mHeightOffset;
+		return result;
+	}
+	
+	inline class Vec3 getPosGrounded(void) const {
+		Vec3 result(this->getPos());
+		result.y -= this->mHeightOffset;
+		return result;
 	}
 
 	// actor fields
@@ -686,7 +707,7 @@ public:
 	BUILD_ACCESS_MUT(class Vec2, mRenderRot, 0x12C);
 	BUILD_ACCESS_MUT(int32_t, mAmbientSoundTime, 0x134);
 	BUILD_ACCESS_MUT(int32_t, mLastHurtByPlayerTime, 0x138);
-	BUILD_ACCESS_MUT(int32_t, mCategories, 0x13C); // ActorCategory, ida says _BYTE[4]
+	BUILD_ACCESS_MUT(uint32_t, mCategories, 0x13C); // bit flags for enum ActorCategory
 	BUILD_ACCESS_MUT(class SynchedActorData, mEntityData, 0x140);
 	BUILD_ACCESS_MUT(std::unique_ptr<class SpatialActorNetworkData>, mNetworkData, 0x160);
 	BUILD_ACCESS_MUT(class Vec3, mSentDelta, 0x168);
