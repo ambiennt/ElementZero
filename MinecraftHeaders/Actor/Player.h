@@ -388,9 +388,7 @@ public:
 
 	inline void setPlayerPermissionLevel(enum PlayerPermissionLevel level, bool syncToClients) {
 		this->mAbilities.mPermissionsHandler->mPlayerPermissions = level;
-		if (syncToClients) {
-			this->syncAbilities();
-		}
+		if (syncToClients) { this->syncAbilities(); }
 	}
 
 	template <typename T> T getAbilityValue(enum AbilitiesIndex index) const;

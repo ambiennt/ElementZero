@@ -37,9 +37,14 @@ public:
 	MCAPI std::string asString() const;
 	MCAPI static UUID fromString(std::string const &source);
 	MCAPI static UUID EMPTY;
+
 	static UUID generateUUID(void) {
-		auto temp = boost::uuids::random_generator()();
-		return UUID::fromString(boost::lexical_cast<std::string>(temp));
+		static boost::uuids::random_generator uuidGen;
+		return fromString(boost::lexical_cast<std::string>(uuidGen()));
+	}
+	static std::string generateUUIDAsString(void) {
+		static boost::uuids::random_generator uuidGen;
+		return boost::lexical_cast<std::string>(uuidGen());
 	}
 
 	inline bool empty() const noexcept { return a == 0 && b == 0; }

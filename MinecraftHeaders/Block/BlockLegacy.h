@@ -452,6 +452,14 @@ public:
 		return (ItemRuntimeID)this->toItemId();
 	}
 
+	inline bool isAirBlock(void) const {
+		return (this->getIdAsEnum() == LegacyBlockID::AIR);
+	}
+
+	inline bool isUnbreakableBlock(void) const {
+		return (!this->isAirBlock() && (this->mDestroySpeed < 0.f) && this->mSolid);
+	}
+
 	inline bool hasBlockProperty(enum BlockProperty property) const {
 		return (this->mProperties & (uint64_t)property);
 	}

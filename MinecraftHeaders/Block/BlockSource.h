@@ -150,15 +150,15 @@ public:
 	MCAPI class gsl::span<class BlockFetchResult const>
 		fetchBlocksInCylinderSorted(class BlockPos const &, unsigned int, unsigned int, std::function<bool(Block const &)>);
 
-	enum LegacyBlockID getBlockIdAt(Vec3 const &pos) {
+	inline enum LegacyBlockID getBlockIdAt(Vec3 const &pos) {
 		return (LegacyBlockID)this->getBlock(BlockPos(pos)).mLegacyBlock->mId;
 	}
 
-	enum LegacyBlockID getBlockIdAt(BlockPos const &pos) {
+	inline enum LegacyBlockID getBlockIdAt(BlockPos const &pos) {
 		return (LegacyBlockID)this->getBlock(pos).mLegacyBlock->mId;
 	}
 
-	enum LegacyBlockID getBlockIdAt(int32_t x, int32_t y, int32_t z) {
+	inline enum LegacyBlockID getBlockIdAt(int32_t x, int32_t y, int32_t z) {
 		return (LegacyBlockID)this->getBlock(BlockPos(x, y, z)).mLegacyBlock->mId;
 	}
 };

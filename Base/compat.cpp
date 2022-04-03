@@ -81,17 +81,18 @@ THook(void*,
 	const uint8_t subid, void *uuid, void *deviceId, void *certificate, void *platformId, void *platformOnlineId) {
 
 	auto ret = original(player, level, packetSender, playerGameType, owner, subid, uuid, deviceId, certificate, platformId, platformOnlineId);
-	auto& unusedVec = direct_access<Vec3>(player, 0xB24); // Player::mFirstPersonLatestHandOffset (store a pointer here at unused field)
-	unusedVec.x = unusedVec.y = unusedVec.z = 0;
+
+	// store pointer at unused field, Player::mFirstPersonLatestHandOffset
 	direct_access<EZPlayerFields*>(player, 0xB24) = new EZPlayerFields();
 	return ret;
 }
 
 THook(void*, "??1Player@@UEAA@XZ", Player* player) {
 
-	auto pf = direct_access<EZPlayerFields*>(player, 0xB24);
-	delete pf; // clean up to be safe because idk what bds does with this field
-	pf = nullptr;
+	// clean up to be safe because idk what bds does with this field
+	delete direct_access<EZPlayerFields*>(player, 0xB24);
+	direct_access<EZPlayerFields*>(player, 0xB24) = nullptr;
+	
 	return original(player);
 }
 
@@ -111,18 +112,18 @@ std::string &ServerNetworkHandler::getMotd() { return direct_access<std::string>
 
 void CommandOutput::success() { direct_access<bool>(this, 40) = true; }
 
-uint64_t Level::getServerTick() {
-	return CallServerClassMethod<const struct Tick>("?getCurrentServerTick@Level@@UEBA?BUTick@@XZ", this).value;
-}
-
-ActorUniqueID Level::getNewUniqueID() const {
-	return ActorUniqueID(++this->mLastUniqueID.value);
-}
-
 // RaidBossComponent::_sendBossEvent
 PacketSender &Level::getPacketSender() const { return *direct_access<PacketSender *>(this, 2240); } // verified
 
 LevelDataWrapper &Level::getLevelDataWrapper() { return direct_access<LevelDataWrapper>(this, 544); } // verified
+
+uint64_t Level::getServerTick() {
+	return (uint64_t)(CallServerClassMethod<const struct Tick>("?getCurrentServerTick@Level@@UEBA?BUTick@@XZ", this).value);
+}
+
+struct ActorUniqueID Level::getNewUniqueID() const {
+	return ActorUniqueID(++this->mLastUniqueID.value);
+}
 
 template <> Minecraft *LocateService<Minecraft>() {
 	return *GetServerSymbol<Minecraft *>("?mGame@ServerCommand@@1PEAVMinecraft@@EA");

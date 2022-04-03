@@ -100,10 +100,10 @@ static_assert(sizeof(SerializedSkin) == 0x1D0);
 
 class SteveSkin : public SerializedSkin {
 public:
-	SteveSkin(mce::UUID const& uuid) {
+	SteveSkin() : SerializedSkin() {
 
-		this->mId = "c18e65aa-7b21-4637-9b63-8ad63622ef01_Steve";
-		this->mFullId = uuid.asString();
+		//this->mId = "c18e65aa-7b21-4637-9b63-8ad63622ef01_Steve";
+		this->mId = this->mFullId = mce::UUID::generateUUIDAsString();
 		this->mArmSize = "wide";
 		this->mTrustedFlag = SerializedSkin::TrustedSkinFlag::YES;
 		this->mResourcePatch = "{\"geometry\":{\"default\":\"geometry.humanoid.custom\"}}";
@@ -135,10 +135,10 @@ public:
 
 class AlexSkin : public SerializedSkin {
 public:
-	AlexSkin(mce::UUID const& uuid) {
+	AlexSkin() : SerializedSkin() {
 
-		this->mId = "c18e65aa-7b21-4637-9b63-8ad63622ef01_Alex";
-		this->mFullId = uuid.asString();
+		//this->mId = "c18e65aa-7b21-4637-9b63-8ad63622ef01_Alex";
+		this->mId = this->mFullId = mce::UUID::generateUUIDAsString();
 		this->mArmSize = "slim";
 		this->mTrustedFlag = SerializedSkin::TrustedSkinFlag::YES;
 		this->mResourcePatch = "{\"geometry\":{\"default\":\"geometry.humanoid.customSlim\"}}";

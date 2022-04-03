@@ -516,15 +516,19 @@ enum class ParticleType {
 	PortalReverse          = 74
 };
 
-class Level {
+class Level /*: public BlockSourceListener, public IWorldRegistriesProvider*/ {
 public:
+
+	MCAPI Level(class SoundPlayer &, std::unique_ptr<class LevelStorage>, class IMinecraftEventing &, bool, class Scheduler &,
+			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
+			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);
+
 	MCAPI void save(void);
 	MCAPI void saveGameData(void);
 	MCAPI void saveVillages(void);
 	MCAPI void saveBiomeData(void);
 	MCAPI void saveLevelData(void);
 	MCAPI void saveDirtyChunks(void);
-
 	MCAPI int getNewPlayerId(void) const;
 	MCAPI class GameRules &getGameRules(void);
 	MCAPI class Player *getRandomPlayer(void);
@@ -537,26 +541,18 @@ public:
 	MCAPI float getSpecialMultiplier(AutomaticID<class Dimension, int>);
 	MCAPI class MapItemSavedData *getMapSavedData(struct ActorUniqueID);
 	MCAPI class Dimension *getDimension(class AutomaticID<class Dimension, int>) const;
+	MCAPI std::string const &getPlayerPlatformOnlineId(class mce::UUID const &) const;
 
 	// slow func, has to iterate through whole player list and match mce::UUID
 	// EZ player database is probably a lot faster
 	MCAPI std::string const &getPlayerXUID(class mce::UUID const &) const;
-	
-	MCAPI std::string const &getPlayerPlatformOnlineId(class mce::UUID const &) const;
-	BASEAPI ActorUniqueID getNewUniqueID() const;
-	BASEAPI PacketSender &getPacketSender() const;
-	BASEAPI uint64_t getServerTick();
-	BASEAPI LevelDataWrapper &getLevelDataWrapper();
 
 	MCAPI void setDefaultGameType(enum GameType);
-
 	MCAPI bool hasCommandsEnabled(void) const;
 	MCAPI bool hasExperimentalGameplayEnabled(void) const;
-
 	MCAPI void forEachPlayer(std::function<bool(Player &)>);
 	MCAPI void forEachPlayer(std::function<bool(Player const &)>) const;
 	MCAPI void forEachDimension(std::function<bool(Dimension const &)>);
-
 	MCAPI void broadcastBossEvent(enum BossEventUpdateType);
 	MCAPI void broadcastActorEvent(class Actor &, enum ActorEvent, int32_t data);
 	MCAPI void broadcastLevelEvent(enum LevelEvent, class Vec3 const &pos, int32_t data, class Player *);
@@ -599,11 +595,7 @@ public:
 	MCAPI void spawnParticleEffect(std::string const &, class Vec3 const &, class Dimension *);
 	MCAPI void requestPlayerChangeDimension(class Player &, std::unique_ptr<class ChangeDimensionRequest>);
 
-	MCAPI Level(class SoundPlayer &, std::unique_ptr<class LevelStorage>, class IMinecraftEventing &, bool, class Scheduler &,
-			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
-			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);
-	
-	enum GeneratorType getWorldGeneratorType(void) {
+	inline enum GeneratorType getWorldGeneratorType(void) {
 		return this->getLevelDataWrapper()->getWorldGenerator();
 	}
 
@@ -613,10 +605,15 @@ public:
 
 	BUILD_ACCESS(class BlockPalette *, GlobalBlockPalette, 1856);
 
-	BUILD_ACCESS_MUT(ActorUniqueID, mLastUniqueID, 0x1A0);
+	BUILD_ACCESS_MUT(struct ActorUniqueID, mLastUniqueID, 0x1A0);
 	BUILD_ACCESS_MUT(std::vector<class Player *>, mActivePlayers, 0x58); // Level::forEachPlayer
 	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack
 	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt
 	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData - 0x2090 - 0x28
+
+	BASEAPI PacketSender &getPacketSender() const;
+	BASEAPI LevelDataWrapper &getLevelDataWrapper();
+	BASEAPI uint64_t getServerTick();
+	BASEAPI ActorUniqueID getNewUniqueID() const;
 };
