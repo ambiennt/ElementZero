@@ -20,7 +20,7 @@ struct MoveActorAbsoluteData {
 	ActorRuntimeID mRuntimeId;
 	MoveActorAbsoluteData::Header mFlags; // mHeader
 	Vec3 mPos = Vec3::ZERO;
-	uint8_t mRotX, mRotY, mRotYHead = 0;
+	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
 
 	MoveActorAbsoluteData() {}
 	MCAPI MoveActorAbsoluteData(Actor const &);
