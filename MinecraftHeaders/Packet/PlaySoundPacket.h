@@ -13,8 +13,9 @@ public:
 	float mPitch  = 1.0f;
 
 	inline ~PlaySoundPacket() {}
-	MCAPI PlaySoundPacket(void);
-	MCAPI PlaySoundPacket(std::string name, const Vec3& pos, float volume = 1.0f, float pitch = 1.0f);
+	PlaySoundPacket() {}
+	PlaySoundPacket(std::string name, const Vec3 &pos, float volume = 1.0f, float pitch = 1.0f) 
+		: mName(name), mPos(pos), mVolume(volume), mPitch(pitch) {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

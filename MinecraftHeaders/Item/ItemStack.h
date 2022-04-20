@@ -159,7 +159,7 @@ public:
 	}
 
 	inline bool isBlockItem(void) const {
-		return (this->mBlock->mLegacyBlock.get() != nullptr);
+		return (this->mBlock && this->mBlock->mLegacyBlock);
 	}
 
 	inline enum ItemRuntimeID getIdAsEnum(void) const {
@@ -167,9 +167,7 @@ public:
 	}
 
 	inline uint16_t toBlockId(void) const {
-		if (!this->isBlockItem()) {
-			return (uint16_t)this->getId();
-		}
+		if (!this->isBlockItem()) return 0;
 		return this->mBlock->mLegacyBlock->mId;
 	}
 

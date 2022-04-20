@@ -15,6 +15,6 @@ struct ActorUniqueID {
 		this->value = rhs.value;
 		return *this;
 	}
-	bool operator==(ActorUniqueID const &rhs) const { return (this->value == rhs.value); }
-	bool operator!=(ActorUniqueID const &rhs) const { return (this->value != rhs.value); }
+	inline bool operator==(ActorUniqueID const &rhs) const { return (this->value == rhs.value); }
+	inline bool operator!=(ActorUniqueID const &rhs) const { return !(*this == rhs); }
 };

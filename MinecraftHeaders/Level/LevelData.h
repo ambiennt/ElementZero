@@ -67,7 +67,7 @@ public:
 	Tick mCurrentTick;
 	bool mHasSpawnPos;
 	BlockPos mLimitedWorldOrigin;
-	int mDayCycleTime;
+	int32_t mDayCycleTime;
 	uint64_t mLastPlayedTime;
 	uint32_t mServerChunkTickRange;
 	float mRainLevel;
@@ -80,7 +80,7 @@ public:
 	bool mForceGameType;
 	bool mSpawnMobs;
 	Json::Value mFlatworldGeneratorOptions;
-	int mWorldStartCount;
+	int32_t mWorldStartCount;
 	bool mAchievementsDisabled;
 	EducationEditionOffer mEducationEditionOffer;
 	bool mEducationFeaturesEnabled;

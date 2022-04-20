@@ -6,32 +6,39 @@
 #include "../Actor/Actor.h"
 #include "../dll.h"
 
+struct MoveActorAbsoluteData {
+	struct Header {
+		union {
+			struct {
+				uint8_t mIsOnGround : 1;
+				uint8_t mTeleported : 1;
+				uint8_t mForceMoveLocalEntity : 1;
+			};
+			uint8_t mRaw = 0x0;
+		};
+	};
+	ActorRuntimeID mRuntimeId;
+	MoveActorAbsoluteData::Header mFlags; // mHeader
+	Vec3 mPos = Vec3::ZERO;
+	uint8_t mRotX, mRotY, mRotYHead = 0;
+
+	MoveActorAbsoluteData() {}
+	MCAPI MoveActorAbsoluteData(Actor const &);
+	inline ~MoveActorAbsoluteData() {}
+};
+
 class MoveActorAbsolutePacket : public Packet {
 public:
 
-	enum class MovementFlags : uint8_t { 
-		GROUND     = 0x1,
-		TELEPORT   = 0x2,
-		FORCE_MOVE = 0x4
-	};
+	MoveActorAbsoluteData mMoveData;
 
-	ActorRuntimeID mRuntimeId;
-	uint8_t mFlags = 0x0; // MovementFlags::GROUND - (actually a MoveActorAbsoluteData::Header in BDS)
-	Vec3 mPos = Vec3::ZERO;
-	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
-
-	MoveActorAbsolutePacket() {};
-	MoveActorAbsolutePacket(Actor &actor) {
-		this->mRuntimeId = actor.getRuntimeID();
-		this->mPos = actor.getPos();
-		auto& rot = actor.mRot;
-		this->mRotX = rot.x; this->mRotY = this->mRotYHead = rot.y;
-		this->mFlags |= (actor.mOnGround ? (uint8_t)MovementFlags::GROUND : 0x0) |
-			(actor.mTeleportedThisTick ? (uint8_t)MovementFlags::TELEPORT : 0x0);
-	}
+	MoveActorAbsolutePacket() {}
 	inline ~MoveActorAbsolutePacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
+
+static_assert(offsetof(MoveActorAbsoluteData, mFlags) == 0x8);
+static_assert(sizeof(MoveActorAbsolutePacket) == 0x48);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include "../dll.h"
 
 class ActorRuntimeID {
 public:
@@ -13,6 +14,6 @@ public:
 		this->value = rhs.value;
 		return *this;
 	}
-	bool operator==(ActorRuntimeID const &rhs) const { return (this->value == rhs.value); }
-	bool operator!=(ActorRuntimeID const &rhs) const { return (this->value != rhs.value); }
+	inline bool operator==(ActorRuntimeID const &rhs) const { return (this->value == rhs.value); }
+	inline bool operator!=(ActorRuntimeID const &rhs) const { return !(*this == rhs); }
 };

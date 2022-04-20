@@ -6,12 +6,14 @@
 
 class Color {
 public:
-	float r{}, g{}, b{}, a{};
+	float r, g, b, a;
 
+	inline Color() : r(0.f), g(0.f), b(0.f), a(0.f) {}
 	inline Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {}
-	inline Color() {}
+	inline Color(Color const &rhs) : r(rhs.r), g(rhs.g), b(rhs.b), a(rhs.a) {}
 
-	MCAPI bool operator==(Color const &) const;
+	bool operator==(Color const &rhs) const { return (this->r == rhs.r) && (this->g == rhs.g) && (this->b == rhs.b) && (this->a == rhs.a); }
+	bool operator!=(Color const &rhs) const { return !(*this == rhs); }
 
 	MCAPI static Color fromARGB(int);
 	MCAPI static Color fromHexString(std::string const &);

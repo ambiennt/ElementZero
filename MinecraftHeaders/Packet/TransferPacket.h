@@ -6,12 +6,12 @@
 #include "../dll.h"
 
 class TransferPacket : public Packet {
-	std::string address;
-	int port = 0;
+	std::string mServerAddress;
+	int32_t mServerPort = 0;
 
 public:
-	TransferPacket(std::string address, int port) : address(address), port(port) {}
-	inline virtual ~TransferPacket() {}
+	inline ~TransferPacket() {}
+	TransferPacket(std::string address, int32_t port) : mServerAddress(address), mServerPort(port) {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;
