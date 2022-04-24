@@ -1,10 +1,7 @@
 #pragma once
 
-#include "Level.h"
-#include "Dimension.h"
 #include "Tick.h"
 #include "../Core/SpinLock.h"
-#include "SubChunk.h"
 #include "ChunkState.h"
 #include "DirtyTicksCounter.h"
 #include "../Math/BlockPos.h"
@@ -119,7 +116,7 @@ public:
 	using rainHeightsArr256 = std::array<int16_t, 256>;
 	BUILD_ACCESS_MUT(rainHeightsArr256, mRainHeights, 0x12D4);
 
-	BUILD_ACCESS_MUT(std::vector<std::unique_ptr<class Actor>>, mEntities, 0x14D8); // SmallSet<std::unique_ptr<Actor>> - I have no idea what a smallSet is
+	//BUILD_ACCESS_MUT(SmallSet<std::unique_ptr<class Actor>>, mEntities, 0x14D8);
 
 	using chunkBlockPosBlockActorMap = std::unordered_map<class ChunkBlockPos, std::shared_ptr<class BlockActor>>;
 	BUILD_ACCESS_MUT(chunkBlockPosBlockActorMap, mBlockEntities, 0x14F0);
@@ -146,3 +143,12 @@ public:
 	MCAPI void setUnsaved(void);
 	MCAPI bool hasEntity(class Actor&);
 };
+
+class LevelChunkGarbageCollector {
+public:
+	Dimension *mDimension; // 0x0
+	uint8_t mLevelChunksToDiscard[0x268]; // MPMCQueue<std::unique_ptr<LevelChunk, LevelChunkFinalDeleter>> - 0x8
+	std::atomic<uint64_t> mPendingDeletes; // 0x270
+};
+
+static_assert(sizeof(LevelChunkGarbageCollector) == 0x278);

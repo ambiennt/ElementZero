@@ -2,11 +2,12 @@
 
 #include "Container.h"
 #include "ContainerType.h"
-#include "../Core/SemVersion.h"
-#include "../Level/Level.h"
 
 #include "../dll.h"
 #include <memory>
+
+class Level;
+class SemVersion;
 
 class FillingContainer : public Container {
 public:

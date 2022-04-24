@@ -3,10 +3,11 @@
 #include <memory>
 
 #include "../Core/AutomaticID.h"
-#include "../Core/NBT.h"
 #include "../Math/Vec3.h"
 
 class Dimension;
+class CompoundTag;
+enum class DimensionID : int32_t;
 
 class ChangeDimensionRequest {
 public:
@@ -18,7 +19,7 @@ public:
 	};
 
 	State mState = State::PrepareRegion;
-	AutomaticID<Dimension, int32_t> mFromDimensionId, mToDimensionId;
+	DimensionID mFromDimensionId, mToDimensionId; // AutomaticID<Dimension, int32_t>
 	Vec3 mPos;
 	bool mUsePortal, mRespawn;
 	std::unique_ptr<CompoundTag> mAgentTag;

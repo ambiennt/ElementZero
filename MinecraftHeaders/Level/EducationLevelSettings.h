@@ -11,13 +11,18 @@ class LevelStorage;
 struct CommandFlag;
 
 struct EducationLocalLevelSettings {
-	bool enabled{};
+	std::optional<std::string> mCodeBuilderOverrideUri; // 0x0
+	bool mHasQuiz; // 0x28
 };
 
+static_assert(sizeof(EducationLocalLevelSettings) == 0x30);
+
 struct EducationLevelSettings {
-	std::string code_builder_uri;
-	std::unordered_map<std::string, CommandFlag> commands_flags;
-	EducationLocalLevelSettings local_settings;
+	std::string mCodeBuilderDefaultUri; // 0x0
+	std::string mCodeBuilderTitle; // 0x20
+	bool mCanResizeCodeBuilder; // 0x40
+	std::unordered_map<std::string, CommandFlag> mHiddenPlayerCommands; // 0x48
+	EducationLocalLevelSettings mLocalSettings; // 0x88
 
 	MCAPI EducationLevelSettings();
 	MCAPI EducationLevelSettings(EducationLevelSettings const &);
@@ -29,3 +34,5 @@ struct EducationLevelSettings {
 
 	MCAPI static std::optional<EducationLevelSettings> load(LevelStorage const &);
 };
+
+static_assert(sizeof(EducationLevelSettings) == 0xB8);

@@ -3,8 +3,9 @@
 #include "FillingContainer.h"
 
 class Inventory : public FillingContainer {
+	MCAPI void setupDefault();
 public:
-	Inventory(Player *);
+	MCAPI Inventory(Player *);
 	MCAPI virtual void init() override;
 	MCAPI virtual bool add(ItemStack &) override;
 	MCAPI virtual bool canAdd(ItemStack const &) override;
@@ -12,8 +13,6 @@ public:
 	MCAPI virtual int getEmptySlotsCount() const override;
 	MCAPI virtual int getFirstEmptySlot() const;
 	MCAPI virtual void setContainerSize(int);
+	
 	MCAPI void tick();
-
-private:
-	MCAPI void setupDefault();
 };

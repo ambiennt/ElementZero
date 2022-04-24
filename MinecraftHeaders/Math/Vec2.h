@@ -9,12 +9,11 @@
 
 class Vec2 {
 public:
-	float x = 0.f, y = 0.f;
-	// For ABI
+	float x, y;
 
 	static const Vec2 ZERO;
 
-	Vec2() {}
+	Vec2() : x(0.f), y(0.f) {}
 	Vec2(float x, float y) : x(x), y(y) {}
 	Vec2(Vec2 const& rhs) : x(rhs.x), y(rhs.y) {}
 	inline ~Vec2() {}

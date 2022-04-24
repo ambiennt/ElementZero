@@ -4,6 +4,10 @@
 
 class CommandPosition {
 public:
-	Vec3 vec;
-	bool mx, my, mz, op;
+	Vec3 mOffset;
+	bool mRelativeX, mRelativeY, mRelativeZ, mLocal;
+};
+
+class CommandPositionFloat : public CommandPosition {
+public:
 };

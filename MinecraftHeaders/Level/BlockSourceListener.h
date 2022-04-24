@@ -4,17 +4,24 @@
 
 #include "../dll.h"
 
+class BlockSource;
+class BlockActor;
+class BlockPos;
+class Block;
+class Actor;
+struct ActorBlockSyncMessage;
+
 class BlockSourceListener {
 public:
 	virtual ~BlockSourceListener();
-	virtual void onSourceCreated(class BlockSource &);
-	virtual void onSourceDestroyed(class BlockSource &);
-	virtual void onAreaChanged(class BlockSource &, class BlockPos const&, BlockPos const&);
-	virtual void onBlockChanged(class BlockSource &, class BlockPos const&, uint32_t,
-		class Block const&, class Block const&, int32_t, struct ActorBlockSyncMessage const*);
-	virtual void onBrightnessChanged(class BlockSource &, class BlockPos const&);
-	virtual void onBlockEntityChanged(class BlockSource &, class BlockActor &);
-	virtual void onBlockEntityAboutToBeRemoved(class BlockSource &, std::shared_ptr<class BlockActor>);
-	virtual void onEntityChanged(class BlockSource &, class Actor &);
-	virtual void onBlockEvent(class BlockSource &, int32_t, int32_t, int32_t, int32_t, int32_t);
+	virtual void onSourceCreated(BlockSource &);
+	virtual void onSourceDestroyed(BlockSource &);
+	virtual void onAreaChanged(BlockSource &, BlockPos const&, BlockPos const&);
+	virtual void onBlockChanged(BlockSource &, BlockPos const&, uint32_t,
+		Block const&, Block const&, int32_t, ActorBlockSyncMessage const*);
+	virtual void onBrightnessChanged(BlockSource &, BlockPos const&);
+	virtual void onBlockEntityChanged(BlockSource &, BlockActor &);
+	virtual void onBlockEntityAboutToBeRemoved(BlockSource &, std::shared_ptr<BlockActor>);
+	virtual void onEntityChanged(BlockSource &, Actor &);
+	virtual void onBlockEvent(BlockSource &, int32_t, int32_t, int32_t, int32_t, int32_t);
 };

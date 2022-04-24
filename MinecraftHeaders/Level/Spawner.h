@@ -1,16 +1,21 @@
 #pragma once
 
 #include "../dll.h"
-#include "../Block/BlockSource.h"
-#include "../Actor/ActorDefinitionIdentifier.h"
-#include "../Actor/Mob.h"
-#include "../Math/Vec3.h"
+#include <modutils.h>
+
+struct ActorDefinitionIdentifier;
+class BlockSource;
+class Vec3;
+class Mob;
+class Actor;
 
 class Spawner {
 public:
 
-	MCAPI Mob* spawnMob(class BlockSource &region, struct ActorDefinitionIdentifier const& id,
+	MCAPI Mob* spawnMob(BlockSource &region, ActorDefinitionIdentifier const& id,
 		Actor *spawner, Vec3 const& position, bool naturalSpawn, bool surface, bool fromSpawner);
-	MCAPI Actor* spawnProjectile(class BlockSource &region, struct ActorDefinitionIdentifier const& id,
+	MCAPI Actor* spawnProjectile(BlockSource &region, ActorDefinitionIdentifier const& id,
 		Actor *spawner, Vec3 const& position, Vec3 const& direction);
+
+	BUILD_ACCESS_MUT(int32_t, mTotalEntityCount, 0xC0);
 };

@@ -8,15 +8,15 @@
 #include "ContainerType.h"
 #include "ContainerContentChangeListener.h"
 #include "ContainerSizeChangeListener.h"
-#include "../Core/NBT.h"
 #include "../Item/ItemStack.h"
-#include "../Math/Vec3.h"
 
 #include "../dll.h"
 
 class Player;
 class BlockSource;
 class ItemDescriptor;
+class Vec3;
+class CompoundTag;
 
 class Container {
 public:
@@ -29,7 +29,7 @@ public:
 	bool mHasCustomName; // 0xD8
 	uint32_t mContainerRuntimeId = 0; // 0xDC - SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0>
 
-	MCAPI Container(enum ContainerType);
+	MCAPI Container(ContainerType);
 	virtual ~Container();
 	virtual void init();
 	virtual void serverInitItemStackIds(int, int, std::function<void(int, ItemStack const &)>);
@@ -42,7 +42,7 @@ public:
 	virtual void setItem(int, ItemStack const &);
 	virtual void setItemWithForceBalance(int, ItemStack const &, bool);
 	virtual void removeItem(int, int);
-	virtual void removeAllItems(void);
+	virtual void removeAllItems();
 	virtual void dropContents(BlockSource &, Vec3 const &, bool);
 	virtual int getContainerSize() const = 0;
 	virtual int getMaxStackSize() const  = 0;

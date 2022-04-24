@@ -175,8 +175,8 @@ public:
 	}
 	inline void setLimitedWorldDepth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_DEPTH, value); }
 
-	int getSpawnDimension() const { return mSpawnSettings.dim; }
-	void setSpawnDimension(int v) { mSpawnSettings.dim = v; }
+	inline DimensionID getSpawnDimension() const { return mSpawnSettings.mDim; }
+	inline void setSpawnDimension(DimensionID d) { mSpawnSettings.mDim = d; }
 
 	DEF_FIELD_RW(unsigned, Seed);
 	DEF_FIELD_RW(GeneratorType, WorldGenerator);

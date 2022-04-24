@@ -5,12 +5,11 @@
 
 class Vec3 {
 public:
-	float x = 0.f, y = 0.f, z = 0.f;
-	// For ABI
+	float x, y, z;
 
 	static const Vec3 ZERO;
 
-	Vec3() {}
+	Vec3() : x(0.f), y(0.f), z(0.f) {}
 	Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 	Vec3(Vec3 const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
 	inline ~Vec3() {}

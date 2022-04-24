@@ -7,14 +7,13 @@
 
 class BlockPos {
 public:
-	int32_t x = 0, y = 0, z = 0;
-	// For ABI
+	int32_t x, y, z;
 
 	static const BlockPos MIN;
 	static const BlockPos MAX;
 	static const BlockPos ZERO;
 
-	BlockPos() {}
+	BlockPos() : x(0), y(0), z(0) {}
 	BlockPos(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
 	BlockPos(BlockPos const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
 	MCAPI BlockPos(Vec3 const&);

@@ -13,7 +13,7 @@ public:
 
 	MCAPI SpinLock();
 	inline ~SpinLock();
-	MCAPI uint64_t _getThreadId(void) const;
-	MCAPI void lock(void) const;
-	MCAPI void unlock(void) const;;
+	MCAPI uint64_t _getThreadId() const;
+	MCAPI void lock() const;
+	MCAPI void unlock() const;;
 };

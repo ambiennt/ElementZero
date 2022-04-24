@@ -6,11 +6,11 @@
 
 class ChunkPos {
 public:
-	int32_t x = 0, z = 0;
+	int32_t x, z;
 
 	static const ChunkPos ZERO;
 
-	ChunkPos() {}
+	ChunkPos(): x(0), z(0) {}
 	inline ~ChunkPos() {}
 	ChunkPos(int32_t x, int32_t z) : x(x), z(z) {}
 	ChunkPos(ChunkPos const& rhs) : x(rhs.x), z(rhs.z) {}

@@ -1,10 +1,13 @@
 #pragma once
 
+#include <cstdint>
+
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
-#include "Actor.h"
 
 #include "../dll.h"
+
+class Actor;
 
 enum class HitResultType {
 	TILE                = 0x0,

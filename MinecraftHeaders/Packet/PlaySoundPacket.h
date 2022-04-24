@@ -8,14 +8,17 @@
 class PlaySoundPacket : public Packet {
 public:
 	std::string mName; // same as in /playsound
-	Vec3 mPos;
-	float mVolume = 1.0f;
-	float mPitch  = 1.0f;
+	BlockPos mPos; // NetworkBlockPosition
+	float mVolume = 1.f, mPitch = 1.f;
 
 	inline ~PlaySoundPacket() {}
 	PlaySoundPacket() {}
-	PlaySoundPacket(std::string name, const Vec3 &pos, float volume = 1.0f, float pitch = 1.0f) 
-		: mName(name), mPos(pos), mVolume(volume), mPitch(pitch) {}
+	PlaySoundPacket(const std::string &name, const BlockPos &pos, float volume = 1.f, float pitch = 1.f) {
+		this->mName = name;
+		this->mPos = pos * 8; // for some reason it needs this conversion idk
+		this->mVolume = volume;
+		this->mPitch = pitch;
+	}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

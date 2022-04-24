@@ -1,10 +1,21 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
+
+#include "DimensionID.h"
 
 class SpawnSettings {
 public:
-	short type = 0;
-	std::string mValue = "plains";
-	int dim;
+
+	union Type {
+		uint8_t mTypes[2];
+		uint16_t mRaw = 0x0;
+	};
+
+	Type mType;
+	std::string mUserDefinedBiomeName = "plains";
+	DimensionID mDim; // AutomaticID<Dimension, int32_t>
 };
+
+static_assert(sizeof(SpawnSettings) == 0x30);
