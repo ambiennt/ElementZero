@@ -6,8 +6,6 @@
 #include "Inventory.h"
 #include "../dll.h"
 
-#include <memory>
-
 class HudContainerManagerModel;
 
 class PlayerInventory : public ContainerSizeChangeListener, public ContainerContentChangeListener {
@@ -24,9 +22,6 @@ public:
 		int32_t mSlot;
 	};
 
-	MCAPI void ContainerSizeChanged(int) override;
-	MCAPI void ContainerContentChanged(int) override;
-
-	MCAPI void createTransactionContext(
-			std::function<void(Container &, int, const ItemStack &, const ItemStack &)>, std::function<void()>);
+	virtual void createTransactionContext(
+		std::function<void(Container &, int, const ItemStack &, const ItemStack &)>, std::function<void()>);
 };

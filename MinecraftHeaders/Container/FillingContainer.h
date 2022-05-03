@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Container.h"
-#include "ContainerType.h"
-
 #include "../dll.h"
-#include <memory>
 
 class Level;
 class SemVersion;
@@ -24,8 +21,8 @@ public:
 	virtual void load(ListTag const &, SemVersion const &, Level &);
 	virtual void doDrop(ItemStack &, bool);
 	virtual int getEmptySlotsCount() const;
-	virtual void dropAll(int, int, bool);
 
+	MCAPI void dropAll(int, int, bool);
 	MCAPI std::unique_ptr<ListTag> save();
 };
 

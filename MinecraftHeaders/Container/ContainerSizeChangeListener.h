@@ -1,6 +1,7 @@
 #pragma once
 
-struct ContainerSizeChangeListener {
+class ContainerSizeChangeListener {
+public:
 	virtual void ContainerSizeChanged(int) = 0;
-	virtual ~ContainerSizeChangeListener(){};
+	virtual ~ContainerSizeChangeListener();
 };

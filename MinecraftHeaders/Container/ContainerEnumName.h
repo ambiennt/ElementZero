@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 enum class ContainerEnumName : int8_t {
 	AnvilInputContainer                  = 0,
 	AnvilMaterialContainer               = 1,

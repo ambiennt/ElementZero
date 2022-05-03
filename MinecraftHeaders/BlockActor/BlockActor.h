@@ -1,44 +1,43 @@
 #pragma once
 
-#include <memory>
+#include "../Math/Vec3.h"
+#include "../Math/BlockPos.h"
+#include "../Math/AABB.h"
+#include "ActorTerrainInterlockData.h"
+#include "../dll.h"
+
 #include <string>
 #include <vector>
 
-#include "../Math/Vec3.h"
-#include "../Math/AABB.h"
-#include "../Block/Block.h"
-#include "BlockActorType.h"
-#include "BlockActorRendererId.h"
+class Block;
 
-#include "../dll.h"
-
-#include <modutils.h>
+enum class BlockActorType : int32_t;
+enum class BlockActorRendererId : int32_t;
 
 class BlockActor {
-	char unknown[200];
-
 public:
-	BUILD_ACCESS_MUT(int32_t, mTickCount, 0x8);
-	BUILD_ACCESS_MUT(const class Block*, mBlock, 0x10);
-	BUILD_ACCESS_MUT(float, mDestroyTimer, 0x18);
-	BUILD_ACCESS_MUT(class Vec3, mDestroyDirection, 0x1C);
-	BUILD_ACCESS_MUT(float, mDestroyProgress, 0x28);
-	BUILD_ACCESS_MUT(class BlockPos, mPosition, 0x2C);
-	BUILD_ACCESS_MUT(class AABB, mAABB, 0x38);
-	BUILD_ACCESS_MUT(const enum BlockActorType, mType, 0x54);
-	BUILD_ACCESS_MUT(enum BlockActorRendererId, mRendererId, 0x58);
-	BUILD_ACCESS_MUT(std::string, mCustomName, 0x60);
-	BUILD_ACCESS_MUT(std::string, mFilteredCustomName, 0x80);
-	BUILD_ACCESS_MUT(int32_t, mRepairCost, 0xA0);
-	BUILD_ACCESS_MUT(bool, mClientSideOnly, 0xA4);
-	BUILD_ACCESS_MUT(bool, mIsMovable, 0xA5);
-	BUILD_ACCESS_MUT(bool, mSaveCustomName, 0xA6);
-	BUILD_ACCESS_MUT(bool, mCanRenderCustomName, 0xA7);
-	BUILD_ACCESS_MUT(const float, mSignShadowRadius, 0xA8);
-	BUILD_ACCESS_MUT(class ActorTerrainInterlockData, mTerrainInterlockData, 0xB0);
-	BUILD_ACCESS_MUT(bool, mChanged, 0xC8);
+	int32_t mTickCount; // 0x8
+	const Block* mBlock; // 0x10
+	float mDestroyTimer; // 0x18
+	Vec3 mDestroyDirection; // 0x1C
+	float mDestroyProgress; // 0x28
+	BlockPos mPosition; // 0x2C
+	AABB mAABB; // 0x38
+	const BlockActorType mType; // 0x54
+	BlockActorRendererId mRendererId; // 0x58
+	std::string mCustomName; // 0x60
+	std::string mFilteredCustomName; // 0x80
+	int32_t mRepairCost; // 0xA0
+	bool mClientSideOnly; // 0xA4
+	bool mIsMovable; // 0xA5
+	bool mSaveCustomName; // 0xA6
+	bool mCanRenderCustomName; // 0xA7
+	const float mSignShadowRadius; // 0xA8
+	ActorTerrainInterlockData mTerrainInterlockData; // 0xB0
+	bool mChanged; // 0xC8
 
 	MCAPI BlockActor(enum BlockActorType, class BlockPos const &, std::string const &);
+
 	virtual ~BlockActor();
 	virtual void load(class Level &, class CompoundTag const &, class DataLoadHelper &);
 	virtual bool save(class CompoundTag &) const;
@@ -79,4 +78,4 @@ protected:
 	virtual bool _playerCanUpdate(class Player const &) const;
 };
 
-static_assert(sizeof(BlockActor) == 208);
+static_assert(sizeof(BlockActor) == 0xD0);

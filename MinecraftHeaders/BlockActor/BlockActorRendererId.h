@@ -1,6 +1,8 @@
 #pragma once
 
-enum class BlockActorRendererId {
+#include <cstdint>
+
+enum class BlockActorRendererId : int32_t {
 	DEFAULT_RENDERER       = 0,
 	CHEST_RENDERER         = 1,
 	SIGN_RENDERER          = 2,
@@ -21,5 +23,5 @@ enum class BlockActorRendererId {
 	CONDUIT_RENDERER       = 17,
 	LECTERN_RENDERER       = 18,
 	BELL_RENDERER          = 19,
-	CAMPFIRE_RENDERER      = 20
+	CAMPFIRE_RENDERER      = 20,
 };

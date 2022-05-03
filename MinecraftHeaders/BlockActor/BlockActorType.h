@@ -1,6 +1,8 @@
 #pragma once
 
-enum class BlockActorType {
+#include <cstdint>
+
+enum class BlockActorType : int32_t {
 	Undefined        = 0x0,
 	Furnace          = 0x1,
 	Chest            = 0x2,
@@ -11,12 +13,12 @@ enum class BlockActorType {
 	FlowerPot        = 0x7,
 	BrewingStand     = 0x8,
 	EnchantTable     = 0x9,
-	DaylightDetector = 0xa,
-	Music            = 0xb,
-	Comparator       = 0xc,
-	Dispenser        = 0xd,
-	Dropper          = 0xe,
-	Hopper           = 0xf,
+	DaylightDetector = 0xA,
+	Music            = 0xB,
+	Comparator       = 0xC,
+	Dispenser        = 0xD,
+	Dropper          = 0xE,
+	Hopper           = 0xF,
 	Cauldron         = 0x10,
 	ItemFrame        = 0x11,
 	PistonArm        = 0x12,
@@ -27,9 +29,9 @@ enum class BlockActorType {
 	EnderChest       = 0x17,
 	EndGateway       = 0x18,
 	ShulkerBox       = 0x19,
-	CommandBlock     = 0x1a,
-	Bed              = 0x1b,
-	Banner           = 0x1c,
+	CommandBlock     = 0x1A,
+	Bed              = 0x1B,
+	Banner           = 0x1C,
 	StructureBlock   = 0x20,
 	Jukebox          = 0x21,
 	ChemistryTable   = 0x22,
@@ -40,7 +42,7 @@ enum class BlockActorType {
 	Smoker           = 0x27,
 	Bell             = 0x28,
 	Campfire         = 0x29,
-	Barrel           = 0x2a,
-	Beehive          = 0x2b,
-	Lodestone        = 0x2c
+	Barrel           = 0x2A,
+	Beehive          = 0x2B,
+	Lodestone        = 0x2C,
 };

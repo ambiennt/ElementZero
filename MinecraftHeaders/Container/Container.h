@@ -9,7 +9,6 @@
 #include "ContainerContentChangeListener.h"
 #include "ContainerSizeChangeListener.h"
 #include "../Item/ItemStack.h"
-
 #include "../dll.h"
 
 class Player;
@@ -30,16 +29,17 @@ public:
 	uint32_t mContainerRuntimeId = 0; // 0xDC - SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0>
 
 	MCAPI Container(ContainerType);
+
 	virtual ~Container();
 	virtual void init();
-	virtual void serverInitItemStackIds(int, int, std::function<void(int, ItemStack const &)>);
+	virtual void serverInitItemStackIds(int, int, std::function<void(int, ItemStack const &)>) = 0;
 	virtual void addContentChangeListener(ContainerContentChangeListener *);
 	virtual void removeContentChangeListener(ContainerContentChangeListener *);
-	virtual class ItemStack const &getItem(int) const;
+	virtual class ItemStack const &getItem(int) const = 0;
 	virtual bool hasRoomForItem(ItemStack const &);
 	virtual void addItem(ItemStack &);
 	virtual bool addItemToFirstEmptySlot(ItemStack &);
-	virtual void setItem(int, ItemStack const &);
+	virtual void setItem(int, ItemStack const &) = 0;
 	virtual void setItemWithForceBalance(int, ItemStack const &, bool);
 	virtual void removeItem(int, int);
 	virtual void removeAllItems();
@@ -61,7 +61,7 @@ public:
 	virtual void readAdditionalSaveData(CompoundTag const &);
 	virtual void addAdditionalSaveData(CompoundTag &);
 	virtual void createTransactionContext(
-			std::function<void(Container &, int, ItemStack const &, ItemStack const &)>, std::function<void()>);
+		std::function<void(Container &, int, ItemStack const &, ItemStack const &)>, std::function<void()>);
 	virtual void initializeContainerContents(BlockSource &);
 
 	MCAPI void triggerTransactionChange(int, ItemStack const&, ItemStack const&);
