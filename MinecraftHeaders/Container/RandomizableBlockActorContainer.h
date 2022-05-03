@@ -5,8 +5,8 @@
 
 class RandomizableBlockActorContainerBase : public BlockActor {
 public:
-  std::string mLootTable; // 0xD0
-  int32_t mLootTableSeed; // 0xF0
+	std::string mLootTable; // 0xD0
+	int32_t mLootTableSeed; // 0xF0
 };
 
 static_assert(offsetof(RandomizableBlockActorContainerBase, mLootTable) == 0xD0);
