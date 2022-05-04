@@ -2,7 +2,11 @@
 
 #include "BlockLegacy.h"
 
+class ItemInstance;
+class Random;
+class BlockActor;
+
 class ActorBlock : public BlockLegacy {
 public:
-	MCAPI virtual class ItemInstance getEntityResourceItem(class Random &, class BlockActor const &, int) const;
+	virtual ItemInstance getEntityResourceItem(Random &, BlockActor const &, int) const;
 };

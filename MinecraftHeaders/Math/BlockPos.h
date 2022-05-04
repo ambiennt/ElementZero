@@ -16,7 +16,11 @@ public:
 	BlockPos() : x(0), y(0), z(0) {}
 	BlockPos(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
 	BlockPos(BlockPos const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
-	MCAPI BlockPos(Vec3 const&);
+	BlockPos(Vec3 const& vec) {
+		this->x = ((vec.x < 0.f) ? (int32_t)(vec.x - 1.f) : (int32_t)vec.x);
+		this->y = ((vec.y < 0.f) ? (int32_t)(vec.y - 1.f) : (int32_t)vec.y);
+		this->z = ((vec.z < 0.f) ? (int32_t)(vec.z - 1.f) : (int32_t)vec.z);
+	}
 	inline ~BlockPos() {}
 
 	BlockPos operator+(BlockPos const &rhs) const {

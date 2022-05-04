@@ -53,3 +53,5 @@ public:
 		return this->mFlags & (uint32_t)flag;
 	}
 };
+
+static_assert(sizeof(ChestBlockActor) == 0x280);

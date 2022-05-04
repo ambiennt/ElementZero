@@ -4,9 +4,9 @@
 #include "../Math/AABB.h"
 #include "../dll.h"
 
-#include "modutils.h"
-
 class FireBlock : public BlockLegacy {
 public:
-	BUILD_ACCESS_MUT(class AABB, mAabb, 0x1060);
+	AABB mAabb; // 0x1060
 };
+
+static_assert(offsetof(FireBlock, mAabb) == 0x1060);

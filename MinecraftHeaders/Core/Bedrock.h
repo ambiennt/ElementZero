@@ -12,12 +12,12 @@ class SignalReceiver;
 class IIslandCore {
 public:
 	virtual ~IIslandCore();
-	virtual uint16_t getId(void);
-	virtual bool start(void);
-	virtual bool suspend(void);
-	virtual bool resume(void);
-	virtual bool stop(void);
-	virtual void mainUpdate(void);
+	virtual uint16_t getId();
+	virtual bool start();
+	virtual bool suspend();
+	virtual bool resume();
+	virtual bool stop();
+	virtual void mainUpdate();
 	virtual void processActivationArguments(const Bedrock::ActivationArguments *);
 };
 

@@ -3,7 +3,7 @@
 #include "BlockLegacy.h"
 #include "../dll.h"
 
-class LiquidBlock : public BlockLegacy { // LiquidBlock has no extra fields
+class LiquidBlock : public BlockLegacy {
 public:
 
 	inline bool isSourceBlock(class BlockSource &region, class BlockPos const &pos) {

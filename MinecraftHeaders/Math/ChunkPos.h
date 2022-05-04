@@ -10,17 +10,16 @@ public:
 
 	static const ChunkPos ZERO;
 
-	ChunkPos(): x(0), z(0) {}
-	inline ~ChunkPos() {}
+	ChunkPos() : x(0), z(0) {}
 	ChunkPos(int32_t x, int32_t z) : x(x), z(z) {}
 	ChunkPos(ChunkPos const& rhs) : x(rhs.x), z(rhs.z) {}
 	ChunkPos(BlockPos const& bp) : x((int32_t)(bp.x >> 4)), z((int32_t)(bp.z >> 4)) {}
-
 	ChunkPos(Vec3 const& vec) {
 		BlockPos bp(vec);
 		this->x = bp.x >> 4;
 		this->z = bp.z >> 4;
 	}
+	inline ~ChunkPos() {}
 };
 
 inline const ChunkPos ChunkPos::ZERO = {0, 0};

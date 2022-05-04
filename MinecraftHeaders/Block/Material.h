@@ -46,8 +46,9 @@ enum class MaterialType {
 	Barrier              = 39,
 	DecorationFlammable  = 40,
 	SurfaceTypeTotal     = 41,
-	Any                  = 42
+	Any                  = 42,
 };
+
 class Material {
 public:
 	

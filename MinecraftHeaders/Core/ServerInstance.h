@@ -16,12 +16,12 @@
 class ServerInstance {
 public:
 
-	enum class InstanceState {
+	enum class InstanceState : int32_t {
 		Running = 0,
 		Suspended = 1,
 		WaitingLeaveGame = 2,
 		Stopped = 3,
-		NotStarted = 4
+		NotStarted = 4,
 	};
 
 	BUILD_ACCESS_MUT(const class IMinecraftApp *, mApp, 0x88);
@@ -38,20 +38,17 @@ public:
 	BUILD_ACCESS_MUT(std::atomic<int32_t>, mWriteRefCounter, 0xE4);
 	BUILD_ACCESS_MUT(std::atomic<bool>, mThreadShouldJoin, 0xE8);
 	BUILD_ACCESS_MUT(std::atomic<bool>, mServerThreadActive, 0xE9);
-	BUILD_ACCESS_MUT(class ServerInstanceEventCoordinator*, mEventCoordinator, 0xF0); // gsl::not_null<Bedrock::NonOwnerPointer<ServerInstanceEventCoordinator>>
+	//BUILD_ACCESS_MUT(gsl::not_null<Bedrock::NonOwnerPointer<class ServerInstanceEventCoordinator>>, mEventCoordinator, 0xF0);
 	BUILD_ACCESS_MUT(std::atomic<enum ServerInstance::InstanceState>, mInstanceState, 0xF8);
 	//BUILD_ACCESS_MUT(class SPSCQueue<std::function<void (void)>, 512>, mCommandQueue, 0x100);
 	BUILD_ACCESS_MUT(std::thread, mServerInstanceThread, 0x150);
 	BUILD_ACCESS_MUT(std::mutex, mResumeMutex, 0x160);
 	BUILD_ACCESS_MUT(std::condition_variable, mResumeSignal, 0x1B0);
 	BUILD_ACCESS_MUT(std::unique_ptr<class MinecraftServerScriptEngine>, mScriptEngine, 0x1F8);
-	BUILD_ACCESS_MUT(std::function<void (void)>, mLevelCorruptCallback, 0x200);
+	BUILD_ACCESS_MUT(std::function<void()>, mLevelCorruptCallback, 0x200);
 	BUILD_ACCESS_MUT(bool, mHandledLevelCorruption, 0x240);
 	BUILD_ACCESS_MUT(std::unique_ptr<class TextFilteringProcessor>, mTextFilteringProcessor, 0x248);
-
-	using interval1000000 = std::chrono::duration<int64_t, std::ratio<1, 1000000>>;
-	BUILD_ACCESS_MUT(interval1000000, mWakeupInterval, 0x250);
-
+	//BUILD_ACCESS_MUT(std::chrono::duration<int64_t, std::ratio<1, 1000000>>, mWakeupInterval, 0x250);
 	BUILD_ACCESS_MUT(std::string, mLevelId, 0x258);
 	BUILD_ACCESS_MUT(std::unique_ptr<class WorldSessionEndPoint>, mWorldSessionEndPoint, 0x278);
 	//BUILD_ACCESS_MUT(std::shared_ptr<class Core::FileStorageArea>, mStorageAreaForLevel, 0x280);

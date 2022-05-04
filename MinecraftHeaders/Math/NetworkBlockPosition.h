@@ -6,5 +6,4 @@
 // be used for packets, but BlockPos can be used instead
 class NetworkBlockPosition : public BlockPos {
 public:
-
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 class Hopper {
 public:
 	int32_t mCooldownTime;

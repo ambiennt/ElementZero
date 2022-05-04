@@ -3,13 +3,13 @@
 #include "BlockLegacy.h"
 #include "../dll.h"
 
-#include <modutils.h>
-
 class OreBlock : public BlockLegacy {
 public:
 };
 
 class RedstoneOreBlock : public BlockLegacy {
 public:
-	BUILD_ACCESS_MUT(bool, mLit, 0x1060);
+	bool mLit; // 0x1060
 };
+
+static_assert(offsetof(RedstoneOreBlock, mLit) == 0x1060);

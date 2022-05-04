@@ -1,6 +1,8 @@
 #pragma once
 
-enum class MobEffectIds : uint32_t {
+#include <cstdint>
+
+enum class MobEffectID : uint32_t {
 	Empty = 0,
 	Speed = 1,
 	Slowness = 2,
@@ -30,5 +32,5 @@ enum class MobEffectIds : uint32_t {
 	ConduitPower = 26,
 	SlowFalling = 27,
 	BadOmen = 28,
-	VillageHero = 29
+	VillageHero = 29,
 };
