@@ -13,11 +13,11 @@ struct MCRESULT {
 	MCCATEGORY mCategory; // 0x1
 	int16_t mCode; // 0x2
 
-	constexpr bool operator==(MCRESULT const &rhs) const {
+	inline bool operator==(MCRESULT const &rhs) const {
 		return ((mSuccess == rhs.mSuccess) && (mCategory == rhs.mCategory) && (mCode == rhs.mCode));
 	}
-	constexpr bool operator!=(MCRESULT const &rhs) const {
-		return ((mSuccess != rhs.mSuccess) || (mCategory != rhs.mCategory) || (mCode != rhs.mCode));
+	inline bool operator!=(MCRESULT const &rhs) const {
+		return !(*this == rhs);
 	}
 };
 

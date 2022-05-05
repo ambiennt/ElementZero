@@ -18,7 +18,7 @@ enum class BossEventUpdateType;
 enum class ActorEvent : int8_t;
 enum class MaterialType;
 
-enum class LevelEvent {
+enum class LevelEvent : int16_t {
 	Undefined                     = 0x0,
 	SoundClick                    = 0x3E8,
 	SoundClickFail                = 0x3E9,
@@ -107,7 +107,7 @@ enum class LevelEvent {
 	ParticleLegacyEvent           = 0x4000
 };
 
-enum class LevelSoundEvent {
+enum class LevelSoundEvent : int32_t {
 	ItemUseOn                      = 0x0,
 	Hit                            = 0x1,
 	Step                           = 0x2,
@@ -438,7 +438,7 @@ enum class LevelSoundEvent {
 	AmbientAdditionCrimsonForest   = 0x147
 };
 
-enum class ParticleType {
+enum class ParticleType : int32_t {
 	Undefined              = 0,
 	Bubble                 = 1,
 	BubbleManual           = 2,

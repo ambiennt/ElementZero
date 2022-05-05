@@ -9,7 +9,7 @@ namespace cg {
 }
 
 enum class ParticleType;
-enum class LevelEvent;
+enum class LevelEvent : int16_t;
 enum class LevelSoundEvent;
 
 class HashedString;

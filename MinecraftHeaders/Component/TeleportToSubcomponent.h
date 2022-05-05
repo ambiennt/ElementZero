@@ -1,7 +1,13 @@
 #pragma once
 
-#include "../Core/json.h"
-#include "ProjectileComponent.h"
+#include "../dll.h"
+
+namespace Json {
+class Value;
+}
+
+class ProjectileComponent;
+class Actor;
 
 class OnHitSubcomponent {
 public:

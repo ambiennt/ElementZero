@@ -2,8 +2,10 @@
 
 #include "../dll.h"
 #include <functional>
+#include <string>
+#include <cstdint>
 
-enum class ActorType {
+enum class ActorType : int32_t {
 	Undefined            = 0x1,
 	TypeMask             = 0xFF,
 	Mob                  = 0x100,
@@ -137,12 +139,12 @@ enum class ActorType {
 	PiglinBrute          = 0x17F,
 	Hoglin               = 0x137C,
 	Zoglin               = 0x10B7E,
-	Strider              = 0x137D
+	Strider              = 0x137D,
 };
 
-enum class ActorTypeNamespaceRules {
+enum class ActorTypeNamespaceRules : int32_t {
 	ReturnWithoutNamespace = 0,
-	ReturnWithNamespace    = 1
+	ReturnWithNamespace    = 1,
 };
 
 MCAPI void forEachEntityType(std::function<bool(ActorType, std::string const &)>);
