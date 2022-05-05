@@ -2,10 +2,12 @@
 
 #include <vector>
 #include <functional>
+#include "../Net/NetworkIdentifier.h"
 
 class Packet;
-class NetworkIdentifier;
-class NetworkIdentifierWithSubId;
+class NetworkHandler;
+class NetEventCallback;
+class Player;
 
 class PacketSender {
 public:
@@ -22,15 +24,11 @@ public:
 };
 
 class LoopbackPacketSender : public PacketSender {
-
-	// TODO: fields
-	
-	virtual ~LoopbackPacketSender();
-	virtual void send(Packet &);
-	virtual void sendToServer(Packet &);
-	virtual void sendToClient(NetworkIdentifier const &, Packet const &, uint8_t subId);
-	virtual void sendToClients(std::vector<NetworkIdentifierWithSubId> const &, Packet const &);
-	virtual void sendBroadcast(Packet const &);
-	virtual void sendBroadcast(NetworkIdentifier const &, uint8_t mSubId, Packet const &);
-	virtual void flush(NetworkIdentifier const &, std::function<void()> &&callback);
+public:
+	NetworkHandler* mNetwork; // 0x10
+	std::vector<NetEventCallback*> mLoopbackCallbacks; // 0x18
+	const std::vector<std::unique_ptr<Player>>* mUserList; // 0x30
+	std::vector<NetworkIdentifierWithSubId> mTempUserIds; // 0x38
 };
+
+static_assert(sizeof(LoopbackPacketSender) == 0x50);

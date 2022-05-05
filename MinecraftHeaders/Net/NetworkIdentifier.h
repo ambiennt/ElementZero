@@ -1,11 +1,11 @@
 #pragma once
 
 #include <boost/functional/hash.hpp>
-#include <hook.h>
-#include <modutils.h>
 #include "../Core/mce.h"
 #include "../RakNet/RakNetTypes.h"
 #include "../dll.h"
+#include <hook.h>
+#include <modutils.h>
 
 class NetworkIdentifier {
 public:
@@ -37,7 +37,7 @@ static_assert(offsetof(NetworkIdentifier, mType) == 144);
 class NetworkIdentifierWithSubId {
 public:
 	NetworkIdentifier identifier;
-	unsigned char subId;
+	uint8_t subId;
 };
 
 static_assert(sizeof(NetworkIdentifierWithSubId) == 160);
