@@ -26,19 +26,21 @@ public:
 		YES   = 2
 	};
 
-	std::string mId, mFullId, mResourcePatch, mDefaultGeometryName;
-	mce::Image mSkinImage, mCapeImage;
-	std::vector<AnimatedImageData> mSkinAnimatedImages;
-	Json::Value mGeometryData, mGeometryDataMutable;
-	std::string mAnimationData, mCapeId;
-	bool mIsPremium, mIsPersona, mIsPersonaCapeOnClassicSkin; // premium skins are from skin packs or skins bought from the marketplace
-	std::vector<SerializedPersonaPieceHandle> mPersonaPieces;
-	std::string mArmSize; // seems to be unused
-	std::unordered_map<PieceType, TintMapColor> mPieceTintColors;
-	Color mSkinColor;
-	TrustedSkinFlag mTrustedFlag; // mIsTrustedSkin
+	// mFullId is always a concatenation of mId and mCapeId
+	std::string mId, mFullId, mResourcePatch, mDefaultGeometryName; // 0x0, 0x20, 0x40, 0x60
+	mce::Image mSkinImage, mCapeImage; // 0x80, 0xA0
+	std::vector<AnimatedImageData> mSkinAnimatedImages; // 0xC0
+	Json::Value mGeometryData, mGeometryDataMutable; // 0xD8, 0xE8
+	std::string mAnimationData, mCapeId; // 0xF8, 0x118
+	// premium skins are from skin packs or skins bought from the marketplace
+	bool mIsPremium, mIsPersona, mIsPersonaCapeOnClassicSkin; // 0x138, 0x139, 0x13A
+	std::vector<SerializedPersonaPieceHandle> mPersonaPieces; // 0x140
+	// seems to be unused now, but it would be "slim" or "wide" for classic skins
+	std::string mArmSize; // 0x158
+	std::unordered_map<PieceType, TintMapColor> mPieceTintColors; // 0x178
+	Color mSkinColor; // 0x1B8
+	TrustedSkinFlag mTrustedFlag; // 0x1C8 - mTrustedSkin
 
-#pragma region methods
 	MCAPI SerializedSkin();
 	MCAPI SerializedSkin(SerializedSkin const &);
 	MCAPI SerializedSkin(ConnectionRequest const &);
@@ -64,17 +66,13 @@ public:
 	}
 
 	inline void setCapeImageData(mce::Image const *ptr) {
-		if (ptr)
-			this->mCapeImage = ptr->clone();
-		else
-			this->mCapeImage = {};
+		if (ptr) { this->mCapeImage = ptr->clone(); }
+		else { this->mCapeImage = {}; }
 	}
 
 	inline void setImageData(mce::Image const *ptr) {
-		if (ptr)
-			this->mSkinImage = ptr->clone();
-		else
-			this->mSkinImage = {};
+		if (ptr) { this->mSkinImage = ptr->clone(); }
+		else { this->mSkinImage = {}; }
 	}
 
 	inline bool setIsPersonaCapeOnClassicSkin(bool value) { return this->mIsPersonaCapeOnClassicSkin = value; }
@@ -85,7 +83,6 @@ public:
 		}
 		return 1.0f;
 	}
-#pragma endregion
 };
 
 static_assert(offsetof(SerializedSkin, mIsPremium) == 0x138);

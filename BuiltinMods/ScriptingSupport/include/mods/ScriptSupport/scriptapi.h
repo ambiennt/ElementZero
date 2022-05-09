@@ -197,7 +197,7 @@ template <> inline std::unique_ptr<Tag> FromJs(JsValueRef ref) {
 struct ScriptEnchantmentInstance {
   EnchantmentInstance instance;
 
-  inline int GetType() const { return (int) instance.type; }
+  inline int GetType() const { return (int32_t)instance.mEnchantType; }
 
   ScriptEnchantmentInstance(EnchantmentInstance const &instance) : instance(instance) {}
 

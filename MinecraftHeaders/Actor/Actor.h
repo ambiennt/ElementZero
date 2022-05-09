@@ -98,12 +98,12 @@ enum class PaletteColor {
 	PaletteColorCount  = 16
 };
 
-enum class ArmorSlot {
+enum class ArmorSlot : int32_t {
 	Head             = 0,
 	Torso            = 1,
 	Legs             = 2,
 	Feet             = 3,
-	SlotCount        = 4
+	SlotCount        = 4,
 };
 
 enum class ActorFlags {
@@ -696,7 +696,7 @@ public:
 	BUILD_ACCESS_MUT(bool, mAdded, 0xD0);
 	BUILD_ACCESS_MUT(class ActorDefinitionGroup *, mDefinitions, 0xD8);
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDescriptor>, mCurrentDescription, 0xE0);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8); // maps to Actor::getUniqueID, but use the method instead
+	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8); // maps to Actor::getUniqueID(), but use Actor::getUniqueID() instead
 	BUILD_ACCESS_MUT(std::shared_ptr<class RopeSystem>, mLeashRopeSystem, 0xF0);
 	BUILD_ACCESS_MUT(class Vec2, mRot, 0x100);
 	BUILD_ACCESS_MUT(class Vec2, mRotPrev, 0x108);

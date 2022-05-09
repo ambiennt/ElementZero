@@ -7,12 +7,14 @@
 
 class SpawnParticleEffectPacket : public Packet {
 public:
-	uint8_t mVanillaDimensionId;
-	ActorUniqueID mActorId;
-	Vec3 mPos;
-	std::string mEffectName;
+	uint8_t mVanillaDimensionId; // 0x28
+	ActorUniqueID mActorId; // 0x30
+	Vec3 mPos; // 0x38
+	std::string mEffectName; // 0x48
 
-	inline SpawnParticleEffectPacket() {}
+	SpawnParticleEffectPacket() {}
+	SpawnParticleEffectPacket(uint8_t dimId, ActorUniqueID uid, Vec3 const& pos, std::string const& effect) :
+		mVanillaDimensionId(dimId), mActorId(uid), mPos(pos), mEffectName(effect) {}
 	inline ~SpawnParticleEffectPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

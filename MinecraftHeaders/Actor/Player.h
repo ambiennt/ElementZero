@@ -26,15 +26,29 @@
 
 // add custom player fields here
 struct EZPlayerFields {
-	uint64_t mLastUhcHeadEatTimestamp = 0; // the tick when the player last ate a head/golden head 
-	uint64_t mBucketCooldownTimestamp = 0; // the tick when the player last placed a bucket of liquid
-	bool mShouldCancelBucketPickup = false; // whether or not the player can pick up liquid, used to fix MCPE-100598
-	uint64_t mLastAttackedActorTimestamp = 0; // the tick when the player last attacked an actor 
-	bool mHasResetSprint = false; // if true, player should administer bonus knockback to other players
-	Vec3 mRawPos = Vec3::ZERO; // use this value for more accuracy of current pos (sometimes BDS pos zeroes out)
-	Vec3 mRawPosOld = Vec3::ZERO; // used this value for more accuracy of pos from last tick
-	int32_t mHealthOld = 0; // heatlh value from the previous tick
-	int32_t mAbsorptionOld = 0; // absorption value from the previous tick
+	uint64_t mLastUhcHeadEatTimestamp; // the tick when the player last ate a head/golden head 
+	uint64_t mBucketCooldownTimestamp; // the tick when the player last placed a bucket of liquid
+	bool mShouldCancelBucketPickup; // whether or not the player can pick up liquid, used to fix MCPE-100598
+	uint64_t mLastAttackedActorTimestamp; // the tick when the player last attacked an actor 
+	bool mHasResetSprint; // if true, player should administer bonus knockback to other players
+	Vec3 mRawPos; // use this value for more accuracy of current pos (sometimes BDS pos zeroes out)
+	Vec3 mRawPosOld; // used this value for more accuracy of pos from last tick
+	int32_t mHealthOld; // heatlh value from the previous tick
+	int32_t mAbsorptionOld; // absorption value from the previous tick
+	uint64_t mLastSharpnessParticleEmitTimestamp;
+
+	EZPlayerFields() {
+		this->mLastUhcHeadEatTimestamp = 0;
+		this->mBucketCooldownTimestamp = 0;
+		this->mShouldCancelBucketPickup = false;
+		this->mLastAttackedActorTimestamp = 0;
+		this->mHasResetSprint = false;
+		this->mRawPos = Vec3::ZERO;
+		this->mRawPosOld = Vec3::ZERO;
+		this->mHealthOld = 0;
+		this->mAbsorptionOld = 0;
+		this->mLastSharpnessParticleEmitTimestamp = 0;
+	}
 };
 
 class Packet;

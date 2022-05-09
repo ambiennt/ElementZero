@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-enum class ActorCategory  {
+enum class ActorCategory : int32_t {
 	None                     = 0x0,
 	Player                   = 0x1,
 	Mob                      = 0x2,

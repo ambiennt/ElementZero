@@ -2,10 +2,11 @@
 
 #include "../Item/ItemStack.h"
 #include "../Item/ItemInstance.h"
-#include "../Command/CommandOutput.h"
 #include "../dll.h"
 
 #include <optional>
+
+class CommandOutput;
 
 class CommandItem {
 public:

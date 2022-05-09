@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ItemStackNetManager.h"
 #include "../Container/ContainerType.h"
 #include "../Core/ContainerID.h"
 #include "../Item/ItemStack.h"
@@ -11,16 +10,16 @@ class ContainerModel; // TODO
 class IContainerManager {
 public:
 	virtual ~IContainerManager();
-	virtual ContainerID getContainerId(void);
-	virtual void setContainerId(enum ContainerID id);
-	virtual ContainerType getContainerType(void);
-	virtual void setContainerType(enum ContainerType type);
-	virtual void serverInitItemStackIds(void);
-	virtual std::vector<ItemStack> getItemCopies(void);
-	virtual void setSlot(int slot, const ItemStack& stack, bool fromNetwork);
-	virtual ItemStack& getSlot(int slot);
-	virtual void setData(int id, int value);
-	virtual void broadcastChanges(void);
+	virtual ContainerID getContainerId() = 0;
+	virtual void setContainerId(ContainerID id) = 0;
+	virtual ContainerType getContainerType() = 0;
+	virtual void setContainerType(ContainerType type) = 0;
+	virtual void serverInitItemStackIds() = 0;
+	virtual std::vector<ItemStack> getItemCopies() = 0;
+	virtual void setSlot(int32_t slot, const ItemStack& stack, bool fromNetwork) = 0;
+	virtual const ItemStack& getSlot(int32_t slot) = 0;
+	virtual void setData(int32_t id, int32_t value) = 0;
+	virtual void broadcastChanges() = 0;
 };
 
 class ContainerManagerModel : public IContainerManager {

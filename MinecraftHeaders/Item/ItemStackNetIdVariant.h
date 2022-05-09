@@ -4,6 +4,7 @@
 
 #include "SimpleClientNetId.h"
 #include "SimpleServerNetId.h"
+#include "../dll.h"
 
 class ItemStackNetIdVariant : public std::variant<
 	SimpleServerNetId<ItemStackNetIdTag, int, 0>,

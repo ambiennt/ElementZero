@@ -4,12 +4,12 @@
 #include "../dll.h"
 
 struct ActorUniqueID {
-	uint64_t value = 0;
+	int64_t value = 0; // SIGNED INT64
 
 	MCAPI static ActorUniqueID const INVALID_ID;
 
 	inline ActorUniqueID() {}
-	inline ActorUniqueID(uint64_t value) : value(value) {}
+	inline ActorUniqueID(int64_t value) : value(value) {}
 
 	ActorUniqueID& operator=(ActorUniqueID const &rhs) {
 		this->value = rhs.value;

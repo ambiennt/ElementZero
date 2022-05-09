@@ -231,7 +231,7 @@ public:
 	std::unique_ptr<FoodItemComponent> mFoodComponent; // 0x188
 	std::unique_ptr<SeedItemComponent> mSeedComponent; // 0x190
 	std::unique_ptr<CameraItemComponent> mCameraComponent; // 0x198
-	std::vector<std::function<void (void)>> mOnResetBAIcallbacks; // 0x1A0
+	std::vector<std::function<void ()>> mOnResetBAIcallbacks; // 0x1A0
 
 	inline bool hasBitFlag(enum Item::Flags flag) {
 		return (this->mFlags & (uint16_t)flag);

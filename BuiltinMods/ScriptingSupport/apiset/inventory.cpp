@@ -13,7 +13,7 @@ JsValueRef ScriptEnchantmentInstance::InitProto() {
     JsObjectWrapper proto;
     proto["type"]     = JsObjectWrapper::PropertyDesc{&ScriptEnchantmentInstance::GetType};
     proto["name"]     = JsObjectWrapper::PropertyDesc{&EnchantmentInstance::getName};
-    proto["level"]    = JsObjectWrapper::PropertyDesc{&EnchantmentInstance::level};
+    proto["level"]    = JsObjectWrapper::PropertyDesc{&EnchantmentInstance::mLevel};
     proto["toString"] = &EnchantmentInstance::toString;
     return *proto;
   });

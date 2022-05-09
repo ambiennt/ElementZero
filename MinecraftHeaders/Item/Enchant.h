@@ -3,15 +3,47 @@
 #include <string>
 #include <vector>
 
-#include "../Core/Util.h"
+#include "../Core/HashedString.h"
 #include "../Core/NBT.h"
 #include "../dll.h"
 
 class ActorDamageSource;
 class Actor;
+class Mob;
+class Item;
 class ItemInstance;
-class EnchantUtils;
+class ItemStack;
+class ItemStackBase;
+class ReadOnlyBinaryStream;
+class Random;
+class Vec3;
+class BlockSource;
+
 class EnchantmentInstance;
+class ItemEnchants;
+
+enum class EquipmentFilter : int32_t {
+	MainHand = 0x0,
+	OffHand  = 0x1,
+	Hands    = 0x2,
+	Armor    = 0x3,
+	All      = 0x4,
+	Count    = 0x5,
+};
+
+enum class EnchantResultType : int8_t {
+	Fail = 0,
+	Conflict = 1,
+	Increment = 2,
+	Enchant = 3,
+};
+
+struct EnchantResult {
+	EnchantResultType result; // 0x0
+	uint64_t enchantIdx;      // 0x8
+	int32_t level;            // 0x10
+};
+static_assert(sizeof(EnchantResult) == 0x18);
 
 class Enchant {
 public:
@@ -93,39 +125,74 @@ public:
 		MUSHROOM_STICK   = 1048576
 	};
 
-	Type type{};
-	Frequency freq{};
-	bool lootable{};
-	Slot primarySlot{};
-	Slot secondarySlot{};
-	int compatibility{};
-	std::string description;
-	Util::HashString stringId;
-	bool experimental{};
-	bool disabled{};
+	enum class CompatibilityID : int32_t {
+		NON_CONFLICT = 0x0,
+		DAMAGE = 0x1,
+		GATHERING = 0x2,
+		PROTECTION = 0x3,
+		FROSTSTRIDER = 0x4,
+		MENDFINITY = 0x5,
+		LOYALRIPTIDE = 0x6,
+	};
 
-	MCAPI virtual ~Enchant();
-	MCAPI virtual bool isCompatibleWith(Type) const;
-	MCAPI virtual int getMinCost(int) const;
-	MCAPI virtual int getMaxCost(int) const;
-	MCAPI virtual short getMinLevel(void) const;
-	MCAPI virtual short getMaxLevel(void) const;
-	MCAPI virtual int getDamageProtection(int, ActorDamageSource const &) const;
-	MCAPI virtual float getDamageBonus(int, Actor const &) const;
-	MCAPI virtual void doPostAttack(Actor &, Actor &, int) const;
-	MCAPI virtual void doPostHurt(ItemInstance &, Actor &, Actor &, int) const;
-	MCAPI virtual bool isMeleeDamageEnchant() const;
-	MCAPI virtual bool isProtectionEnchant() const;
-	MCAPI virtual bool isTreasureOnly() const;
+	Type mEnchantType{}; // const - 0x8
+	Frequency mFrequency{}; // const - 0x8
+	bool mIsLootable{}; // const - 0x10
+	int32_t mPrimarySlots{}; // const - 0x14
+	int32_t mSecondarySlots{}; // const - 0x18
+	int32_t mCompatibility{}; // const - 0x1C
+	std::string mDescription; // const - 0x20
+	HashedString mStringId; // const - 0x40
+	bool mIsExperimental{}; // 0x68
+	bool mIsDisabled{}; // 0x69
+
+	virtual ~Enchant();
+	virtual bool isCompatibleWith(Type) const;
+	virtual int32_t getMinCost(int32_t) const;
+	virtual int32_t getMaxCost(int32_t) const;
+	virtual int32_t getMinLevel() const;
+	virtual int32_t getMaxLevel() const;
+	virtual int32_t getDamageProtection(int32_t, ActorDamageSource const &) const;
+	virtual float getDamageBonus(int32_t, Actor const &) const;
+	virtual void doPostAttack(Actor &, Actor &, int32_t) const;
+	virtual void doPostHurt(ItemInstance &, Actor &, Actor &, int32_t) const;
+	virtual bool isMeleeDamageEnchant() const;
+	virtual bool isProtectionEnchant() const;
+	virtual bool isTreasureOnly() const;
 };
+static_assert(sizeof(Enchant) == 0x70);
 
 class EnchantUtils {
+	MCAPI static std::vector<std::string> mEnchantmentNames;
 public:
-	MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int);
-	MCAPI static bool applyEnchant(class ItemStackBase&, EnchantmentInstance const&, bool allowNonVanilla);
+	MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int32_t);
+	MCAPI static bool applyEnchant(ItemStackBase&, EnchantmentInstance const&, bool allowNonVanilla);
+	MCAPI static int applyEnchant(ItemStackBase &, ItemEnchants const &, bool);
 	MCAPI static int32_t getEnchantLevel(Enchant::Type enchantType, ItemStackBase const& stack);
-	MCAPI static void doPostHurtEffects(class Mob &victim, class Mob &attacker);
-	inline static char const *getEnchantName(Enchant::Type type) {
+	MCAPI static void doPostHurtEffects(Mob &victim, Mob &attacker);
+	MCAPI static void doPostDamageEffects(Actor &, Actor &);
+	MCAPI static int32_t determineActivation(Enchant::Type);
+	MCAPI static int32_t getBestEnchantLevel(Enchant::Type, Mob const &, EquipmentFilter);
+	MCAPI static int32_t getLootableRandomEnchantIndex(Random &);
+	MCAPI static EnchantResult canEnchant(ItemStackBase const &,Enchant::Type, int32_t, bool);
+	MCAPI static std::vector<int32_t> getEnchantCosts(ItemStackBase const &, int32_t);
+	MCAPI static std::vector<Vec3> getEnchantingTablePositions(BlockSource &, Vec3 const &);
+	MCAPI static void randomlyEnchant(ItemStack &, int32_t, int32_t, bool);
+	MCAPI static void randomlyEnchant(ItemInstance &, int32_t, int32_t, bool);
+	MCAPI static std::vector<Vec3> getBookCasePositions(BlockSource &, Vec3 const &);
+	MCAPI static std::vector<int32_t> getLegalEnchants(Item const *);
+	MCAPI static int32_t getMeleeDamageBonus(Actor const &, Actor &);
+	MCAPI static void _convertBookCheck(ItemStackBase &);
+	MCAPI static void appendEnchantToFormattedText(Enchant::Type, std::string const &, std::string &);
+	MCAPI static ItemStack const &getRandomItemWithMending(Mob const &);
+	MCAPI static ItemStack const &getRandomItemWith(Enchant::Type, Mob const &, EquipmentFilter);
+	MCAPI static std::vector<EnchantmentInstance> getAvailableEnchantmentResults(Item const *, int32_t, bool);
+	MCAPI static ItemEnchants selectEnchantments(Item const *, int32_t, int32_t, bool);
+	MCAPI static ItemInstance generateEnchantedBook(EnchantmentInstance const &);
+	MCAPI static float getDamageReduction(ActorDamageSource const &, Mob const &);
+	MCAPI static bool hasEnchant(Enchant::Type, ItemStackBase const &);
+
+	inline static const char* getEnchantName(Enchant::Type type) {
 		switch (type) {
 			case Enchant::Type::protection: return "protection";
 			case Enchant::Type::fire_protection: return "fire_protection";
@@ -167,25 +234,32 @@ public:
 			default: return "unknown";
 		}
 	}
+
+	MCAPI static int32_t const PROTECTIONFACTOR_SECONDARYCAP;
 };
 
 class EnchantmentInstance {
 public:
-	Enchant::Type type;
-	int level;
+	Enchant::Type mEnchantType;
+	int32_t mLevel;
 
-	inline std::string getName() const { return EnchantUtils::getEnchantName(type); }
+	EnchantmentInstance() {}
+	EnchantmentInstance(Enchant::Type type, int32_t lvl) : mEnchantType(type), mLevel(lvl) {}
 
-	inline std::string toString() const { return EnchantUtils::getEnchantNameAndLevel(type, level); }
+	inline std::string getName() const { return EnchantUtils::getEnchantName(this->mEnchantType); }
+	inline std::string toString() const { return EnchantUtils::getEnchantNameAndLevel(this->mEnchantType, this->mLevel); }
 };
 
 class ItemEnchants {
 public:
-	Enchant::Slot slot;
-	std::vector<EnchantmentInstance> list[3];
+	Enchant::Slot mSlot;
+	std::vector<EnchantmentInstance> mItemEnchants[3];
 
 	MCAPI std::vector<EnchantmentInstance> getAllEnchants() const;
 	MCAPI std::vector<std::string> getEnchantNames() const;
+	MCAPI bool addEnchant(EnchantmentInstance, bool);
+	MCAPI EnchantResult canEnchant(EnchantmentInstance, bool);
+	MCAPI void read(ReadOnlyBinaryStream &);
 
 private:
 	MCAPI std::vector<ListTag> _toList() const;

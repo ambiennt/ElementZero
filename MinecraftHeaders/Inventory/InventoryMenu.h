@@ -1,12 +1,13 @@
 #pragma once
 
 #include "../dll.h"
-#include "../Actor/Player.h"
 #include "../Item/ItemStack.h"
 #include "ContainerManager.h"
 #include "../Core/ContainerID.h"
 #include "../Container/ContainerType.h"
 #include "../Container/Container.h"
+
+class Player;
 
 class BaseContainerMenu : public ContainerContentChangeListener, public IContainerManager {
 public:
@@ -25,6 +26,4 @@ class InventoryMenu : public BaseContainerMenu {
 public:
 	Container *mContainer; // 0x38
 };
-
-static_assert(offsetof(InventoryMenu, mContainer) == 0x38);
 static_assert(sizeof(InventoryMenu) == 0x40);
