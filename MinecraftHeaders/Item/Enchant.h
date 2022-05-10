@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include <modutils.h>
 #include "../Core/HashedString.h"
 #include "../Core/NBT.h"
 #include "../dll.h"
@@ -10,10 +11,10 @@
 class ActorDamageSource;
 class Actor;
 class Mob;
+class ItemStackBase;
+class ItemStack;
 class Item;
 class ItemInstance;
-class ItemStack;
-class ItemStackBase;
 class ReadOnlyBinaryStream;
 class Random;
 class Vec3;
@@ -164,17 +165,19 @@ static_assert(sizeof(Enchant) == 0x70);
 
 class EnchantUtils {
 	MCAPI static std::vector<std::string> mEnchantmentNames;
+
+	MCAPI static void _convertBookCheck(ItemStackBase &out);
 public:
 	MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int32_t);
-	MCAPI static bool applyEnchant(ItemStackBase&, EnchantmentInstance const&, bool allowNonVanilla);
-	MCAPI static int applyEnchant(ItemStackBase &, ItemEnchants const &, bool);
+	MCAPI static bool applyEnchant(ItemStackBase &out, EnchantmentInstance const &enchant, bool allowNonVanilla);
+	MCAPI static int32_t applyEnchant(ItemStackBase &out, ItemEnchants const &enchants, bool allowNonVanilla);
 	MCAPI static int32_t getEnchantLevel(Enchant::Type enchantType, ItemStackBase const& stack);
 	MCAPI static void doPostHurtEffects(Mob &victim, Mob &attacker);
 	MCAPI static void doPostDamageEffects(Actor &, Actor &);
 	MCAPI static int32_t determineActivation(Enchant::Type);
 	MCAPI static int32_t getBestEnchantLevel(Enchant::Type, Mob const &, EquipmentFilter);
 	MCAPI static int32_t getLootableRandomEnchantIndex(Random &);
-	MCAPI static EnchantResult canEnchant(ItemStackBase const &,Enchant::Type, int32_t, bool);
+	MCAPI static EnchantResult canEnchant(ItemStackBase const &item, Enchant::Type type, int32_t level, bool allowNonVanilla);
 	MCAPI static std::vector<int32_t> getEnchantCosts(ItemStackBase const &, int32_t);
 	MCAPI static std::vector<Vec3> getEnchantingTablePositions(BlockSource &, Vec3 const &);
 	MCAPI static void randomlyEnchant(ItemStack &, int32_t, int32_t, bool);
@@ -182,7 +185,6 @@ public:
 	MCAPI static std::vector<Vec3> getBookCasePositions(BlockSource &, Vec3 const &);
 	MCAPI static std::vector<int32_t> getLegalEnchants(Item const *);
 	MCAPI static int32_t getMeleeDamageBonus(Actor const &, Actor &);
-	MCAPI static void _convertBookCheck(ItemStackBase &);
 	MCAPI static void appendEnchantToFormattedText(Enchant::Type, std::string const &, std::string &);
 	MCAPI static ItemStack const &getRandomItemWithMending(Mob const &);
 	MCAPI static ItemStack const &getRandomItemWith(Enchant::Type, Mob const &, EquipmentFilter);
@@ -191,7 +193,7 @@ public:
 	MCAPI static ItemInstance generateEnchantedBook(EnchantmentInstance const &);
 	MCAPI static float getDamageReduction(ActorDamageSource const &, Mob const &);
 	MCAPI static bool hasEnchant(Enchant::Type, ItemStackBase const &);
-
+	
 	inline static const char* getEnchantName(Enchant::Type type) {
 		switch (type) {
 			case Enchant::Type::protection: return "protection";
@@ -235,6 +237,8 @@ public:
 		}
 	}
 
+	BASEAPI static void applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant);
+
 	MCAPI static int32_t const PROTECTIONFACTOR_SECONDARYCAP;
 };
 
@@ -260,6 +264,7 @@ public:
 	MCAPI bool addEnchant(EnchantmentInstance, bool);
 	MCAPI EnchantResult canEnchant(EnchantmentInstance, bool);
 	MCAPI void read(ReadOnlyBinaryStream &);
+	MCAPI ItemEnchants& operator=(ItemEnchants &&);
 
 private:
 	MCAPI std::vector<ListTag> _toList() const;

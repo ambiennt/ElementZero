@@ -2,12 +2,10 @@
 
 #include <string>
 #include <cstdint>
+#include "../Core/NBT.h"
 #include "../dll.h"
 
-#include "../Core/NBT.h"
-
-// const class ItemState
-class ItemState {
+class ItemState { // const class ItemState
 public:
 
 	struct StateListNode {
@@ -24,7 +22,7 @@ public:
 	uint64_t mID; // const - 0x8
 	uint64_t mVariationCount; // const - 0x10
 	std::string mName; // const - 0x18
-	ItemState::StateListNode mNode; // 0x38
+	StateListNode mNode; // 0x38
 };
 
 static_assert(sizeof(ItemState) == 0x50);

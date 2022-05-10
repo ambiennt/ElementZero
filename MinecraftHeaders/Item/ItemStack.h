@@ -11,6 +11,7 @@
 #include "../Core/WeakPtr.h"
 #include "../Block/LegacyBlockID.h"
 #include "../Block/Block.h"
+#include "../Block/BlockLegacy.h"
 #include "ItemStackNetIdVariant.h"
 #include "ItemRuntimeID.h"
 #include "../dll.h"
@@ -20,7 +21,6 @@
 
 class Item;
 class Block;
-class BlockLegacy;
 class CompoundTag;
 class IDataOutput;
 class IDataInput;
@@ -62,39 +62,39 @@ public:
 
 	MCAPI virtual ~ItemStackBase();
 
-	MCAPI bool isNull(void) const;
-	MCAPI bool isBlock(void) const;
-	MCAPI bool isDamaged(void) const;
-	MCAPI bool isEnchanted(void) const;
-	MCAPI bool isPotionItem(void) const;
-	MCAPI bool isExperimental(void) const;
-	MCAPI bool isWearableItem(void) const;
-	MCAPI bool isStackedByData(void) const;
-	MCAPI bool isHorseArmorItem(void) const;
+	MCAPI bool isNull() const;
+	MCAPI bool isBlock() const;
+	MCAPI bool isDamaged() const;
+	MCAPI bool isEnchanted() const;
+	MCAPI bool isPotionItem() const;
+	MCAPI bool isExperimental() const;
+	MCAPI bool isWearableItem() const;
+	MCAPI bool isStackedByData() const;
+	MCAPI bool isHorseArmorItem() const;
 	MCAPI bool isStackable(class ItemStackBase const &) const;
 
-	MCAPI std::string toString(void) const;
+	MCAPI std::string toString() const;
 
-	MCAPI short getId(void) const; // item id
-	MCAPI int getIdAux(void) const; // assume item id x 65536
-	MCAPI class Item const *getItem(void) const;
-	MCAPI short getAuxValue(void) const; // example: dye has aux values 0-15 (same as mAuxValue)
-	MCAPI class ItemDescriptor getDescriptor(void) const;
-	MCAPI unsigned char getMaxStackSize(void) const;
-	MCAPI class ItemEnchants constructItemEnchantsFromUserData(void) const;
-	MCAPI std::string getName(void) const;
-	MCAPI std::string getHoverName(void) const;
-	MCAPI std::string getRawNameId(void) const;
-	MCAPI std::string getCustomName(void) const;
-	MCAPI std::string getDescriptionId(void) const;
-	MCAPI std::unique_ptr<class CompoundTag> getNetworkUserData(void) const;
+	MCAPI short getId() const; // item id
+	MCAPI int getIdAux() const; // assume item id x 65536
+	MCAPI class Item const *getItem() const;
+	MCAPI short getAuxValue() const; // example: dye has aux values 0-15 (same as mAuxValue)
+	MCAPI class ItemDescriptor getDescriptor() const;
+	MCAPI unsigned char getMaxStackSize() const;
+	MCAPI class ItemEnchants constructItemEnchantsFromUserData() const;
+	MCAPI std::string getName() const;
+	MCAPI std::string getHoverName() const;
+	MCAPI std::string getRawNameId() const;
+	MCAPI std::string getCustomName() const;
+	MCAPI std::string getDescriptionId() const;
+	MCAPI std::unique_ptr<class CompoundTag> getNetworkUserData() const;
 
-	MCAPI bool hasCustomHoverName(void) const;
+	MCAPI bool hasCustomHoverName() const;
 	MCAPI bool hasSameAuxValue(class ItemStackBase const &) const;
 	MCAPI bool hasSameUserData(class ItemStackBase const &) const;
 
 	MCAPI void set(const int32_t amount);
-	MCAPI void setNull(void);
+	MCAPI void setNull();
 	MCAPI void setChargedItem(class ItemInstance const &, bool);
 	MCAPI void setCustomName(std::string const &);
 	MCAPI void setUserData(std::unique_ptr<class CompoundTag>);
@@ -110,12 +110,12 @@ public:
 	MCAPI void serializeComponents(class IDataOutput &) const;
 	MCAPI void deserializeComponents(class IDataInput &);
 
-	MCAPI std::unique_ptr<class CompoundTag> save(void) const;
+	MCAPI std::unique_ptr<class CompoundTag> save() const;
 
 	MCAPI bool sameItem(int, int) const;
 	MCAPI bool matches(class ItemStackBase const &) const;
 	MCAPI void setRepairCost(int);
-	MCAPI void clearChargedItem(void);
+	MCAPI void clearChargedItem();
 	MCAPI bool matchesItem(class ItemStackBase const &) const;
 	MCAPI bool sameItemAndAux(class ItemStackBase const &) const;
 	MCAPI void _write(class BinaryStream &) const;
@@ -136,7 +136,6 @@ public:
 		return ret;
 	}
 
-	MCAPI bool operator!=(ItemStackBase const &rhs) const;
 	MCAPI operator bool() const;
 
 protected:
@@ -157,21 +156,24 @@ public:
 	inline bool operator==(ItemStackBase const &rhs) const {
 		return this->matchesItem(rhs);
 	}
+	inline bool operator!=(ItemStackBase const &rhs) const {
+		return !(*this == rhs);
+	}
 
-	inline bool isBlockItem(void) const {
+	inline bool isBlockItem() const {
 		return (this->mBlock && this->mBlock->mLegacyBlock);
 	}
 
-	inline enum ItemRuntimeID getIdAsEnum(void) const {
+	inline ItemRuntimeID getIdAsEnum() const {
 		return (ItemRuntimeID)this->getId();
 	}
 
-	inline uint16_t toBlockId(void) const {
+	inline uint16_t toBlockId() const {
 		if (!this->isBlockItem()) return 0;
 		return this->mBlock->mLegacyBlock->mId;
 	}
 
-	inline enum LegacyBlockID toBlockIdAsEnum(void) const {
+	inline LegacyBlockID toBlockIdAsEnum() const {
 		return (LegacyBlockID)this->toBlockId();
 	}
 

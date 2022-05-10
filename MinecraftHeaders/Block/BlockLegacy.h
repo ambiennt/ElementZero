@@ -25,7 +25,7 @@ enum class BlockActorType;
 enum class CreativeItemCategory;
 enum class MaterialType;
 
-enum class BlockRenderLayer {
+enum class BlockRenderLayer : int32_t {
 	RENDERLAYER_DOUBLE_SIDED                = 0,
 	RENDERLAYER_BLEND                       = 1,
 	RENDERLAYER_OPAQUE                      = 2,
@@ -37,7 +37,7 @@ enum class BlockRenderLayer {
 	RENDERLAYER_ENDPORTAL                   = 8,
 	RENDERLAYER_BARRIER                     = 9,
 	RENDERLAYER_STRUCTURE_VOID              = 10,
-	COUNT                                   = 11
+	COUNT                                   = 11,
 };
 
 enum class BlockSupportType {
@@ -356,7 +356,7 @@ public:
 	virtual unsigned char getMappedFace(unsigned char, class Block const &) const;
 	virtual enum Flip getFaceFlip(unsigned char, class Block const &) const;
 	virtual void animateTick(class BlockSource &, class BlockPos const &, class Random &) const;
-	virtual class BlockLegacy &init(void);
+	virtual class BlockLegacy &init();
 	virtual class BlockLegacy &setLightBlock(struct Brightness);
 	virtual class BlockLegacy &setLightEmission(float);
 	virtual class BlockLegacy &setExplodeable(float);
@@ -367,7 +367,7 @@ public:
 	virtual class BlockLegacy &addState(class ItemState const &, uint64_t);
 	virtual class BlockLegacy &setAllowsRunes(bool);
 	virtual class BlockLegacy &setMapColor(class Color const &);
-	virtual bool canBeSilkTouched(void) const;
+	virtual bool canBeSilkTouched() const;
 	virtual class ItemInstance getSilkTouchItemInstance(class Block const &) const;
 	virtual void setVisualShape(class AABB const &);
 	virtual void setVisualShape(class Vec3 const &, class Vec3 const &);
@@ -375,7 +375,7 @@ public:
 	virtual bool dealsContactDamage(class Actor const &, class Block const &, bool) const;
 
 	template <typename T> MCAPI T getState(class ItemState const &, unsigned short) const;
-	MCAPI class Block const &getDefaultState(void) const;
+	MCAPI class Block const &getDefaultState() const;
 
 	std::string mDescriptionId; // 0x8
 	std::string mRawNameId; // 0x28
@@ -433,38 +433,38 @@ public:
 	std::shared_mutex mAccess; // Core::Cache
 	std::unordered_map<uint16_t, const Block*> mContent; // Core::Cache
 
-	inline uint16_t getId(void) const {
+	inline uint16_t getId() const {
 		return this->mId;
 	}
 
-	inline enum LegacyBlockID getIdAsEnum(void) const {
+	inline LegacyBlockID getIdAsEnum() const {
 		return (LegacyBlockID)this->getId();
 	}
 
-	inline int16_t toItemId(void) const {
+	inline int16_t toItemId() const {
 		if (this->mId > 255) {
 			return (int16_t)(255 - this->mId);
 		}
 		return (int16_t)this->mId;
 	}
 
-	inline enum ItemRuntimeID toItemIdAsEnum(void) const {
+	inline ItemRuntimeID toItemIdAsEnum() const {
 		return (ItemRuntimeID)this->toItemId();
 	}
 
-	inline bool isAirBlock(void) const {
+	inline bool isAirBlock() const {
 		return (this->getIdAsEnum() == LegacyBlockID::AIR);
 	}
 
-	inline bool isUnbreakableBlock(void) const {
+	inline bool isUnbreakableBlock() const {
 		return (!this->isAirBlock() && (this->mDestroySpeed < 0.f) && this->mSolid);
 	}
 
-	inline bool hasBlockProperty(enum BlockProperty property) const {
+	inline bool hasBlockProperty(BlockProperty property) const {
 		return (this->mProperties & (uint64_t)property);
 	}
 
-	inline enum MaterialType getMaterial(void) const {
+	inline MaterialType getMaterial() const {
 		return this->mMaterial->mType;
 	}
 };

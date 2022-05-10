@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Core/Packet.h"
-#include "../Core/ContainerID.h"
+#include "../Container/ContainerID.h"
 #include "../dll.h"
 
 class PlayerHotbarPacket : public Packet {

@@ -60,18 +60,18 @@ public:
 	bool operator==(Vec3 const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
 	bool operator!=(Vec3 const &rhs) const { return !(*this == rhs); }
 
-	inline float length(void) const {
+	inline float length() const {
 		return std::sqrtf((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
 	}
 
-	inline Vec3& normalize(void) {
+	inline Vec3& normalize() {
 		float l = this->length();
 		if (l == 0.f) return *this;
 		this->operator*=(1.f / l);
 		return *this;
 	}
 
-	inline Vec3& normalizeXZ(void) {
+	inline Vec3& normalizeXZ() {
 		float l = this->length();
 		if (l == 0.f) return *this;
 		l = 1.f / l;
@@ -90,11 +90,7 @@ public:
 		float f3 = std::cosf(x);
 		float f4 = std::sinf(x);
 
-		Vec3 result;
-		result.x = f3 * f2;
-		result.y = f4;
-		result.z = f3 * f1;
-		return result;
+		return Vec3(f3 * f2, f4, f3 * f1);
 	};
 };
 

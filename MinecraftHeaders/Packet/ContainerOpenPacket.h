@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Core/Packet.h"
-#include "../Core/ContainerID.h"
+#include "../Container/ContainerID.h"
 #include "../Actor/ActorUniqueID.h"
 #include "../Math/BlockPos.h"
 #include "../Container/ContainerType.h"

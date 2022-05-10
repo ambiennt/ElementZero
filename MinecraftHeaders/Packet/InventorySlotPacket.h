@@ -2,7 +2,7 @@
 
 #include "../Core/Packet.h"
 #include "../Item/ItemStack.h"
-#include "../Core/ContainerID.h"
+#include "../Container/ContainerID.h"
 #include "../dll.h"
 
 class InventorySlotPacket : public Packet {

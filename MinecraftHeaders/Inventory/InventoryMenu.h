@@ -1,11 +1,8 @@
 #pragma once
 
-#include "../dll.h"
 #include "../Item/ItemStack.h"
 #include "ContainerManager.h"
-#include "../Core/ContainerID.h"
-#include "../Container/ContainerType.h"
-#include "../Container/Container.h"
+#include "../dll.h"
 
 class Player;
 

@@ -59,11 +59,11 @@ public:
 	bool operator==(Vec2 const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y); }
 	bool operator!=(Vec2 const &rhs) const { return !(*this == rhs); }
 
-	inline float length(void) const {
+	inline float length() const {
 		return std::sqrtf((this->x * this->x) + (this->y * this->y));
 	}
 
-	inline Vec2& normalize(void) {
+	inline Vec2& normalize() {
 		float l = this->length();
 		if (l == 0.f) return *this;
 		this->operator*=(1.f / l);

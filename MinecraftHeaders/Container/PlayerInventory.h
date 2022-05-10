@@ -2,7 +2,7 @@
 
 #include "ContainerContentChangeListener.h"
 #include "ContainerSizeChangeListener.h"
-#include "../Core/ContainerID.h"
+#include "ContainerID.h"
 #include "Inventory.h"
 #include "../dll.h"
 

@@ -7,7 +7,7 @@
 
 #include "../Core/NBT.h"
 #include "../Core/Packet.h"
-#include "../Core/ContainerID.h"
+#include "../Container/ContainerID.h"
 #include "../Container/ContainerEnumName.h"
 #include "../Math/NetworkBlockPosition.h"
 #include "../Actor/Player.h"

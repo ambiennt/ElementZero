@@ -221,35 +221,35 @@ public:
 	};
 
 	virtual void prepareRegion(class ChunkSource &);
-	virtual void destroyRegion(void);
-	virtual void suspendRegion(void);
-	virtual void _fireWillChangeDimension(void);
-	virtual void _fireDimensionChanged(void);
+	virtual void destroyRegion();
+	virtual void suspendRegion();
+	virtual void _fireWillChangeDimension();
+	virtual void _fireDimensionChanged();
 	virtual void changeDimensionWithCredits(class AutomaticID<class Dimension, int>);
 	virtual int tickWorld(struct Tick const &);
 	virtual void frameUpdate(class FrameUpdateContextBase &);
-	virtual std::vector<class ChunkPos> const &getTickingOffsets(void) const;
-	virtual void moveView(void);
+	virtual std::vector<class ChunkPos> const &getTickingOffsets() const;
+	virtual void moveView();
 	virtual void setName(std::string const &);
 	virtual void checkMovementStats(class Vec3 const &);
 	virtual class StructureFeature *getCurrentStructureFeature() const;
 	virtual bool isAutoJumpEnabled() const;
-	virtual void respawn(void);
+	virtual void respawn();
 	virtual void resetRot();
 	virtual void resetPos(bool);
 	virtual bool isInTrialMode();
 	virtual bool hasResource(int);
-	virtual void completeUsingItem(void);
+	virtual void completeUsingItem();
 	virtual void setPermissions(enum CommandPermissionLevel);
-	virtual void startDestroying(void);
-	virtual void stopDestroying(void);
+	virtual void startDestroying();
+	virtual void stopDestroying();
 	virtual void openPortfolio();
 	virtual void openBook(int, bool, int, BlockActor *);
 	virtual void openTrading(struct ActorUniqueID const &, bool);
-	virtual bool canOpenContainerScreen(void);
+	virtual bool canOpenContainerScreen();
 	virtual void openChalkboard(class ChalkboardBlockActor *, bool);
 	virtual void openNpcInteractScreen(Actor &);
-	virtual void openInventory(void);
+	virtual void openInventory();
 	virtual void displayChatMessage(std::string const &, std::string const &);
 	virtual void displayClientMessage(std::string const &);
 	virtual void displayTextObjectMessage(class TextObjectRoot const &);
@@ -257,21 +257,21 @@ public:
 	virtual void displayWhisperMessage(std::string const &, std::string const &, std::string const &, std::string const &);
 	virtual enum BedSleepingResult startSleepInBed(class BlockPos const &);
 	virtual void stopSleepInBed(bool forcefulWakeUp, bool updateLevelList);
-	virtual bool canStartSleepInBed(void);
-	virtual int getSleepTimer(void) const;
-	virtual int getPreviousTickSleepTimer(void) const;
+	virtual bool canStartSleepInBed();
+	virtual int getSleepTimer() const;
+	virtual int getPreviousTickSleepTimer() const;
 	virtual void openSign(BlockPos const &);
 	virtual void playEmote(std::string const &);
 	virtual bool isLocalPlayer() const;
-	virtual bool isHostingPlayer(void) const;
-	virtual bool isLoading(void) const;
-	virtual bool isPlayerInitialized(void) const;
+	virtual bool isHostingPlayer() const;
+	virtual bool isLoading() const;
+	virtual bool isPlayerInitialized() const;
 	virtual void stopLoading();
 	virtual void registerTrackedBoss(struct ActorUniqueID);
 	virtual void unRegisterTrackedBoss(struct ActorUniqueID);
 	virtual void setPlayerGameType(enum GameType);
 	virtual void _crit(class Actor &);
-	virtual class IMinecraftEventing *getEventing(void) const;
+	virtual class IMinecraftEventing *getEventing() const;
 	virtual uint8_t getUserId();
 	virtual void sendEventPacket(class EventPacket &) const;
 	virtual void addExperience(int);
@@ -280,46 +280,46 @@ public:
 	virtual void slotChanged(class IContainerManager &, class Container &, int, class ItemStack const &, class ItemStack const &, bool);
 	virtual void inventoryChanged(class Container &, int, class ItemStack const &, class ItemStack const &, bool);
 	virtual void refreshContainer(class IContainerManager &);
-	virtual void deleteContainerManager(void);
+	virtual void deleteContainerManager();
 	virtual void setFieldOfViewModifier(float);
 	virtual bool isPositionRelevant(class AutomaticID<class Dimension, int>, class BlockPos const &);
 	virtual bool isEntityRelevant(class Actor const &);
-	virtual bool isTeacher(void) const;
-	virtual void onSuspension(void);
-	virtual void onLinkedSlotsChanged(void);
+	virtual bool isTeacher() const;
+	virtual void onSuspension();
+	virtual void onLinkedSlotsChanged();
 	virtual void startCooldown(class Item const *);
 	virtual int getItemCooldownLeft(enum CooldownType) const;
 	virtual bool isItemInCooldown(enum CooldownType) const;
 	virtual void sendInventoryTransaction(class InventoryTransaction const &) const;
 	virtual void sendComplexInventoryTransaction(std::unique_ptr<class ComplexInventoryTransaction>) const;
 	virtual void sendNetworkPacket(class Packet &) const;
-	virtual class PlayerEventCoordinator &getPlayerEventCoordinator(void);
+	virtual class PlayerEventCoordinator &getPlayerEventCoordinator();
 	virtual class MoveInputHandler *getMoveInputHandler();
-	virtual enum InputMode getInputMode(void) const;
-	virtual enum ClientPlayMode getPlayMode(void) const;
+	virtual enum InputMode getInputMode() const;
+	virtual enum ClientPlayMode getPlayMode() const;
 	virtual void reportMovementTelemetry(enum MovementEventType);
 	virtual void onMovePlayerPacketNormal(class Vec3 const &, class Vec2 const &, float);
 
-	MCAPI bool isInRaid(void) const;
-	MCAPI bool isSurvival(void) const;
-	MCAPI bool isInCreativeMode(void) const;
+	MCAPI bool isInRaid() const;
+	MCAPI bool isSurvival() const;
+	MCAPI bool isInCreativeMode() const;
 	MCAPI bool isHiddenFrom(class Mob &) const;
-	MCAPI bool canBeSeenOnMap(void) const;
-	MCAPI bool canUseOperatorBlocks(void) const;
+	MCAPI bool canBeSeenOnMap() const;
+	MCAPI bool canUseOperatorBlocks() const;
 	MCAPI bool canDestroy(class Block const &) const;
 	MCAPI bool canUseAbility(enum AbilitiesIndex) const;
-	MCAPI class Agent *getAgent(void) const;
-	MCAPI int getDirection(void) const;
-	MCAPI int getXpNeededForNextLevel(void) const;
+	MCAPI class Agent *getAgent() const;
+	MCAPI int getDirection() const;
+	MCAPI int getXpNeededForNextLevel() const;
 	MCAPI float getDestroySpeed(class Block const &) const;
 	MCAPI float getDestroyProgress(class Block const &) const;
-	MCAPI class ItemStack const &getSelectedItem(void) const;
+	MCAPI class ItemStack const &getSelectedItem() const;
 	MCAPI void setSelectedItem(class ItemStack const&);
-	MCAPI class ItemStack const &getCurrentActiveShield(void) const;
-	//MCAPI class EnderChestContainer *getEnderChestContainer(void);
-	//MCAPI class PlayerInventory& getSupplies(void);
-	MCAPI void updateTeleportDestPos(void);
-	MCAPI void updateInventoryTransactions(void);
+	MCAPI class ItemStack const &getCurrentActiveShield() const;
+	//MCAPI class EnderChestContainer *getEnderChestContainer();
+	//MCAPI class PlayerInventory& getSupplies();
+	MCAPI void updateTeleportDestPos();
+	MCAPI void updateInventoryTransactions();
 	MCAPI void updateSkin(class SerializedSkin const &, int clientSubID); // client side function, has no effect on server
 	MCAPI void setAgent(class Agent *);
 	MCAPI void setRespawnPosition(class BlockPos const &, bool);
@@ -328,71 +328,71 @@ public:
 	MCAPI void setContainerManager(class std::shared_ptr<class IContainerManager>);
 	MCAPI void eat(int, float);
 	MCAPI void startUsingItem(class ItemStack const &, int);
-	MCAPI void stopUsingItem(void);
-	MCAPI void releaseUsingItem(void);
-	MCAPI void stopGliding(void);
-	MCAPI void resetPlayerLevel(void);
-	MCAPI void handleJumpEffects(void);
+	MCAPI void stopUsingItem();
+	MCAPI void releaseUsingItem();
+	MCAPI void stopGliding();
+	MCAPI void resetPlayerLevel();
+	MCAPI void handleJumpEffects();
 	MCAPI bool take(class Actor &, int, int);
-	MCAPI void updateTrackedBosses(void);
+	MCAPI void updateTrackedBosses();
 	MCAPI void causeFoodExhaustion(float);
 	MCAPI bool checkNeedAutoJump(float, float);
-	MCAPI void clearRespawnPosition(void);
-	MCAPI void recheckSpawnPosition(void);
+	MCAPI void clearRespawnPosition();
+	MCAPI void recheckSpawnPosition();
 
 	// custom methods
 	inline ServerPlayer *asServerPlayer() const noexcept {
 		return const_cast<ServerPlayer *>(reinterpret_cast<ServerPlayer const *>(this));
 	}
 
-	inline class ItemStack const& getPlayerUIItem(void) const {
+	inline class ItemStack const& getPlayerUIItem() const {
 		return this->mPlayerUIContainer.getItem((int32_t)PlayerUISlot::CursorSelected);
 	}
 
-	inline class Vec3 const& getRawPlayerPos(void) const {
+	inline class Vec3 const& getRawPlayerPos() const {
 		return this->EZPlayerFields->mRawPos;
 	}
 
-	inline class Vec3 const& getRawPlayerPosOld(void) const {
+	inline class Vec3 const& getRawPlayerPosOld() const {
 		return this->EZPlayerFields->mRawPosOld;
 	}
 
 	// a more reliable way to get pos delta for players
 	// since for some reason the player pos delta zeroes out or the old and current pos match on the same tick
-	inline class Vec3 getRawPlayerPosDelta(void) const {
+	inline class Vec3 getRawPlayerPosDelta() const {
 		const auto& prevPos = this->getRawPlayerPosOld();
 		const auto& currPos = this->getRawPlayerPos();
 		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
 	}
 
 	// fill LevelChunkPacket with empty values except for cache setting
-	inline void crashClient(void) const {
+	inline void crashClient() const {
 		LevelChunkPacket badPkt;
 		badPkt.mCacheEnabled = true;
 		this->sendNetworkPacket(badPkt);
 	}
 
-	inline class PlayerInventory& getSupplies(void) const {
+	inline class PlayerInventory& getSupplies() const {
 		return *this->mPlayerInventory.get();
 	}
 
-	inline class Inventory& getRawInventory(void) const {
+	inline class Inventory& getRawInventory() const {
 		return *this->mPlayerInventory->mInventory.get();
 	}
 
-	inline class EnderChestContainer* getEnderChestContainer(void) const {
+	inline class EnderChestContainer* getEnderChestContainer() const {
 		return this->mEnderChestInventory.get();
 	}
 
-	inline bool isOperator(void) const {
+	inline bool isOperator() const {
 		return (this->getCommandPermissionLevel() >= CommandPermissionLevel::GameMasters);
 	}
 
-	inline enum PlayerPermissionLevel getPlayerPermissionLevel(void) const {
+	inline enum PlayerPermissionLevel getPlayerPermissionLevel() const {
 		return this->mAbilities.mPermissionsHandler->mPlayerPermissions;
 	}	
 
-	inline void syncAbilities(void) const {
+	inline void syncAbilities() const {
 		AdventureSettingsPacket pkt(this->mLevel->getAdventureSettings(), this->mAbilities, this->getUniqueID(), false);
 		this->mLevel->forEachPlayer([&](Player const& p) -> bool {
         	p.sendNetworkPacket(pkt);

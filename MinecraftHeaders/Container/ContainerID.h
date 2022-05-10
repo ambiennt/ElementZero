@@ -8,5 +8,5 @@ enum class ContainerID : int8_t {
 	Offhand         = 119,
 	Armor           = 120,
 	SelectionSlots  = 122,
-	PlayerUIOnly    = 124
+	PlayerUIOnly    = 124,
 };

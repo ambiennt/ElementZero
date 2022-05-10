@@ -231,31 +231,31 @@ public:
 	virtual void reloadHardcodedClient(enum InitializationMethod, class VariantParameterList const &);
 	virtual void initializeComponents(enum InitializationMethod, class VariantParameterList const &);
 	virtual void reloadComponents(enum InitializationMethod, class VariantParameterList const &);
-	virtual void _serverInitItemStackIds(void);
-	virtual void _doInitialMove(void);
+	virtual void _serverInitItemStackIds();
+	virtual void _doInitialMove();
 	virtual ~Actor();
-	virtual void reset(void);
-	virtual int getOnDeathExperience(void);
-	virtual enum ActorType getOwnerEntityType(void);
-	virtual void remove(void);
+	virtual void reset();
+	virtual int getOnDeathExperience();
+	virtual enum ActorType getOwnerEntityType();
+	virtual void remove();
 	virtual void setPos(class Vec3 const &);
-	virtual class Vec3 const &getPos(void) const;
-	virtual class Vec3 const &getPosOld(void) const;
+	virtual class Vec3 const &getPos() const;
+	virtual class Vec3 const &getPosOld() const;
 	virtual class Vec3 const getPosExtrapolated(float) const;
 	virtual class Vec3 getAttachPos(enum ActorLocation, float) const;
-	virtual class Vec3 getFiringPos(void) const;
+	virtual class Vec3 getFiringPos() const;
 	virtual void setRot(class Vec2 const &);
 	virtual void move(class Vec3 const &);
 	virtual class Vec3 getInterpolatedRidingPosition(float) const;
 	virtual float getInterpolatedBodyRot(float) const;
 	virtual float getInterpolatedHeadRot(float) const;
 	virtual float getInterpolatedBodyYaw(float) const;
-	virtual float getYawSpeedInDegreesPerSecond(void) const;
+	virtual float getYawSpeedInDegreesPerSecond() const;
 	virtual float getInterpolatedWalkAnimSpeed(float) const;
 	virtual class Vec3 getInterpolatedRidingOffset(float) const;
 	virtual void checkBlockCollisions(class AABB const &);
 	virtual void checkBlockCollisions();
-	virtual bool isFireImmune(void) const;
+	virtual bool isFireImmune() const;
 	virtual void breaksFallingBlocks() const;
 	virtual void blockedByShield(class ActorDamageSource const &, class Actor &);
 	virtual void moveRelative(float, float, float, float);
@@ -264,12 +264,12 @@ public:
 	virtual void chorusFruitTeleport(class Vec3 &);
 	virtual void lerpTo(class Vec3 const &, class Vec2 const &, int);
 	virtual void lerpMotion(class Vec3 const &);
-	virtual std::unique_ptr<class AddActorBasePacket> getAddPacket(void);
-	virtual void normalTick(void);
-	virtual void baseTick(void);
-	virtual void rideTick(void);
+	virtual std::unique_ptr<class AddActorBasePacket> getAddPacket();
+	virtual void normalTick();
+	virtual void baseTick();
+	virtual void rideTick();
 	virtual void positionRider(class Actor &, float);
-	virtual float getRidingHeight(void);
+	virtual float getRidingHeight();
 	virtual bool startRiding(class Actor &);
 	virtual void addRider(class Actor &);
 	virtual void flagRiderToRemove(class Actor &);
@@ -277,30 +277,30 @@ public:
 	virtual bool intersects(class Vec3 const &, class Vec3 const &) const;
 	virtual bool isFree(class Vec3 const &, float);
 	virtual bool isFree(class Vec3 const &);
-	virtual bool isInWall(void) const;
-	virtual bool isInvisible(void) const;
+	virtual bool isInWall() const;
+	virtual bool isInvisible() const;
 	virtual bool canShowNameTag() const;
 	virtual bool canExistInPeaceful() const;
 	virtual void setNameTagVisible(bool);
-	virtual std::string const &getNameTag(void) const;
-	virtual uint64_t getNameTagAsHash(void) const;
-	virtual std::string getFormattedNameTag(void) const;
+	virtual std::string const &getNameTag() const;
+	virtual uint64_t getNameTagAsHash() const;
+	virtual std::string getFormattedNameTag() const;
 	virtual void filterFormattedNameTag(class UIProfanityContext const &);
 	virtual void setNameTag(std::string const &);
 	virtual bool getAlwaysShowNameTag() const;
 	virtual void setScoreTag(std::string const &);
-	virtual std::string const &getScoreTag(void) const;
-	virtual bool isInWater(void) const;
-	virtual bool hasEnteredWater(void) const;
-	virtual bool isImmersedInWater(void) const;
-	virtual bool isInWaterOrRain(void) const;
-	virtual bool isInLava(void) const;
+	virtual std::string const &getScoreTag() const;
+	virtual bool isInWater() const;
+	virtual bool hasEnteredWater() const;
+	virtual bool isImmersedInWater() const;
+	virtual bool isInWaterOrRain() const;
+	virtual bool isInLava() const;
 	virtual bool isUnderLiquid(enum MaterialType) const;
-	virtual bool isOverWater(void) const;
+	virtual bool isOverWater() const;
 	virtual void makeStuckInBlock(float);
 	virtual float getCameraOffset() const;
-	virtual float getShadowHeightOffs(void);
-	virtual float getShadowRadius(void) const;
+	virtual float getShadowHeightOffs();
+	virtual float getShadowRadius() const;
 	virtual class Vec3 getHeadLookVector(float);
 	virtual bool canSeeInvisible() const;
 	virtual bool canSee(class Actor const &) const;
@@ -311,21 +311,21 @@ public:
 	virtual void playerTouch(Player &);
 	virtual void onAboveBubbleColumn(bool);
 	virtual void onInsideBubbleColumn(bool);
-	virtual bool isImmobile(void) const;
-	virtual bool isSilent(void);
-	virtual bool isPickable(void);
+	virtual bool isImmobile() const;
+	virtual bool isSilent();
+	virtual bool isPickable();
 	virtual bool isFishable() const;
-	virtual bool isSleeping(void) const;
+	virtual bool isSleeping() const;
 	virtual bool isShootable();
-	virtual bool isSneaking(void) const;
+	virtual bool isSneaking() const;
 	virtual void setSneaking(bool);
-	virtual bool isBlocking(void) const;
+	virtual bool isBlocking() const;
 	virtual bool isDamageBlocked(ActorDamageSource const &) const;
-	virtual bool isAlive(void) const;
-	virtual bool isOnFire(void) const;
-	virtual bool isOnHotBlock(void) const;
+	virtual bool isAlive() const;
+	virtual bool isOnFire() const;
+	virtual bool isOnHotBlock() const;
 	virtual bool isCreativeModeAllowed();
-	virtual bool isSurfaceMob(void) const;
+	virtual bool isSurfaceMob() const;
 	virtual bool isTargetable() const;
 	virtual bool canAttack(class Actor *, bool) const;
 	virtual void setTarget(class Actor *);
@@ -334,39 +334,39 @@ public:
 	virtual bool attack(class Actor &);
 	virtual void performRangedAttack(class Actor &, float);
 	virtual void adjustDamageAmount(int &) const;
-	virtual int getEquipmentCount(void) const;
+	virtual int getEquipmentCount() const;
 	virtual void setOwner(struct ActorUniqueID);
 	virtual void setSitting(bool);
 	virtual void onTame();
 	virtual void onFailedTame();
-	virtual int getInventorySize(void) const;
-	virtual int getEquipSlots(void) const;
-	virtual int getChestSlots(void) const;
+	virtual int getInventorySize() const;
+	virtual int getEquipSlots() const;
+	virtual int getChestSlots() const;
 	virtual void setStanding(bool);
-	virtual bool canPowerJump(void) const;
+	virtual bool canPowerJump() const;
 	virtual void setCanPowerJump(bool);
-	virtual bool isJumping(void) const;
-	virtual bool isEnchanted(void) const;
+	virtual bool isJumping() const;
+	virtual bool isEnchanted() const;
 	virtual void rideJumped();
 	virtual void rideLanded(Vec3 const &, Vec3 const &);
-	virtual bool shouldRender(void) const;
+	virtual bool shouldRender() const;
 	virtual bool isInvulnerableTo(class ActorDamageSource const &) const;
 	virtual enum ActorDamageCause getBlockDamageCause(class Block const &) const;
 	virtual void actuallyHurt(int damage, class ActorDamageSource const &, bool bypassArmor);
-	virtual void animateHurt(void);
+	virtual void animateHurt();
 	virtual bool doFireHurt(int damage);
-	virtual void onLightningHit(void);
+	virtual void onLightningHit();
 	virtual void onBounceStarted(BlockPos const &, BlockPos const &);
 	virtual void feed(int);
 	virtual void handleEntityEvent(enum ActorEvent, int);
 	virtual float getPickRadius();
-	virtual class HashedString const &getActorRendererId(void) const;
+	virtual class HashedString const &getActorRendererId() const;
 	virtual class ItemActor *spawnAtLocation(int, int);
 	virtual class ItemActor *spawnAtLocation(int, int, float);
 	virtual class ItemActor *spawnAtLocation(class Block const &, int);
 	virtual class ItemActor *spawnAtLocation(class Block const &, int, float);
 	virtual class ItemActor *spawnAtLocation(class ItemStack const &, float);
-	virtual void despawn(void);
+	virtual void despawn();
 	virtual void killed(class Actor &);
 	virtual void awardKillScore(Actor &, int);
 	virtual void setArmor(enum ArmorSlot, class ItemStack const &);
@@ -376,28 +376,28 @@ public:
 	virtual float getArmorColorInSlot(enum ArmorSlot, int) const;
 	virtual void setEquippedSlot(enum ArmorSlot, int, int);
 	virtual void setEquippedSlot(enum ArmorSlot, class ItemStack const &);
-	virtual class ItemStack const &getCarriedItem(void) const;
+	virtual class ItemStack const &getCarriedItem() const;
 	virtual void setCarriedItem(class ItemStack const &);
 	virtual void setOffhandSlot(class ItemStack const &);
-	virtual class ItemStack const &getEquippedTotem(void) const;
-	virtual bool consumeTotem(void);
+	virtual class ItemStack const &getEquippedTotem() const;
+	virtual bool consumeTotem();
 	virtual bool save(class CompoundTag &);
 	virtual void saveWithoutId(class CompoundTag &);
 	virtual bool load(class CompoundTag const &, class DataLoadHelper &);
 	virtual void loadLinks(class CompoundTag const &, std::vector<struct ActorLink> &, class DataLoadHelper &);
-	virtual enum ActorType getEntityTypeId(void) const;
-	virtual class HashedString const &queryEntityRenderer(void) const;
+	virtual enum ActorType getEntityTypeId() const;
+	virtual class HashedString const &queryEntityRenderer() const;
 	virtual struct ActorUniqueID getSourceUniqueID() const;
 	virtual void setOnFire(int);
-	virtual class AABB getHandleWaterAABB(void) const;
+	virtual class AABB getHandleWaterAABB() const;
 	virtual void handleInsidePortal(class BlockPos const &);
-	virtual int getPortalCooldown(void) const;
+	virtual int getPortalCooldown() const;
 	virtual int getPortalWaitTime() const;
-	virtual class AutomaticID<class Dimension, int> getDimensionId(void) const;
+	virtual class AutomaticID<class Dimension, int> getDimensionId() const;
 	virtual bool canChangeDimensions() const;
 	virtual void changeDimension(class AutomaticID<class Dimension, int>, bool);
 	virtual void changeDimension(class ChangeDimensionPacket const &);
-	virtual struct ActorUniqueID getControllingPlayer(void) const;
+	virtual struct ActorUniqueID getControllingPlayer() const;
 	virtual void checkFallDamage(float, bool);
 	virtual void causeFallDamage(float);
 	virtual void handleFallDistanceOnServer(float, bool);
@@ -407,67 +407,67 @@ public:
 	virtual bool canAddRider(class Actor &) const;
 	virtual bool canPickupItem(ItemStack const &) const;
 	virtual bool canBePulledIntoVehicle() const;
-	virtual bool inCaravan(void) const;
+	virtual bool inCaravan() const;
 	virtual bool isLeashableType();
-	virtual void tickLeash(void);
-	virtual void sendMotionPacketIfNeeded(void);
+	virtual void tickLeash();
+	virtual void sendMotionPacketIfNeeded();
 	virtual bool canSynchronizeNewEntity() const;
 	virtual void stopRiding(bool exitFromRider, bool actorIsBeingDestroyed, bool switchingRides);
-	virtual void startSwimming(void);
-	virtual void stopSwimming(void);
+	virtual void startSwimming();
+	virtual void stopSwimming();
 	virtual void buildDebugInfo(std::string &) const;
-	virtual enum CommandPermissionLevel getCommandPermissionLevel(void) const;
+	virtual enum CommandPermissionLevel getCommandPermissionLevel() const;
 	virtual class AttributeInstance *getMutableAttribute(class Attribute const &);
 	virtual class AttributeInstance const &getAttribute(class Attribute const &) const;
-	virtual int getDeathTime(void) const;
+	virtual int getDeathTime() const;
 	virtual void heal(int);
-	virtual bool isInvertedHealAndHarm(void) const;
+	virtual bool isInvertedHealAndHarm() const;
 	virtual bool canBeAffected(int) const;
 	virtual bool canBeAffected(class MobEffectInstance const &) const;
 	virtual bool canBeAffectedByArrow(class MobEffectInstance const &) const;
 	virtual void onEffectAdded(class MobEffectInstance &);
 	virtual void onEffectUpdated(class MobEffectInstance const &);
 	virtual void onEffectRemoved(class MobEffectInstance &);
-	virtual class AnimationComponent &getAnimationComponent(void);
+	virtual class AnimationComponent &getAnimationComponent();
 	virtual void openContainerComponent(class Player &);
-	virtual void swing(void);
+	virtual void swing();
 	virtual void useItem(class ItemStack &, enum ItemUseMethod, bool consumeItem);
 	virtual bool hasOutputSignal(unsigned char) const;
 	virtual int getOutputSignal() const;
 	virtual void getDebugText(std::vector<std::string> &);
-	virtual float getMapDecorationRotation(void) const;
+	virtual float getMapDecorationRotation() const;
 	virtual float getRiderYRotation(class Actor const &) const;
 	virtual float getYHeadRot() const;
-	virtual bool isWorldBuilder(void);
+	virtual bool isWorldBuilder();
 	virtual bool isCreative() const;
-	virtual bool isAdventure(void) const;
+	virtual bool isAdventure() const;
 	virtual bool add(class ItemStack &item);
 	virtual bool drop(class ItemStack const &item, bool randomly);
 	virtual bool getInteraction(class Player &, class ActorInteraction &, class Vec3 const &);
 	virtual bool canDestroyBlock(Block const &) const;
 	virtual void setAuxValue(int);
 	virtual void setSize(float, float);
-	virtual int getLifeSpan(void) const;
-	virtual void onOrphan(void);
-	virtual void wobble(void);
-	virtual bool wasHurt(void);
-	virtual void startSpinAttack(void);
+	virtual int getLifeSpan() const;
+	virtual void onOrphan();
+	virtual void wobble();
+	virtual bool wasHurt();
+	virtual void startSpinAttack();
 	virtual void stopSpinAttack();
 	virtual void setDamageNearbyMobs(bool);
 	virtual void renderDebugServerState(class Options const &);
-	virtual void reloadLootTable(void);
+	virtual void reloadLootTable();
 	virtual void reloadLootTable(struct EquipmentTableDescription const *);
 	virtual float getDeletionDelayTimeSeconds() const;
-	virtual void kill(void);
+	virtual void kill();
 	virtual void die(class ActorDamageSource const &);
-	virtual bool shouldTick(void) const;
+	virtual bool shouldTick() const;
 	virtual void updateEntitySpecificMolangVariables(class RenderParams &);
-	virtual bool shouldTryMakeStepSound(void);
+	virtual bool shouldTryMakeStepSound();
 	virtual float getNextStep(float);
 	virtual bool canMakeStepSound() const;
-	virtual void outOfWorld(void);
+	virtual void outOfWorld();
 	virtual bool _hurt(class ActorDamageSource const &, int damage, bool knock, bool ignite);
-	virtual void markHurt(void);
+	virtual void markHurt();
 	virtual void readAdditionalSaveData(class CompoundTag const &, class DataLoadHelper &);
 	virtual void addAdditionalSaveData(class CompoundTag &);
 	virtual void _playStepSound(class BlockPos const &, class Block const &);
@@ -475,46 +475,46 @@ public:
 	virtual void _makeFlySound() const;
 	virtual void checkInsideBlocks(float);
 	virtual void pushOutOfBlocks(class Vec3 const &);
-	virtual bool updateWaterState(void);
-	virtual void doWaterSplashEffect(void);
-	virtual void spawnTrailBubbles(void);
-	virtual void updateInsideBlock(void);
+	virtual bool updateWaterState();
+	virtual void doWaterSplashEffect();
+	virtual void spawnTrailBubbles();
+	virtual void updateInsideBlock();
 	virtual class LootTable *getLootTable();
 	virtual class LootTable *getDefaultLootTable();
 	virtual void _removeRider(struct ActorUniqueID const &, bool, bool, bool);
-	virtual void _onSizeUpdated(void);
+	virtual void _onSizeUpdated();
 	virtual void _doAutoAttackOnTouch(Actor &);
 
-	MCAPI bool isRiding(void) const;
+	MCAPI bool isRiding() const;
 	MCAPI bool isRider(class Actor const &) const;
-	MCAPI bool isUnderWaterfall(void) const;
+	MCAPI bool isUnderWaterfall() const;
 	MCAPI bool isInsideBorderBlock(float) const;
-	MCAPI bool isControlledByLocalInstance(void) const;
+	MCAPI bool isControlledByLocalInstance() const;
 	MCAPI bool isWithinRestriction(class BlockPos const &) const;
-	MCAPI int getSkinID(void) const;
-	MCAPI int getVariant(void) const;
-	MCAPI int getStrength(void) const;
-	MCAPI int getMarkVariant(void) const;
-	MCAPI int getControllingSeat(void);
-	MCAPI ActorRuntimeID getRuntimeID(void) const;
+	MCAPI int getSkinID() const;
+	MCAPI int getVariant() const;
+	MCAPI int getStrength() const;
+	MCAPI int getMarkVariant() const;
+	MCAPI int getControllingSeat();
+	MCAPI ActorRuntimeID getRuntimeID() const;
 	MCAPI int getRiderIndex(class Actor &) const;
-	MCAPI int getStructuralIntegrity(void) const;
+	MCAPI int getStructuralIntegrity() const;
 	MCAPI class Vec3 getViewVector(float) const;
-	MCAPI enum PaletteColor getColor(void) const;
-	MCAPI enum PaletteColor getColor2(void) const;
-	MCAPI struct ActorUniqueID const getOwnerId(void) const;
+	MCAPI enum PaletteColor getColor() const;
+	MCAPI enum PaletteColor getColor2() const;
+	MCAPI struct ActorUniqueID const getOwnerId() const;
 	MCAPI bool getStatusFlag(enum ActorFlags) const;
-	MCAPI std::vector<struct ActorLink> getLinks(void) const;
-	MCAPI std::unique_ptr<class CompoundTag> getPersistingTradeOffers(void);
-	MCAPI class Actor *getTarget(void) const;
-	MCAPI class Mob *getOwner(void) const;
-	MCAPI class Actor *getRideRoot(void) const;
-	MCAPI class Player *getTradingPlayer(void) const;
-	MCAPI class Player *getPlayerOwner(void) const;
-	MCAPI class ITickingArea *getTickingArea(void);
-	MCAPI class MerchantRecipeList *getTradeOffers(void);
+	MCAPI std::vector<struct ActorLink> getLinks() const;
+	MCAPI std::unique_ptr<class CompoundTag> getPersistingTradeOffers();
+	MCAPI class Actor *getTarget() const;
+	MCAPI class Mob *getOwner() const;
+	MCAPI class Actor *getRideRoot() const;
+	MCAPI class Player *getTradingPlayer() const;
+	MCAPI class Player *getPlayerOwner() const;
+	MCAPI class ITickingArea *getTickingArea();
+	MCAPI class MerchantRecipeList *getTradeOffers();
 	MCAPI class MobEffectInstance const *getEffect(class MobEffect const &) const;
-	MCAPI struct ActorUniqueID const &getUniqueID(void) const;
+	MCAPI struct ActorUniqueID const &getUniqueID() const;
 	MCAPI void setSkinID(int);
 	MCAPI void setCanFly(bool);
 	MCAPI void setHurtDir(int);
@@ -522,7 +522,7 @@ public:
 	MCAPI void setHurtTime(int);
 	MCAPI void setStrength(int);
 	MCAPI void setCanClimb(bool);
-	MCAPI void setPersistent(void);
+	MCAPI void setPersistent();
 	MCAPI void setInvisible(bool);
 	MCAPI void setInLove(class Actor *);
 	MCAPI void setLimitedLife(int);
@@ -539,51 +539,51 @@ public:
 	MCAPI void setPreviousPosRot(class Vec3 const &, class Vec2 const &);
 	MCAPI void setSeatDescription(class Vec3 const &, struct SeatDescription const &);
 	MCAPI void setBaseDefinition(struct ActorDefinitionIdentifier const &, bool, bool);
-	MCAPI bool hasPlayerRider(void) const;
-	MCAPI bool hasRestriction(void) const;
-	MCAPI bool hasSubBBInLava(void) const;
-	MCAPI bool hasTickingArea(void) const;
+	MCAPI bool hasPlayerRider() const;
+	MCAPI bool hasRestriction() const;
+	MCAPI bool hasSubBBInLava() const;
+	MCAPI bool hasTickingArea() const;
 	MCAPI bool hasEffect(class MobEffect const &) const;
 	MCAPI bool hasFamily(class Util::HashString const &) const;
 	MCAPI bool hasTag(std::string const &) const;
 	MCAPI void addEffect(class MobEffectInstance const &);
 	MCAPI bool addTag(std::string const &);
 	MCAPI void removeEffect(int);
-	MCAPI void removeAllEffects(void);
+	MCAPI void removeAllEffects();
 	MCAPI void removeAllRiders(bool, bool);
-	MCAPI void removeEffectParticles(void);
-	MCAPI void updateDescription(void);
-	MCAPI void updateTickingData(void);
-	MCAPI void updateBBFromDescription(void);
-	MCAPI void updateInvisibilityStatus(void);
-	MCAPI void updateInBubbleColumnState(void);
+	MCAPI void removeEffectParticles();
+	MCAPI void updateDescription();
+	MCAPI void updateTickingData();
+	MCAPI void updateBBFromDescription();
+	MCAPI void updateInvisibilityStatus();
+	MCAPI void updateInBubbleColumnState();
 	MCAPI void moveTo(class Vec3 const &, class Vec2 const &);
 	MCAPI void teleportRidersTo(class Vec3 const &, int, int);
 	MCAPI void saveEntityFlags(class CompoundTag &);
-	MCAPI std::unique_ptr<class ListTag> saveLinks(void) const;
+	MCAPI std::unique_ptr<class ListTag> saveLinks() const;
 	MCAPI void savePersistingTrade(std::unique_ptr<class CompoundTag>, int);
-	MCAPI bool canCurrentlySwim(void) const;
+	MCAPI bool canCurrentlySwim() const;
 	MCAPI bool canBeginOrContinueClimbingLadder(bool) const;
-	MCAPI void spawnDeathParticles(void);
+	MCAPI void spawnDeathParticles();
 	MCAPI void spawnDustParticles(int);
 	MCAPI void spawnTamingParticles(bool);
-	MCAPI void spawnBalloonPopParticles(void);
+	MCAPI void spawnBalloonPopParticles();
 	MCAPI void spawnEatParticles(class ItemStack const &, int);
-	MCAPI void sendMotionToServer(void);
+	MCAPI void sendMotionToServer();
 	MCAPI void sendActorDefinitionEventTriggered(std::string const &);
-	MCAPI void _sendDirtyActorData(void);
+	MCAPI void _sendDirtyActorData();
 	//MCAPI void forEachLeashedActor(class std::function<void (class gsl::not_null<class Actor* >)>);
 	MCAPI bool shouldOrphan(class BlockSource &);
-	MCAPI bool onLadder(void) const;
-	MCAPI void reload(void);
-	MCAPI bool moveChunks(void);
+	MCAPI bool onLadder() const;
+	MCAPI void reload();
+	MCAPI bool moveChunks();
 	MCAPI void dropLeash(bool, bool);
 	MCAPI void moveBBs(class Vec3 const &);
-	MCAPI void positionAllRiders(void);
+	MCAPI void positionAllRiders();
 	MCAPI bool pullInEntity(class Actor &);
 	MCAPI bool _tryPlaceAt(class Vec3 const &);
 	MCAPI bool tick(class BlockSource &);
-	MCAPI class Vec3 _randomHeartPos(void);
+	MCAPI class Vec3 _randomHeartPos();
 	MCAPI void pickUpItem(class ItemActor &, int);
 	MCAPI int calculateAttackDamage(class Actor &);
 	MCAPI bool hurt(class ActorDamageSource const &, int damage, bool knock, bool ignite);
@@ -595,10 +595,10 @@ public:
 	MCAPI void loadEntityFlags(class CompoundTag const &, class DataLoadHelper &);
 	MCAPI void testForCollidableMobs(class BlockSource &, class AABB const &, std::vector<class AABB> &);
 	MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
-	MCAPI class ItemStack const& getOffhandSlot(void) const;
+	MCAPI class ItemStack const& getOffhandSlot() const;
 
-	template <typename T> MCAPI T *tryGetComponent(void);
-	template <typename T> MCAPI T const *tryGetComponent(void) const;
+	template <typename T> MCAPI T *tryGetComponent();
+	template <typename T> MCAPI T const *tryGetComponent() const;
 	
 	// custom methods
 	inline std::string getEntityName() const {
@@ -617,27 +617,27 @@ public:
 		return this->mAttributes->getMutableInstance((uint32_t)id);
 	}
 
-	inline float getHealth(void) {
+	inline float getHealth() {
 		return this->getMutableAttribute(AttributeID::Health)->mCurrentValue;
 	}
 
-	inline float getAbsorption(void) {
+	inline float getAbsorption() {
 		return this->getMutableAttribute(AttributeID::Absorption)->mCurrentValue;
 	}
 
-	inline int32_t getHealthAsInt(void) {
+	inline int32_t getHealthAsInt() {
 		return (int32_t)this->getHealth();
 	}
 
-	inline int32_t getAbsorptionAsInt(void) {
+	inline int32_t getAbsorptionAsInt() {
 		return (int32_t)this->getAbsorption();
 	}
 
-	inline class BlockPos getBlockPos(void) const {
+	inline class BlockPos getBlockPos() const {
 		return BlockPos(this->getPos());
 	}
 
-	inline bool hasAnyEffects(void) const {
+	inline bool hasAnyEffects() const {
 		if (this->mMobEffects.size() <= 0) return false;
 		for (auto& effect : this->mMobEffects) {
 			if (effect != MobEffectInstance::NO_EFFECT) return true;
@@ -649,34 +649,34 @@ public:
 		return (this->mCategories & (uint32_t)category);
 	}
 
-	inline bool isInstanceOfMob(void) const {
+	inline bool isInstanceOfMob() const {
 		return this->hasCategory(ActorCategory::Mob);
 	}
 
-	inline bool isInstanceOfPlayer(void) const {
+	inline bool isInstanceOfPlayer() const {
 		return this->hasCategory(ActorCategory::Player);
 	}
 
-	inline bool hasRider(void) const {
+	inline bool hasRider() const {
 		return (this->mRiderIDs.size() > 0);
 	}
 
 	// the pos delta for the mob's position delta in its state vector seems to be inconsistent,
 	// so I think its better to calculate manually
 	// only use this on non-player entities, for players use getRawPlayerPosDelta()
-	inline class Vec3 getRawActorPosDelta(void) const {
+	inline class Vec3 getRawActorPosDelta() const {
 		const auto& prevPos = this->getPosOld();
 		const auto& currPos = this->getPos();
 		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
 	}
 
-	inline class Vec3 getPosOldGrounded(void) const {
+	inline class Vec3 getPosOldGrounded() const {
 		Vec3 result(this->getPosOld());
 		result.y -= this->mHeightOffset;
 		return result;
 	}
 	
-	inline class Vec3 getPosGrounded(void) const {
+	inline class Vec3 getPosGrounded() const {
 		Vec3 result(this->getPos());
 		result.y -= this->mHeightOffset;
 		return result;

@@ -46,7 +46,7 @@ enum class UseAnimation : int8_t {
 	Crossbow         = 9
 };
 
-enum class CreativeItemCategory {
+enum class CreativeItemCategory : int32_t {
 	All              = 0,
 	Construction     = 1,
 	Nature           = 2,
@@ -54,7 +54,7 @@ enum class CreativeItemCategory {
 	Items            = 4,
 	ItemCommandOnly  = 5,
 	Undefined        = 6,
-	NUM_CATEGORIES   = 7
+	NUM_CATEGORIES   = 7,
 };
 
 enum class ItemUseMethod {

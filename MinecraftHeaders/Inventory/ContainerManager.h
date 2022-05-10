@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Container/ContainerType.h"
-#include "../Core/ContainerID.h"
+#include "../Container/ContainerID.h"
 #include "../Item/ItemStack.h"
 #include "../dll.h"
 

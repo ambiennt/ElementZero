@@ -17,4 +17,6 @@ struct ActorUniqueID {
 	}
 	inline bool operator==(ActorUniqueID const &rhs) const { return (this->value == rhs.value); }
 	inline bool operator!=(ActorUniqueID const &rhs) const { return !(*this == rhs); }
+
+	MCAPI uint64_t getHash() const;
 };

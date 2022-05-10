@@ -1,18 +1,6 @@
-#include <Actor/Player.h>
-#include <Math/Vec3.h>
-#include <Core/Minecraft.h>
-#include <Command/CommandOutput.h>
-#include <Level/Level.h>
-#include <Item/Item.h>
-#include <Net/NetworkIdentifier.h>
-#include <Net/ServerNetworkHandler.h>
-#include <RakNet/RakPeer.h>
+#include "include/base/compat.h"
 
-#include <modutils.h>
-#include <base/base.h>
-#include "loader.h"
-
-#pragma region Player
+#pragma region player
 
 // ServerPlayer::handleActorPickRequestOnServer
 class SynchedActorData &Actor::getEntityData() const {
@@ -102,6 +90,14 @@ struct EZPlayerFields* Player::getEZPlayerFields() const {
 
 #pragma endregion
 
+
+
+
+
+
+
+
+
 void NetworkIdentifier::kick(std::string const &reason) const {
 	LocateService<ServerNetworkHandler>()->disconnectClient(*this, 0, reason, reason.empty());
 }
@@ -149,4 +145,12 @@ TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z"
 	auto &path = direct_access<std::string>(this, 160);
 	worldHook(std::filesystem::weakly_canonical(path));
 	return original(this, data);
+}
+
+void EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant) {
+	auto resultEnchants = out.constructItemEnchantsFromUserData(); // get current ItemEnchants for the given itemstack
+	int32_t activationIndex = determineActivation(newEnchant.mEnchantType); // get the proper index for ItemEnchants::mItemEnchants[3]
+	resultEnchants.mItemEnchants[activationIndex].push_back(newEnchant); // add newEnchant to current enchants
+	_convertBookCheck(out); // convert newEnchant to a book enchant if the given itemstack is a book
+	out.saveEnchantsToUserData(resultEnchants); // apply newEnchant to the given itemstack
 }
