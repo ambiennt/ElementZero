@@ -25,7 +25,9 @@ public:
 	MCAPI void error(std::string const &, std::vector<CommandOutputParameter> const &params = {});
 	MCAPI void addToResultList(std::string const &, Actor const &);
 	inline void addToResultList(std::string const &key, std::string const &value) {
-		if (type == CommandOutputType::WithJson) property_bag->addToResultList(key, value);
+		if (this->type == CommandOutputType::WithJson) {
+			this->property_bag->addToResultList(key, value);
+		}
 	}
 	template <typename T> MCAPI void set(char const *name, T value);
 };

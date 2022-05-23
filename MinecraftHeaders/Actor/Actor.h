@@ -17,6 +17,7 @@
 #include "../Core/Util.h"
 #include "../Core/RelativeFloat.h"
 #include "../Command/CommandPermissionLevel.h"
+#include "../Component/AABBShapeComponent.h"
 #include "../Level/Level.h"
 #include "../dll.h"
 
@@ -633,10 +634,6 @@ public:
 		return (int32_t)this->getAbsorption();
 	}
 
-	inline class BlockPos getBlockPos() const {
-		return BlockPos(this->getPos());
-	}
-
 	inline bool hasAnyEffects() const {
 		if (this->mMobEffects.size() <= 0) return false;
 		for (auto& effect : this->mMobEffects) {
@@ -661,6 +658,11 @@ public:
 		return (this->mRiderIDs.size() > 0);
 	}
 
+	inline class Actor* getRide() const {
+		if (this->mRidingID.value == -1) { return nullptr; }
+		return this->mLevel->fetchEntity(this->mRidingID, false);
+	}
+
 	// the pos delta for the mob's position delta in its state vector seems to be inconsistent,
 	// so I think its better to calculate manually
 	// only use this on non-player entities, for players use getRawPlayerPosDelta()
@@ -669,17 +671,23 @@ public:
 		const auto& currPos = this->getPos();
 		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
 	}
-
-	inline class Vec3 getPosOldGrounded() const {
-		Vec3 result(this->getPosOld());
-		result.y -= this->mHeightOffset;
-		return result;
-	}
 	
 	inline class Vec3 getPosGrounded() const {
-		Vec3 result(this->getPos());
-		result.y -= this->mHeightOffset;
-		return result;
+		const auto& thisAabb = this->mAABBComponent.mAABB;
+		float yNew;
+		if (this->isRiding() && this->getRide()) {
+			yNew = std::fmaxf(thisAabb.min.y, this->getRide()->mAABBComponent.mAABB.min.y);
+		}
+		else { yNew = thisAabb.min.y; }
+		return Vec3(this->getPos().x, yNew, this->getPos().z);
+	}
+
+	inline class BlockPos getBlockPos() const {
+		return BlockPos(this->getPos());
+	}
+
+	inline class BlockPos getBlockPosGrounded() const {
+		return BlockPos(this->getPosGrounded());
 	}
 
 	// actor fields

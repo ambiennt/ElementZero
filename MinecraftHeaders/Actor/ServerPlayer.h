@@ -2,8 +2,7 @@
 
 #include "Player.h"
 
-// place holder... all implemented in Player.h
+// placeholder... all implemented in Player.h
 class ServerPlayer : public Player {
 public:
-
 };

@@ -7,11 +7,15 @@
 #include "GameRulesIndex.h"
 #include "../dll.h"
 
+class GameRulesChangedPacket;
+class CompoundTag;
+struct GameRulesChangedPacketData;
+
 // annoying bloat
 struct GameRuleId {
 	int32_t mId; // NewType<int>
+	GameRuleId() : mId(0) {}
 	GameRuleId(int32_t id) : mId(id) {}
-	GameRuleId() {}
 };
 
 class GameRule {
@@ -48,26 +52,25 @@ public:
 };
 
 class GameRules {
+	 MCAPI std::unique_ptr<GameRulesChangedPacket> _setRule(GameRuleId ruleType, GameRule::Value value,
+	 	GameRule::Type type, bool returnPacket, bool *pValueValidated, bool *pValueChanged, GameRule::ValidationError *errorOutput);
 public:
 	std::vector<GameRule> mGameRules; // 0x0
 
 	MCAPI GameRules();
 	MCAPI ~GameRules();
 
-	MCAPI class GameRule& _registerRule(void);
-	MCAPI void _registerRules(void);
-	/*MCAPI void _setRule(
-		struct GameRuleId ruleType, union GameRule::Value value, enum GameRule::Type type, bool returnPacket,
-		bool *pValueValidated, bool *pValueChanged, struct GameRule::ValidationError *errorOutput);*/
-	MCAPI std::unique_ptr<class GameRulesChangedPacket> createAllGameRulesPacket(void);
-	MCAPI void deserializeRules(struct GameRulesChangedPacketData const &ruleData);
-	MCAPI bool getBool(struct gameRuleId ruleType) const;
-	MCAPI int32_t getInt(struct gameRuleId ruleType) const;
-	MCAPI const class GameRule* getRule(struct gameRuleId ruleType) const;
-	MCAPI void getTagData(class CompoundTag const& tag);
-	MCAPI struct GameRuleId nameToGameRuleIndex(std::string const& name) const; // returns struct GameRuleId but just use enum GameRulesIndex
-	MCAPI void setMarketplaceOverrides(void); // BLOAT
-	MCAPI void setTagData(class CompoundTag const& tag);
+	MCAPI GameRule& _registerRule();
+	MCAPI void _registerRules();
+	MCAPI std::unique_ptr<GameRulesChangedPacket> createAllGameRulesPacket();
+	MCAPI void deserializeRules(GameRulesChangedPacketData const &ruleData);
+	MCAPI bool getBool(GameRuleId ruleType) const;
+	MCAPI int32_t getInt(GameRuleId ruleType) const;
+	MCAPI const GameRule* getRule(GameRuleId ruleType) const;
+	MCAPI void getTagData(CompoundTag const& tag);
+	MCAPI GameRuleId nameToGameRuleIndex(std::string const& name) const; // returns struct GameRuleId but just use enum GameRulesIndex
+	MCAPI void setMarketplaceOverrides(); // BLOAT
+	MCAPI void setTagData(CompoundTag const& tag);
 
 	MCAPI static int32_t const MAX_FUNCTIONCOMMANDLIMIT = 10000;
 	static uint32_t const DEFAULT_PLAYER_SPAWN_RADIUS   = 5;
@@ -76,11 +79,11 @@ public:
 	static int32_t const MAX_RANDOMTICKSPEED            = 4096;
 	static int32_t const DEFAULT_RANDOMTICKSPEED        = 1;
 
-	inline bool hasRule(enum GameRulesIndex id) const {
+	inline bool hasRule(GameRulesIndex id) const {
 		return ((((int32_t)id) >= 0) && (((int32_t)id) < (int32_t)(this->mGameRules.size())));
 	}
 
-	template <typename T> T getGameRuleValue(enum GameRulesIndex index) const {
+	template <typename T> T getGameRuleValue(GameRulesIndex index) const {
 		if (!this->hasRule(index)) return T{};
 		const auto& rule = this->mGameRules[(int32_t)index];
 		switch (rule.mType) {

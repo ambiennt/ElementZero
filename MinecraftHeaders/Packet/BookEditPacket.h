@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "../Core/Packet.h"
 #include "../dll.h"
 
@@ -12,11 +10,11 @@ public:
 		ADD_PAGE      = 1,
 		DELETE_PAGE   = 2,
 		SWAP_PAGES    = 3,
-		SIGN_BOOK     = 4
+		SIGN_BOOK     = 4,
 	};
 	
 	Action mAction;
-	int mBookSlot, mPageIndex1, mPageIndex2;
+	int32_t mBookSlot, mPageIndex1, mPageIndex2;
 	std::string mText1, mText2, mText3;
 
 	inline ~BookEditPacket() {}
@@ -26,8 +24,7 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(BookEditPacket, mAction) == 40);
-static_assert(offsetof(BookEditPacket, mBookSlot) == 44);
-static_assert(offsetof(BookEditPacket, mText1) == 56);
-static_assert(offsetof(BookEditPacket, mText2) == 88);
-static_assert(offsetof(BookEditPacket, mText3) == 120);
+static_assert(offsetof(BookEditPacket, mAction) == 0x28);
+static_assert(offsetof(BookEditPacket, mText1) == 0x38);
+static_assert(offsetof(BookEditPacket, mText2) == 0x58);
+static_assert(offsetof(BookEditPacket, mText3) == 0x78);

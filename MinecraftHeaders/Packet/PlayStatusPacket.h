@@ -3,7 +3,7 @@
 #include "../Core/Packet.h"
 #include "../dll.h"
 
-enum class PlayStatus {
+enum class PlayStatus : int32_t {
 	LoginSuccess = 0x0,
 	LoginFailed_ClientOld = 0x1,
 	LoginFailed_ServerOld = 0x2,
@@ -16,7 +16,6 @@ enum class PlayStatus {
 
 class PlayStatusPacket : public Packet {
 public:
-
 	PlayStatus mPlayStatus; // 0x28
 
 	inline ~PlayStatusPacket() {}
@@ -25,5 +24,3 @@ public:
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
-
-static_assert(offsetof(mPlayStatus) == 0x28);

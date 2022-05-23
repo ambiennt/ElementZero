@@ -65,7 +65,7 @@ public:
 
 	inline Vec2& normalize() {
 		float l = this->length();
-		if (l == 0.f) return *this;
+		if (l <= 0.f) return *this;
 		this->operator*=(1.f / l);
 		return *this;
 	}

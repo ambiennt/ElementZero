@@ -31,13 +31,13 @@ THook(void*, "??0CommandRegistry@@QEAA@XZ", CommandRegistry *registry) {
   return ret;
 }
 
-short &Mod::CommandSupport::type_id_count() {
-  static auto ptr = (short *) GetServerSymbol("?count@?$typeid_t@VCommandRegistry@@@@2GA");
+uint16_t &Mod::CommandSupport::type_id_count() {
+  static auto ptr = (uint16_t*)GetServerSymbol("?count@?$typeid_t@VCommandRegistry@@@@2GA");
   return *ptr;
 }
 
 template <SIGTEMPLATE> inline static typeid_t<CommandRegistry> getid(char const *name) {
-  static auto ptr = (typeid_t<CommandRegistry> *) GetServerSymbol(name);
+  static auto ptr = (typeid_t<CommandRegistry> *)GetServerSymbol(name);
   return *ptr;
 }
 
@@ -57,8 +57,7 @@ template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<Re
 }
 template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<std::string>() {
   return GETID(
-      "?id@?1???$type_id@VCommandRegistry@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@@YA?AV?$"
-      "typeid_t@VCommandRegistry@@@@XZ@4V1@A");
+    "?id@?1???$type_id@VCommandRegistry@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");
 }
 template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<CommandItem>() {
   return GETID("?id@?1???$type_id@VCommandRegistry@@VCommandItem@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");
@@ -68,13 +67,11 @@ template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<Js
 }
 template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<CommandSelector<Actor>>() {
   return GETID(
-      "?id@?1???$type_id@VCommandRegistry@@V?$CommandSelector@VActor@@@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@"
-      "A");
+    "?id@?1???$type_id@VCommandRegistry@@V?$CommandSelector@VActor@@@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");
 }
 template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<CommandSelector<Player>>() {
   return GETID(
-      "?id@?1???$type_id@VCommandRegistry@@V?$CommandSelector@VPlayer@@@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@"
-      "A");
+    "?id@?1???$type_id@VCommandRegistry@@V?$CommandSelector@VPlayer@@@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");
 }
 template <> COMMANDAPI typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<CommandRawText>() {
   return GETID("?id@?1???$type_id@VCommandRegistry@@VCommandRawText@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");

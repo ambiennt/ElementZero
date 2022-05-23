@@ -1,5 +1,16 @@
 #include "include/base/compat.h"
 
+
+
+
+
+
+
+
+
+
+
+
 #pragma region player
 
 // ServerPlayer::handleActorPickRequestOnServer
@@ -72,16 +83,20 @@ THook(void*,
 
 	// store pointer at unused field, Player::mFirstPersonLatestHandOffset
 	direct_access<EZPlayerFields*>(player, 0xB24) = new EZPlayerFields();
+	
 	return ret;
 }
 
 THook(void*, "??1Player@@UEAA@XZ", Player* player) {
 
+	auto ret = original(player);
+
 	// clean up to be safe because idk what bds does with this field
-	delete direct_access<EZPlayerFields*>(player, 0xB24);
-	direct_access<EZPlayerFields*>(player, 0xB24) = nullptr;
+	auto playerFields = direct_access<EZPlayerFields*>(player, 0xB24);
+	delete playerFields;
+	playerFields = nullptr;
 	
-	return original(player);
+	return ret;
 }
 
 struct EZPlayerFields* Player::getEZPlayerFields() const {
@@ -89,6 +104,45 @@ struct EZPlayerFields* Player::getEZPlayerFields() const {
 }
 
 #pragma endregion
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma region service_locator
+
+template <> Minecraft *LocateService<Minecraft>() {
+	return *GetServerSymbol<Minecraft *>("?mGame@ServerCommand@@1PEAVMinecraft@@EA");
+}
+
+template <> ServerNetworkHandler *LocateService<ServerNetworkHandler>() {
+	return LocateService<Minecraft>()->getServerNetworkHandler();
+}
+
+template <> NetworkHandler *LocateService<NetworkHandler>() {
+	return LocateService<ServerInstance>()->mNetwork.get(); // verified
+}
+
+template <> MinecraftCommands *LocateService<MinecraftCommands>() {
+	return LocateService<Minecraft>()->mCommands.get();
+}
+
+template <> CommandRegistry *LocateService<CommandRegistry>() {
+	return LocateService<MinecraftCommands>()->mRegistry.get();
+}
+
+#pragma endregion
+
+
+
+
 
 
 
@@ -121,22 +175,6 @@ struct ActorUniqueID Level::getNewUniqueID() const {
 	return ActorUniqueID(++this->mLastUniqueID.value);
 }
 
-template <> Minecraft *LocateService<Minecraft>() {
-	return *GetServerSymbol<Minecraft *>("?mGame@ServerCommand@@1PEAVMinecraft@@EA");
-}
-
-template <> ServerNetworkHandler *LocateService<ServerNetworkHandler>() {
-	return LocateService<Minecraft>()->getServerNetworkHandler();
-}
-
-template <> NetworkHandler *LocateService<NetworkHandler>() {
-	return direct_access<std::unique_ptr<NetworkHandler>>(LocateService<ServerInstance>(), 152).get(); // verified
-}
-
-template <> MinecraftCommands *LocateService<MinecraftCommands>() { return LocateService<Minecraft>()->getCommands(); }
-
-MinecraftCommands *Minecraft::getCommands() { return direct_access<MinecraftCommands *>(this, 160); }
-
 RakNet::SystemAddress NetworkIdentifier::getRealAddress() const {
 	return LocateService<RakNet::RakPeer>()->GetSystemAddressFromGuid(guid);
 }
@@ -147,10 +185,33 @@ TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z"
 	return original(this, data);
 }
 
-void EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant) {
+bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant, bool overwriteDuplicates) {
+
 	auto resultEnchants = out.constructItemEnchantsFromUserData(); // get current ItemEnchants for the given itemstack
 	int32_t activationIndex = determineActivation(newEnchant.mEnchantType); // get the proper index for ItemEnchants::mItemEnchants[3]
-	resultEnchants.mItemEnchants[activationIndex].push_back(newEnchant); // add newEnchant to current enchants
-	_convertBookCheck(out); // convert newEnchant to a book enchant if the given itemstack is a book
-	out.saveEnchantsToUserData(resultEnchants); // apply newEnchant to the given itemstack
+
+	if ((activationIndex >= 0) && (activationIndex <= 2)) { // boundary checking...
+
+		auto &instanceVectorToWriteTo = resultEnchants.mItemEnchants[activationIndex];
+		if (overwriteDuplicates) {
+
+			for (int32_t i = 0; i < instanceVectorToWriteTo.size(); i++) {
+
+				if (instanceVectorToWriteTo[i].mEnchantType == newEnchant.mEnchantType) { // if the enchant id is the same, overwrite at that index
+
+					instanceVectorToWriteTo[i] = newEnchant;
+					_convertBookCheck(out);
+					out.saveEnchantsToUserData(resultEnchants);
+					return true;
+				}
+			}
+		}
+
+		instanceVectorToWriteTo.push_back(newEnchant); // add newEnchant to current enchants
+		_convertBookCheck(out); // convert newEnchant to a book enchant if the given itemstack is a book
+		out.saveEnchantsToUserData(resultEnchants); // apply newEnchant to the given itemstack
+		return true;
+	}
+
+	return false;
 }

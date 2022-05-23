@@ -2,11 +2,13 @@
 
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
-#include "../Block/BlockSource.h"
 #include "../Actor/ActorUniqueID.h"
+#include "../Core/Random.h"
 
 #include <unordered_set>
 #include <optional>
+
+class BlockSource;
 
 class Explosion {
 public:
@@ -20,8 +22,7 @@ public:
 	BlockSource* mRegion; // 0x60
 	float mMaxResistance; // 0x68
 	std::optional<bool> mInWaterOverride; // 0x6C
-	//Random mRandom; // 0x70
-	char pad[0xA50 - 0x70];
+	Random mRandom; // 0x70
 };
 
 static_assert(sizeof(Explosion) == 0xA98);

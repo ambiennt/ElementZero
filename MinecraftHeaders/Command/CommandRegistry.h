@@ -15,6 +15,14 @@ class CommandOrigin;
 struct CommandParameterData;
 class HardNonTerminal;
 
+enum class SemanticConstraint : int8_t {
+	None = 0x0,
+	RequiresCheatsEnabled = 0x1,
+	RequiresElevatedPermissions = 0x2,
+	RequiresHostPermissions = 0x4,
+	VALUE_MASK = 0x7,
+};
+
 class CommandRegistry {
 public:
 #pragma region struct
@@ -58,15 +66,21 @@ public:
 #pragma endregion struct definition
 
 	MCAPI void registerCommand(std::string const &, char const *, CommandPermissionLevel, CommandFlag, CommandFlag);
-	MCAPI void registerAlias(std::string, std::string);
+	MCAPI void registerAlias(std::string name, std::string alias);
+	MCAPI int32_t addSoftEnum(std::string const &enumName, std::vector<std::string> values);
+	MCAPI int32_t addEnumValues(std::string const &enumName, std::vector<std::string> const &values);
+	MCAPI void addSoftEnumValues(std::string const &enumName, std::vector<std::string> values);
+	MCAPI void setSoftEnumValues(std::string const &enumName, std::vector<std::string> values);
+	MCAPI void removeSoftEnumValues(std::string const &enumName, std::vector<std::string> values);
+	MCAPI void addEnumValueConstraints(std::string const &enumName, std::vector<std::string> const &values, SemanticConstraint constraints);
 
 private:
 	MCAPI Signature const *findCommand(std::string const &) const;
 	MCAPI void registerOverloadInternal(Signature &, Overload &);
 
-	template <typename Type>
-	MCAPI bool
-	parse(void *, ParseToken const &, CommandOrigin const &, int, std::string &, std::vector<std::string> &) const;
+	template <typename Type> MCAPI bool
+	parse(void *storage, ParseToken const &token, CommandOrigin const &origin, int32_t version,
+		std::string &error, std::vector<std::string> &errorParams) const;
 
 	MCAPI Symbol addEnumValuesInternal(
 			std::string const &, std::vector<std::pair<uint64_t, uint64_t>> const &, typeid_t<CommandRegistry>,
@@ -79,7 +93,6 @@ private:
 			bool (CommandRegistry::*)(
 					void *, CommandRegistry::ParseToken const &, CommandOrigin const &, int, std::string &,
 					std::vector<std::string> &) const);
-	MCAPI unsigned addEnumValues(std::string const &, std::vector<std::string> const &);
 	MCAPI uint64_t getEnumData(CommandRegistry::ParseToken const &) const;
 
 public:
@@ -97,9 +110,9 @@ public:
 
 	template <typename T> inline static auto getParseFn() { return &CommandRegistry::parse<T>; }
 
-	template <typename Type>
-	bool
-	fakeparse(void *, ParseToken const &, CommandOrigin const &, int, std::string &, std::vector<std::string> &) const {
+	template <typename Type> bool
+	fakeparse(void *storage, ParseToken const &token, CommandOrigin const &origin,
+		int32_t version, std::string &error, std::vector<std::string> &errorParams) const {
 		return false;
 	}
 

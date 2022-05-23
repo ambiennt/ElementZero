@@ -66,14 +66,14 @@ public:
 
 	inline Vec3& normalize() {
 		float l = this->length();
-		if (l == 0.f) return *this;
+		if (l <= 0.f) return *this;
 		this->operator*=(1.f / l);
 		return *this;
 	}
 
 	inline Vec3& normalizeXZ() {
 		float l = this->length();
-		if (l == 0.f) return *this;
+		if (l <= 0.f) return *this;
 		l = 1.f / l;
 		this->x *= l;
 		this->z *= l;

@@ -14,11 +14,11 @@ enum class CommandParameterOption : int8_t {
 	HasSemanticConstraint     = 2
 };
 
-enum class CommandParameterDataType {
+enum class CommandParameterDataType : int32_t {
 	NORMAL   = 0,
 	ENUM     = 1,
 	SOFTENUM = 2,
-	POSTFIX  = 3
+	POSTFIX  = 3,
 };
 
 struct CommandParameterData {

@@ -48,7 +48,7 @@ static_assert(sizeof(EnchantResult) == 0x18);
 
 class Enchant {
 public:
-	enum class Type : uint8_t {
+	enum class Type : int8_t {
 		protection            = 0,
 		fire_protection       = 1,
 		feather_falling       = 2,
@@ -165,8 +165,8 @@ static_assert(sizeof(Enchant) == 0x70);
 
 class EnchantUtils {
 	MCAPI static std::vector<std::string> mEnchantmentNames;
-
 	MCAPI static void _convertBookCheck(ItemStackBase &out);
+
 public:
 	MCAPI static std::string getEnchantNameAndLevel(Enchant::Type type, int32_t);
 	MCAPI static bool applyEnchant(ItemStackBase &out, EnchantmentInstance const &enchant, bool allowNonVanilla);
@@ -237,7 +237,7 @@ public:
 		}
 	}
 
-	BASEAPI static void applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant);
+	BASEAPI static bool applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant, bool overwriteDuplicates);
 
 	MCAPI static int32_t const PROTECTIONFACTOR_SECONDARYCAP;
 };
@@ -247,16 +247,22 @@ public:
 	Enchant::Type mEnchantType;
 	int32_t mLevel;
 
-	EnchantmentInstance() {}
+	EnchantmentInstance() : mEnchantType(Enchant::Type::invalid_enchantment), mLevel(0) {}
 	EnchantmentInstance(Enchant::Type type, int32_t lvl) : mEnchantType(type), mLevel(lvl) {}
 
 	inline std::string getName() const { return EnchantUtils::getEnchantName(this->mEnchantType); }
 	inline std::string toString() const { return EnchantUtils::getEnchantNameAndLevel(this->mEnchantType, this->mLevel); }
+	inline bool operator==(EnchantmentInstance const& rhs) { return ((this->mEnchantType == rhs.mEnchantType) && (this->mLevel == rhs.mLevel)); }
+	inline bool operator!=(EnchantmentInstance const& rhs) { return !(*this == rhs); }
 };
+static_assert(sizeof(EnchantmentInstance) == 0x8);
 
 class ItemEnchants {
+	MCAPI std::vector<ListTag> _toList() const;
+	MCAPI void _fromList(std::vector<ListTag> const &);
+
 public:
-	Enchant::Slot mSlot;
+	Enchant::Slot mSlot; // int32_t
 	std::vector<EnchantmentInstance> mItemEnchants[3];
 
 	MCAPI std::vector<EnchantmentInstance> getAllEnchants() const;
@@ -266,11 +272,7 @@ public:
 	MCAPI void read(ReadOnlyBinaryStream &);
 	MCAPI ItemEnchants& operator=(ItemEnchants &&);
 
-private:
-	MCAPI std::vector<ListTag> _toList() const;
-	MCAPI void _fromList(std::vector<ListTag> const &);
-
-public:
 	inline std::vector<ListTag> save() const { return _toList(); }
 	inline void load(std::vector<ListTag> const &list) { return _fromList(list); }
 };
+static_assert(sizeof(ItemEnchants) == 0x50);

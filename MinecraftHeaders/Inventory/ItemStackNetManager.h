@@ -78,14 +78,14 @@ public:
 	virtual bool allowInventoryTransactionManager() = 0;
 	//virtual gsl::final_action<std::function<void ()>> _tryBeginClientLegacyTransactionRequest();
 private:
-	__declspec(dllimport) virtual void* vtbl_pad_5() = 0;
+	virtual void* vtbl_pad_5() { return nullptr; }
 public:
 	virtual void onContainerScreenOpen(ContainerScreenContext const&);
 	virtual void onContainerScreenClose() = 0;
 	virtual SparseContainer* initOpenContainer(BlockSource&, ContainerEnumName, ContainerWeakRef const&) = 0;
 	virtual void _addLegacyTransactionRequestSetItemSlot(ContainerType, int32_t slot);
 
-	inline bool isScreenOpen() {
+	inline bool isScreenOpen() const {
 		auto& ctx = this->mScreenContext;
 		return ctx.mPlayer && (ctx.mScreenContainerType != ContainerType::NONE) && (ctx.mOwner.index() != 0);
 	}

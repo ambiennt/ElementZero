@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../Core/Packet.h"
-#include "../Math/Vec3.h"
-#include "../Actor/Actor.h"
+#include "../Math/BlockPos.h"
 #include "../dll.h"
 
 class PlaySoundPacket : public Packet {
@@ -11,7 +10,6 @@ public:
 	BlockPos mPos; // NetworkBlockPosition
 	float mVolume = 1.f, mPitch = 1.f;
 
-	inline ~PlaySoundPacket() {}
 	PlaySoundPacket() {}
 	PlaySoundPacket(const std::string &name, const BlockPos &pos, float volume = 1.f, float pitch = 1.f) {
 		this->mName = name;
@@ -19,6 +17,7 @@ public:
 		this->mVolume = volume;
 		this->mPitch = pitch;
 	}
+	inline ~PlaySoundPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

@@ -19,11 +19,12 @@ protected:
 	CommandFlagValue mFlags; // 29
 
 public:
+	virtual ~Command();
+	virtual void execute(CommandOrigin const &, CommandOutput &) = 0;
+
 	MCAPI static std::string const WILDCARD_TOKEN;
 	MCAPI static bool validRange(int, int, int, class CommandOutput &);
 	MCAPI void run(class CommandOrigin const &, class CommandOutput &) const;
-	MCAPI virtual ~Command();
-	virtual void execute(CommandOrigin const &, CommandOutput &) = 0;
 
 protected:
 	MCAPI static bool isWildcard(class CommandSelectorBase const &);

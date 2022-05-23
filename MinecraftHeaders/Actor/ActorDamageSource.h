@@ -1,15 +1,16 @@
 #pragma once
 
-#include <hook.h>
 #include "ActorUniqueID.h"
-#include "ActorType.h"
-#include "ActorCategory.h"
+#include "../dll.h"
 
 class BlockSource;
 class Block;
 class Actor;
 
-enum class ActorDamageCause {
+enum class ActorType : int32_t;
+enum class ActorCategory : int32_t;
+
+enum class ActorDamageCause : int32_t {
 	None             = -1,
 	Override         = 0,
 	Contact          = 1,
@@ -38,7 +39,7 @@ enum class ActorDamageCause {
 	Lightning        = 24,
 	Charging         = 25,
 	Temperature      = 26,
-	All              = 31
+	All              = 31,
 };
 
 class ActorDamageSource {
@@ -52,19 +53,19 @@ public:
 	virtual std::pair<std::string, std::vector<std::string>> getDeathMessage(std::string deadName, Actor *dead) const;
 	virtual bool getIsCreative() const;
 	virtual bool getIsWorldBuilder() const;
-	virtual struct ActorUniqueID getEntityUniqueID() const;
-	virtual enum ActorType getEntityType() const;
-	virtual enum ActorCategory getEntityCategories() const;
+	virtual ActorUniqueID getEntityUniqueID() const;
+	virtual ActorType getEntityType() const;
+	virtual ActorCategory getEntityCategories() const;
 	virtual bool getDamagingEntityIsCreative() const;
 	virtual bool getDamagingEntityIsWorldBuilder() const;
-	virtual struct ActorUniqueID getDamagingEntityUniqueID() const;
-	virtual enum ActorType getDamagingEntityType() const;
-	virtual enum ActorCategory getDamagingEntityCategories() const;
-	virtual std::unique_ptr<class ActorDamageSource> clone() const;
+	virtual ActorUniqueID getDamagingEntityUniqueID() const;
+	virtual ActorType getDamagingEntityType() const;
+	virtual ActorCategory getDamagingEntityCategories() const;
+	virtual std::unique_ptr<ActorDamageSource> clone() const;
 
 	ActorDamageCause mCause; // 0x8
 
-	ActorDamageSource() {}
+	ActorDamageSource() : mCause(ActorDamageCause::None) {}
 	ActorDamageSource(ActorDamageCause cause) : mCause(cause) {}
 };
 

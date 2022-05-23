@@ -38,14 +38,15 @@ private:
 	bool explicitIdSelector;                                                              // 165
 
 public:
-	inline bool isExplicitIdSelector() const { return explicitIdSelector; }
-	inline void addNameFilter(InvertableFilter<std::string> const &filter) { namefilters.emplace_back(filter); }
+	inline bool isExplicitIdSelector() const { return this->explicitIdSelector; }
+	inline void setExplicitIdSelector(bool value) { this->explicitIdSelector = value; }
+	inline void addNameFilter(InvertableFilter<std::string> const &filter) { this->namefilters.emplace_back(filter); }
 	inline void addTagFilter(InvertableFilter<std::string> const &filter) {
-		if (isExplicitIdSelector()) explicitIdSelector = false;
-		tagfilters.emplace_back(filter);
+		if (isExplicitIdSelector()) { this->explicitIdSelector = false; }
+		this->tagfilters.emplace_back(filter);
 	}
-	inline void setIncludeDeadPlayers(bool value) { includeDeadPlayers = value; }
-	inline void setResultCount(uint64_t value) { resultCount = value; }
+	inline void setIncludeDeadPlayers(bool value) { this->includeDeadPlayers = value; }
+	inline void setResultCount(uint64_t value) { this->resultCount = value; }
 
 	MCAPI void addFilter(std::function<bool(CommandOrigin const &, Actor const &)>);
 	MCAPI void addTypeFilter(InvertableFilter<std::string> const &);

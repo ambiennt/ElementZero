@@ -19,6 +19,7 @@
 #include <Command/CommandSelector.h>
 #include <Command/CommandRegistry.h>
 #include <Command/CommandParameterData.h>
+#include <Command/CommandMessage.h>
 
 #include <base/base.h>
 #include <base/event.h>
@@ -42,7 +43,7 @@ class CustomCommandOrigin;
 // Custom command registration related functions
 class CommandSupport : public EventEmitter<"loaded"_sig, CommandRegistry *> {
   COMMANDAPI CommandSupport();
-  static COMMANDAPI short &type_id_count();
+  static COMMANDAPI uint16_t &type_id_count();
 
 public:
   USING_EVENTEMITTER("loaded", CommandRegistry *);

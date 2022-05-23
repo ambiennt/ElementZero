@@ -2,22 +2,23 @@
 
 #include "persona.h"
 #include "../../Core/mce.h"
+#include "../../dll.h"
 
 class AnimatedImageData {
 public:
-	AnimatedTextureType type;
-	mce::Image image;
-	float frame;
+	persona::AnimatedTextureType mType;
+	mce::Image mImage;
+	float mFrames;
 
-	inline AnimatedImageData(AnimatedTextureType type, mce::Image const &image, float frame)
-			: type(type), image(image.clone()), frame(frame) {}
+	inline AnimatedImageData(persona::AnimatedTextureType type, mce::Image const &image, float frames)
+            : mType(type), mImage(image.clone()), mFrames(frames) {}
 
 	inline AnimatedImageData &operator=(AnimatedImageData const &rhs) {
-		type  = rhs.type;
-		image = rhs.image.clone();
-		frame = rhs.frame;
+		this->mType = rhs.mType;
+		this->mImage = rhs.mImage.clone();
+		this->mFrames = rhs.mFrames;
 		return *this;
 	}
 };
 
-static_assert(offsetof(AnimatedImageData, frame) == 40);
+static_assert(offsetof(AnimatedImageData, mFrames) == 40);

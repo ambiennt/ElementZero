@@ -190,9 +190,9 @@ void Instance::createBossActor() {
   pkt.rid    = unqid;
   pkt.def_id = ActorDefinitionIdentifier{"minecraft:agent"};
   syncedata.append<int64_t>(ActorDataIDs::FLAGS, 0);
-  syncedata.append<short>(ActorDataIDs::AIR, 400);
-  syncedata.append<short>(ActorDataIDs::MAX_AIR, 400);
-  syncedata.append<int64_t>(ActorDataIDs::LEAD_HOLDER, -1);
+  syncedata.append<short>(ActorDataIDs::AIR_SUPPLY, 400);
+  syncedata.append<short>(ActorDataIDs::AIR_SUPPLY_MAX, 400);
+  syncedata.append<int64_t>(ActorDataIDs::LEASH_HOLDER, -1);
   syncedata.append<std::string>(ActorDataIDs::NAMETAG, cfg.text);
   syncedata.append<float>(ActorDataIDs::SCALE, 0);
   pkt.syncedata = &syncedata;

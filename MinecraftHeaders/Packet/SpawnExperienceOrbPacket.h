@@ -6,9 +6,10 @@
 
 class SpawnExperienceOrbPacket : public Packet {
 public:
-	Vec3 pos;
-	int amount = 0;
+	Vec3 mPos; // 0x28
+	int32_t mCount; // 0x34
 
+	SpawnExperienceOrbPacket(Vec3 const& pos, int32_t count) : mPos(pos), mCount(count) {}
 	inline ~SpawnExperienceOrbPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
@@ -16,5 +17,5 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 };
 
-static_assert(offsetof(SpawnExperienceOrbPacket, pos) == 40);
-static_assert(offsetof(SpawnExperienceOrbPacket, amount) == 52);
+static_assert(offsetof(SpawnExperienceOrbPacket, mPos) == 0x28);
+static_assert(offsetof(SpawnExperienceOrbPacket, mCount) == 0x34);

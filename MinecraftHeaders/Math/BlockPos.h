@@ -17,9 +17,9 @@ public:
 	BlockPos(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
 	BlockPos(BlockPos const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
 	BlockPos(Vec3 const& vec) {
-		this->x = ((vec.x < 0.f) ? (int32_t)(vec.x - 1.f) : (int32_t)vec.x);
-		this->y = ((vec.y < 0.f) ? (int32_t)(vec.y - 1.f) : (int32_t)vec.y);
-		this->z = ((vec.z < 0.f) ? (int32_t)(vec.z - 1.f) : (int32_t)vec.z);
+		this->x = (int32_t)(std::floorf(vec.x));
+		this->y = (int32_t)(std::floorf(vec.y));
+		this->z = (int32_t)(std::floorf(vec.z));
 	}
 	inline ~BlockPos() {}
 

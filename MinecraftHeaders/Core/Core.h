@@ -15,8 +15,8 @@ public:
 	float mNextGuassian; // 0x9CC
 	int32_t mInitedIdx; // 0x9D0
 
-	MCAPI uint32_t _genRandInt32(void);
-	MCAPI double nextGaussian(void);
+	MCAPI uint32_t _genRandInt32();
+	MCAPI double nextGaussian();
 	MCAPI void _setSeed(uint32_t seed);
 };
 static_assert(sizeof(Core::Random) == 0x9D4);

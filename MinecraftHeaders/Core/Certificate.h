@@ -8,18 +8,18 @@
 
 class Certificate {
 public:
-	UnverifiedCertificate        mUnverifiedCertificate;
-	std::unique_ptr<Certificate> mParentCertificate;
-	bool                         mIsValid;
+	UnverifiedCertificate        mUnverifiedCertificate; // 0x0
+	std::unique_ptr<Certificate> mParentCertificate; // 0x88
+	bool                         mIsValid; // 0x90
 
-	MCAPI Certificate(class Certificate const&);
-	MCAPI int64_t getExpirationDate(void) const;
-	MCAPI class Json::Value getExtraData(std::string const& key, class Json::Value const& defaultValue) const;
-	MCAPI std::string getIdentityPublicKey(void) const;
-	MCAPI int64_t getNotBeforeDate(void) const;
-	MCAPI bool isCertificateAuthority(void) const;
+	MCAPI Certificate(Certificate const&);
+	MCAPI int64_t getExpirationDate() const;
+	MCAPI Json::Value getExtraData(std::string const& key, Json::Value const& defaultValue) const;
+	MCAPI std::string getIdentityPublicKey() const;
+	MCAPI int64_t getNotBeforeDate() const;
+	MCAPI bool isCertificateAuthority() const;
 	MCAPI bool validate(int64_t currentTime);
-	MCAPI ~Certificate(void);
+	MCAPI ~Certificate();
 };
 
 static_assert(offsetof(Certificate, mUnverifiedCertificate) == 0x0);

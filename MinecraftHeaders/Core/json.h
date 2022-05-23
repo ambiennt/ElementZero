@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 
-#include <modutils.h>
 #include "../dll.h"
 
 namespace Json {
@@ -56,7 +55,6 @@ class Value {
 	friend class ValueIteratorBase;
 
 public:
-	BUILD_ACCESS_MUT(int16_t, unknownBitFlags, 0x8);
 	
 	class CZString {
 	public:
@@ -203,7 +201,7 @@ public:
 	union ValueHolder {
 		LargestInt int_;
 		LargestUInt uint_;
-		double real_;
+		long double real_;
 		bool bool_;
 		char *string_; // actually ptr to unsigned, followed by str, unless
 									 // !allocated_
