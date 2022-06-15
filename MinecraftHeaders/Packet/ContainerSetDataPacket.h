@@ -6,11 +6,11 @@
 
 class ContainerSetDataPacket : public Packet {
 public:
-	enum class Property {
-		FuranceTickCount   = 0,
-		FuranceLitTime     = 1,
-		FuranceLitDuration = 2,
-		FuranceLitStoredXP = 3,
+	enum class Property : int32_t {
+		FuranceTickCount       = 0,
+		FuranceLitTime         = 1,
+		FuranceLitDuration     = 2,
+		FuranceLitStoredXP     = 3,
 
 		BrewingStandBrewTime   = 0,
 		BrewingStandFuelAmount = 1,
@@ -21,7 +21,9 @@ public:
 	int32_t mValue;
 	ContainerID mContainerId = ContainerID::Invalid;
 
-	inline ~ContainerSetDataPacket() {}
+	ContainerSetDataPacket() {}
+	ContainerSetDataPacket(ContainerSetDataPacket::Property property, int32_t value, ContainerID id)
+		: mProperty(property), mValue(value), mContainerId(id) {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

@@ -7,6 +7,143 @@
 
 
 
+std::string session;
+
+mce::UUID const& getSessionUUID() {
+  	if (!session.empty()) {
+    	static auto result = mce::UUID::fromString(session);
+    	return result;
+  	}
+  	return mce::UUID::EMPTY;
+}
+
+THook(DedicatedServer::StartResult,
+  	"?start@DedicatedServer@@QEAA?AW4StartResult@1@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
+  	void* self, std::string const &uuid) {
+  	session = uuid;
+  	return original(self, uuid);
+}
+
+TClasslessInstanceHook(void,
+  	"?announceServer@RakNetServerLocator@@UEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0W4GameType@@HH_N@Z",
+  	std::string const &playerName, std::string const &worldName, int32_t gameType,
+  	int32_t numPlayers, int32_t maxNumPlayers, bool isJoinableThroughServerScreen) {
+
+  	direct_access<RakNet::RakPeer*>(this, 0x118) = LocateService<RakNet::RakPeer>();
+  	original(this, playerName, worldName, gameType, numPlayers, maxNumPlayers, isJoinableThroughServerScreen);
+  	direct_access<RakNet::RakPeer*>(this, 0x118) = nullptr;
+}
+
+TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z", void *data) {
+	auto &path = direct_access<std::string>(this, 0xA0);
+	worldHook(std::filesystem::weakly_canonical(path));
+	return original(this, data);
+}
+
+
+
+
+
+
+
+
+
+
+static DedicatedServer *mDedicatedServer = nullptr;
+static RakNet::RakPeer *mRakPeer         = nullptr;
+static AppPlatform *mAppPlatform         = nullptr;
+
+THook(void*, "??0DedicatedServer@@QEAA@XZ", void* self) {
+	auto ret = original(self);
+	if (!mDedicatedServer) { mDedicatedServer = (DedicatedServer*)self; }
+	return ret;
+}
+
+THook(void*, "??0AppPlatform@@QEAA@_N@Z", void* self, bool registerService) {
+  	auto ret = original(self, registerService);
+  	if (!mAppPlatform) { mAppPlatform = (AppPlatform*)self; }
+  	return ret;
+}
+
+THook(void*, "??0RakPeer@RakNet@@QEAA@XZ", void *self) {
+  	auto ret = original(self);
+	if (!mRakPeer) { mRakPeer = (RakNet::RakPeer*)self; }
+	return ret;
+}
+
+
+
+
+
+
+
+
+template <> ServerInstance *LocateService<ServerInstance>() {
+  	static auto ptr = GetServerSymbol<ServerInstance *>(
+		"?mService@?$ServiceLocator@VServerInstance@@@@0V?$NonOwnerPointer@VServerInstance@@@Bedrock@@A");
+  	return *ptr;
+}
+
+template <> DedicatedServer *LocateService<DedicatedServer>() { return mDedicatedServer; }
+
+template <> RakNet::RakPeer *LocateService<RakNet::RakPeer>() { return mRakPeer; }
+
+template <> AppPlatform *LocateService<AppPlatform>() { return mAppPlatform; }
+
+template <> Minecraft *LocateService<Minecraft>() {
+	return LocateService<ServerInstance>()->mMinecraft.get();
+}
+
+template <> ServerNetworkHandler *LocateService<ServerNetworkHandler>() {
+	return LocateService<Minecraft>()->getServerNetworkHandler();
+}
+
+template <> NetworkHandler *LocateService<NetworkHandler>() {
+	return LocateService<ServerInstance>()->mNetwork.get();
+}
+
+template <> MinecraftCommands *LocateService<MinecraftCommands>() {
+	return LocateService<Minecraft>()->mCommands.get();
+}
+
+template <> CommandRegistry *LocateService<CommandRegistry>() {
+	return LocateService<MinecraftCommands>()->mRegistry.get();
+}
+
+template <> Level *LocateService<Level>() {
+	return LocateService<Minecraft>()->getLevel();
+}
+
+template <> LoopbackPacketSender *LocateService<LoopbackPacketSender>() {
+	return LocateService<ServerInstance>()->mPacketSender.get();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -73,71 +210,6 @@ uint8_t Player::getClientSubId() const {
 	return direct_access<uint8_t>(this, 3520); // verified
 }
 
-// custom player fields setup
-THook(void*,
-	"??0Player@@QEAA@AEAVLevel@@AEAVPacketSender@@W4GameType@@AEBVNetworkIdentifier@@EVUUID@mce@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$unique_ptr@VCertificate@@U?$default_delete@VCertificate@@@std@@@8@55@Z",
-	Player* player, void *level, void *packetSender, int32_t playerGameType, void *owner,
-	const uint8_t subid, void *uuid, void *deviceId, void *certificate, void *platformId, void *platformOnlineId) {
-
-	auto ret = original(player, level, packetSender, playerGameType, owner, subid, uuid, deviceId, certificate, platformId, platformOnlineId);
-
-	// store pointer at unused field, Player::mFirstPersonLatestHandOffset
-	direct_access<EZPlayerFields*>(player, 0xB24) = new EZPlayerFields();
-	
-	return ret;
-}
-
-THook(void*, "??1Player@@UEAA@XZ", Player* player) {
-
-	auto ret = original(player);
-
-	// clean up to be safe because idk what bds does with this field
-	auto playerFields = direct_access<EZPlayerFields*>(player, 0xB24);
-	delete playerFields;
-	playerFields = nullptr;
-	
-	return ret;
-}
-
-struct EZPlayerFields* Player::getEZPlayerFields() const {
-	return direct_access<struct EZPlayerFields*>(this, 0xB24);
-}
-
-#pragma endregion
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma region service_locator
-
-template <> Minecraft *LocateService<Minecraft>() {
-	return *GetServerSymbol<Minecraft *>("?mGame@ServerCommand@@1PEAVMinecraft@@EA");
-}
-
-template <> ServerNetworkHandler *LocateService<ServerNetworkHandler>() {
-	return LocateService<Minecraft>()->getServerNetworkHandler();
-}
-
-template <> NetworkHandler *LocateService<NetworkHandler>() {
-	return LocateService<ServerInstance>()->mNetwork.get(); // verified
-}
-
-template <> MinecraftCommands *LocateService<MinecraftCommands>() {
-	return LocateService<Minecraft>()->mCommands.get();
-}
-
-template <> CommandRegistry *LocateService<CommandRegistry>() {
-	return LocateService<MinecraftCommands>()->mRegistry.get();
-}
-
 #pragma endregion
 
 
@@ -152,13 +224,21 @@ template <> CommandRegistry *LocateService<CommandRegistry>() {
 
 
 
-void NetworkIdentifier::kick(std::string const &reason) const {
-	LocateService<ServerNetworkHandler>()->disconnectClient(*this, 0, reason, reason.empty());
+
+
+
+
+void ServerNetworkHandler::forceDisconnectClient(Player const& player,
+	bool skipDisconnectScreen, bool skipPlayerLeftChatMsg, std::string const& disconnectMsg) {
+	this->forceDisconnectClient(player.getNetworkIdentifier(), player.mClientSubId,
+		skipDisconnectScreen, skipPlayerLeftChatMsg, disconnectMsg);
 }
 
-void Player::kick() { LocateService<ServerNetworkHandler>()->forceDisconnectClient(this->asServerPlayer(), true); }
-
-std::string &ServerNetworkHandler::getMotd() { return direct_access<std::string>(this, 600); } // verified
+void ServerNetworkHandler::forceDisconnectClient(NetworkIdentifier const& netId, uint8_t subId,
+	bool skipDisconnectScreen, bool skipPlayerLeftChatMsg, std::string const& disconnectMsg) {
+	this->disconnectClient(netId, subId, disconnectMsg, skipDisconnectScreen);
+	this->onDisconnect(netId, disconnectMsg, skipPlayerLeftChatMsg);
+}
 
 void CommandOutput::success() { direct_access<bool>(this, 40) = true; }
 
@@ -176,13 +256,7 @@ struct ActorUniqueID Level::getNewUniqueID() const {
 }
 
 RakNet::SystemAddress NetworkIdentifier::getRealAddress() const {
-	return LocateService<RakNet::RakPeer>()->GetSystemAddressFromGuid(guid);
-}
-
-TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z", void *data) {
-	auto &path = direct_access<std::string>(this, 160);
-	worldHook(std::filesystem::weakly_canonical(path));
-	return original(this, data);
+	return LocateService<RakNet::RakPeer>()->GetSystemAddressFromGuid(this->mGuid);
 }
 
 bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant, bool overwriteDuplicates) {
@@ -214,4 +288,43 @@ bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstanc
 	}
 
 	return false;
+}
+
+bool EnchantUtils::removeEnchant(ItemStackBase &out, Enchant::Type typeToRemove) {
+
+	auto resultEnchants = out.constructItemEnchantsFromUserData();
+	int32_t activationIndex = determineActivation(typeToRemove);
+
+	if ((activationIndex >= 0) && (activationIndex <= 2)) {
+
+		auto &instanceVectorToWriteTo = resultEnchants.mItemEnchants[activationIndex];
+		bool atLeastOneRemoved = false;
+		auto it = instanceVectorToWriteTo.begin();
+
+		while (it != instanceVectorToWriteTo.end()) {
+			if (it->mEnchantType == typeToRemove) {
+				it = instanceVectorToWriteTo.erase(it);
+				atLeastOneRemoved = true;
+			}
+			else ++it;
+		}
+
+		if (atLeastOneRemoved) {
+			out.saveEnchantsToUserData(resultEnchants);
+		}
+		return atLeastOneRemoved;
+	}
+	return false;
+}
+
+void EnchantUtils::removeAllEnchants(ItemStackBase &out) {
+
+	auto resultEnchants = out.constructItemEnchantsFromUserData();
+
+	const int32_t ENCHANTS_ARRAY_SIZE = 3;
+	for (int32_t i = 0; i < ENCHANTS_ARRAY_SIZE; i++) {
+		resultEnchants.mItemEnchants[i].clear();
+	}
+
+	out.saveEnchantsToUserData(resultEnchants);
 }

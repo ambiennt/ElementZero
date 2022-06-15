@@ -19,10 +19,10 @@ struct Blacklist {
   static BLACKLISTAPI Blacklist &GetInstance();
 
   struct XUID {
-    std::int64_t value;
+    int64_t value;
     std::optional<std::string> name;
-    explicit XUID(std::uint64_t value, std::string name) : value((std::int64_t) value), name(name) {}
-    explicit XUID(std::uint64_t value) : value((std::int64_t) value) {}
+    explicit XUID(uint64_t value, std::string name) : value((int64_t)value), name(name) {}
+    explicit XUID(uint64_t value) : value((int64_t)value) {}
     std::int64_t const &operator*() const { return value; }
   };
   struct UUID {

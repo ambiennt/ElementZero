@@ -238,6 +238,8 @@ public:
 	}
 
 	BASEAPI static bool applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant, bool overwriteDuplicates);
+	BASEAPI static bool removeEnchant(ItemStackBase &out, Enchant::Type typeToRemove);
+	BASEAPI static void removeAllEnchants(ItemStackBase &out);
 
 	MCAPI static int32_t const PROTECTIONFACTOR_SECONDARYCAP;
 };

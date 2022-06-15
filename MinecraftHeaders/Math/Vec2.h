@@ -16,7 +16,6 @@ public:
 	Vec2() : x(0.f), y(0.f) {}
 	Vec2(float x, float y) : x(x), y(y) {}
 	Vec2(Vec2 const& rhs) : x(rhs.x), y(rhs.y) {}
-	inline ~Vec2() {}
 
 	Vec2 operator+(Vec2 const &rhs) const {
 		return Vec2(this->x + rhs.x, this->y + rhs.y);

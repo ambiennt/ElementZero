@@ -1,10 +1,5 @@
 #pragma once
 
-#include <vector>
-
-#include <hook.h>
-
-#include "Actor.h"
 #include "Mob.h"
 #include "ActorType.h"
 #include "../Core/ExtendedCertificate.h"
@@ -22,27 +17,9 @@
 #include "../Level/Abilities.h"
 #include "../Packet/LevelChunkPacket.h"
 #include "../Packet/AdventureSettingsPacket.h"
+#include <modutils.h>
+#include <base/ezplayer.h>
 #include "../dll.h"
-
-// add custom player fields here
-struct EZPlayerFields {
-	uint64_t mLastUhcHeadEatTimestamp; // the tick when the player last ate a head/golden head 
-	uint64_t mBucketCooldownTimestamp; // the tick when the player last placed a bucket of liquid
-	bool mShouldCancelBucketPickup; // whether or not the player can pick up liquid with a bucket, used to fix MCPE-100598
-	uint64_t mLastAttackedActorTimestamp; // the tick when the player last melee attacked an actor
-	bool mHasResetSprint; // if true, player should administer bonus knockback to other players
-	Vec3 mRawPos; // use this value for more accuracy of current pos (sometimes BDS pos zeroes out)
-	Vec3 mRawPosOld; // use this value for more accuracy of pos from last tick
-	int32_t mHealthOld; // heatlh value from the previous tick
-	int32_t mAbsorptionOld; // absorption value from the previous tick
-	uint64_t mLastSharpnessParticleInvokeTimestamp; // the tick when the player last invoked a sharpness particle on another actor
-	uint64_t mLastWhisperMessagerXuid; // the xuid of the most recent player who sent this a whisper message
-
-	EZPlayerFields() :
-		mLastUhcHeadEatTimestamp(0), mBucketCooldownTimestamp(0), mShouldCancelBucketPickup(false),
-		mLastAttackedActorTimestamp(0), mHasResetSprint(false), mRawPos(Vec3::ZERO), mRawPosOld(Vec3::ZERO), mHealthOld(0),
-		mAbsorptionOld(0), mLastSharpnessParticleInvokeTimestamp(0), mLastWhisperMessagerXuid(0) {}
-};
 
 class Packet;
 class ServerPlayer;
@@ -75,7 +52,7 @@ enum class ClientPlayMode {
 	Viewer               = 3,
 	Reality              = 4,
 	Placement            = 5,
-	LivingRoom           = 6, 
+	LivingRoom           = 6,
 	ExitLevel            = 7,
 	ExitLevelLivingRoom  = 8,
 	NumModes             = 9
@@ -146,30 +123,26 @@ enum class BedSleepingResult {
 	NOT_SAFE           = 5
 };
 
-#ifndef BASEAPI
-#  define BASEAPI __declspec(dllimport)
-#endif
-
 class Player : public Mob {
 public:
 	class PlayerSpawnPoint {
 	public:
-		inline static BlockPos InvalidSpawnPos = BlockPos::MIN;
-		BlockPos spawn_block = InvalidSpawnPos, spawn_pos = InvalidSpawnPos;
-		AutomaticID<class Dimension, int> dim = VanillaDimensions::Undefined;
+		inline static BlockPos INVALID_SPAWN_POS = BlockPos::MIN;
 
-		inline PlayerSpawnPoint()        = default;
-		inline PlayerSpawnPoint &operator=(PlayerSpawnPoint &&) = default;
-		inline bool hasSpawnPoint() const { return spawn_block != BlockPos::MIN && dim != VanillaDimensions::Undefined; }
+		BlockPos mSpawnBlockPos, mPlayerPosition;
+		AutomaticID<class Dimension, int32_t> mDimension;
+		
+		PlayerSpawnPoint() : mSpawnBlockPos(INVALID_SPAWN_POS), mPlayerPosition(INVALID_SPAWN_POS), mDimension(VanillaDimensions::Undefined) {}
+		inline bool hasSpawnPoint() const { return (this->mSpawnBlockPos != BlockPos::MIN) && (this->mDimension != VanillaDimensions::Undefined); }
 		inline void invalidate() { *this = {}; }
-		inline bool isValid() const { return dim != VanillaDimensions::Undefined; }
-		inline void setSpawnPoint(BlockPos spawn_block, AutomaticID<class Dimension, int> dim, BlockPos spawn_pos) {
-			this->spawn_block = spawn_block;
-			this->spawn_pos   = spawn_pos;
-			this->dim         = dim;
+		inline bool isValid() const { return (this->mDimension != VanillaDimensions::Undefined); }
+		inline void setSpawnPoint(BlockPos spawnBlock, BlockPos spawnPos, AutomaticID<class Dimension, int32_t> dim) {
+			this->mSpawnBlockPos  = spawnBlock;
+			this->mPlayerPosition = spawnPos;
+			this->mDimension      = dim;
 		}
-		inline void setSpawnPoint(BlockPos spawn_block, AutomaticID<class Dimension, int> dim) {
-			setSpawnPoint(spawn_block, dim, spawn_block);
+		inline void setSpawnPoint(BlockPos spawnBlock, AutomaticID<class Dimension, int32_t> dim) {
+			this->setSpawnPoint(spawnBlock, spawnBlock, dim);
 		}
 	};
 
@@ -343,11 +316,11 @@ public:
 	}
 
 	inline class Vec3 const& getRawPlayerPos() const {
-		return this->EZPlayerFields->mRawPos;
+		return this->mEZPlayer->mRawPos;
 	}
 
 	inline class Vec3 const& getRawPlayerPosOld() const {
-		return this->EZPlayerFields->mRawPosOld;
+		return this->mEZPlayer->mRawPosOld;
 	}
 
 	// a more reliable way to get pos delta for players
@@ -383,14 +356,14 @@ public:
 
 	inline enum PlayerPermissionLevel getPlayerPermissionLevel() const {
 		return this->mAbilities.mPermissionsHandler->mPlayerPermissions;
-	}	
+	}
 
 	inline void syncAbilities() const {
 		AdventureSettingsPacket pkt(this->mLevel->getAdventureSettings(), this->mAbilities, this->getUniqueID(), false);
 		this->mLevel->forEachPlayer([&](Player const& p) -> bool {
-        	p.sendNetworkPacket(pkt);
-        	return true;
-    	});
+			p.sendNetworkPacket(pkt);
+			return true;
+		});
 	}
 
 	inline void setPlayerPermissionLevel(enum PlayerPermissionLevel level, bool syncToClients) {
@@ -437,7 +410,7 @@ public:
 	BUILD_ACCESS_MUT(int32_t, mScore, 0x804); // no clue what this is for
 	BUILD_ACCESS_MUT(float, mBob, 0x80C);
 	BUILD_ACCESS_MUT(bool, mHandsBusy, 0x810);
-	BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818);
+	BUILD_ACCESS_MUT(std::string, mPlayerName, 0x818); // mName
 	BUILD_ACCESS_MUT(enum BuildPlatform, mBuildPlatform, 0x838);
 	BUILD_ACCESS_MUT(class Abilities, mAbilities, 0x840);
 	BUILD_ACCESS_MUT(const class NetworkIdentifier, mOwner, 0x980);
@@ -459,7 +432,7 @@ public:
 	BUILD_ACCESS_MUT(std::unique_ptr<class ChunkViewSource>, mSpawnChunkSource, 0xB10);
 	BUILD_ACCESS_MUT(std::unique_ptr<class BlockSource>, mOwnedBlockSource, 0xB18);
 	BUILD_ACCESS_MUT(bool, mUpdateMobs, 0xB20); // whether or not the player can tick nearby mobs?
-	//BUILD_ACCESS_MUT(class Vec3, mFirstPersonLatestHandOffset, 0xB24); // some remnants of client stuff (REPLACED BY EZPlayerFields)
+	//BUILD_ACCESS_MUT(class Vec3, mFirstPersonLatestHandOffset, 0xB24); // some remnants of client stuff (replaced by mEZPlayer field)
 	BUILD_ACCESS_MUT(class Vec3, mCapePosOld, 0xB30);
 	BUILD_ACCESS_MUT(class vec3, mCapePos, 0xB3C);
 	BUILD_ACCESS_MUT(float, mDistanceSinceTraveledEvent, 0xB54);
@@ -513,7 +486,9 @@ public:
 	BUILD_ACCESS_MUT(class PlayerUIContainer, mPlayerUIContainer, 0x1078);
 	BUILD_ACCESS_MUT(class InventoryTransactionManager, mTransactionManager, 0x1178);
 	BUILD_ACCESS_MUT(std::unique_ptr<class GameMode>, mGameMode, 0x11A0);
-	BUILD_ACCESS_MUT(class PlayerSpawnRandomizer, mSpawnRandomizer, 0x11A8); // this is 0x10 bytes smaller in the public 1.16.20 BDS
+
+	// this is probably 0x10 bytes smaller in the public 1.16.20 BDS (including struct alignment)
+	BUILD_ACCESS_MUT(class PlayerRespawnRandomizer, mSpawnRandomizer, 0x11A8);
 
 	// note to self: shift every offset back 0x10 bytes from here and below
 	BUILD_ACCESS_MUT(int32_t, mLastLevelUpTime, 0x1C40);
@@ -572,7 +547,15 @@ public:
 	BUILD_ACCESS_COMPAT(std::string &, PlatformOfflineId);
 	BUILD_ACCESS_COMPAT(std::string &, ClientPlatformOnlineId);
 	BUILD_ACCESS_COMPAT(uint8_t, ClientSubId);
-	BUILD_ACCESS_COMPAT(struct EZPlayerFields*, EZPlayerFields);
 
-	BASEAPI void kick();
+
+
+
+
+
+	inline class EZPlayer* getEZPlayer() const {
+		return this->mEZPlayer;
+	}
+
+	BUILD_ACCESS_MUT(class EZPlayer*, mEZPlayer, 0xB24);
 };

@@ -15,7 +15,7 @@ struct ResourcePackInfoData {
 	ContentIdentity mContentIdentity; // 0xD0
 	bool mHasScripts; // 0xE8 - client scripts with the Legacy Scripting API
 	// whether client will be forced to download the resource pack or not (this differs from mTexturePackRequired in ResourcePacksInfoData
-	// because the clien't can still use their own texture packs alongside the forced one from the server
+	// because the client can still use their own texture packs alongside the forced one from the server
 	bool mForceServerPacks; // 0xE9 - mHasExceptions
 };
 
@@ -31,7 +31,6 @@ class ResourcePacksInfoPacket : public Packet {
 public:
 	ResourcePacksInfoData mData; // 0x28
 
-	inline ~ResourcePacksInfoPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

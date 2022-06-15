@@ -86,8 +86,8 @@ public:
 	int32_t mOperand; // 0x50
 
 	virtual ~AttributeBuff();
-	virtual bool isInstantaneous(void) { return false; }
-	virtual bool isSerializable(void) { return false; }
+	virtual bool isInstantaneous() { return false; }
+	virtual bool isSerializable() { return false; }
 	virtual void setDurationAmplifier(std::shared_ptr<class Amplifier>);
 };
 static_assert(offsetof(AttributeBuff, mAmount) == 0x8);
@@ -117,7 +117,7 @@ public:
 	bool mSerialize; // 0x48
 
 	virtual ~AttributeModifier();
-	virtual bool isInstantaneous(void) { return 0; }
+	virtual bool isInstantaneous() { return 0; }
 };
 static_assert(offsetof(AttributeModifier, mAmount) == 0x8);
 static_assert(offsetof(AttributeModifier, mOperation) == 0xC);
@@ -140,8 +140,8 @@ public:
 	AttributeInstanceHandle mAttributeHandle; // 0x8
 
 	virtual ~AttributeInstanceDelegate();
-	virtual void tick(void);
-	virtual void notify(void);
+	virtual void tick();
+	virtual void notify();
 	virtual void change(float oldValue, float newValue, struct AttributeBuffInfo);
 	virtual void getBuffValue(class AttributeBuff const&);
 };
@@ -174,7 +174,7 @@ public:
 	};
 
 	virtual ~AttributeInstance();
-	virtual void tick(void);
+	virtual void tick();
 };
 static_assert(offsetof(AttributeInstance, mAttributeMap) == 0x8);
 static_assert(offsetof(AttributeInstance, mAttribute) == 0x10);

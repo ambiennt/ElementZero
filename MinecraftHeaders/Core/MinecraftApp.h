@@ -1,16 +1,18 @@
 #pragma once
 
 #include "../dll.h"
-
 #include "Automation.h"
+
+class Minecraft;
+class IGameModuleShared;
 
 class IMinecraftApp {
 public:
 	virtual ~IMinecraftApp();
-	virtual class Minecraft* getPrimaryMinecraft(void);
-	virtual class Automation::AutomationClient getAutomationClient(void);
-	virtual bool isEduMode(void);
-	virtual bool isDedicatedServer(void);
+	virtual Minecraft* getPrimaryMinecraft();
+	virtual Automation::AutomationClient getAutomationClient();
+	virtual bool isEduMode();
+	virtual bool isDedicatedServer();
 	virtual void onNetworkMaxPlayersChanged(uint32_t newMaxPlayerCount);
-	virtual class IGameModuleShared* getGameModule(void);
+	virtual IGameModuleShared* getGameModule();
 };

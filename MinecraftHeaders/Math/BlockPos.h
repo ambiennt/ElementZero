@@ -21,7 +21,6 @@ public:
 		this->y = (int32_t)(std::floorf(vec.y));
 		this->z = (int32_t)(std::floorf(vec.z));
 	}
-	inline ~BlockPos() {}
 
 	BlockPos operator+(BlockPos const &rhs) const {
 		return BlockPos(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);
@@ -66,9 +65,9 @@ public:
 		return *this;
 	}
 
-	bool operator==(BlockPos const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
-	bool operator!=(BlockPos const &rhs) const { return !(*this == rhs); }
-	operator Vec3() { return {(float)x, (float)y, (float)z}; }
+	inline bool operator==(BlockPos const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
+	inline bool operator!=(BlockPos const &rhs) const { return !(*this == rhs); }
+	inline operator Vec3() { return {(float)x, (float)y, (float)z}; }
 };
 
 inline const BlockPos BlockPos::MIN = {std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::min()};

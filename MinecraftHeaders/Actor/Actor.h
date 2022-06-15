@@ -123,7 +123,7 @@ enum class ActorFlags {
 	Baby                        = 11,
 	Converting                  = 12,
 	Critical                    = 13,
-	CanShowName                 = 14, 
+	CanShowName                 = 14,
 	AlwaysShowName              = 15,
 	NoAI                        = 16, // immobile flag
 	Immobile                    = 16,
@@ -545,7 +545,7 @@ public:
 	MCAPI bool hasSubBBInLava() const;
 	MCAPI bool hasTickingArea() const;
 	MCAPI bool hasEffect(class MobEffect const &) const;
-	MCAPI bool hasFamily(class Util::HashString const &) const;
+	MCAPI bool hasFamily(class HashedString const &) const;
 	MCAPI bool hasTag(std::string const &) const;
 	MCAPI void addEffect(class MobEffectInstance const &);
 	MCAPI bool addTag(std::string const &);
@@ -597,10 +597,11 @@ public:
 	MCAPI void testForCollidableMobs(class BlockSource &, class AABB const &, std::vector<class AABB> &);
 	MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
 	MCAPI class ItemStack const& getOffhandSlot() const;
+	MCAPI class BlockPos getBlockPosCurrentlyStandingOn() const; // use getBlockPosGrounded instead
 
 	template <typename T> MCAPI T *tryGetComponent();
 	template <typename T> MCAPI T const *tryGetComponent() const;
-	
+
 	// custom methods
 	inline std::string getEntityName() const {
 		return CallServerFunction<std::string>(
@@ -671,7 +672,7 @@ public:
 		const auto& currPos = this->getPos();
 		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
 	}
-	
+
 	inline class Vec3 getPosGrounded() const {
 		const auto& thisAabb = this->mAABBComponent.mAABB;
 		float yNew;

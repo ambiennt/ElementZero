@@ -2,7 +2,11 @@
 
 #include <Windows.h>
 
-#include <modutils.h>
+#ifdef Base_EXPORTS
+#  define BASEAPI __declspec(dllexport)
+#else
+#  define BASEAPI __declspec(dllimport)
+#endif
 
 class DedicatedServer;
 class ServerInstance;
@@ -13,6 +17,7 @@ class AppPlatform;
 class ServerNetworkHandler;
 class NetworkHandler;
 class Level;
+class LoopbackPacketSender;
 namespace RakNet {
 class RakPeer;
 }
@@ -20,11 +25,11 @@ namespace mce {
 class UUID;
 }
 
-BASEAPI HMODULE GetLoadedMod(char const *name);
+BASEAPI HMODULE getLoadedMod(char const *name);
 
-BASEAPI mce::UUID const &SessionUUID();
+BASEAPI mce::UUID const &getSessionUUID();
 
-// Can only be used to get instances of the above types
+// can only be used to get instances of the above types
 template <typename T> T *LocateService();
 
 template <> BASEAPI DedicatedServer *LocateService<DedicatedServer>();
@@ -37,3 +42,4 @@ template <> BASEAPI NetworkHandler *LocateService<NetworkHandler>();
 template <> BASEAPI Level *LocateService<Level>();
 template <> BASEAPI AppPlatform *LocateService<AppPlatform>();
 template <> BASEAPI RakNet::RakPeer *LocateService<RakNet::RakPeer>();
+template <> BASEAPI LoopbackPacketSender *LocateService<LoopbackPacketSender>();

@@ -523,19 +523,19 @@ public:
 			class StructureManager &, class ResourcePackManager &, class IEntityRegistryOwner &,
 			std::unique_ptr<class BlockComponentFactory>, std::unique_ptr<class BlockDefinitionGroup>);
 
-	MCAPI void save(void);
-	MCAPI void saveGameData(void);
-	MCAPI void saveVillages(void);
-	MCAPI void saveBiomeData(void);
-	MCAPI void saveLevelData(void);
-	MCAPI void saveDirtyChunks(void);
-	MCAPI int getNewPlayerId(void) const;
-	MCAPI class GameRules &getGameRules(void);
-	MCAPI class Player *getRandomPlayer(void);
-	MCAPI enum Difficulty getDifficulty(void) const;
-	MCAPI class Player *getPrimaryLocalPlayer(void) const;
+	MCAPI void save();
+	MCAPI void saveGameData();
+	MCAPI void saveVillages();
+	MCAPI void saveBiomeData();
+	MCAPI void saveLevelData();
+	MCAPI void saveDirtyChunks();
+	MCAPI int getNewPlayerId() const;
+	MCAPI class GameRules &getGameRules();
+	MCAPI class Player *getRandomPlayer();
+	MCAPI enum Difficulty getDifficulty() const;
+	MCAPI class Player *getPrimaryLocalPlayer() const;
 	MCAPI class Color getPlayerColor(class Player const &) const;
-	MCAPI struct AdventureSettings &getAdventureSettings(void);
+	MCAPI struct AdventureSettings &getAdventureSettings();
 	MCAPI class Actor *getRuntimeEntity(class ActorRuntimeID, bool) const;
 	MCAPI class ITickingArea *getTickingArea(class mce::UUID const &) const;
 	MCAPI float getSpecialMultiplier(AutomaticID<class Dimension, int>);
@@ -548,8 +548,8 @@ public:
 	MCAPI std::string const &getPlayerXUID(class mce::UUID const &) const;
 
 	MCAPI void setDefaultGameType(enum GameType);
-	MCAPI bool hasCommandsEnabled(void) const;
-	MCAPI bool hasExperimentalGameplayEnabled(void) const;
+	MCAPI bool hasCommandsEnabled() const;
+	MCAPI bool hasExperimentalGameplayEnabled() const;
 	MCAPI void forEachPlayer(std::function<bool(Player &)>);
 	MCAPI void forEachPlayer(std::function<bool(Player const &)>) const;
 	MCAPI void forEachDimension(std::function<bool(Dimension const &)>);
@@ -567,7 +567,7 @@ public:
 	MCAPI void playSynchronizedSound(
 		class BlockSource &, enum LevelSoundEvent, class Vec3 const &, int, struct ActorDefinitionIdentifier const &, bool, bool);
 
-	MCAPI void tickEntities(void);
+	MCAPI void tickEntities();
 	MCAPI void updateWeather(float, int, float, int);
 	MCAPI void denyEffect(class Vec3 const &);
 	MCAPI void forceRemoveEntity(class Actor &);
@@ -595,7 +595,7 @@ public:
 	MCAPI void spawnParticleEffect(std::string const &, class Vec3 const &, class Dimension *);
 	MCAPI void requestPlayerChangeDimension(class Player &, std::unique_ptr<class ChangeDimensionRequest>);
 
-	inline enum GeneratorType getWorldGeneratorType(void) {
+	inline enum GeneratorType getWorldGeneratorType() {
 		return this->getLevelDataWrapper()->getWorldGenerator();
 	}
 

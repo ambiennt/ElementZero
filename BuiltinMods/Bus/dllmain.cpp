@@ -32,7 +32,7 @@ struct MiniBusConnectionInfo : ConnectionInfo {
       fn();
     }
     for (auto [name, fn] : RegisterAPI::GetMap()) {
-      if (GetLoadedMod(name.data())) {
+      if (getLoadedMod(name.data())) {
         LOGV("Load builtin extension for %s") % name;
         fn();
       } else {

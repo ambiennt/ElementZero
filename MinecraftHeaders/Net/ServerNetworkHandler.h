@@ -6,9 +6,7 @@
 #include "../Core/PackIdVersion.h"
 #include "NetworkIdentifier.h"
 #include "../Core/mce.h"
-
 #include "../dll.h"
-
 #include <mutex>
 
 class Player;
@@ -19,32 +17,46 @@ class NetworkIdentifier;
 // PacketHandlerDispatcherInstance::handle - for client-bound packets (server to client)
 // or GameSpecificPacketHandlerDispatcherInstance
 
-class ServerNetworkHandler {
-
-	MCAPI void _onPlayerLeft(ServerPlayer *player, bool skipMessage);
-	MCAPI ServerPlayer * _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
+class ServerNetworkHandler /*: public NetEventCallback, public LevelListener, public Social::MultiplayerServiceObserver, public Social::XboxLiveUserObserver*/ {
+	MCAPI void _onPlayerLeft(ServerPlayer *player, bool useDefaultDisconnectMsg); // do not use, use forceDisconnectClient instead
+	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
 	MCAPI int32_t _getActiveAndInProgressPlayerCount(mce::UUID excludePlayer) const;
 
 public:
-
 	class Client;
 
-	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subId, std::string const &reason, bool skipMessage);
-	MCAPI void updateServerAnnouncement(void);
+	MCAPI void disconnectClient(NetworkIdentifier const& netId,
+		uint8_t subId, std::string const &reason, bool useDefaultDisconnectMsg); // do not use, use forceDisconnectClient instead
+	MCAPI void updateServerAnnouncement();
 
-	inline void forceDisconnectClient(ServerPlayer *player, bool skipMessage) {
-		this->_onPlayerLeft(player, skipMessage);
-	}
-
-	inline ServerPlayer * getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
+	inline ServerPlayer* getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
 		return this->_getServerPlayer(netId, subId);
 	}
 
-	inline int32_t getActiveAndInProgressPlayerCount(mce::UUID excludePlayer = mce::UUID::EMPTY) const {
-          return this->_getActiveAndInProgressPlayerCount(excludePlayer);
+	inline int32_t getActiveAndInProgressPlayerCount(mce::UUID const& excludePlayer = mce::UUID::EMPTY) const {
+		return this->_getActiveAndInProgressPlayerCount(excludePlayer);
 	}
-	
-	BASEAPI std::string &getMotd();
+
+	inline std::string const& getMOTD() const {
+		return this->mServerName;
+	}
+
+	inline void setMOTD(std::string const& motd) {
+		this->mServerName = motd;
+	}
+
+	inline void onDisconnect(NetworkIdentifier const &netId, std::string const &msg, bool skipPlayerLeftChatMsg) { // do not use, use forceDisconnectClient instead
+		return CallServerClassMethod<void>(
+			"?onDisconnect@ServerNetworkHandler@@UEAAXAEBVNetworkIdentifier@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N1@Z",
+			this, netId, msg, skipPlayerLeftChatMsg, std::string() /*std::string const& telemetryOverride*/);
+	}
+
+	// useDefaultDisconnectMsg set to true will cause the contents of mMessage will be ignored and the client will default to disconnectionScreen.disconnected
+	// skipPlayerLeftChatMsg set to true will prevent the "%s left the game" message from outputting in the in-game chat
+	BASEAPI void forceDisconnectClient(NetworkIdentifier const& netId, uint8_t subId, bool useDefaultDisconnectMsg,
+		bool skipPlayerLeftChatMsg, std::string const& disconnectMsg = std::string());
+	BASEAPI void forceDisconnectClient(Player const& player, bool useDefaultDisconnectMsg,
+		bool skipPlayerLeftChatMsg, std::string const& disconnectMsg = std::string());
 
 	BUILD_ACCESS_MUT(class GameCallbacks *, mGameCallbacks, 0x30);
 	BUILD_ACCESS_MUT(class Level *, mLevel, 0x38);
@@ -58,7 +70,7 @@ public:
 	BUILD_ACCESS_MUT(class BlackList, mServerBlackList, 0x78); // not a pointer
 	BUILD_ACCESS_MUT(bool, mRequireTrustedAuthentication, 0xE0);
 	BUILD_ACCESS_MUT(bool, mHasDisplayedPackErrors, 0xE1);
-	BUILD_ACCESS_MUT(class NetworkIdentifier, mMyId, 0xE8);
+	BUILD_ACCESS_MUT(class NetworkIdentifier, mMyId, 0xE8); // localplayer NetworkIdentifier?
 	BUILD_ACCESS_MUT(const int32_t, mMaxChunkRadius, 0x180);
 	BUILD_ACCESS_MUT(class MinecraftCommands *, mMinecraftCommands, 0x188);
 	BUILD_ACCESS_MUT(class IMinecraftApp *, mApp, 0x190);

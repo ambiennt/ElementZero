@@ -26,7 +26,7 @@
 namespace Mod {
 
 struct AuxHolder {
-  virtual ~AuxHolder(){};
+  virtual ~AuxHolder() {}
 };
 
 // Player database entry structure

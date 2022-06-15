@@ -32,6 +32,7 @@ public:
 		return *this;
 	}
 
+	inline bool empty() const noexcept { return ((this->a == 0) && (this->b == 0)); }
 	MCAPI std::string asString() const;
 	MCAPI static UUID fromString(std::string const &source);
 	MCAPI static UUID EMPTY;
@@ -44,8 +45,6 @@ public:
 		static boost::uuids::random_generator uuidGen;
 		return boost::lexical_cast<std::string>(uuidGen());
 	}
-
-	inline bool empty() const noexcept { return ((this->a == 0) && (this->b == 0)); }
 };
 
 class Blob {
@@ -101,17 +100,16 @@ inline uint32_t numChannels(ImageFormat format) {
 	}
 }
 
-class Image {
-	inline Image(ImageFormat format, uint32_t width, uint32_t height, ImageUsage usage, Blob &&data)
-		: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
+struct Image {
 
-public:
 	ImageFormat format{}; // 0x0
 	uint32_t width{}, height{}; // 0x4, 0x8
 	ImageUsage usage{}; // 0xC
 	Blob data; // 0x10
 
 	inline Image() {}
+	inline Image(ImageFormat format, uint32_t width, uint32_t height, ImageUsage usage, Blob &&data)
+		: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
 	inline Image(Blob &&data) : data(std::move(data)) {}
 	inline Image(uint32_t width, uint32_t height, ImageFormat format, ImageUsage usage) : format(format), width(width), height(height), usage(usage) {}
 

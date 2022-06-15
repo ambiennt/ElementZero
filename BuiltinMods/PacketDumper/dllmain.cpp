@@ -26,28 +26,28 @@ void PreInit() {
   InitDatabase();
   Mod::PlayerDatabase::GetInstance().AddListener(SIG("joined"), [](Mod::PlayerEntry const &entry) {
     static SQLite::Statement cache{*database, "INSERT OR REPLACE INTO idmap VALUES (?, ?, ?, ?)"};
-    static auto sess = SessionUUID();
+    const auto& session = getSessionUUID();
     BOOST_SCOPE_EXIT_ALL() {
       cache.reset();
       cache.clearBindings();
     };
-    cache.bindNoCopy(1, sess, sizeof sess);
-    cache.bind(2, (int64_t) entry.netid.guid.g);
+    cache.bindNoCopy(1, session, sizeof(session));
+    cache.bind(2, (int64_t)entry.netid.mGuid.g);
     cache.bind(3, entry.netid.getRealAddress().ToString());
-    cache.bind(4, (int64_t) entry.xuid);
+    cache.bind(4, (int64_t)entry.xuid);
     cache.exec();
   });
 }
 
-void LogPacket(bool isSent, NetworkIdentifier id, std::string const &data) {
+void LogPacket(bool isSent, NetworkIdentifier const& id, std::string const &data) {
   static SQLite::Statement cache{*database, "INSERT INTO packets (session, netid, type, data) VALUES (?, ?, ?, ?)"};
-  static auto sess = SessionUUID();
+  const auto &session = getSessionUUID();
   BOOST_SCOPE_EXIT_ALL() {
     cache.reset();
     cache.clearBindings();
   };
-  cache.bindNoCopy(1, sess, sizeof sess);
-  cache.bind(2, (int64_t) id.guid.g);
+  cache.bindNoCopy(1, session, sizeof(session));
+  cache.bind(2, (int64_t)id.mGuid.g);
   cache.bind(3, isSent);
   cache.bindNoCopy(4, data);
   cache.exec();
@@ -59,7 +59,7 @@ TInstanceHook(
     "std@@V?$allocator@D@2@@std@@@Z",
     NetworkHandler::Connection, std::string &data) {
   auto status = original(this, data);
-  if (status == NetworkPeer::DataStatus::HasData && database) LogPacket(false, id, data);
+  if (status == NetworkPeer::DataStatus::HasData && database) LogPacket(false, this->mId, data);
   return status;
 }
 

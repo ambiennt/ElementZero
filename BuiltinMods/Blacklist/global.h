@@ -2,4 +2,4 @@
 
 #include <Command/CommandRegistry.h>
 
-void registerBanCommand(CommandRegistry *);
+void registerBlacklistCommands(CommandRegistry *);

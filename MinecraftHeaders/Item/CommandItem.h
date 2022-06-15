@@ -24,10 +24,10 @@ public:
 		return this->createInstance(count, aux, nullptr, requireExactAux);
 	}
 
-    // to create an ItemStack instance, default construct an ItemStack then pass in its address as the result
-    inline ItemStackBase* createInstance(ItemStackBase *result, int32_t count, int32_t aux, bool requireExactAux) {
-        return CallServerClassMethod<ItemStackBase*>(
-            "?createInstance@CommandItem@@QEBA?AV?$optional@VItemInstance@@@std@@HHPEAVCommandOutput@@_N@Z",
-            this, result, count, aux, nullptr, requireExactAux);
-    }
+	// to create an ItemStack instance, default construct an ItemStack then pass in its address as the result
+	inline ItemStackBase* createInstance(ItemStackBase *result, int32_t count, int32_t aux, bool requireExactAux) {
+		return CallServerClassMethod<ItemStackBase*>(
+			"?createInstance@CommandItem@@QEBA?AV?$optional@VItemInstance@@@std@@HHPEAVCommandOutput@@_N@Z",
+			this, result, count, aux, nullptr, requireExactAux);
+	}
 };

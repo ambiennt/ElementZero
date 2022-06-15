@@ -146,7 +146,7 @@ static void FetchModule(JsModuleRecord referencingModule, JsValueRef specifier, 
     return;
   }
   if (auto it = lazylist.find(name); it != lazylist.end()) {
-    if (GetLoadedMod(it->second.first)) {
+    if (getLoadedMod(it->second.first)) {
       LoadBuiltinModule(referencingModule, specifier, target, name, it->second.second);
       return;
     } else {

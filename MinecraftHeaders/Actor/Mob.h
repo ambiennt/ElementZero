@@ -42,7 +42,7 @@ public:
 		Ground = 2,
 		Air    = 3
 	};
-	
+
 	virtual void knockback(class Actor *, int, float, float, float, float, float);
 	virtual void resolveDeathLoot(int, class ActorDamageSource const &);
 	virtual void spawnAnim();

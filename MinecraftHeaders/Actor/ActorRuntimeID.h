@@ -5,10 +5,10 @@
 
 class ActorRuntimeID {
 public:
-	uint64_t value = 0; // UNSIGNED INT64
+	uint64_t value; // UNSIGNED INT64
 
-	inline ActorRuntimeID() {}
-	inline ActorRuntimeID(uint64_t value) : value(value) {}
+	ActorRuntimeID() : value(0) {}
+	ActorRuntimeID(uint64_t value) : value(value) {}
 
 	ActorRuntimeID& operator=(ActorRuntimeID const &rhs) {
 		this->value = rhs.value;

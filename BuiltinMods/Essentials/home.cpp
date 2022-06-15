@@ -39,8 +39,8 @@ public:
       output.error("commands.spawn.error.not.set");
       return;
     }
-    auto source = (Player *) origin.getEntity();
-    auto pos    = level->SpawnPos;
+    auto source = (Player *)origin.getEntity();
+    auto pos    = level->getSpawnPos();
     if (pos.y > 256) {
       output.error("commands.spawn.error.not.set");
       return;

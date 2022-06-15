@@ -52,9 +52,12 @@ public:
 	PacketSender *mPacketSender; // 0xC8
 	IMinecraftApp *mApp; // 0xD0
 	uint8_t mClientSubId; // 0xD8
-	std::shared_ptr<EntityRegistryOwned> mEntityRegistry; // OwnerPtrT<EntityRegistryRefTraits>; - 0xE0
+	std::shared_ptr<EntityRegistryOwned> mEntityRegistry; // OwnerPtrT<EntityRegistryRefTraits> - 0xE0
 
-	virtual std::shared_ptr<EntityRegistryOwned> getEntityRegistry();
+	//virtual OwnerPtrT<EntityRegistryRefTraits>& getEntityRegistry();
+private:
+	virtual void* vtbl_pad_0() { return nullptr; }
+public:
 	virtual ~Minecraft();
 
 	MCAPI Level *getLevel() const;

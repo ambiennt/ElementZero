@@ -185,8 +185,9 @@ TClasslessInstanceHook(
     stmt_login.exec();
   } catch (...) {
     LOGV("illegal connection from %s (name: %s)") % address % name;
-    if (LocateService<ServerNetworkHandler>()->mRequireTrustedAuthentication) {
-      player->kick();
+    auto& snh = *LocateService<ServerNetworkHandler>();
+    if (snh.mRequireTrustedAuthentication) {
+      snh.forceDisconnectClient(*netId, req.mClientSubId, false, true, "Illegal connection!");
     }
   }
   return std::move(player);

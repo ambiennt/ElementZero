@@ -16,9 +16,6 @@
 #include "ItemRuntimeID.h"
 #include "../dll.h"
 
-#include <hook.h>
-#include <modutils.h>
-
 class Item;
 class Block;
 class CompoundTag;
@@ -60,7 +57,10 @@ public:
 	Tick mBlockingTick; // 0x78
 	std::unique_ptr<ItemInstance> mChargedItem; // 0x80
 
-	MCAPI virtual ~ItemStackBase();
+	virtual ~ItemStackBase();
+	virtual void reinit(BlockLegacy const& blockLegacy, int32_t count) = 0;
+	virtual void reinit(Item const&, int32_t count, int32_t auxValue) = 0;
+	virtual void setNull();
 
 	MCAPI bool isNull() const;
 	MCAPI bool isBlock() const;
@@ -75,12 +75,12 @@ public:
 
 	MCAPI std::string toString() const;
 
-	MCAPI short getId() const; // item id
+	MCAPI int16_t getId() const; // item id
 	MCAPI int getIdAux() const; // assume item id x 65536
 	MCAPI class Item const *getItem() const;
-	MCAPI short getAuxValue() const; // example: dye has aux values 0-15 (same as mAuxValue)
+	MCAPI int16_t getAuxValue() const; // example: dye has aux values 0-15 (same as mAuxValue)
 	MCAPI class ItemDescriptor getDescriptor() const;
-	MCAPI unsigned char getMaxStackSize() const;
+	MCAPI uint8_t getMaxStackSize() const;
 	MCAPI class ItemEnchants constructItemEnchantsFromUserData() const;
 	MCAPI std::string getName() const;
 	MCAPI std::string getHoverName() const;
@@ -94,7 +94,6 @@ public:
 	MCAPI bool hasSameUserData(class ItemStackBase const &) const;
 
 	MCAPI void set(const int32_t amount);
-	MCAPI void setNull();
 	MCAPI void setChargedItem(class ItemInstance const &, bool);
 	MCAPI void setCustomName(std::string const &);
 	MCAPI void setUserData(std::unique_ptr<class CompoundTag>);
@@ -122,7 +121,7 @@ public:
 	MCAPI void hurtAndBreak(int, class Actor *);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
 
-	inline uint8_t getStackSize() const { return mCount; }
+	inline uint8_t getStackSize() const { return this->mCount; }
 
 	inline std::vector<std::string> getCustomLore() const {
 		std::vector<std::string> ret;
@@ -139,19 +138,20 @@ public:
 	MCAPI operator bool() const;
 
 protected:
-	virtual void reinit(Item const &, int, int) = 0;
 	MCAPI ItemStackBase();
 	MCAPI ItemStackBase(Item const &item);
-	MCAPI ItemStackBase(Item const &ite, int);
-	MCAPI ItemStackBase(Item const &ite, int, int);
-	MCAPI ItemStackBase(Item const &ite, int, int, CompoundTag const *);
+	MCAPI ItemStackBase(Item const &item, int);
+	MCAPI ItemStackBase(Item const &item, int, int);
+	MCAPI ItemStackBase(Item const &item, int, int, CompoundTag const *);
 	MCAPI ItemStackBase(BlockLegacy const &, int);
 	MCAPI ItemStackBase(Block const &, int, CompoundTag const *);
 	MCAPI ItemStackBase(ItemStackBase const &rhs);
+
 	MCAPI ItemStackBase &operator=(ItemStackBase const &rhs);
+	
+	MCAPI bool _setItem(int32_t id);
 
 public:
-	virtual void reinit(BlockLegacy const &, int) = 0;
 
 	inline bool operator==(ItemStackBase const &rhs) const {
 		return this->matchesItem(rhs);
@@ -183,6 +183,9 @@ public:
 
 	ItemStackNetIdVariant mNetIdVariant; // 0x88
 
+	virtual void reinit(BlockLegacy const& blockLegacy, int32_t count) override;
+	virtual void reinit(Item const&, int32_t count, int32_t auxValue) override;
+
 	MCAPI static ItemStack const EMPTY_ITEM;
 
 	MCAPI ItemStack();
@@ -192,10 +195,8 @@ public:
 	MCAPI ItemStack(Item const &item, int count, int auxValue);
 	MCAPI ItemStack(Block const &block, int count, CompoundTag const *userData);
 	MCAPI ItemStack(BlockLegacy const &block, int count);
-	MCAPI ~ItemStack();
+
 	MCAPI static ItemStack fromTag(CompoundTag const &userData);
-	MCAPI void reinit(Item const &item, int count, int auxValue);
-	MCAPI void reinit(BlockLegacy const &block, int count);
 };
 
 static_assert(offsetof(ItemStackBase, mItem) == 0x8);

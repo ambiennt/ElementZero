@@ -42,35 +42,35 @@ public:
 
 static Mod::Scheduler::Token tok;
 
-void handler(Mod::Scheduler::Token) {
-  auto handler       = LocateService<ServerNetworkHandler>();
-  handler->getMotd() = state.GetNext();
-  handler->updateServerAnnouncement();
+void updateMOTD(Mod::Scheduler::Token) {
+  auto& handler = *LocateService<ServerNetworkHandler>();
+  handler.setMOTD(state.GetNext());
+  handler.updateServerAnnouncement();
 }
 
 void WorldInit(std::filesystem::path const &) {
   using namespace Mod::Scheduler;
   if (settings.List.empty()) {
-    LOGW("Failed to load dynamic motd list");
+    LOGW("Failed to load dynamic MOTD list");
     return;
   }
-  LOGW("Starting dynamic motd, count: %d") % settings.List.size();
+  LOGW("Starting dynamic MOTD, count: %d") % settings.List.size();
   state.Init();
-  tok = Mod::Scheduler::SetInterval(std::chrono::seconds(settings.Interval), handler);
+  tok = Mod::Scheduler::SetInterval(std::chrono::seconds(settings.Interval), updateMOTD);
 }
 
 void AfterReload() {
   Mod::Scheduler::ClearInterval(tok);
   if (settings.List.empty()) {
-    LOGW("Failed to reload dynamic motd list");
+    LOGW("Failed to reload dynamic MOTD list");
     state.SetHealth(false);
     return;
   }
-  LOGW("Reload dynamic motd, count: %d") % settings.List.size();
+  LOGW("Reloaded dynamic MOTD, count: %d") % settings.List.size();
   state.Init();
   state.SetHealth(true);
-  tok = Mod::Scheduler::SetInterval(std::chrono::seconds(settings.Interval), handler);
+  tok = Mod::Scheduler::SetInterval(std::chrono::seconds(settings.Interval), updateMOTD);
 }
 
-void dllenter(){};
-void dllexit(){};
+void dllenter() {}
+void dllexit() {}

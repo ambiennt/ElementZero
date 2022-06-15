@@ -30,7 +30,7 @@ struct NetworkStatus : Command {
 		if (peer) {
 			auto status = peer->getNetworkStatus();
 			return output.success("commands.net-stat.result",
-				{status.ping, status.avgping, status.packetloss, status.avgpacketloss});
+				{status.mCurrentPing, status.mAveragePing, status.mCurrentPacketLoss, status.mAveragePacketLoss});
 		}
 
 		output.error("Failed to retrieve network statistics!");
@@ -53,10 +53,10 @@ static ModuleRegister reg("ez:network-stats", [](JsObjectWrapper native) -> std:
 		auto peer   = LocateService<NetworkHandler>()->getPeerForUser(player.netid);
 		auto status = peer->getNetworkStatus();
 		JsObjectWrapper ret;
-		ret["ping"]          = status.ping;
-		ret["avgping"]       = status.avgping;
-		ret["packetloss"]    = status.packetloss;
-		ret["avgpacketloss"] = status.avgpacketloss;
+		ret["ping"]          = status.mCurrentPing;
+		ret["avgping"]       = status.mAveragePing;
+		ret["packetloss"]    = status.mCurrentPacketLoss;
+		ret["avgpacketloss"] = status.mAveragePacketLoss;
 		return *ret;
 	};
 	return "export const getNetworkStats = import.meta.native.getNetworkStats;";

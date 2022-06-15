@@ -6,11 +6,10 @@
 class DisconnectPacket : public Packet {
 public:
 
-	bool mSkipMessage; // 0x28
+	bool mSkipMessage; // 0x28 - if true, the contents of mMessage will be ignored and the client will default to disconnectionScreen.disconnected
 	std::string mMessage; // 0x30
 
-	DisconnectPacket(bool skipMsg, std::string msg) : mSkipMessage(skipMsg), mMessage(msg) {}
-	inline ~DisconnectPacket() {}
+	DisconnectPacket(bool skipMsg, std::string const& msg) : mSkipMessage(skipMsg), mMessage(msg) {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

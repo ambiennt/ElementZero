@@ -98,7 +98,7 @@ static std::list<FnWithName<BeforeUnloadType, &ModLibrary::beforeUnload>> Unload
 static std::list<ReloadableMod> Reloadables;
 static lc_set LibNameList;
 
-HMODULE GetLoadedMod(const char *name) {
+HMODULE getLoadedMod(const char *name) {
   auto it = LoadedMods.find(lc_string{name});
   if (it == LoadedMods.end()) return 0;
   return it->second;

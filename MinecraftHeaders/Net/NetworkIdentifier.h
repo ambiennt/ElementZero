@@ -1,11 +1,9 @@
 #pragma once
 
 #include <boost/functional/hash.hpp>
-#include "../Core/mce.h"
 #include "../RakNet/RakNetTypes.h"
-#include "../dll.h"
-#include <hook.h>
 #include <modutils.h>
+#include "../dll.h"
 
 class NetworkIdentifier {
 public:
@@ -17,30 +15,25 @@ public:
 		Generic  = 3
 	};
 
-	RakNet::RakNetGUID guid;
-	uint16_t port;
-	char filler[0x76];
-	uint64_t mSock; // sockaddr_storage
-	NetworkIdentifier::Type mType; // 144
+	RakNet::RakNetGUID mGuid; // 0x0
+	uint8_t pad[0x80]; // 0x10
+	NetworkIdentifier::Type mType; // 0x90
 
 	MCAPI bool operator==(NetworkIdentifier const &) const;
 	MCAPI uint64_t getHash() const;
 	MCAPI std::string getAddress() const;
 
 	BASEAPI RakNet::SystemAddress getRealAddress() const;
-	BASEAPI void kick(std::string const &reason) const;
 };
-
-static_assert(offsetof(NetworkIdentifier, mSock) == 136);
-static_assert(offsetof(NetworkIdentifier, mType) == 144);
+static_assert(offsetof(NetworkIdentifier, mType) == 0x90);
+static_assert(sizeof(NetworkIdentifier) == 0x98);
 
 class NetworkIdentifierWithSubId {
 public:
-	NetworkIdentifier identifier;
-	uint8_t subId;
+	NetworkIdentifier mId;
+	uint8_t mSubId;
 };
-
-static_assert(sizeof(NetworkIdentifierWithSubId) == 160);
+static_assert(sizeof(NetworkIdentifierWithSubId) == 0xA0);
 
 namespace std {
 

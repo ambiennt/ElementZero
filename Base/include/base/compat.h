@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Actor/Player.h>
-#include <Math/Vec3.h>
 #include <Core/Minecraft.h>
 #include <Core/ServerInstance.h>
 #include <Command/MinecraftCommands.h>
@@ -9,8 +7,11 @@
 #include <Level/Level.h>
 #include <Item/ItemStack.h>
 #include <Item/Enchant.h>
+#include <Net/NetworkHandler.h>
 #include <Net/NetworkIdentifier.h>
 #include <Net/ServerNetworkHandler.h>
+#include <Core/DedicatedServer.h>
+#include <Core/mce.h>
 #include <RakNet/RakPeer.h>
 
 #include <modutils.h>

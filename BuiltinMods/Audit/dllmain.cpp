@@ -76,15 +76,15 @@ TClasslessInstanceHook(
         stmt.clearBindings();
         stmt.reset();
       };
-      auto &session = SessionUUID();
-      stmt.bindNoCopy(1, session, sizeof session);
+      const auto &session = getSessionUUID();
+      stmt.bindNoCopy(1, session, sizeof(session));
       stmt.bindNoCopy(2, it->uuid, sizeof it->uuid);
       stmt.bind(3, it->player->getDimensionId());
       if (token)
         stmt.bindNoCopy(4, *token);
       else
         stmt.bind(4, nullptr);
-      stmt.bind(5, (int) pkt.mAction);
+      stmt.bind(5, (int32_t)pkt.mAction);
       stmt.bind(6, pkt.mPos.x);
       stmt.bind(7, pkt.mPos.y);
       stmt.bind(8, pkt.mPos.z);
@@ -115,7 +115,7 @@ TClasslessInstanceHook(
         stmt.clearBindings();
         stmt.reset();
       };
-      auto &session = SessionUUID();
+      const auto &session = getSessionUUID();
       stmt.bindNoCopy(1, session, sizeof session);
       stmt.bindNoCopy(2, it->uuid, sizeof it->uuid);
       stmt.bind(3, it->player->getDimensionId());
@@ -147,7 +147,7 @@ TClasslessInstanceHook(
         stmt.clearBindings();
         stmt.reset();
       };
-      auto &session = SessionUUID();
+      const auto &session = getSessionUUID();
       stmt.bindNoCopy(1, session, sizeof session);
       stmt.bindNoCopy(2, it->uuid, sizeof it->uuid);
       stmt.bind(3, it->player->getDimensionId());

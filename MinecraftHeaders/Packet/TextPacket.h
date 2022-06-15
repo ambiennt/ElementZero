@@ -39,7 +39,7 @@ public:
 		TextPacket pkt;
 		pkt.mType      = type;
 		pkt.mMessage   = msg;
-		pkt.mLocalize = translated;
+		pkt.mLocalize  = translated;
 		return pkt;
 	}
 	template <TextPacketType type, bool translated = true>
@@ -48,7 +48,7 @@ public:
 		pkt.mType      = type;
 		pkt.mAuthor    = author;
 		pkt.mMessage   = msg;
-		pkt.mLocalize = translated;
+		pkt.mLocalize  = translated;
 		return pkt;
 	}
 	template <TextPacketType type, bool translated = false>
@@ -57,7 +57,7 @@ public:
 		pkt.mType      = type;
 		pkt.mAuthor    = author;
 		pkt.mMessage   = msg;
-		pkt.mLocalize = translated;
+		pkt.mLocalize  = translated;
 		pkt.mXuid      = xuid;
 		return pkt;
 	}
@@ -68,7 +68,6 @@ public:
 		return createTextObjectMessage(root);
 	}
 	inline TextPacket() {}
-	inline ~TextPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

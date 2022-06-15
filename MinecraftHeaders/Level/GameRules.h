@@ -52,7 +52,7 @@ public:
 };
 
 class GameRules {
-	 MCAPI std::unique_ptr<GameRulesChangedPacket> _setRule(GameRuleId ruleType, GameRule::Value value,
+	MCAPI std::unique_ptr<GameRulesChangedPacket> _setRule(GameRuleId ruleType, GameRule::Value value,
 	 	GameRule::Type type, bool returnPacket, bool *pValueValidated, bool *pValueChanged, GameRule::ValidationError *errorOutput);
 public:
 	std::vector<GameRule> mGameRules; // 0x0

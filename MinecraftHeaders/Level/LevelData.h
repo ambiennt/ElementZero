@@ -21,8 +21,6 @@
 #include "GeneratorType.h"
 #include "SpawnSettings.h"
 
-#include <modutils.h>
-
 #include "../dll.h"
 
 enum class EducationEditionOffer {
@@ -37,7 +35,7 @@ enum class NetherWorldType : int8_t {
 };
 
 struct LevelDataValue : public std::variant<int, bool, float, std::string, GeneratorType,
-GameType, BlockPos, unsigned int, std::unique_ptr<CompoundTag>> {
+GameType, BlockPos, uint32_t, std::unique_ptr<CompoundTag>> {
 	using variant::variant;
 };
 
@@ -128,63 +126,50 @@ public:
 	template <typename T> inline void setValue(StringKey const &key, T value) { mKV[key] = LevelDataValue(value); }
 
 	inline BlockPos getSpawnPos() const {
-		if (auto value = extractValue<BlockPos>(LevelDataKeys::SPAWN_POS))
-			return *value;
-		else
-			return BlockPos::ZERO;
+		auto value = this->extractValue<BlockPos>(LevelDataKeys::SPAWN_POS);
+		if (value) { return *value; }
+		return BlockPos::ZERO;
 	}
-	inline void setSpawnPos(BlockPos const &pos) { setValue(LevelDataKeys::SPAWN_POS, pos); }
+	inline void setSpawnPos(BlockPos const &pos) { this->setValue(LevelDataKeys::SPAWN_POS, pos); }
 
 	inline GameType getGameType() const {
-		if (auto value = extractValue<::GameType>(LevelDataKeys::GAME_TYPE))
-			return *value;
-		else
-			return GameType::Survival;
+		auto value = this->extractValue<::GameType>(LevelDataKeys::GAME_TYPE);
+		if (value) { return *value; }
+		return GameType::Survival;
 	}
-	inline void setGameType(GameType type) { setValue(LevelDataKeys::GAME_TYPE, type); }
+	inline void setGameType(GameType type) { this->setValue(LevelDataKeys::GAME_TYPE, type); }
 
-	inline unsigned getSeed() const {
-		if (auto value = extractValue<unsigned>(LevelDataKeys::SEED))
-			return *value;
-		else
-			return 0;
+	inline uint32_t getSeed() const {
+		auto value = this->extractValue<uint32_t>(LevelDataKeys::SEED);
+		if (value) { return *value; }
+		return 0;
 	}
-	inline void setSeed(unsigned seed) { setValue(LevelDataKeys::SEED, seed); }
+	inline void setSeed(uint32_t seed) { this->setValue(LevelDataKeys::SEED, seed); }
 
 	inline GeneratorType getWorldGenerator() const {
-		if (auto value = extractValue<GeneratorType>(LevelDataKeys::GENERATOR))
-			return *value;
-		else
-			return GeneratorType::Overworld;
+		auto value = this->extractValue<GeneratorType>(LevelDataKeys::GENERATOR);
+		if (value) { return *value; }
+		return GeneratorType::Overworld;
 	}
-	inline void setWorldGenerator(GeneratorType seed) { setValue(LevelDataKeys::SEED, seed); }
+	inline void setWorldGenerator(GeneratorType seed) { this->setValue(LevelDataKeys::SEED, seed); }
 
-	inline int getLimitedWorldWidth() const {
-		if (auto value = extractValue<int>(LevelDataKeys::LIMITED_WORLD_WIDTH))
-			return *value;
-		else
-			return 0;
+	inline int32_t getLimitedWorldWidth() const {
+		auto value = this->extractValue<int32_t>(LevelDataKeys::LIMITED_WORLD_WIDTH);
+		if (value) { return *value; }
+		return 0;
 	}
-	inline void setLimitedWorldWidth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_WIDTH, value); }
+	inline void setLimitedWorldWidth(int32_t value) { this->setValue(LevelDataKeys::LIMITED_WORLD_WIDTH, value); }
 
-	inline int getLimitedWorldDepth() const {
-		if (auto value = extractValue<int>(LevelDataKeys::LIMITED_WORLD_DEPTH))
-			return *value;
-		else
-			return 0;
+	inline int32_t getLimitedWorldDepth() const {
+		auto value = this->extractValue<int32_t>(LevelDataKeys::LIMITED_WORLD_DEPTH);
+		if (value) { return *value; }
+		return 0;
 	}
-	inline void setLimitedWorldDepth(int value) { setValue(LevelDataKeys::LIMITED_WORLD_DEPTH, value); }
+	inline void setLimitedWorldDepth(int32_t value) { this->setValue(LevelDataKeys::LIMITED_WORLD_DEPTH, value); }
 
-	inline DimensionID getSpawnDimension() const { return mSpawnSettings.mDim; }
-	inline void setSpawnDimension(DimensionID d) { mSpawnSettings.mDim = d; }
+	inline DimensionID getSpawnDimension() const { return this->mSpawnSettings.mDim; }
+	inline void setSpawnDimension(DimensionID d) { this->mSpawnSettings.mDim = d; }
 
-	DEF_FIELD_RW(unsigned, Seed);
-	DEF_FIELD_RW(GeneratorType, WorldGenerator);
-	DEF_FIELD_RW(int, LimitedWorldWidth);
-	DEF_FIELD_RW(int, LimitedWorldDepth);
-	DEF_FIELD_RW(BlockPos, SpawnPos);
-	DEF_FIELD_RW(GameType, GameType);
-	DEF_FIELD_RW(int, SpawnDimension);
 };
 
 static_assert(offsetof(LevelData, mGameRules) == 288);

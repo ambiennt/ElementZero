@@ -56,7 +56,7 @@ void PreInit() {
       "reason TEXT NOT NULL, "
       "address TEXT NOT NULL, "
       "time INTEGER DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'now')))");
-  Mod::CommandSupport::GetInstance().AddListener(SIG("loaded"), registerBanCommand);
+  Mod::CommandSupport::GetInstance().AddListener(SIG("loaded"), registerBlacklistCommands);
 }
 
 void dllenter() {}
