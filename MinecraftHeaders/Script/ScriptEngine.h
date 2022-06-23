@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <modutils.h>
 
 namespace ScriptApi {
 	class ScriptObjectHandle;
@@ -19,4 +20,6 @@ public:
 
 	bool deserializeScriptObjectHandleToJson(ScriptApi::ScriptObjectHandle const &, Json::Value &);
 	bool serializeJsonToScriptObjectHandle(ScriptApi::ScriptObjectHandle &, Json::Value const &);
+
+	BUILD_ACCESS_MUT(bool, mInitialized, 0xA8);
 };

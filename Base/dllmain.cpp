@@ -24,34 +24,34 @@ Settings settings;
 
 THook(void*, "??R?$default_delete@VConsoleInputReader@@@std@@QEBAXPEAVConsoleInputReader@@@Z", void *self, char *s) {
   	auto &thrd = direct_access<std::thread>(s, 0x58);
-  	if (thrd.joinable()) thrd.detach();
+  	if (thrd.joinable()) { thrd.detach(); }
   	return original(self, s);
 }
 
 static bool stopping = false;
 
 static BOOL ConsoleCtrlHandler(DWORD type) {
-  	DEF_LOGGER("ConsoleCtrlHandler");
-  	if (type == CTRL_C_EVENT) {
+	DEF_LOGGER("ConsoleCtrlHandler");
+	if (type == CTRL_C_EVENT) {
 		auto dedicatedServer = LocateService<DedicatedServer>();
-    	if (dedicatedServer) {
-      		if (stopping) return TRUE;
-      		dedicatedServer->doAsyncStop();
-      		LOGW("Requested to stop");
-      		stopping = true;
-      		return TRUE;
-    	}
-    	ExitProcess(0);
-  	}
-  	return TRUE;
+		if (dedicatedServer) {
+			if (stopping) return TRUE;
+			dedicatedServer->doAsyncStop();
+			LOGW("Requested to stop");
+			stopping = true;
+			return TRUE;
+		}
+		ExitProcess(0);
+	}
+	return TRUE;
 }
 
 class MBuf : public std::stringbuf {
 public:
   	int sync() {
-    	fputs(str().c_str(), stdout);
-    	str("");
-    	return 0;
+		fputs(str().c_str(), stdout);
+		str("");
+		return 0;
   	}
 } buf;
 
@@ -62,8 +62,8 @@ void dllenter() {
   	SetConsoleCP(65001);
   	SetConsoleOutputCP(65001);
   	SetConsoleMode(
-      	GetStdHandle(STD_OUTPUT_HANDLE),
-      	ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+	  	GetStdHandle(STD_OUTPUT_HANDLE),
+	  	ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
   	std::cout.rdbuf(&buf);
 
   	std::thread::id this_id = std::this_thread::get_id();
@@ -72,13 +72,13 @@ void dllenter() {
   	SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE);
 
   	try {
-    	auto cfg     = readConfig();
-    	bool changed = !ReadYAML(settings, cfg);
-    	if (changed) WriteYAML(settings, cfg);
-    	auto mods = cfg["mods"];
-    	initDatabase();
-    	if (settings.ModEnabled) loadMods(mods);
-    	writeConfig(cfg);
+		auto cfg     = readConfig();
+		bool changed = !ReadYAML(settings, cfg);
+		if (changed) WriteYAML(settings, cfg);
+		auto mods = cfg["mods"];
+		initDatabase();
+		if (settings.ModEnabled) loadMods(mods);
+		writeConfig(cfg);
   	}
 	catch (std::exception const &e) {
 		LOGE("Unexcepted exception: %s") % e.what();

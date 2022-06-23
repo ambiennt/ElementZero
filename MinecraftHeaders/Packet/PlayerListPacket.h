@@ -18,7 +18,6 @@ public:
 	SerializedSkin mSkin; // 0x80
 	bool mIsTeacher, mIsHost; // 0x250, 0x251
 
-	MCAPI ~PlayerListEntry();
 	MCAPI void write(BinaryStream &) const;
 	MCAPI StreamReadResult read(ReadOnlyBinaryStream &);
 };
@@ -37,7 +36,7 @@ public:
 	std::vector<PlayerListEntry> mEntries; // 0x28
 	PlayerListPacketType mAction; // 0x40
 
-	inline ~PlayerListPacket() {}
+	PlayerListPacket(std::vector<PlayerListEntry> const& entries, PlayerListPacketType action) : mEntries(entries), mAction(action) {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

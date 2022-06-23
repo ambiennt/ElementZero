@@ -8,7 +8,7 @@ public:
 	MCAPI Inventory(Player *);
 	
 	virtual int getFirstEmptySlot();
-	virtual void setContainerSize(int);
+	virtual void setContainerSize(int32_t size);
 	
-	MCAPI void tick(int);
+	MCAPI void tick(int32_t selectedSlot);
 };

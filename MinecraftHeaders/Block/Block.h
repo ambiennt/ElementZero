@@ -22,7 +22,7 @@ public:
 	bool mHasRuntimeId; // 0x34
 
 	virtual ~Block();
-	virtual BlockRenderLayer getRenderLayer() const; // 
+	virtual BlockRenderLayer getRenderLayer() const;
 
 	template <typename T> MCAPI Block const *setState(ItemState const &, T) const;
 	template <typename T> MCAPI T getState(ItemState const &) const;

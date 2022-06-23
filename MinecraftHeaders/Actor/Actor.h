@@ -637,7 +637,7 @@ public:
 
 	inline bool hasAnyEffects() const {
 		if (this->mMobEffects.size() <= 0) return false;
-		for (auto& effect : this->mMobEffects) {
+		for (const auto& effect : this->mMobEffects) {
 			if (effect != MobEffectInstance::NO_EFFECT) return true;
 		}
 		return false;

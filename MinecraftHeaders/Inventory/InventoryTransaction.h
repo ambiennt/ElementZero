@@ -9,8 +9,6 @@
 #include "../Core/Packet.h"
 #include "../Container/ContainerID.h"
 #include "../Container/ContainerEnumName.h"
-#include "../Math/NetworkBlockPosition.h"
-#include "../Actor/Player.h"
 #include "../Actor/ActorRuntimeID.h"
 #include "../Item/ItemStack.h"
 #include "../Item/SimpleClientNetId.h"
@@ -18,13 +16,11 @@
 #include "../Math/BlockPos.h"
 #include "../dll.h"
 
-#include <modutils.h>
-
-
 class ReadOnlyBinaryStream;
 class BinaryStream;
 class ItemStack;
 class CompoundTag;
+class Player;
 
 enum class InventoryTransactionError {
 	Unknown             = 0,
@@ -65,7 +61,12 @@ public:
 	inline InventorySource(InventorySourceType type, ContainerID id) : type(type), container(id) {}
 
 	constexpr inline bool operator==(InventorySource const &rhs) const noexcept {
-		return type == rhs.type && container == rhs.container && flags == rhs.flags;
+		return ((this->type == rhs.type) &&
+			(this->container == rhs.container) &&
+			(this->flags == rhs.flags));
+	}
+	constexpr inline bool operator!=(InventorySource const &rhs) const noexcept {
+		return !(*this == rhs);
 	}
 
 	static inline InventorySource fromContainerWindowID(ContainerID id) { return {id}; }
@@ -90,7 +91,7 @@ static_assert(offsetof(InventorySource, flags) == 0x8);
 namespace std {
 template <> struct hash<InventorySource> {
 	constexpr uint64_t operator()(InventorySource const &source) const noexcept {
-		return (uint64_t) source.type << 16 ^ (uint64_t) source.container;
+		return (uint64_t)source.type << 16 ^ (uint64_t)source.container;
 	}
 };
 } // namespace std
@@ -117,8 +118,7 @@ public:
 	int32_t count; // 0x10
 	bool overflow; // 0x14
 
-	MCAPI InventoryTransactionItemGroup(ItemStack const &, int);
-	inline ~InventoryTransactionItemGroup() {}
+	MCAPI InventoryTransactionItemGroup(ItemStack const &, int32_t);
 };
 
 static_assert(offsetof(InventoryTransactionItemGroup, itemId) == 0x0);
@@ -128,28 +128,22 @@ static_assert(offsetof(InventoryTransactionItemGroup, count) == 0x10);
 static_assert(offsetof(InventoryTransactionItemGroup, overflow) == 0x14);
 
 class InventoryTransaction {
+	MCAPI void addActionToContent(InventoryAction const &);
+	MCAPI void _dropCreatedItems(Player &);
+	MCAPI void addItemToContent(ItemStack const &);
 public:
 
-	std::unordered_map<class InventorySource, std::vector<class InventoryAction>> actions; // 0x0
-	std::vector<class InventoryTransactionItemGroup> items; // 0x40
+	std::unordered_map<InventorySource, std::vector<InventoryAction>> actions; // 0x0
+	std::vector<InventoryTransactionItemGroup> items; // 0x40
 
 	MCAPI void addAction(InventoryAction const &);
 	MCAPI InventoryTransactionError executeFull(Player &, bool) const;
 	MCAPI void forceBalanceTransaction();
 	MCAPI std::vector<InventoryAction> const &getActions(InventorySource const &) const;
-	MCAPI
-	std::function<InventoryTransactionError(Player &, InventoryAction const &, bool)>
-	getVerifyFunction(InventorySource const &) const;
+	MCAPI std::function<InventoryTransactionError(Player &, InventoryAction const &, bool)> getVerifyFunction(InventorySource const &) const;
 	MCAPI InventoryTransactionError verifyFull(Player &, bool) const;
 
-private:
-	MCAPI void addActionToContent(InventoryAction const &);
-	MCAPI void _dropCreatedItems(Player &);
-	MCAPI void addItemToContent(ItemStack const &);
-
-public:
-	inline InventoryTransaction() {}
-	inline InventoryTransaction(std::vector<InventoryAction> actions) {
+	inline InventoryTransaction(std::vector<InventoryAction> const& actions) {
 		for (auto &act : actions) addAction(act);
 	}
 };
@@ -170,7 +164,7 @@ public:
 	Type type; // 0x8
 	InventoryTransaction data; // 0x10
 
-	inline virtual ~ComplexInventoryTransaction() {}
+	virtual ~ComplexInventoryTransaction() {}
 	MCAPI virtual void read(ReadOnlyBinaryStream &);
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
@@ -195,12 +189,6 @@ public:
 	int32_t slot; // 0x80
 	ItemStack itemInHand; // 0x88
 	Vec3 playerPos, clickPos; // 0x124
-
-	inline virtual ~ItemUseInventoryTransaction() {}
-	MCAPI virtual void read(ReadOnlyBinaryStream &);
-	MCAPI virtual void write(BinaryStream &) const;
-	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
-	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
 
 static_assert(offsetof(ItemUseInventoryTransaction, actionType) == 0x68);
@@ -226,12 +214,6 @@ public:
 	int32_t slot; // 0x74
 	ItemStack itemInHand; // 0x78
 	Vec3 playerPos, clickPos; // 0x108, 0x114
-
-	inline virtual ~ItemUseOnActorInventoryTransaction() {}
-	MCAPI virtual void read(ReadOnlyBinaryStream &);
-	MCAPI virtual void write(BinaryStream &) const;
-	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
-	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
 
 static_assert(offsetof(ItemUseOnActorInventoryTransaction, actorId) == 0x68);
@@ -253,12 +235,6 @@ public:
 	int32_t slot; // 0x6C
 	ItemStack itemInHand; // 0x70
 	Vec3 playerPos; // 0x100
-
-	inline virtual ~ItemReleaseInventoryTransaction() {}
-	MCAPI virtual void read(ReadOnlyBinaryStream &);
-	MCAPI virtual void write(BinaryStream &) const;
-	MCAPI virtual InventoryTransactionError handle(Player &, bool) const;
-	MCAPI virtual void onTransactionError(Player &, InventoryTransactionError) const;
 };
 
 static_assert(offsetof(ItemReleaseInventoryTransaction, actionType) == 0x68);

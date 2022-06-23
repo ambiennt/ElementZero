@@ -162,7 +162,7 @@ TClasslessInstanceHook(
   auto sadd    = netId->getRealAddress();
   auto address = sadd.ToString();
   try {
-    uint64_t xuid = req.getXuidAsUInt64();
+    uint64_t xuid = req.getXUIDAsUInt64();
     LOGV("%s joined (from %s)") % name % address;
     auto ref = container->emplace(Mod::PlayerEntry{player.get(), name, xuid, uuid, *netId});
     (db.*emitter<"joined"_sig>) (SIG("joined"), *ref.first);
@@ -184,7 +184,7 @@ TClasslessInstanceHook(
     stmt_login.bindNoCopy(2, address);
     stmt_login.exec();
   } catch (...) {
-    LOGV("illegal connection from %s (name: %s)") % address % name;
+    LOGV("Illegal connection from %s (name: %s)") % address % name;
     auto& snh = *LocateService<ServerNetworkHandler>();
     if (snh.mRequireTrustedAuthentication) {
       snh.forceDisconnectClient(*netId, req.mClientSubId, false, true, "Illegal connection!");

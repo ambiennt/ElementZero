@@ -49,9 +49,10 @@ TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z"
 
 
 
-static DedicatedServer *mDedicatedServer = nullptr;
-static RakNet::RakPeer *mRakPeer         = nullptr;
-static AppPlatform *mAppPlatform         = nullptr;
+static DedicatedServer *mDedicatedServer    = nullptr;
+static RakNet::RakPeer *mRakPeer            = nullptr;
+static AppPlatform *mAppPlatform            = nullptr;
+static MinecraftServerScriptEngine *mEngine = nullptr;
 
 THook(void*, "??0DedicatedServer@@QEAA@XZ", void* self) {
 	auto ret = original(self);
@@ -68,6 +69,12 @@ THook(void*, "??0AppPlatform@@QEAA@_N@Z", void* self, bool registerService) {
 THook(void*, "??0RakPeer@RakNet@@QEAA@XZ", void *self) {
   	auto ret = original(self);
 	if (!mRakPeer) { mRakPeer = (RakNet::RakPeer*)self; }
+	return ret;
+}
+
+THook(void*, "??0ScriptEngine@@QEAA@W4ApiScriptType@ScriptApi@@@Z", void* self, int32_t ApiScriptType) {
+	auto ret = original(self, ApiScriptType);
+	if (!mEngine) { mEngine = (MinecraftServerScriptEngine*)self; }
 	return ret;
 }
 
@@ -89,6 +96,8 @@ template <> DedicatedServer *LocateService<DedicatedServer>() { return mDedicate
 template <> RakNet::RakPeer *LocateService<RakNet::RakPeer>() { return mRakPeer; }
 
 template <> AppPlatform *LocateService<AppPlatform>() { return mAppPlatform; }
+
+template <> MinecraftServerScriptEngine *LocateService<MinecraftServerScriptEngine>() { return mEngine; }
 
 template <> Minecraft *LocateService<Minecraft>() {
 	return LocateService<ServerInstance>()->mMinecraft.get();

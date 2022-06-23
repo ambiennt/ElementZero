@@ -25,9 +25,8 @@ public:
 	uint8_t mUpdateFlags = 0x2; // 0x38 - UpdateFlags::NETWORK
 	uint32_t mRuntimeId; // 0x3C (block runtime ID)
 
-	UpdateBlockPacket() {}
-	MCAPI UpdateBlockPacket(BlockPos const &pos, uint32_t dataLayerId, class Block const &block, uint8_t flags);
-	inline ~UpdateBlockPacket() {}
+	UpdateBlockPacket(BlockPos const& pos, LayerID id, updateFlags flags, uint32_t blockRuntimeId)
+		: mPos(pos), mDataLayerId(id), mUpdateFlags(flags), mRuntimeId(blockRuntimeId) {}
 
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;

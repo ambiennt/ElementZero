@@ -36,13 +36,13 @@ enum ValueType : char {
 	objectValue   = 7  ///< object value (collection of name/value pairs).
 };
 
-using UInt        = unsigned;
-using UInt64      = unsigned long long;
-using Int         = int;
-using Int64       = long long;
+using UInt        = uint32_t;
+using UInt64      = uint64_t;
+using Int         = int32_t;
+using Int64       = int64_t;
 using LargestInt  = Int64;
 using LargestUInt = UInt64;
-using ArrayIndex  = unsigned;
+using ArrayIndex  = uint32_t;
 
 enum CommentPlacement {
 	commentBefore            = 0, ///< a comment placed on the line before a value
@@ -141,38 +141,72 @@ public:
 	MCAPI static Value const null;
 
 	MCAPI void swap(Value &other);
-	ValueType type() const { return bits_.value_type_; }
+	inline ValueType type() const { return this->bits_.value_type_; }
 
 	MCAPI Value &operator=(const Value &other);
 
 	MCAPI bool operator<(const Value &other) const;
 	MCAPI bool operator==(const Value &other) const;
+	inline bool operator>(const Value &other) const { return (other < *this); }
+	inline bool operator!=(const Value &other) const { return !(*this == other); }
+	inline bool operator<=(const Value &other) const { return !(other < *this); }
+	inline bool operator>=(const Value &other) const { return !(*this < other); }
 
-	// the symbol does require a data type as a parameter, this isn't a typo
-	// its a default fallback!
-	MCAPI std::string asString(std::string const &) const;
-	MCAPI Int asInt(Int) const;
-	MCAPI UInt asUInt(UInt) const;
-	MCAPI float asFloat(float) const;
-	MCAPI double asDouble(double) const;
-	MCAPI bool asBool(bool) const;
+	MCAPI std::string asString(std::string const &defaultValue) const;
+	MCAPI Int asInt(Int defaultValue) const;
+	MCAPI UInt asUInt(UInt defaultValue) const;
+	MCAPI float asFloat(float defaultValue) const;
+	MCAPI double asDouble(double defaultValue) const;
+	MCAPI bool asBool(bool defaultValue) const;
+	inline UInt64 asUInt64(UInt64 defaultValue) {
+		switch (this->bits_.value_type_) {
+			case 0:
+      			break;
+    		case 1:
+    		case 2:
+      			defaultValue = this->value_.int_; break;
+    		case 3:
+				defaultValue = (uint64_t)this->value_.real_; break;
+    		case 5:
+				defaultValue = this->value_.bool_; break;
+    		default:
+      			defaultValue = 0; break;
+		}
+		return defaultValue;
+	}
+	inline Int64 asInt64(Int64 defaultValue) {
+		switch (this->bits_.value_type_) {
+			case 0:
+      			break;
+    		case 1:
+    		case 2:
+      			defaultValue = this->value_.int_; break;
+    		case 3:
+				defaultValue = (int64_t)this->value_.real_; break;
+    		case 5:
+				defaultValue = this->value_.bool_; break;
+    		default:
+      			defaultValue = 0; break;
+		}
+		return defaultValue;
+	}
 
-	MCAPI bool isNull() const;
-	bool isBool() const { return type() == booleanValue; }
-	bool isInt() const { return type() == intValue; }
-	bool isUInt() const { return type() == uintValue; }
-	bool isIntegral() const { return type() == intValue || type() == uintValue; }
-	bool isDouble() const { return type() == realValue; }
+	inline bool isNull() const { return (this->type() == ValueType::nullValue); }
+	inline bool isBool() const { return (this->type() == ValueType::booleanValue); }
+	inline bool isInt() const { return (this->type() == ValueType::intValue); }
+	inline bool isUInt() const { return (this->type() == ValueType::uintValue); }
+	inline bool isIntegral() const { return ((this->type() == ValueType::intValue) || (this->type() == ValueType::uintValue)); }
+	inline bool isDouble() const { return (this->type() == ValueType::realValue); }
 	MCAPI bool isNumeric() const;
 	MCAPI bool isString() const;
-	bool isArray() const { return type() == arrayValue; }
-	bool isObject() const { return type() == objectValue; }
+	inline bool isArray() const { return (this->type() == ValueType::arrayValue); }
+	inline bool isObject() const { return (this->type() == ValueType::objectValue); }
 	MCAPI bool isConvertibleTo(ValueType other) const;
 
 	MCAPI ArrayIndex size() const;
 	MCAPI bool empty() const;
-	void clear() {
-		if (type() == arrayValue || type() == objectValue) { value_.map_->clear(); }
+	inline void clear() {
+		if ((this->type() == arrayValue) || (this->type() == objectValue)) { this->value_.map_->clear(); }
 	}
 	MCAPI void resize(ArrayIndex newSize);
 	MCAPI Value &operator[](ArrayIndex index);
@@ -183,12 +217,12 @@ public:
 
 	MCAPI Value &operator[](const char *key);
 	MCAPI const Value &operator[](const char *key) const;
-	MCAPI Value &operator[](const std::string &key);
-	MCAPI const Value &operator[](const std::string &key) const;
+	inline Value &operator[](const std::string &key) { return (*this)[key.c_str()]; }
+	inline const Value &operator[](const std::string &key) const { return (*this)[key.c_str()]; }
 	MCAPI Value removeMember(const char *key);
-	void removeMember(const std::string &key) { removeMember(key.c_str()); }
+	inline void removeMember(const std::string &key) { this->removeMember(key.c_str()); }
 	MCAPI bool isMember(const char *key) const;
-	bool isMember(const std::string &key) const { return isMember(key.c_str()); }
+	inline bool isMember(const std::string &key) const { return this->isMember(key.c_str()); }
 
 	MCAPI const_iterator begin() const;
 	MCAPI const_iterator end() const;
@@ -261,6 +295,11 @@ private:
 
 public:
 	MCAPI SelfType &operator++();
+	SelfType operator++(int32_t) {
+   		auto ret = *this;
+   		++*this;
+   		return ret;
+ 	}
 	MCAPI reference operator*() const;
 };
 
@@ -284,6 +323,11 @@ private:
 
 public:
 	MCAPI SelfType &operator++();
+	SelfType operator++(int32_t) {
+   		auto ret = *this;
+   		++*this;
+   		return ret;
+ 	}
 	MCAPI reference operator*() const;
 };
 

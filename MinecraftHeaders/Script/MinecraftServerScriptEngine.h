@@ -14,8 +14,8 @@ class ScriptReportItem;
 class MinecraftServerScriptEngine : public ScriptEngine, public ScriptApi::ScriptCallbackInterface {
 public:
 	virtual ~MinecraftServerScriptEngine();
-	virtual bool initialize(void);
-	virtual bool shutdown(void);
+	virtual bool initialize();
+	virtual bool shutdown();
 	virtual bool onLogReceived(std::string const &);
 	virtual bool onInfoReceived(std::string const &);
 	virtual bool onWarnReceived(std::string const &);
@@ -30,7 +30,7 @@ public:
 	virtual bool helpGetLevel(class ScriptObjectBinder const &, class Level **);
 	virtual bool helpDefineItemStack(class ItemInstance const &, ScriptApi::ScriptObjectHandle &);
 	virtual void helpPopulateEcsID(class Json::Value &);
-	virtual bool setupInterface(void);
+	virtual bool setupInterface();
 	virtual bool
 		registerEventData(ScriptApi::ScriptVersionInfo const &, std::string const &, ScriptApi::ScriptObjectHandle const &);
 	virtual bool
@@ -91,5 +91,5 @@ public:
 	virtual enum EventResult onServerUpdateEnd(class ServerInstance &);
 	virtual enum EventResult onServerThreadStarted(class ServerInstance &);
 	virtual enum EventResult onLeaveGameDone(class ServerInstance &);
-	virtual enum EventResult onLevelTick(void);
+	virtual enum EventResult onLevelTick();
 };

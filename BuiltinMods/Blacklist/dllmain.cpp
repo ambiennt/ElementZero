@@ -204,7 +204,7 @@ TClasslessInstanceHook(
 TClasslessInstanceHook(bool,
   "?isBlocked@Blacklist@@AEBA_NAEBUEntry@1@AEAV?$_Vector_const_iterator@V?$_Vector_val@U?$_Simple_types@UEntry@Blacklist@@@std@@@std@@@std@@@Z",
   BlacklistEntry const &id, BlacklistEntry *&it) {
-  
+   
   if (cached) {
     if (cached->first) {
       it = cached->second;
@@ -213,9 +213,16 @@ TClasslessInstanceHook(bool,
     return false;
   }
 
-  auto &name = *(std::string *) ((char *) &id + 192); // HACK
-  auto xuid  = id.xuid.empty() ? 0 : std::stoull(id.xuid);
-  auto uuid  = (char const *) &id.uuid;
+  auto &name = direct_access<std::string>(&id, 0xC0); // HACK
+
+  uint64_t xuid = 0;
+  if (!id.xuid.empty()) {
+    try {
+      xuid = std::stoull(id.xuid);
+    } catch (std::invalid_argument const &i) {}
+  }
+
+  auto uuid  = (char const*)&id.uuid;
 
   if (queryForUUID(uuid, name, it) || queryForXUID(xuid, name, it)) goto logip;
   if (queryForName(name, it)) {

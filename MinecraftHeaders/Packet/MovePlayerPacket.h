@@ -10,12 +10,12 @@
 class MovePlayerPacket : public Packet {
 public:
 
-	enum class TeleportCause {
+	enum class TeleportCause : int32_t {
 		Unknown = 0,
 		Projectile = 1,
 		ChorusFruit = 2,
 		Command = 3,
-		Behavior = 4
+		Behavior = 4,
 	};
 
 	ActorRuntimeID mRuntimeId;
@@ -26,10 +26,10 @@ public:
 	bool mOnGround;
 	ActorRuntimeID mRidingActorId;
 	TeleportCause mTeleportCause = TeleportCause::Unknown; // actually an int32_t in bds
-	int32_t mSourceEntityType = 0; // actor type
+	ActorType mSourceEntityType = (ActorType)0; // actually an int32_t in bds
 
-	MCAPI MovePlayerPacket(Player &player, Player::PositionMode resetPosition, int32_t cause, int32_t sourceEntityType);
-	inline ~MovePlayerPacket() {}
+	MCAPI MovePlayerPacket(Player &player, Player::PositionMode resetPosition,
+		/*MovePlayerPacket::TeleportCause*/ int32_t cause, /*ActorType*/ int32_t sourceEntityType);
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

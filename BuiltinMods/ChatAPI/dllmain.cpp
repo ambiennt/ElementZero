@@ -107,42 +107,47 @@ void Chat::Send(const Mod::PlayerEntry &entry, const std::string &content, std::
 	entry.player->sendNetworkPacket(packet);
 }
 
-} // namespace Mod
-
-static void logChat(Mod::PlayerEntry const &entry, std::string const &content) {
+void Chat::logChat(Mod::PlayerEntry const &sender, std::string const &content, std::string const* recipient) {
 	if (!database) return;
 
 	DEF_LOGGER("CHAT");
-	LOGI("[%s] %s") % entry.name % content;
+
+	if (recipient) {
+		LOGI("[%s -> %s] %s") % sender.name % *recipient % content;
+	}
+	else {
+		LOGI("[%s] %s") % sender.name % content;
+	}
 
 	static SQLite::Statement stmt{*database, "INSERT INTO chat (uuid, name, content) VALUES (?, ?, ?)"};
 	BOOST_SCOPE_EXIT_ALL() {
 		stmt.reset();
 		stmt.clearBindings();
 	};
-	stmt.bindNoCopy(1, entry.uuid, sizeof entry.uuid);
-	stmt.bindNoCopy(2, entry.name);
+	stmt.bindNoCopy(1, sender.uuid, sizeof(sender.uuid));
+	stmt.bindNoCopy(2, sender.name);
 	stmt.bindNoCopy(3, content);
 	stmt.exec();
 }
 
+} // namespace Mod
+
 TClasslessInstanceHook(void,
 	"?_displayGameMessage@ServerNetworkHandler@@AEAAXAEBVPlayer@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
-	Player *player, std::string &content) try {
+	Player const& player, std::string& content) try {
 
-	auto it = Mod::PlayerDatabase::GetInstance().Find(player);
+	auto it = Mod::PlayerDatabase::GetInstance().Find((Player*)&player);
 	if (!it) return;
 
-	std::string displayName(it->name);
 	Mod::CallbackToken<std::string> token;
-	(Mod::Chat::GetInstance().*emitter)(SIG("chat"), *it, displayName, content, token);
+	(Mod::Chat::GetInstance().*emitter)(SIG("chat"), *it, it->name, content, token);
 
-	logChat(*it, content);
+	Mod::Chat::logChat(*it, content);
 
 	if (token) return;
 
 	auto chatTxtPkt = TextPacket::createTextPacket<TextPacketType::SystemMessage>(
-		displayName, settings.namePrefix + displayName + settings.nameSuffix + " " + content);
+		it->name, settings.namePrefix + it->name + settings.nameSuffix + " " + content);
 
 	LocateService<Level>()->forEachPlayer([&](Player const &p) -> bool {
 		p.sendNetworkPacket(chatTxtPkt);

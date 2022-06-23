@@ -28,24 +28,26 @@ enum class StorageVersion {
 
 namespace SharedConstants {
 
-static const uint32_t MajorVersion = 1;
-static const uint32_t MinorVersion = 16;
-static const uint32_t PatchVersion = 20;
-static const uint32_t RevisionVersion = 3;
-static const bool isBeta = false;
-static const uint32_t CurrentLevelChunkFormat = 19;
-static const enum SubChunkFormat CurrentSubChunkFormat = SubChunkFormat::v1_3_0_2;
-static const int32_t StoreVersion = 1;
-static const int32_t NetworkProtocolVersion = 408;
-static const int32_t AutomationProtocolVersion = 1;
-static const int32_t CompanionAppProtocolVersion = 4;
-static const int32_t EduDiscoveryProtocolVersion = 0;
-static const int32_t MaxChatLength = 100;
-static const int32_t LevelDBCompressorID = 16;
-static const enum StorageVersion CurrentStorageVersion = StorageVersion::LevelDBPalettedMultiBlockStorage;
-static const uint16_t NetworkDefaultGamePort = 19132;
-static const uint16_t NetworkDefaultGamePortv6 = 19133;
-static const uint16_t NetworkEphemeralPort = 0;
-static const int32_t NetworkDefaultMaxConnections = 30;
+//extern const int32_t StoreVersion = 1;
+//extern const int32_t EduDiscoveryProtocolVersion = 0;
+//extern const int32_t MaxChatLength = 100;
+//extern const int32_t LevelDBCompressorID = 16;
 
-}
+MCAPI extern const uint32_t MajorVersion; // 1
+MCAPI extern const uint32_t MinorVersion; // 16
+MCAPI extern const uint32_t PatchVersion; // 20
+MCAPI extern const uint32_t RevisionVersion; // 3
+MCAPI extern const bool isBeta; // false
+MCAPI extern const uint32_t CurrentLevelChunkFormat; // 19
+MCAPI extern const enum SubChunkFormat CurrentSubChunkFormat; // SubChunkFormat::v1_3_0_2
+MCAPI extern const int32_t NetworkProtocolVersion; // 408
+MCAPI extern const int32_t AutomationProtocolVersion; // 1
+MCAPI extern const int32_t CompanionAppProtocolVersion; // 4
+MCAPI extern const enum StorageVersion CurrentStorageVersion; // StorageVersion::LevelDBPalettedMultiBlockStorage;
+MCAPI extern const uint16_t NetworkDefaultGamePort; // 19132
+MCAPI extern const uint16_t NetworkDefaultGamePortv6; // 19133
+MCAPI extern const uint16_t NetworkEphemeralPort; // 0
+MCAPI extern const int32_t NetworkDefaultMaxConnections; // 30
+MCAPI extern const class GameVersion MinimumCompatibleGameVersionForLevelData;
+
+} // namespace SharedConstants

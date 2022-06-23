@@ -49,19 +49,26 @@ public:
 	MCAPI std::unordered_map<persona::PieceType, TintMapColor> getPieceTintColors() const;
 	MCAPI ~ConnectionRequest();
 
-	inline uint32_t getTitleId() const {
-		// make as a string first because asUInt() seems to always fail
+	inline uint32_t getTitleID() const {
+		uint32_t result = 0;
 		std::string titleIdStr = this->mCertificate->getExtraData("titleId", "").asString("");
-		if (titleIdStr.empty()) return 0;
-		for (const char& c : titleIdStr) {
-			if (!std::isdigit(c)) return 0;
+		if (titleIdStr.empty()) return result;
+		try {
+			result = (uint32_t)std::stoull(titleIdStr);
 		}
-		return (uint32_t)(std::stoull(titleIdStr));
+		catch (std::invalid_argument const &i) {}
+		return result;
 	}
 
-	inline uint64_t getXuidAsUInt64() const {
+	inline uint64_t getXUIDAsUInt64() const {
+		uint64_t result = 0;
 		std::string xuidStr = ExtendedCertificate::getXuid(*this->mCertificate.get());
-		return (xuidStr.empty() ? 0 : std::stoull(xuidStr));
+		if (xuidStr.empty()) return result;
+		try {
+			result = std::stoull(xuidStr);
+		}
+		catch (std::invalid_argument const &i) {}
+		return result;
 	}
 };
 

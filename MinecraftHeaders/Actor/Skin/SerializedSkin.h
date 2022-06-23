@@ -61,11 +61,12 @@ public:
 	};
 
 	inline std::string const &getName() const { return this->mFullId; }
+	inline bool isPremiumSkin() const { return this->mIsPremium; }
 	inline bool isPersonaSkin() const { return this->mIsPersona; }
 	inline Json::Value const &getGeometryData() const { return this->mGeometryData; }
 	inline Json::Value const &getGeometryDataMutable() const { return this->mGeometryDataMutable; }
 	inline mce::Image const &getCapeImageData() const { return this->mCapeImage; }
-	inline bool isTrustedSkin() const { return this->mTrustedFlag == TrustedSkinFlag::YES; }
+	inline bool isTrustedSkin() const { return (this->mTrustedFlag == TrustedSkinFlag::YES); }
 	inline Color const &getSkinColor() const { return this->mSkinColor; }
 
 	inline void setCapeId(std::string const &str) {
@@ -115,22 +116,16 @@ public:
 		this->mDefaultGeometryName = "geometry.humanoid.custom";
 
 		std::string geoStr = "{\"format_version\":\"1.12.0\",\"minecraft:geometry\":[{\"description\":{\"identifier\":\"geometry.humanoid.custom\",\"visible_bounds_width\":1,\"visible_bounds_height\":2,\"visible_bounds_offset\":[0,1,0],\"texture_width\":64,\"texture_height\":64},\"bones\":[{\"name\":\"root\",\"pivot\":[0,0,0]},{\"name\":\"waist\",\"parent\":\"root\",\"pivot\":[0,12,0]},{\"name\":\"body\",\"parent\":\"waist\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,12,-2],\"size\":[8,12,4],\"uv\":[16,16]}]},{\"name\":\"jacket\",\"parent\":\"body\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,12,-2],\"size\":[8,12,4],\"uv\":[16,32],\"inflate\":0.25}]},{\"name\":\"head\",\"parent\":\"body\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,24,-4],\"size\":[8,8,8],\"uv\":[0,0]}]},{\"name\":\"hat\",\"parent\":\"head\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,24,-4],\"size\":[8,8,8],\"uv\":[32,0],\"inflate\":0.5}]},{\"name\":\"leftArm\",\"parent\":\"body\",\"pivot\":[5,22,0],\"cubes\":[{\"origin\":[4,12,-2],\"size\":[4,12,4],\"uv\":[32,48]}]},{\"name\":\"leftSleeve\",\"parent\":\"leftArm\",\"pivot\":[5,22,0],\"cubes\":[{\"origin\":[4,12,-2],\"size\":[4,12,4],\"uv\":[48,48],\"inflate\":0.25}]},{\"name\":\"leftItem\",\"pivot\":[6,15,1],\"parent\":\"leftArm\"},{\"name\":\"rightArm\",\"parent\":\"body\",\"pivot\":[-5,22,0],\"cubes\":[{\"origin\":[-8,12,-2],\"size\":[4,12,4],\"uv\":[40,16]}]},{\"name\":\"rightSleeve\",\"parent\":\"rightArm\",\"pivot\":[-5,22,0],\"cubes\":[{\"origin\":[-8,12,-2],\"size\":[4,12,4],\"uv\":[40,32],\"inflate\":0.25}]},{\"name\":\"rightItem\",\"pivot\":[-6,15,1],\"locators\":{\"lead_hold\":[-6,15,1]},\"parent\":\"rightArm\"},{\"name\":\"leftLeg\",\"parent\":\"root\",\"pivot\":[1.9,12,0],\"cubes\":[{\"origin\":[-0.1,0,-2],\"size\":[4,12,4],\"uv\":[16,48]}]},{\"name\":\"leftPants\",\"parent\":\"leftLeg\",\"pivot\":[1.9,12,0],\"cubes\":[{\"origin\":[-0.1,0,-2],\"size\":[4,12,4],\"uv\":[0,48],\"inflate\":0.25}]},{\"name\":\"rightLeg\",\"parent\":\"root\",\"pivot\":[-1.9,12,0],\"cubes\":[{\"origin\":[-3.9,0,-2],\"size\":[4,12,4],\"uv\":[0,16]}]},{\"name\":\"rightPants\",\"parent\":\"rightLeg\",\"pivot\":[-1.9,12,0],\"cubes\":[{\"origin\":[-3.9,0,-2],\"size\":[4,12,4],\"uv\":[0,32],\"inflate\":0.25}]}]}]}";
+		
 		Json::Reader reader;
 		Json::Value geo;
 		reader.parse(geoStr, geo);
 		this->mGeometryData = geo;
 
-		mce::Blob blob;
-		blob.length = sizeof(ALEX_SKIN_RAW_DATA);
-		auto buffer = std::make_unique<uint8_t[]>(blob.length);
-		memcpy(buffer.get(), &ALEX_SKIN_RAW_DATA, blob.length);
-		blob.buffer = std::move(buffer);
+		mce::Blob blob(DEFAULT_SKIN_SIZE_IN_BYTES_64x64);
+		memcpy(blob.buffer.get(), &STEVE_SKIN_RAW_DATA, blob.length);
 
-		mce::Image img;
-		img.setImageDescription(64, 64, mce::ImageFormat::RGBA, mce::ImageUsage::unknown);
-		img.data = std::move(blob);
-
-		this->mSkinImage = std::move(img);
+		this->mSkinImage = mce::Image(mce::ImageFormat::RGBA, 64, 64, mce::ImageUsage::unknown, std::move(blob));
 	}
 };
 
@@ -146,21 +141,15 @@ public:
 		this->mDefaultGeometryName = "geometry.humanoid.customSlim";
 
 		std::string geoStr = "{\"format_version\":\"1.12.0\",\"minecraft:geometry\":[{\"description\":{\"identifier\":\"geometry.humanoid.customSlim\",\"visible_bounds_width\":1,\"visible_bounds_height\":2,\"visible_bounds_offset\":[0,1,0],\"texture_width\":64,\"texture_height\":64},\"bones\":[{\"name\":\"root\",\"pivot\":[0,0,0]},{\"name\":\"waist\",\"parent\":\"root\",\"pivot\":[0,12,0]},{\"name\":\"body\",\"parent\":\"waist\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,12,-2],\"size\":[8,12,4],\"uv\":[16,16]}]},{\"name\":\"jacket\",\"parent\":\"body\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,12,-2],\"size\":[8,12,4],\"uv\":[16,32],\"inflate\":0.25}]},{\"name\":\"head\",\"parent\":\"body\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,24,-4],\"size\":[8,8,8],\"uv\":[0,0]}]},{\"name\":\"hat\",\"parent\":\"head\",\"pivot\":[0,24,0],\"cubes\":[{\"origin\":[-4,24,-4],\"size\":[8,8,8],\"uv\":[32,0],\"inflate\":0.5}]},{\"name\":\"leftArm\",\"parent\":\"body\",\"pivot\":[5,21.5,0],\"cubes\":[{\"origin\":[4,11.5,-2],\"size\":[3,12,4],\"uv\":[32,48]}]},{\"name\":\"leftSleeve\",\"parent\":\"leftArm\",\"pivot\":[5,21.5,0],\"cubes\":[{\"origin\":[4,11.5,-2],\"size\":[3,12,4],\"uv\":[48,48],\"inflate\":0.25}]},{\"name\":\"leftItem\",\"pivot\":[6,14.5,1],\"parent\":\"leftArm\"},{\"name\":\"rightArm\",\"parent\":\"body\",\"pivot\":[-5,21.5,0],\"cubes\":[{\"origin\":[-7,11.5,-2],\"size\":[3,12,4],\"uv\":[40,16]}]},{\"name\":\"rightSleeve\",\"parent\":\"rightArm\",\"pivot\":[-5,21.5,0],\"cubes\":[{\"origin\":[-7,11.5,-2],\"size\":[3,12,4],\"uv\":[40,32],\"inflate\":0.25}]},{\"name\":\"rightItem\",\"pivot\":[-6,14.5,1],\"locators\":{\"lead_hold\":[-6,14.5,1]},\"parent\":\"rightArm\"},{\"name\":\"leftLeg\",\"parent\":\"root\",\"pivot\":[1.9,12,0],\"cubes\":[{\"origin\":[-0.1,0,-2],\"size\":[4,12,4],\"uv\":[16,48]}]},{\"name\":\"leftPants\",\"parent\":\"leftLeg\",\"pivot\":[1.9,12,0],\"cubes\":[{\"origin\":[-0.1,0,-2],\"size\":[4,12,4],\"uv\":[0,48],\"inflate\":0.25}]},{\"name\":\"rightLeg\",\"parent\":\"root\",\"pivot\":[-1.9,12,0],\"cubes\":[{\"origin\":[-3.9,0,-2],\"size\":[4,12,4],\"uv\":[0,16]}]},{\"name\":\"rightPants\",\"parent\":\"rightLeg\",\"pivot\":[-1.9,12,0],\"cubes\":[{\"origin\":[-3.9,0,-2],\"size\":[4,12,4],\"uv\":[0,32],\"inflate\":0.25}]}]}]}";
+		
 		Json::Reader reader;
 		Json::Value geo;
 		reader.parse(geoStr, geo);
 		this->mGeometryData = geo;
 
-		mce::Blob blob;
-		blob.length = sizeof(STEVE_SKIN_RAW_DATA); // 64 * 64 * 4 = 16384 for 64x64 skins
-		auto buffer = std::make_unique<uint8_t[]>(blob.length);
-		memcpy(buffer.get(), &STEVE_SKIN_RAW_DATA, blob.length);
-		blob.buffer = std::move(buffer);
+		mce::Blob blob(DEFAULT_SKIN_SIZE_IN_BYTES_64x64);
+		memcpy(blob.buffer.get(), &ALEX_SKIN_RAW_DATA, blob.length);
 
-		mce::Image img;
-		img.setImageDescription(64, 64, mce::ImageFormat::RGBA, mce::ImageUsage::unknown);
-		img.data = std::move(blob);
-
-		this->mSkinImage = std::move(img);
+		this->mSkinImage = mce::Image(mce::ImageFormat::RGBA, 64, 64, mce::ImageUsage::unknown, std::move(blob));
 	}
 };

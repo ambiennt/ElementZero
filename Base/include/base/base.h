@@ -18,6 +18,7 @@ class ServerNetworkHandler;
 class NetworkHandler;
 class Level;
 class LoopbackPacketSender;
+class MinecraftServerScriptEngine;
 namespace RakNet {
 class RakPeer;
 }
@@ -43,3 +44,4 @@ template <> BASEAPI Level *LocateService<Level>();
 template <> BASEAPI AppPlatform *LocateService<AppPlatform>();
 template <> BASEAPI RakNet::RakPeer *LocateService<RakNet::RakPeer>();
 template <> BASEAPI LoopbackPacketSender *LocateService<LoopbackPacketSender>();
+template <> BASEAPI MinecraftServerScriptEngine *LocateService<MinecraftServerScriptEngine>();

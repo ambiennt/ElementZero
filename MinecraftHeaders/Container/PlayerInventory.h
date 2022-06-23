@@ -10,9 +10,9 @@ class HudContainerManagerModel;
 
 class PlayerInventory : public ContainerSizeChangeListener, public ContainerContentChangeListener {
 public:
-	int32_t mSelectedSlot = 0; // mSelected
+	int32_t mSelectedSlot; // mSelected
 	ItemStack mInfiniteItem;
-	ContainerID mSelectedContainerId = ContainerID::Inventory;
+	ContainerID mSelectedContainerId;
 	std::unique_ptr<Inventory> mInventory;
 	std::vector<ItemStack> mComplexItems;
 	std::weak_ptr<HudContainerManagerModel> mHudContainerManager;
@@ -23,5 +23,9 @@ public:
 	};
 
 	virtual void createTransactionContext(
-		std::function<void(Container &, int, const ItemStack &, const ItemStack &)>, std::function<void()>);
+		std::function<void(Container &, int32_t, const ItemStack &, const ItemStack &)>, std::function<void()>);
+
+	inline int32_t getContainerSize() const {
+		return this->mInventory->getContainerSize();
+	}
 };

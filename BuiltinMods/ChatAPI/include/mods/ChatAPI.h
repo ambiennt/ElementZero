@@ -21,12 +21,12 @@ public:
   CHATAPI static Chat &GetInstance();
 
   CHATAPI void SendBroadcast(std::string const &name, std::string const &);
-
   CHATAPI void SendAnnounce(std::string const &);
   CHATAPI void SendAnnounce(std::string const &, std::initializer_list<std::string> args);
-
   CHATAPI void Send(Mod::PlayerEntry const &, std::string const &);
   CHATAPI void Send(Mod::PlayerEntry const &, std::string const &, std::initializer_list<std::string> args);
+
+  CHATAPI static void logChat(Mod::PlayerEntry const &sender, std::string const &content, std::string const* recipient = nullptr);
 
   USING_RECEVENTEMITTER("chat", PlayerEntry const &, std::string &, std::string &, CallbackToken<std::string> &);
 };

@@ -25,5 +25,5 @@ public:
 
 	EZPlayer() : mLastUHCHeadEatTimestamp(0), mBucketCooldownTimestamp(0), mShouldCancelBucketPickup(false),
 		mLastAttackedActorTimestamp(0), mHasResetSprint(false), mRawPos(Vec3::ZERO), mRawPosOld(Vec3::ZERO),
-        mHealthOld(0), mAbsorptionOld(0), mLastSharpnessParticleInvokeTimestamp(0), mLastWhisperMessagerXuid(0) {}
+		mHealthOld(0), mAbsorptionOld(0), mLastSharpnessParticleInvokeTimestamp(0), mLastWhisperMessagerXuid(0) {}
 };

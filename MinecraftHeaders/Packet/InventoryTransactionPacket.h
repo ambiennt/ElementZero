@@ -16,7 +16,6 @@ public:
 	std::unique_ptr<ComplexInventoryTransaction> mTransaction;
 	bool mIsClientSide = false;
 
-	inline ~InventoryTransactionPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

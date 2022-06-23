@@ -122,6 +122,7 @@ public:
 	MCAPI void _read(class ReadOnlyBinaryStream &);
 
 	inline uint8_t getStackSize() const { return this->mCount; }
+	inline bool hasUserData() const { return (this->mUserData.get() != nullptr); }
 
 	inline std::vector<std::string> getCustomLore() const {
 		std::vector<std::string> ret;

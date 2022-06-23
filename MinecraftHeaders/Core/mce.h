@@ -18,9 +18,9 @@ namespace mce {
 
 class UUID {
 public:
-	uint64_t a = 0, b = 0;
+	uint64_t a, b;
 
-	UUID() {}
+	UUID() : a(0), b(0) {}
 	UUID(uint64_t a, uint64_t b) : a(a), b(b) {}
 	UUID(UUID const &rhs) : a(rhs.a), b(rhs.b) {}
 
@@ -50,16 +50,16 @@ public:
 class Blob {
 public:
 	std::unique_ptr<uint8_t[]> buffer;
-	size_t length = 0;
+	size_t length;
 
-	inline Blob() {}
-	inline Blob(Blob &&rhs) : buffer(std::move(rhs.buffer)), length(rhs.length) { rhs.length = 0; }
-	inline Blob(size_t input_length) : buffer(std::make_unique<uint8_t[]>(input_length)), length(input_length) {}
-	inline Blob(uint8_t const *input, size_t input_length) : Blob(input_length) {
+	Blob() : length(0) {}
+	Blob(Blob &&rhs) : buffer(std::move(rhs.buffer)), length(rhs.length) { rhs.length = 0; }
+	Blob(size_t input_length) : buffer(std::make_unique<uint8_t[]>(input_length)), length(input_length) {}
+	Blob(uint8_t const *input, size_t input_length) : Blob(input_length) {
 		memcpy(this->buffer.get(), input, input_length);
 	}
 
-	inline Blob &operator=(Blob &&rhs) {
+	Blob &operator=(Blob &&rhs) {
 		if (&rhs != this) {
 			buffer     = std::move(rhs.buffer);
 			length     = rhs.length;
@@ -102,18 +102,19 @@ inline uint32_t numChannels(ImageFormat format) {
 
 struct Image {
 
-	ImageFormat format{}; // 0x0
-	uint32_t width{}, height{}; // 0x4, 0x8
-	ImageUsage usage{}; // 0xC
+	ImageFormat format; // 0x0
+	uint32_t width, height; // 0x4, 0x8
+	ImageUsage usage; // 0xC
 	Blob data; // 0x10
 
-	inline Image() {}
-	inline Image(ImageFormat format, uint32_t width, uint32_t height, ImageUsage usage, Blob &&data)
+	Image() : format(ImageFormat::NONE), width(0), height(0), usage(ImageUsage::unknown) {}
+	Image(ImageFormat format, uint32_t width, uint32_t height, ImageUsage usage, Blob &&data)
 		: format(format), width(width), height(height), usage(usage), data(std::move(data)) {}
-	inline Image(Blob &&data) : data(std::move(data)) {}
-	inline Image(uint32_t width, uint32_t height, ImageFormat format, ImageUsage usage) : format(format), width(width), height(height), usage(usage) {}
+	Image(Blob &&data) : data(std::move(data)) {}
+	Image(uint32_t width, uint32_t height, ImageFormat format, ImageUsage usage)
+		: format(format), width(width), height(height), usage(usage) {}
 
-	inline Image &operator=(Image &&rhs) {
+	Image &operator=(Image &&rhs) {
 		this->format = rhs.format;
 		this->width  = rhs.width;
 		this->height = rhs.height;

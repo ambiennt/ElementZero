@@ -21,10 +21,6 @@
 #  define SCRIPTAPI __declspec(dllimport)
 #endif
 
-class MinecraftServerScriptEngine;
-
-template <> SCRIPTAPI MinecraftServerScriptEngine *LocateService<MinecraftServerScriptEngine>();
-
 namespace Mod::Scripting {
 
 SCRIPTAPI JsValueRef ToJs(Json::Value entry);

@@ -120,10 +120,10 @@ public:
 	MobEffectInstance(MobEffectID id, int32_t dur, int32_t amplifier, bool visible) :
 		MobEffectInstance(id, dur, dur, dur, dur, amplifier, false, false, false, visible) {}
 
-	bool operator==(MobEffectInstance const &rhs) {
+	bool operator==(MobEffectInstance const &rhs) const {
 		return (this->mId == rhs.mId);
 	}
-	bool operator!=(MobEffectInstance const &rhs) {
+	bool operator!=(MobEffectInstance const &rhs) const {
 		return !(*this == rhs);
 	}
 };

@@ -53,21 +53,17 @@ void LogPacket(bool isSent, NetworkIdentifier const& id, std::string const &data
   cache.exec();
 }
 
-TInstanceHook(
-    NetworkPeer::DataStatus,
-    "?receivePacket@Connection@NetworkHandler@@QEAA?AW4DataStatus@NetworkPeer@@AEAV?$basic_string@DU?$char_traits@D@"
-    "std@@V?$allocator@D@2@@std@@@Z",
-    NetworkHandler::Connection, std::string &data) {
+TInstanceHook(NetworkPeer::DataStatus,
+  "?receivePacket@Connection@NetworkHandler@@QEAA?AW4DataStatus@NetworkPeer@@AEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
+  NetworkHandler::Connection, std::string &data) {
   auto status = original(this, data);
-  if (status == NetworkPeer::DataStatus::HasData && database) LogPacket(false, this->mId, data);
+  if ((status == NetworkPeer::DataStatus::HasData) && database) { LogPacket(false, this->mId, data); }
   return status;
 }
 
-TClasslessInstanceHook(
-    void,
-    "?_sendInternal@NetworkHandler@@AEAAXAEBVNetworkIdentifier@@AEBVPacket@@AEBV?$basic_string@DU?$char_traits@D@std@@"
-    "V?$allocator@D@2@@std@@@Z",
-    NetworkIdentifier const &id, Packet const &pkt, std::string const &content) {
+TClasslessInstanceHook(void,
+  "?_sendInternal@NetworkHandler@@AEAAXAEBVNetworkIdentifier@@AEBVPacket@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
+  NetworkIdentifier const &id, Packet const &pkt, std::string const &content) {
   LogPacket(true, id, content);
   original(this, id, pkt, content);
 }

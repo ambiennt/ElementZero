@@ -52,6 +52,7 @@ public:
 	}
 
 	// useDefaultDisconnectMsg set to true will cause the contents of mMessage will be ignored and the client will default to disconnectionScreen.disconnected
+	// setting useDefaultDisconnectMsg to true will only make a difference if disconnectMsg is not an empty string
 	// skipPlayerLeftChatMsg set to true will prevent the "%s left the game" message from outputting in the in-game chat
 	BASEAPI void forceDisconnectClient(NetworkIdentifier const& netId, uint8_t subId, bool useDefaultDisconnectMsg,
 		bool skipPlayerLeftChatMsg, std::string const& disconnectMsg = std::string());
