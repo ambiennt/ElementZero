@@ -3,15 +3,17 @@
 #include <functional>
 #include <string>
 
-#include <modutils.h>
-
 #include "../Core/AutomaticID.h"
 #include "LevelDataWrapper.h"
+
+#include <modutils.h>
+#include <hook.h>
 #include "../dll.h"
 
 class Player;
 class Dimension;
 class PacketSender;
+class BlockPalette;
 enum class Difficulty;
 enum class GameType;
 enum class BossEventUpdateType;
@@ -603,14 +605,18 @@ public:
 		return this->getGameRules().getGameRuleValue<T>(index);
 	}
 
-	BUILD_ACCESS(class BlockPalette *, GlobalBlockPalette, 1856);
+	inline BlockPalette* getBlockPalette() const {
+		return CallServerClassMethod<BlockPalette*>(
+			"?getBlockPalette@Level@@UEBAAEBVBlockPalette@@XZ", (Level*)&this->mIWorldRegistriesProvider);
+	}
 
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mLastUniqueID, 0x1A0);
-	BUILD_ACCESS_MUT(std::vector<class Player *>, mActivePlayers, 0x58); // Level::forEachPlayer
+	BUILD_ACCESS_MUT(class IWorldRegistriesProvider, mIWorldRegistriesProvider, 0x8); // ItemUseInventoryTransaction::getTargetBlock, not actually a field but a base class
+	BUILD_ACCESS_MUT(std::vector<class Player*>, mActivePlayers, 0x58); // Level::forEachPlayer
+	BUILD_ACCESS_MUT(struct ActorUniqueID, mLastUniqueID, 0x1A0); // Level::getNewUniqueID
 	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
-	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack
-	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt
-	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData - 0x2090 - 0x28
+	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack, 0x1F80 - 0x18
+	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt - 0x2090 - 0x28
+	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData
 
 	BASEAPI PacketSender &getPacketSender() const;
 	BASEAPI LevelDataWrapper &getLevelDataWrapper();

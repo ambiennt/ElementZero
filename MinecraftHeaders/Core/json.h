@@ -55,7 +55,7 @@ class Value {
 	friend class ValueIteratorBase;
 
 public:
-	
+
 	class CZString {
 	public:
 		enum DuplicationPolicy { noDuplication = 0, duplicate, duplicateOnCopy };
@@ -161,32 +161,32 @@ public:
 	inline UInt64 asUInt64(UInt64 defaultValue) {
 		switch (this->bits_.value_type_) {
 			case 0:
-      			break;
-    		case 1:
-    		case 2:
-      			defaultValue = this->value_.int_; break;
-    		case 3:
+	  			break;
+			case 1:
+			case 2:
+	  			defaultValue = this->value_.int_; break;
+			case 3:
 				defaultValue = (uint64_t)this->value_.real_; break;
-    		case 5:
+			case 5:
 				defaultValue = this->value_.bool_; break;
-    		default:
-      			defaultValue = 0; break;
+			default:
+	  			defaultValue = 0; break;
 		}
 		return defaultValue;
 	}
 	inline Int64 asInt64(Int64 defaultValue) {
 		switch (this->bits_.value_type_) {
 			case 0:
-      			break;
-    		case 1:
-    		case 2:
-      			defaultValue = this->value_.int_; break;
-    		case 3:
+	  			break;
+			case 1:
+			case 2:
+	  			defaultValue = this->value_.int_; break;
+			case 3:
 				defaultValue = (int64_t)this->value_.real_; break;
-    		case 5:
+			case 5:
 				defaultValue = this->value_.bool_; break;
-    		default:
-      			defaultValue = 0; break;
+			default:
+	  			defaultValue = 0; break;
 		}
 		return defaultValue;
 	}

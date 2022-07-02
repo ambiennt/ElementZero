@@ -190,7 +190,7 @@ public:
 	MCAPI std::string getSerializedName() const;
 	MCAPI std::string buildDescriptionName(class ItemStackBase const &) const;
 
-	enum class Flags {
+	enum class Flags : int32_t {
 		mIsGlint = 1,
 		mHandEquipped = 2,
 		mIsStackedByData = 3,
@@ -222,7 +222,7 @@ public:
 	std::string mNamespace; // 0xB0
 	HashedString mFullName; // 0xD0
 	int16_t mMaxDamage; // 0xF8
-	int16_t mFlags; // 0xFA - bit flags for enum Item::Flags
+	uint16_t mFlags; // 0xFA - bit flags for enum Item::Flags
 	int32_t mMaxUseDuration; // 0xFC
 	BaseGameVersion mMinRequiredBaseGameVersion; // 0x100
 	BlockLegacy* mLegacyBlock; // 0x170

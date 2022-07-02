@@ -67,7 +67,7 @@ public:
 
 	inline bool operator==(BlockPos const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
 	inline bool operator!=(BlockPos const &rhs) const { return !(*this == rhs); }
-	inline operator Vec3() { return {(float)x, (float)y, (float)z}; }
+	inline operator Vec3() { return Vec3((float)x, (float)y, (float)z); }
 };
 
 inline const BlockPos BlockPos::MIN = {std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::min(), std::numeric_limits<int32_t>::min()};

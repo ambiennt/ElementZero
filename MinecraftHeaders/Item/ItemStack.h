@@ -198,6 +198,13 @@ public:
 	MCAPI ItemStack(BlockLegacy const &block, int count);
 
 	MCAPI static ItemStack fromTag(CompoundTag const &userData);
+	MCAPI void _assignNetIdVariant(ItemStack const &rhs) const;
+
+	inline ItemStack& operator=(ItemStack const& rhs) {
+		ItemStackBase::operator=(rhs);
+		this->_assignNetIdVariant(rhs);
+		return *this;
+	}
 };
 
 static_assert(offsetof(ItemStackBase, mItem) == 0x8);

@@ -12,7 +12,7 @@
 class ChestBlockActor : public RandomizableBlockActorFillingContainer {
 public:
 
-	enum class Flags {
+	enum class Flags : int32_t {
 		mPairLead = 1,
 		mPairingChanged = 2,
 		mAlongX = 3,
@@ -50,7 +50,7 @@ public:
 	MCAPI void unpair(BlockSource &region);
 
 	inline bool hasBitFlag(ChestBlockActor::Flags flag) {
-		return this->mFlags & (uint32_t)flag;
+		return (this->mFlags & (uint32_t)flag);
 	}
 };
 

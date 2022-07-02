@@ -8,6 +8,8 @@
 #include <chrono>
 #include <functional>
 
+class ItemStack;
+
 class GameMode {
 public:
 
@@ -53,6 +55,8 @@ public:
 	virtual void setTrialMode(bool trialModeValue);
 	virtual bool isInTrialMode();
 	virtual void registerUpsellScreenCallback(std::function<void(bool)>);
+
+	MCAPI bool baseUseItem(ItemStack &item);
 };
 
 static_assert(offsetof(GameMode, mDistanceTraveled) == 0x30);

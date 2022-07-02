@@ -1,5 +1,5 @@
 #include "include/base/ezplayer.h"
-#include <Actor/Player.h>
+#include <Actor/ServerPlayer.h>
 
 // EZPlayer setup
 THook(void*,
@@ -18,4 +18,36 @@ THook(void*, "??1Player@@UEAA@XZ", Player* player) {
 	delete player->mEZPlayer; // clean up to be safe because idk what BDS does with this field
 	player->mEZPlayer = nullptr;
 	return ret;
+}
+
+
+
+
+// update some EZPlayer fields below...
+
+
+
+
+// we need to use custom values for more accurate player pos deltas
+// the client won't always send movement packets at the exact start of the tick due to latency
+// this makes getting the single-tick pos delta really difficult if we only relied on client values
+// in summary, mRawPosOld/mRawPos are synced with the start and the end of the ServerPlayer tick, and this->getPos()/this->getPosOld()
+// are synced with when the client sends the movement packet
+
+// keep track of previous and current health/absorption
+// getHealthAsInt() and getAbsorptionAsInt() exist for the current values
+
+// reset the liquid bucket pickup conditions for InventoryTransactionFix
+TInstanceHook(void, "?normalTick@ServerPlayer@@UEAAXXZ", ServerPlayer) {
+	
+	this->mEZPlayer->mRawPosOld = this->getPos();
+	original(this);
+	this->mEZPlayer->mRawPos = this->getPos();
+
+	this->mEZPlayer->mHealthOld = this->getHealthAsInt();
+	this->mEZPlayer->mAbsorptionOld = this->getAbsorptionAsInt();
+
+	if (this->mEZPlayer->mShouldCancelBucketPickup && this->mOnGround) {
+		this->mEZPlayer->mShouldCancelBucketPickup = false;
+	}
 }

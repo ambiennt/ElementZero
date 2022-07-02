@@ -14,6 +14,12 @@
 #include "../Item/SimpleClientNetId.h"
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
+#include "../Level/Level.h"
+#include "../Block/Block.h"
+#include "../Block/BlockPalette.h"
+
+#include <hook.h>
+#include <base/base.h>
 #include "../dll.h"
 
 class ReadOnlyBinaryStream;
@@ -60,12 +66,12 @@ public:
 	inline InventorySource(InventorySourceType type, InventorySourceFlags flags) : type(type), flags(flags) {}
 	inline InventorySource(InventorySourceType type, ContainerID id) : type(type), container(id) {}
 
-	constexpr inline bool operator==(InventorySource const &rhs) const noexcept {
+	inline bool operator==(InventorySource const &rhs) const {
 		return ((this->type == rhs.type) &&
 			(this->container == rhs.container) &&
 			(this->flags == rhs.flags));
 	}
-	constexpr inline bool operator!=(InventorySource const &rhs) const noexcept {
+	inline bool operator!=(InventorySource const &rhs) const {
 		return !(*this == rhs);
 	}
 
@@ -144,7 +150,7 @@ public:
 	MCAPI InventoryTransactionError verifyFull(Player &, bool) const;
 
 	inline InventoryTransaction(std::vector<InventoryAction> const& actions) {
-		for (auto &act : actions) addAction(act);
+		for (auto &act : actions) { addAction(act); }
 	}
 };
 
@@ -153,12 +159,12 @@ static_assert(offsetof(InventoryTransaction, items) == 0x40);
 
 class ComplexInventoryTransaction {
 public:
-	enum class Type {
+	enum class Type : int32_t {
 		NORMAL            = 0,
 		MISMATCH          = 1,
 		ITEM_USE          = 2,
 		ITEM_USE_ON_ACTOR = 3,
-		RELEASE_ITEM      = 4
+		RELEASE_ITEM      = 4,
 	};
 
 	Type type; // 0x8
@@ -176,24 +182,29 @@ static_assert(offsetof(ComplexInventoryTransaction, data) == 0x10);
 
 class ItemUseInventoryTransaction : public ComplexInventoryTransaction {
 public:
-	enum class ActionType {
+	enum class ActionType : int32_t {
 		PLACE   = 0,
 		USE     = 1,
-		DESTROY = 2
+		DESTROY = 2,
 	};
 
 	ActionType actionType; // 0x68
 	BlockPos pos; // 0x6C
-	uint32_t block_runtime_id; // 0x78
+	uint32_t targetBlockRuntimeId; // 0x78
 	uint8_t face; // 0x7C
 	int32_t slot; // 0x80
 	ItemStack itemInHand; // 0x88
-	Vec3 playerPos, clickPos; // 0x124
+	Vec3 playerPos, clickPos; // 0x118, 0x124
+
+	MCAPI void resendBlocksAroundArea(Player &player, BlockPos const &pos, uint8_t blockFace) const;
+	inline Block const& getTargetBlock() const {
+		return LocateService<Level>()->getBlockPalette()->getBlock(this->targetBlockRuntimeId);
+	}
 };
 
 static_assert(offsetof(ItemUseInventoryTransaction, actionType) == 0x68);
 static_assert(offsetof(ItemUseInventoryTransaction, pos) == 0x6C);
-static_assert(offsetof(ItemUseInventoryTransaction, block_runtime_id) == 0x78);
+static_assert(offsetof(ItemUseInventoryTransaction, targetBlockRuntimeId) == 0x78);
 static_assert(offsetof(ItemUseInventoryTransaction, face) == 0x7C);
 static_assert(offsetof(ItemUseInventoryTransaction, slot) == 0x80);
 static_assert(offsetof(ItemUseInventoryTransaction, itemInHand) == 0x88);
@@ -203,10 +214,10 @@ static_assert(offsetof(ItemUseInventoryTransaction, clickPos) == 0x124);
 class ItemUseOnActorInventoryTransaction : public ComplexInventoryTransaction {
 public:
 
-	enum class ActionType {
+	enum class ActionType : int32_t {
 		INTERACT      = 0,
 		ATTACK        = 1,
-		ITEM_INTERACT = 2
+		ITEM_INTERACT = 2,
 	};
 
 	ActorRuntimeID actorId; // 0x68
@@ -226,9 +237,9 @@ static_assert(offsetof(ItemUseOnActorInventoryTransaction, clickPos) == 0x114);
 class ItemReleaseInventoryTransaction : public ComplexInventoryTransaction {
 public:
 
-	enum class ActionType {
+	enum class ActionType : int32_t {
 		RELEASE = 0,
-		USE     = 1
+		USE     = 1,
 	};
 
 	ActionType actionType; // 0x68
