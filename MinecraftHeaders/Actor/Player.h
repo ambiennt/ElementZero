@@ -36,15 +36,6 @@ enum class MovementEventType {
 	BackInSync        = 1
 };
 
-enum class InputMode {
-	Undefined         = 0,
-	Mouse             = 1,
-	Touch             = 2,
-	GamePad           = 3,
-	MotionController  = 4,
-	Count             = 5
-};
-
 enum class ClientPlayMode {
 	Normal               = 0,
 	Teaser               = 1,

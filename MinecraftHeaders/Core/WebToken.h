@@ -8,6 +8,8 @@ public:
 	std::string mData;
 	Json::Value mDataInfo;
 	std::string mSignature;
+
+	MCAPI std::string toString() const;
 };
 
 static_assert(offsetof(WebToken, mHeader) == 0x0);

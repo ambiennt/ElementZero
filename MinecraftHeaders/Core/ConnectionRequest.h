@@ -72,7 +72,7 @@ public:
 	}
 };
 
-static_assert(sizeof(ConnectionRequest) == 32);
+static_assert(sizeof(ConnectionRequest) == 0x20);
 
 class SubClientConnectionRequest {
 public:
@@ -81,4 +81,4 @@ public:
 	std::unique_ptr<WebToken>              mRawToken;
 };
 
-static_assert(sizeof(SubClientConnectionRequest) == 24);
+static_assert(sizeof(SubClientConnectionRequest) == 0x18);

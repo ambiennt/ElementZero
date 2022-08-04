@@ -31,8 +31,16 @@ enum class ActorEvent : int8_t;
 enum class ActorDamageCause;
 enum class ItemUseMethod;
 enum class LevelSoundEvent;
-enum class InputMode;
 enum class DimensionID;
+
+enum class InputMode : int32_t {
+	Undefined         = 0,
+	Mouse             = 1,
+	Touch             = 2,
+	GamePad           = 3,
+	MotionController  = 4,
+	Count             = 5,
+};
 
 enum class SpawnRuleEnum {
 	Undefined     = -1,
@@ -598,6 +606,7 @@ public:
 	MCAPI std::vector<struct DistanceSortedActor> fetchNearbyActorsSorted(class Vec3 const &, enum ActorType);
 	MCAPI class ItemStack const& getOffhandSlot() const;
 	MCAPI class BlockPos getBlockPosCurrentlyStandingOn() const; // use getBlockPosGrounded instead
+	MCAPI class FishingHook* fetchFishingHook();
 
 	template <typename T> MCAPI T *tryGetComponent();
 	template <typename T> MCAPI T const *tryGetComponent() const;

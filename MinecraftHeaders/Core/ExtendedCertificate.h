@@ -1,10 +1,12 @@
 #pragma once
 
 #include <string>
-#include "../Core/mce.h"
 #include "../dll.h"
 
 class Certificate;
+namespace mce {
+class UUID;
+}
 
 class ExtendedCertificate {
 public:

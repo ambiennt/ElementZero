@@ -606,8 +606,7 @@ public:
 	}
 
 	inline BlockPalette* getBlockPalette() const {
-		return CallServerClassMethod<BlockPalette*>(
-			"?getBlockPalette@Level@@UEBAAEBVBlockPalette@@XZ", (Level*)&this->mIWorldRegistriesProvider);
+		return direct_access<BlockPalette*>((Level*)&this->mIWorldRegistriesProvider, 0x7C8);
 	}
 
 	BUILD_ACCESS_MUT(class IWorldRegistriesProvider, mIWorldRegistriesProvider, 0x8); // ItemUseInventoryTransaction::getTargetBlock, not actually a field but a base class

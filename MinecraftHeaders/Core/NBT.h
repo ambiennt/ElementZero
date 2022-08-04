@@ -182,13 +182,13 @@ public:
 	virtual std::unique_ptr<Tag> copy() const override;
 	virtual std::uint64_t hash() const override;
 
-	class CompoundTag const *getCompound(unsigned __int64) const;
+	class CompoundTag const *getCompound(uint64_t) const;
 
-	std::string const &getString(int) const;
+	std::string const &getString(int32_t) const;
 	void add(std::unique_ptr<Tag>);
-	double getDouble(int) const;
-	float getFloat(int) const;
-	int getInt(int) const;
+	double getDouble(int32_t) const;
+	float getFloat(int32_t) const;
+	int32_t getInt(int32_t) const;
 };
 
 class MCAPI CompoundTag : public Tag {

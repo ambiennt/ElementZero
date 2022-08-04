@@ -17,7 +17,6 @@ public:
 	int32_t mBookSlot, mPageIndex1, mPageIndex2;
 	std::string mText1, mText2, mText3;
 
-	inline ~BookEditPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;

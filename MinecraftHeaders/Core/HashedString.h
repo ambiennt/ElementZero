@@ -10,6 +10,7 @@ class HashedString {
 	std::string str;
 
 public:
+	inline HashedString() : hash(0) {}
 	uint64_t getHash() const noexcept { return hash; }
 	std::string const &getString() const noexcept { return str; }
 
@@ -17,7 +18,6 @@ public:
 	MCAPI HashedString(HashedString &&rhs);
 	MCAPI HashedString(char const *rhs);
 	MCAPI HashedString(std::string const &rhs);
-	inline HashedString() {}
 	MCAPI bool operator==(HashedString const &rhs) const;
 	MCAPI bool operator!=(HashedString const &rhs) const;
 };
