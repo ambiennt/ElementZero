@@ -1,28 +1,31 @@
 #pragma once
 
 #include <atomic>
+#include <cstdint>
 
-template <typename T> class SharedCounter {
+template <typename T>
+class SharedCounter {
 public:
 	T *value;
-	std::atomic<int> shared{}, weak{};
+	std::atomic<int32_t> shared, weak;
 
-	inline SharedCounter(T *value) : value(value) {}
+	inline SharedCounter() : value(nullptr), shared(0), weak(0) {}
+	inline SharedCounter(T *value) : value(value), shared(0), weak(0) {}
 
-	inline void addSharedRef() { shared++; }
+	inline void addSharedRef() { this->shared++; }
 	inline bool releaseSharedRef() {
-		shared--;
-		if (shared > 0) return false;
-		if (value) {
+		this->shared--;
+		if (this->shared > 0) { return false; }
+		if (this->value) {
 			auto temp = value;
-			value = nullptr;
+			this->value = nullptr;
 			delete temp;
 		}
-		return weak <= 0;
+		return (this->weak <= 0);
 	}
-	inline void addWeakRef() { weak++; }
+	inline void addWeakRef() { this->weak++; }
 	inline bool releaseWeakRef() {
-		weak--;
-		return weak <= 0 && value;
+		this->weak--;
+		return ((this->weak <= 0) && this->value);
 	}
 };

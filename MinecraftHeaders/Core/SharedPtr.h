@@ -1,24 +1,27 @@
 #pragma once
 
 #include <utility>
-
 #include "SharedCounter.h"
 
-template <typename T> class SharedPtr {
+template <typename T>
+class SharedPtr {
 public:
-	SharedCounter<T> *counter{};
+	SharedCounter<T> *counter;
 
-	inline SharedPtr(T *inp) : counter{new SharedCounter<T>(inp)} { counter->addSharedRef(); }
+	inline SharedPtr() : counter(nullptr) {}
+	inline SharedPtr(T *inp) : counter{new SharedCounter<T>(inp)} { this->counter->addSharedRef(); }
 	template <typename... ps> static inline SharedPtr make(ps &&... p) { return {new T{std::forward<ps>(p)...}}; }
-	inline operator bool() const { return counter && counter->value; }
-	inline T &operator*() { return *counter->value; }
-	inline T *operator->() { return counter->value; }
-	inline T *get() const { return counter->value; }
+	inline operator bool() const { return this->counter && this->counter->value; }
+	inline T &operator*() { return *this->counter->value; }
+	inline T *operator->() { return this->counter->value; }
+	inline T *get() const { return this->counter->value; }
 	inline void reset() {
-		if (counter) {
-			if (counter->releaseSharedRef()) delete counter;
-			counter = nullptr;
+		if (this->counter) {
+			if (this->counter->releaseSharedRef()) {
+				delete this->counter;
+			}
+			this->counter = nullptr;
 		}
 	}
-	~SharedPtr() { reset(); }
+	~SharedPtr() { this->reset(); }
 };

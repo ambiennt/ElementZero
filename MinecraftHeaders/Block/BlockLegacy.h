@@ -441,11 +441,11 @@ public:
 		return (LegacyBlockID)this->getId();
 	}
 
-	inline int16_t toItemId() const {
-		if (this->mId > 255) {
-			return (int16_t)(255 - this->mId);
+	inline int16_t toItemId() const { // BlockLegacy::getBlockItemId
+		if (this->mId < 0x100) {
+			return (int16_t)this->mId;
 		}
-		return (int16_t)this->mId;
+		return (int16_t)(0x100 - this->mId);
 	}
 
 	inline ItemRuntimeID toItemIdAsEnum() const {
@@ -464,7 +464,7 @@ public:
 		return (this->mProperties & (uint64_t)property);
 	}
 
-	inline MaterialType getMaterial() const {
+	inline MaterialType getMaterialType() const {
 		return this->mMaterial->mType;
 	}
 };
