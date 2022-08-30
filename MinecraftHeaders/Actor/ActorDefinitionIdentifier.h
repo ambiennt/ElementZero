@@ -6,14 +6,11 @@
 #include "../dll.h"
 
 struct ActorDefinitionIdentifier {
-	std::string mNamespace;      // 0x0
-	std::string mIdentifier;     // 0x20
-	std::string mInitEvent;      // 0x40
-	std::string mFullName;       // 0x60
-	HashedString mCanonicalHash; // 0x80 - mCanonicalName
+	std::string mNamespace, mIdentifier, mInitEvent, mFullName; // 0x0, 0x20, 0x40, 0x60
+	HashedString mCanonicalHashedName; // 0x80
 
-	inline HashedString const &getCanonicalHash() const { return this->mCanonicalHash; }
-	inline std::string const &getCanonicalName() const { return this->mCanonicalHash.getString(); }
+	inline HashedString const &getCanonicalHashedName() const { return this->mCanonicalHashedName; }
+	inline std::string const &getCanonicalName() const { return this->mCanonicalHashedName.getString(); }
 	inline std::string const &getFullName() const { return this->mFullName; }
 	inline std::string const &getIdentifier() const { return this->mIdentifier; }
 	inline std::string const &getInitEvent() const { return this->mInitEvent; }
@@ -25,8 +22,7 @@ struct ActorDefinitionIdentifier {
 
 	MCAPI ActorDefinitionIdentifier(ActorDefinitionIdentifier const &);
 	MCAPI ActorDefinitionIdentifier(ActorDefinitionIdentifier &&);
-	// "minecraft:entity_spawned", minecraft:entity_born", or "minecraft:entity_transformed" for initEvent
-	MCAPI ActorDefinitionIdentifier(std::string ns, std::string identifier, std::string event);
+	MCAPI ActorDefinitionIdentifier(std::string ns, std::string identifier, std::string event); // "minecraft:entity_spawned", minecraft:entity_born", or "minecraft:entity_transformed" for initEvent
 	MCAPI ActorDefinitionIdentifier(std::string const & fullName);
 	MCAPI ActorDefinitionIdentifier(ActorType);
 	inline ActorDefinitionIdentifier() {}

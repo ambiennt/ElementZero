@@ -76,7 +76,7 @@ public:
 	MCAPI std::string toString() const;
 
 	MCAPI int16_t getId() const; // item id
-	MCAPI int getIdAux() const; // assume item id x 65536
+	MCAPI int32_t getIdAux() const; // assume item id x 65536
 	MCAPI class Item const *getItem() const;
 	MCAPI int16_t getAuxValue() const; // example: dye has aux values 0-15 (same as mAuxValue)
 	MCAPI class ItemDescriptor getDescriptor() const;
@@ -111,14 +111,14 @@ public:
 
 	MCAPI std::unique_ptr<class CompoundTag> save() const;
 
-	MCAPI bool sameItem(int, int) const;
+	MCAPI bool sameItem(int32_t, int32_t) const;
 	MCAPI bool matches(class ItemStackBase const &) const;
-	MCAPI void setRepairCost(int);
+	MCAPI void setRepairCost(int32_t);
 	MCAPI void clearChargedItem();
 	MCAPI bool matchesItem(class ItemStackBase const &) const;
 	MCAPI bool sameItemAndAux(class ItemStackBase const &) const;
 	MCAPI void _write(class BinaryStream &) const;
-	MCAPI void hurtAndBreak(int, class Actor *);
+	MCAPI void hurtAndBreak(int32_t, class Actor *);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
 
 	inline uint8_t getStackSize() const { return this->mCount; }
@@ -130,7 +130,9 @@ public:
 			auto disp = mUserData->getCompound(TAG_DISPLAY);
 			if (disp->contains(TAG_LORE, Tag::List)) {
 				auto list = disp->getList(TAG_LORE);
-				for (auto &item : list->value) ret.emplace_back(static_cast<StringTag *>(item.get())->value);
+				for (auto &item : list->value) {
+					ret.emplace_back(static_cast<StringTag *>(item.get())->value);
+				}
 			}
 		}
 		return ret;
@@ -141,11 +143,11 @@ public:
 protected:
 	MCAPI ItemStackBase();
 	MCAPI ItemStackBase(Item const &item);
-	MCAPI ItemStackBase(Item const &item, int);
-	MCAPI ItemStackBase(Item const &item, int, int);
-	MCAPI ItemStackBase(Item const &item, int, int, CompoundTag const *);
-	MCAPI ItemStackBase(BlockLegacy const &, int);
-	MCAPI ItemStackBase(Block const &, int, CompoundTag const *);
+	MCAPI ItemStackBase(Item const &item, int32_t);
+	MCAPI ItemStackBase(Item const &item, int32_t, int32_t);
+	MCAPI ItemStackBase(Item const &item, int32_t, int32_t, CompoundTag const *);
+	MCAPI ItemStackBase(BlockLegacy const &, int32_t);
+	MCAPI ItemStackBase(Block const &, int32_t, CompoundTag const *);
 	MCAPI ItemStackBase(ItemStackBase const &rhs);
 
 	MCAPI ItemStackBase &operator=(ItemStackBase const &rhs);
@@ -192,10 +194,10 @@ public:
 	MCAPI ItemStack();
 	MCAPI ItemStack(ItemStack const& rhs);
 	MCAPI ItemStack(Item const &item);
-	MCAPI ItemStack(Item const &item, int count);
-	MCAPI ItemStack(Item const &item, int count, int auxValue);
-	MCAPI ItemStack(Block const &block, int count, CompoundTag const *userData);
-	MCAPI ItemStack(BlockLegacy const &block, int count);
+	MCAPI ItemStack(Item const &item, int32_t count);
+	MCAPI ItemStack(Item const &item, int32_t count, int32_t auxValue);
+	MCAPI ItemStack(Block const &block, int32_t count, CompoundTag const *userData);
+	MCAPI ItemStack(BlockLegacy const &block, int32_t count);
 
 	MCAPI static ItemStack fromTag(CompoundTag const &userData);
 	MCAPI void _assignNetIdVariant(ItemStack const &rhs) const;

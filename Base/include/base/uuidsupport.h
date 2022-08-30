@@ -10,7 +10,7 @@
 namespace std {
 
 template <> struct hash<mce::UUID> {
-  constexpr size_t operator()(const mce::UUID &val) const { return val.a ^ val.b; }
+  constexpr size_t operator()(const mce::UUID &val) const { return val.mostSig ^ val.leastSig; }
 };
 
 } // namespace std
@@ -18,7 +18,7 @@ template <> struct hash<mce::UUID> {
 namespace boost {
 
 template <> struct hash<mce::UUID> {
-  constexpr size_t operator()(const mce::UUID &val) const { return val.a ^ val.b; }
+  constexpr size_t operator()(const mce::UUID &val) const { return val.mostSig ^ val.leastSig; }
 };
 
 } // namespace boost

@@ -606,11 +606,12 @@ public:
 	}
 
 	inline BlockPalette* getBlockPalette() const {
-		return direct_access<BlockPalette*>((Level*)&this->mIWorldRegistriesProvider, 0x7C8);
+		return direct_access<BlockPalette*>((Level*)&this->mRegistriesProvider, 0x7C8);
 	}
 
-	BUILD_ACCESS_MUT(class IWorldRegistriesProvider, mIWorldRegistriesProvider, 0x8); // ItemUseInventoryTransaction::getTargetBlock, not actually a field but a base class
+	BUILD_ACCESS_MUT(class IWorldRegistriesProvider, mRegistriesProvider, 0x8); // ItemUseInventoryTransaction::getTargetBlock, not actually a field but a base class
 	BUILD_ACCESS_MUT(std::vector<class Player*>, mActivePlayers, 0x58); // Level::forEachPlayer
+	BUILD_ACCESS_MUT(std::shared_ptr<class ActorInfoRegistry>, mActorInfoRegistry, 0x180); // SetSpawnEggFunction::apply
 	BUILD_ACCESS_MUT(struct ActorUniqueID, mLastUniqueID, 0x1A0); // Level::getNewUniqueID
 	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack, 0x1F80 - 0x18

@@ -18,32 +18,34 @@ namespace mce {
 
 class UUID {
 public:
-	uint64_t a, b;
+	uint64_t mostSig, leastSig;
 
-	UUID() : a(0), b(0) {}
-	UUID(uint64_t a, uint64_t b) : a(a), b(b) {}
-	UUID(UUID const &rhs) : a(rhs.a), b(rhs.b) {}
+	UUID() : mostSig(0), leastSig(0) {}
+	UUID(uint64_t mostSig, uint64_t leastSig) : mostSig(mostSig), leastSig(leastSig) {}
+	UUID(UUID const &rhs) : mostSig(rhs.mostSig), leastSig(rhs.leastSig) {}
 
-	inline bool operator==(UUID const &rhs) const noexcept { return ((this->a == rhs.a) && (this->b == rhs.b)); }
-	inline operator char const *() const { return (char const *)this; }
-	UUID &operator=(UUID const &rhs) {
-		this->a = rhs.a;
-		this->b = rhs.b;
+	static inline boost::uuids::random_generator UUID_GENERATOR{};
+
+	inline bool operator==(UUID const &rhs) const {
+		return ((this->mostSig == rhs.mostSig) && (this->leastSig == rhs.leastSig));
+	}
+	inline UUID &operator=(UUID const &rhs) {
+		this->mostSig = rhs.mostSig;
+		this->leastSig = rhs.leastSig;
 		return *this;
 	}
+	inline operator const char*() const { return reinterpret_cast<const char*>(this); }
 
-	inline bool empty() const noexcept { return ((this->a == 0) && (this->b == 0)); }
+	inline bool empty() const { return ((this->mostSig == 0) && (this->leastSig == 0)); }
 	MCAPI std::string asString() const;
 	MCAPI static UUID fromString(std::string const &source);
 	MCAPI static UUID EMPTY;
 
 	static UUID generateUUID() {
-		static boost::uuids::random_generator uuidGen;
-		return fromString(boost::lexical_cast<std::string>(uuidGen()));
+		return fromString(boost::lexical_cast<std::string>(UUID_GENERATOR()));
 	}
 	static std::string generateUUIDAsString() {
-		static boost::uuids::random_generator uuidGen;
-		return boost::lexical_cast<std::string>(uuidGen());
+		return boost::lexical_cast<std::string>(UUID_GENERATOR());
 	}
 };
 

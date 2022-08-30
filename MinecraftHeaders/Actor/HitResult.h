@@ -9,7 +9,7 @@
 
 class Actor;
 
-enum class HitResultType {
+enum class HitResultType : int32_t {
 	TILE                = 0x0,
 	ENTITY              = 0x1,
 	ENTITY_OUT_OF_RANGE = 0x2,

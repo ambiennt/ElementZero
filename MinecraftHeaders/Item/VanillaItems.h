@@ -246,4 +246,5 @@ public:
 
 	//TODO: add 1.16 items
 	MCAPI static WeakPtr<Item> mNetheriteScrap;
+	MCAPI static WeakPtr<Item> mActorPlacer;
 };

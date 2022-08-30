@@ -28,9 +28,9 @@ public:
 	}
 
 	// inString can be with or without "minecraft:"
-	MCAPI static WeakPtr<Item> lookupByName(int32_t &outItemId, int32_t &outItemAux, const std::string inString&);
-	MCAPI static WeakPtr<Item> lookupByName(int32_t &outItemAux, const std::string inString&);
-	static inline WeakPtr<Item> lookupByName(const std::string inString&) {
+	MCAPI static WeakPtr<Item> lookupByName(int32_t &outItemId, int32_t &outItemAux, const std::string& inString);
+	MCAPI static WeakPtr<Item> lookupByName(int32_t &outItemAux, const std::string& inString);
+	static inline WeakPtr<Item> lookupByName(const std::string& inString) {
 		int32_t outItemId, outItemAux;
 		return lookupByName(outItemId, outItemAux, inString);
 	}
@@ -49,4 +49,4 @@ public:
 	static inline int32_t getItemCount() {
 		return mItemRegistry.size();
 	}
-}
+};

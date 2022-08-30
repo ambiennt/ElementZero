@@ -15,8 +15,8 @@ template <> void migrateDatabase<0, 1>() {
       "make_uuid", 2, true, nullptr,
       [](sqlite3_context *ctx, int argc, sqlite3_value **argv) {
         auto uuid = new mce::UUID;
-        uuid->a   = (uint64_t) sqlite3_value_int64(argv[0]);
-        uuid->b   = (uint64_t) sqlite3_value_int64(argv[1]);
+        uuid->mostSig  = (uint64_t)sqlite3_value_int64(argv[0]);
+        uuid->leastSig = (uint64_t)sqlite3_value_int64(argv[1]);
         sqlite3_result_blob(ctx, uuid, sizeof *uuid, [](void *ptr) { delete (mce::UUID *) ptr; });
       },
       nullptr, nullptr, nullptr);
