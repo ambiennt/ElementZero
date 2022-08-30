@@ -8,10 +8,10 @@
 
 class EmoteListPacket : public Packet {
 public:
-    ActorRuntimeID mRuntimeId; // 0x28
-    std::vector<mce::UUID> mEmotePieceIds; // 0x30
+	ActorRuntimeID mRuntimeId; // 0x28
+	std::vector<mce::UUID> mEmotePieceIds; // 0x30
 
-    static const int32_t MAX_EMOTE_PIECE_IDS; // max amount of emotes that the client can equip at once (amount of slots in the emote wheel, so 6)
+	static const int32_t MAX_EMOTE_PIECE_IDS; // max amount of emotes that the client can equip at once (amount of slots in the emote wheel, so 6)
 
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
