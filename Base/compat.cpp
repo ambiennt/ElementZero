@@ -271,7 +271,7 @@ RakNet::SystemAddress NetworkIdentifier::getRealAddress() const {
 bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstance const& newEnchant, bool overwriteDuplicates) {
 
 	auto resultEnchants = out.constructItemEnchantsFromUserData(); // get current ItemEnchants for the given itemstack
-	int32_t activationIndex = determineActivation(newEnchant.mEnchantType); // get the proper index for ItemEnchants::mItemEnchants[3]
+	int32_t activationIndex = EnchantUtils::determineActivation(newEnchant.mEnchantType); // get the proper index for ItemEnchants::mItemEnchants[3]
 
 	if ((activationIndex >= 0) && (activationIndex <= 2)) { // boundary checking...
 
@@ -291,7 +291,7 @@ bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstanc
 		}
 
 		instanceVectorToWriteTo.push_back(newEnchant); // add newEnchant to current enchants
-		_convertBookCheck(out); // convert newEnchant to a book enchant if the given itemstack is a book
+		EnchantUtils::_convertBookCheck(out); // convert newEnchant to a book enchant if the given itemstack is a book
 		out.saveEnchantsToUserData(resultEnchants); // apply newEnchant to the given itemstack
 		return true;
 	}
@@ -302,7 +302,7 @@ bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstanc
 bool EnchantUtils::removeEnchant(ItemStackBase &out, Enchant::Type typeToRemove) {
 
 	auto resultEnchants = out.constructItemEnchantsFromUserData();
-	int32_t activationIndex = determineActivation(typeToRemove);
+	int32_t activationIndex = EnchantUtils::determineActivation(typeToRemove);
 
 	if ((activationIndex >= 0) && (activationIndex <= 2)) {
 
@@ -327,13 +327,10 @@ bool EnchantUtils::removeEnchant(ItemStackBase &out, Enchant::Type typeToRemove)
 }
 
 void EnchantUtils::removeAllEnchants(ItemStackBase &out) {
-
 	auto resultEnchants = out.constructItemEnchantsFromUserData();
-
-	const int32_t ENCHANTS_ARRAY_SIZE = 3;
+	constexpr int32_t ENCHANTS_ARRAY_SIZE = 3;
 	for (int32_t i = 0; i < ENCHANTS_ARRAY_SIZE; i++) {
 		resultEnchants.mItemEnchants[i].clear();
 	}
-
 	out.saveEnchantsToUserData(resultEnchants);
 }

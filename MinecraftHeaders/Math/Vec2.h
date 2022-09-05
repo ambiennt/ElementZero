@@ -2,10 +2,10 @@
 
 #include <cmath>
 
-#define PI 3.14159265359
-#define TAU 6.28318530718
-#define INV_RADIAN_DEGREES 0.01745329251
-#define RADIAN_DEGREES 57.2957795131
+#define PI                  static_cast<double>(3.14159265359)
+#define TAU                 static_cast<double>(6.28318530718)
+#define INV_RADIAN_DEGREES  static_cast<double>(0.01745329251)
+#define RADIAN_DEGREES      static_cast<double>(57.2957795131)
 
 class Vec2 {
 public:

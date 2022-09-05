@@ -56,8 +56,8 @@ public:
 		return *this;
 	}
 
-	bool operator==(Vec3 const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
-	bool operator!=(Vec3 const &rhs) const { return !(*this == rhs); }
+	inline bool operator==(Vec3 const &rhs) const { return (this->x == rhs.x) && (this->y == rhs.y) && (this->z == rhs.z); }
+	inline bool operator!=(Vec3 const &rhs) const { return !(*this == rhs); }
 
 	inline float length() const {
 		return std::sqrtf((this->x * this->x) + (this->y * this->y) + (this->z * this->z));

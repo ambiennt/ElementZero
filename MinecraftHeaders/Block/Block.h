@@ -24,6 +24,13 @@ public:
 	virtual ~Block();
 	virtual BlockRenderLayer getRenderLayer() const;
 
+	inline bool operator==(const Block& rhs) const {
+		return (this->mLegacyBlock.get() == rhs.mLegacyBlock.get()) && (this->mAux == rhs.mAux);
+	}
+	inline bool operator!=(const Block& rhs) const {
+		return !(*this == rhs);
+	}
+
 	template <typename T> MCAPI Block const *setState(ItemState const &, T) const;
 	template <typename T> MCAPI T getState(ItemState const &) const;
 

@@ -1,4 +1,10 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.12)
+# project (SignCommand)
 
+# friendly name
 # def_mod (SignCommand LINK CommandSupport)
-# this is a comment: this mod is disabled
+
+
+
+
+# this mod is disabled

@@ -433,6 +433,13 @@ public:
 	std::shared_mutex mAccess; // Core::Cache
 	std::unordered_map<uint16_t, const Block*> mContent; // Core::Cache
 
+	bool operator==(const BlockLegacy& rhs) const {
+		return (this == &rhs);
+	}
+	bool operator!=(const BlockLegacy& rhs) const {
+		return (this != &rhs);
+	}
+
 	inline uint16_t getId() const {
 		return this->mId;
 	}

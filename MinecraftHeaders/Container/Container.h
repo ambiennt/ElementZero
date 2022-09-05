@@ -26,7 +26,7 @@ public:
 	std::deque<std::function<void(Container &, int, ItemStack const &, ItemStack const &)>> mTransactionContextStack; // 0x90
 	std::string mName; // 0xB8
 	bool mHasCustomName; // 0xD8
-	uint32_t mContainerRuntimeId = 0; // 0xDC - SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0>
+	uint32_t mContainerRuntimeId; // 0xDC - SimpleRuntimeId<class ContainerRuntimeIdTag,unsigned int,0>
 
 	MCAPI Container(ContainerType);
 
@@ -60,8 +60,7 @@ public:
 	virtual bool hasCustomName() const;
 	virtual void readAdditionalSaveData(CompoundTag const &);
 	virtual void addAdditionalSaveData(CompoundTag &);
-	virtual void createTransactionContext(
-		std::function<void(Container &, int, ItemStack const &, ItemStack const &)>, std::function<void()>);
+	virtual void createTransactionContext(std::function<void(Container &, int, ItemStack const &, ItemStack const &)>, std::function<void()>);
 	virtual void initializeContainerContents(BlockSource &);
 
 	MCAPI void triggerTransactionChange(int, ItemStack const&, ItemStack const&);

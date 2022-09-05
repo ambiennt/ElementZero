@@ -2,9 +2,13 @@
 
 #include <modutils.h>
 #include "Actor.h"
-#include "ActorUniqueID.h"
 
 #include "../dll.h"
+
+class BlockSource;
+class Vec3;
+class Player;
+struct ActorUniqueID;
 
 class ExperienceOrb : public Actor {
 public:
@@ -21,7 +25,6 @@ public:
 	BUILD_ACCESS_MUT(int32_t, mAge, 0x62C);
 	BUILD_ACCESS_MUT(int32_t, mHealth, 0x630);
 
-	// reference: Mob::TickDeath
-	MCAPI static void spawnOrbs(class BlockSource &region, class Vec3 const &pos, int32_t xpValue, DropType type, Player *owner);
+	// xref: Mob::TickDeath
+	MCAPI static void spawnOrbs(BlockSource &region, const Vec3 &pos, int32_t xpValue, DropType type, Player *owner);
 };
-

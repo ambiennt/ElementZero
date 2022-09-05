@@ -2,7 +2,10 @@
 
 #include "base.h"
 #include <Math/Vec3.h>
+#include <Packet/MinecraftPacketIds.h>
+#include <Level/Level.h>
 #include <cstdint>
+#include <unordered_map>
 
 // add custom player fields, constants, and methods here
 // methods should only be if you don't want them inlined or they have a niche purpose (otherwise just put them in Player.h)

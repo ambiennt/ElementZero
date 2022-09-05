@@ -46,13 +46,19 @@ public:
 	bool mDefaultLevelAbilities;
 	uint32_t mCustomAbilityCache; // idk what this is
 
-	MCAPI AdventureSettingsPacket(
-		AdventureSettings const& settings, Abilities const& abilities, ActorUniqueID playerIdToSync, bool defaultLevelSettings);
-	inline ~AdventureSettingsPacket() {}
+	MCAPI AdventureSettingsPacket(AdventureSettings const& settings,
+		Abilities const& abilities, ActorUniqueID playerIdToSync, bool defaultLevelSettings);
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+
+	inline bool hasFlag(AdventureSettingsPacket::Flags flag) {
+		return (this->mFlags & (uint32_t)flag);
+	}
+	inline bool hasFlag(AdventureSettingsPacket::PermissionsFlags flag) {
+		return (this->mPermissionsFlags & (uint32_t)flag);
+	}
 };
 
 static_assert(offsetof(AdventureSettingsPacket, mFlags) == 0x28);

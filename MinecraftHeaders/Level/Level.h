@@ -613,6 +613,7 @@ public:
 	BUILD_ACCESS_MUT(std::vector<class Player*>, mActivePlayers, 0x58); // Level::forEachPlayer
 	BUILD_ACCESS_MUT(std::shared_ptr<class ActorInfoRegistry>, mActorInfoRegistry, 0x180); // SetSpawnEggFunction::apply
 	BUILD_ACCESS_MUT(struct ActorUniqueID, mLastUniqueID, 0x1A0); // Level::getNewUniqueID
+	BUILD_ACCESS_MUT(std::unique_ptr<class LevelStorage>, mLevelStorage, 0x208); // Level::getLevelStorage
 	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
 	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack, 0x1F80 - 0x18
 	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt - 0x2090 - 0x28

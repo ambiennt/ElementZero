@@ -6,6 +6,7 @@
 #include "../Container/PlayerInventory.h"
 #include "../Container/EnderChestContainer.h"
 #include "../Container/PlayerUIContainer.h"
+#include "../Inventory/ContainerManager.h"
 #include "../Math/Vec3.h"
 #include "../Math/BlockPos.h"
 #include "../Core/AutomaticID.h"
@@ -387,6 +388,11 @@ public:
 			abil.mValue.mFloatVal = value;
 			if (syncToClients) { this->syncAbilities(); }
 		}
+	}
+
+	inline enum ContainerType getContainerType() const {
+		auto container = this->mContainerManager.get();
+		return (container ? container->getContainerType() : ContainerType::NONE);
 	}
 
 	// player fields

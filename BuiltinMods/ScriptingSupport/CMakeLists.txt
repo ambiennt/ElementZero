@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.12)
+project (ScriptingSupport)
 
-def_mod (ScriptingSupport
-    LINK CommandSupport
-    DELAY_LINK ChatAPI Blacklist BasicAntiCheat Economy)
+# friendly name
+def_mod (ScriptingSupport LINK CommandSupport DELAY_LINK ChatAPI Blacklist BasicAntiCheat Economy)

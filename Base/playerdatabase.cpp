@@ -172,7 +172,7 @@ TClasslessInstanceHook(
       stmt_user.reset();
       stmt_user.clearBindings();
     };
-    stmt_user.bindNoCopy(1, uuid, sizeof uuid);
+    stmt_user.bindNoCopy(1, uuid, sizeof(uuid));
     stmt_user.bind(2, (int64_t) xuid);
     stmt_user.bindNoCopy(3, name);
     stmt_user.exec();

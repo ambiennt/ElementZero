@@ -2,16 +2,13 @@
 
 #include <string>
 #include <vector>
-
-#include "CommandRegistry.h"
 #include "../Core/type_id.h"
-
-class CommandOrigin;
+#include "CommandRegistry.h"
 
 enum class CommandParameterOption : int8_t {
 	None                      = 0,
 	EnumAutocompleteExpansion = 1,
-	HasSemanticConstraint     = 2
+	HasSemanticConstraint     = 2,
 };
 
 enum class CommandParameterDataType : int32_t {
@@ -22,8 +19,8 @@ enum class CommandParameterDataType : int32_t {
 };
 
 struct CommandParameterData {
-	using ParseFn = bool (CommandRegistry::*)(void *, CommandRegistry::ParseToken const &,
-		CommandOrigin const &, int32_t, std::string &, std::vector<std::string> &) const;
+	using ParseFn = bool(CommandRegistry::*)(void *, const CommandRegistry::ParseToken &,
+		const CommandOrigin &, int32_t, std::string &, std::vector<std::string> &) const;
 
 	typeid_t<CommandRegistry> mTypeIndex; // 0x0
 	ParseFn mParser; // 0x8
@@ -36,8 +33,12 @@ struct CommandParameterData {
 	bool mIsOptional; // 0x48
 	CommandParameterOption mOptions; // 0x49
 
-	CommandParameterData(typeid_t<CommandRegistry> typeIndex, ParseFn parser, std::string name, CommandParameterDataType paramType,
-		const char *enumNameOrPostfix, int32_t offset, bool optional, int32_t setOffset)
-		: mTypeIndex(typeIndex), mParser(parser), mName(name), mEnumNameOrPostfix(enumNameOrPostfix), mEnumOrPostfixSymbol(-1),
-		mParamType(paramType), mOffset(offset), mSetOffset(setOffset), mIsOptional(optional), mOptions(CommandParameterOption::None) {}
+	CommandParameterData(typeid_t<CommandRegistry> typeIndex, ParseFn parser, std::string name,
+		CommandParameterDataType paramType, const char *enumNameOrPostfix, int32_t offset, bool optional, int32_t setOffset)
+		: mTypeIndex(typeIndex), mParser(parser), mName(name), mEnumNameOrPostfix(enumNameOrPostfix),
+		mEnumOrPostfixSymbol(-1), mParamType(paramType), mOffset(offset),
+		mSetOffset(setOffset), mIsOptional(optional), mOptions(CommandParameterOption::None) {}
 };
+
+static_assert(sizeof(CommandParameterData) == 0x50);
+static_assert(sizeof(CommandParameterData::mParser) == 0x8);

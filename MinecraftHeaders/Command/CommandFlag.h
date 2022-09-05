@@ -1,28 +1,29 @@
 #pragma once
 
-enum class CommandFlagValue : int8_t { // bit flags?
+enum class CommandFlagValue : int8_t {
 	None        = 0, // Visible
 	Usage       = 1, // makes the command color blue like gametest?
-	Visibility2 = 2, // HiddenFromCommandBlockOrigin 
+	Visibility2 = 2, // HiddenFromCommandBlockOrigin
 	Visibility4 = 4, // HiddenFromPlayerOrigin
 	Visibility6 = 6, // Hidden
 	Sync        = 8, // HiddenFromAutomationOrigin
 	Removed     = 14,
 	Execute     = 16,
 	Type        = 32, // message/title type commands
-	Cheat       = 64
+	Cheat       = 64,
 };
 
 struct CommandFlag {
 	CommandFlagValue value;
 
-	constexpr bool operator==(CommandFlag const &rhs) const noexcept { return value == rhs.value; }
-	constexpr bool operator!=(CommandFlag const &rhs) const noexcept { return value != rhs.value; }
+	inline bool operator==(CommandFlag const &rhs) const { return (this->value == rhs.value); }
+	inline bool operator!=(CommandFlag const &rhs) const { return (this->value != rhs.value); }
 	CommandFlag &operator|=(CommandFlag const &rhs) {
-		value = (CommandFlagValue)((char) rhs.value | (char) value);
+		this->value = (CommandFlagValue)((char)rhs.value | (char)this->value);
 		return *this;
 	}
 };
+
 constexpr inline CommandFlag CommandFlagNone        = {CommandFlagValue::None};
 constexpr inline CommandFlag CommandFlagUsage       = {CommandFlagValue::Usage};
 constexpr inline CommandFlag CommandFlagVisibility2 = {CommandFlagValue::Visibility2};

@@ -28,7 +28,11 @@ struct NetworkStatus : Command {
 		auto peer = LocateService<NetworkHandler>()->getPeerForUser(netId);
 		
 		if (peer) {
+			
 			auto status = peer->getNetworkStatus();
+			if (std::isnan(status.mCurrentPacketLoss)) { status.mCurrentPacketLoss = 0.f; }
+			if (std::isnan(status.mAveragePacketLoss)) { status.mAveragePacketLoss = 0.f; }
+
 			return output.success("commands.net-stat.result",
 				{status.mCurrentPing, status.mAveragePing, status.mCurrentPacketLoss, status.mAveragePacketLoss});
 		}
