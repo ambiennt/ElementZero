@@ -101,13 +101,13 @@ public:
 	Dimension *getDimension() const override { return this->dim; }
 	Actor *getEntity() const override { return this->actor; }
 	CommandPermissionLevel getPermissionsLevel() const override { return this->permLevel; }
-	    std::unique_ptr<CustomCommandOrigin> custom_clone(Json::Value *new_result = nullptr) const {
+	std::unique_ptr<CustomCommandOrigin> custom_clone(Json::Value *new_result = nullptr) const {
 	    return std::make_unique<CustomCommandOrigin>(*this);
 	}
-	std::unique_ptr<CommandOrigin> clone() const override { return custom_clone(); }
-	CommandOriginType getOriginType() const override { return type; }
+	std::unique_ptr<CommandOrigin> clone() const override { return this->custom_clone(); }
+	CommandOriginType getOriginType() const override { return this->type; }
 	bool canUseCommandsWithoutCheatsEnabled() const override { return true; }
-	bool isSelectorExpansionAllowed() const override { return allowSelectorExpansion; }
+	bool isSelectorExpansionAllowed() const override { return this->allowSelectorExpansion; }
 	void handleCommandOutputCallback(Json::Value &&val) const override {
 	    if (this->result) {
 		    *this->result = std::move(val);

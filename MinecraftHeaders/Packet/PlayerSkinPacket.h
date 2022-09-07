@@ -14,10 +14,12 @@ public:
 	PlayerSkinPacket(mce::UUID uuid, SerializedSkin skin) : mUUID(uuid), mSkin(skin) {}
 	PlayerSkinPacket(mce::UUID uuid, SerializedSkin skin, std::string newName, std::string oldName) :
 		mUUID(uuid), mSkin(skin), mLocalizedNewSkinName(newName), mLocalizedOldSkinName(oldName) {}
+
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	MCAPI virtual ExtendedStreamReadResult readExtended(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(PlayerSkinPacket, mUUID) == 0x28);

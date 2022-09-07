@@ -27,20 +27,21 @@ public:
 // so if you dont have the vanilla enum, use uint8_t
 enum PlayerListPacketType : int8_t {
 	Add    = 0x0,
-	Remove = 0x1
+	Remove = 0x1,
 };
 
 class PlayerListPacket : public Packet {
 public:
-
 	std::vector<PlayerListEntry> mEntries; // 0x28
 	PlayerListPacketType mAction; // 0x40
 
 	PlayerListPacket(std::vector<PlayerListEntry> const& entries, PlayerListPacketType action) : mEntries(entries), mAction(action) {}
+
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
 	MCAPI virtual void write(BinaryStream &) const;
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
+	MCAPI virtual ExtendedStreamReadResult readExtended(ReadOnlyBinaryStream &);
 };
 
 static_assert(offsetof(PlayerListEntry, mBuildPlatform) == 0x78);

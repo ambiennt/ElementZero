@@ -4,10 +4,9 @@
 #include "../Core/ConnectionRequest.h"
 #include "../dll.h"
 
-class LoginPacket : public Packet {
+class SubClientLoginPacket : public Packet {
 public:
-	int32_t mClientNetworkVersion;
-	std::unique_ptr<ConnectionRequest> mConnectionRequest;
+	std::unique_ptr<SubClientConnectionRequest> mConnectionRequest;
 
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
@@ -16,6 +15,5 @@ public:
 	MCAPI virtual bool disallowBatching() const;
 };
 
-static_assert(offsetof(LoginPacket, mClientNetworkVersion) == 0x28);
-static_assert(offsetof(LoginPacket, mConnectionRequest) == 0x30);
-static_assert(sizeof(LoginPacket) == 0x38);
+static_assert(offsetof(SubClientLoginPacket, mConnectionRequest) == 0x28);
+static_assert(sizeof(SubClientLoginPacket) == 0x30);

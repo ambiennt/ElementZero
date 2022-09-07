@@ -124,9 +124,7 @@ public:
 	bool parseEnum(void *target, CommandRegistry::ParseToken const &token, CommandOrigin const &,
 		int32_t, std::string &, std::vector<std::string> &) const {
 		auto data = this->getEnumData(token);
-		IDConverter id{};
-		id(data);
-		target = reinterpret_cast<void*>(&id);
+		*reinterpret_cast<Type*>(target) = IDConverter{}(data);
 		return true;
 	}
 

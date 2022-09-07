@@ -815,8 +815,7 @@ public:
 	BUILD_ACCESS_MUT(class Dimension *, mDimension, 0x328);
 	BUILD_ACCESS_MUT(class Level *, mLevel, 0x330);
 	BUILD_ACCESS_MUT(class HashedString, mActorRendererId, 0x338);
-	BUILD_ACCESS_MUT(class HashedString,
-		mActorRendererIdThatAnimationComponentWasInitializedWith, 0x360); // yes this is the actual name
+	BUILD_ACCESS_MUT(class HashedString, mActorRendererIdThatAnimationComponentWasInitializedWith, 0x360); // yes this is the actual name
 	BUILD_ACCESS_MUT(bool, mChanged, 0x388);
 	BUILD_ACCESS_MUT(bool, mRemoved, 0x389); // probably died on this tick
 	BUILD_ACCESS_MUT(bool, mGlobal, 0x38A);

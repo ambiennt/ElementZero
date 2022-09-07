@@ -54,7 +54,9 @@ public:
 	inline virtual ExtendedStreamReadResult readExtended(ReadOnlyBinaryStream &stream) {
 		return ExtendedStreamReadResult();
 	}
-	inline virtual bool disallowBatching() const { return false; }
+	inline virtual bool disallowBatching() const {
+		return false;
+	}
 };
 
 static_assert(offsetof(Packet, mPriority) == 0x8);
