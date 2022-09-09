@@ -10,6 +10,11 @@
 #include <memory>
 #include <atomic>
 
+class ServerInstanceEventCoordinator;
+class ConsoleInputReader;
+class AppConfigs;
+class IGameModuleShared;
+
 class DedicatedServer : public IMinecraftApp, public Bedrock::AppIsland {
 public:
 	virtual ~DedicatedServer();
@@ -21,13 +26,13 @@ public:
 	};
 
 	Minecraft *mMinecraft; // 0x18
-	std::unique_ptr<class Automation::AutomationClient> mAutomationClient; // 0x20
-	std::unique_ptr<class ServerInstanceEventCoordinator> mServerInstanceEventCoordinator; // 0x28
+	std::unique_ptr<Automation::AutomationClient> mAutomationClient; // 0x20
+	std::unique_ptr<ServerInstanceEventCoordinator> mServerInstanceEventCoordinator; // 0x28
 	std::atomic<bool> mWantsToQuit; // 0x30
-	std::unique_ptr<class ConsoleInputReader> mConsoleInputReader; // 0x38
-	std::unique_ptr<class AppConfigs> mAppConfig; // 0x40
-	class AppConfigs* mAppConfigServiceRegistrationToken; // 0x48 - ServiceRegistrationToken<AppConfigs>
-	std::unique_ptr<class IGameModuleShared> mGameModule; // 0x50
+	std::unique_ptr<ConsoleInputReader> mConsoleInputReader; // 0x38
+	std::unique_ptr<AppConfigs> mAppConfig; // 0x40
+	AppConfigs* mAppConfigServiceRegistrationToken; // 0x48 - ServiceRegistrationToken<AppConfigs>
+	std::unique_ptr<IGameModuleShared> mGameModule; // 0x50
 
 	inline void doAsyncStop() { this->mWantsToQuit = true; }
 };

@@ -1,9 +1,7 @@
 #pragma once
 
 #include <string>
-
 #include <WinSock2.h>
-
 #include "../Core/mce.h"
 #include "../dll.h"
 
@@ -29,6 +27,9 @@ public:
 	}
 };
 static_assert(sizeof(RakNet::SystemAddress) == 0x88);
+
+struct RakNetGUID;
+MCAPI extern RakNetGUID const UNASSIGNED_RAKNET_GUID;
 
 struct RakNetGUID {
 	uint64_t g;

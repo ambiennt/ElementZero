@@ -18,9 +18,9 @@
 #include "settings.hpp"
 #include "yaml.h"
 
-using namespace std::filesystem;
-
 DEF_LOGGER("ModLoader");
+
+using namespace std::filesystem;
 
 typedef void (*ApplySettingsType)(YAML::Node const &);
 typedef bool (*GenerateSettingsType)(YAML::Node &);
@@ -256,7 +256,6 @@ void worldHook(std::filesystem::path const &path) {
 
 TClasslessInstanceHook(void, "?execute@ReloadCommand@@UEBAXAEBVCommandOrigin@@AEAVCommandOutput@@@Z",
   CommandOrigin const &origin, CommandOutput &output) {
-
   original(this, origin, output);
 
   auto cfg     = readConfig();
@@ -267,9 +266,7 @@ TClasslessInstanceHook(void, "?execute@ReloadCommand@@UEBAXAEBVCommandOrigin@@AE
   auto mods = cfg["mods"];
 
   for (auto hook : Reloadables) {
-
     auto content = mods[hook.name];
-
     if (!content.IsMap()) {
       LOGE("Reload failed for mod %s: cannot find section for mod") % hook.name;
       continue;

@@ -154,17 +154,17 @@ TClasslessInstanceHook(
     std::unique_ptr<ServerPlayer>,
     "?createNewPlayer@ServerNetworkHandler@@QEAA?AV?$unique_ptr@VServerPlayer@@U?$default_delete@VServerPlayer@@@std@@@"
     "std@@AEBVNetworkIdentifier@@AEBVConnectionRequest@@@Z",
-    NetworkIdentifier *netId, ConnectionRequest const& req) {
+    const NetworkIdentifier &netId, const ConnectionRequest &req) {
   auto player  = original(this, netId, req);
   auto &cert   = player->getCertificate();
   auto uuid    = ExtendedCertificate::getIdentity(cert);
   auto name    = ExtendedCertificate::getIdentityName(cert);
-  auto sadd    = netId->getRealAddress();
+  auto sadd    = netId.getRealAddress();
   auto address = sadd.ToString();
   try {
     uint64_t xuid = req.getXUIDAsUInt64();
     LOGV("%s joined (from %s)") % name % address;
-    auto ref = container->emplace(Mod::PlayerEntry{player.get(), name, xuid, uuid, *netId});
+    auto ref = container->emplace(Mod::PlayerEntry{player.get(), name, xuid, uuid, netId});
     (db.*emitter<"joined"_sig>) (SIG("joined"), *ref.first);
     static SQLite::Statement stmt_user{*sqldb, "INSERT OR REPLACE INTO user VALUES (?, ?, ?)"};
     static SQLite::Statement stmt_login{*sqldb, "INSERT INTO login (uuid, address) VALUES (?, ?)"};
@@ -173,21 +173,21 @@ TClasslessInstanceHook(
       stmt_user.clearBindings();
     };
     stmt_user.bindNoCopy(1, uuid, sizeof(uuid));
-    stmt_user.bind(2, (int64_t) xuid);
+    stmt_user.bind(2, (int64_t)xuid);
     stmt_user.bindNoCopy(3, name);
     stmt_user.exec();
     BOOST_SCOPE_EXIT_ALL() {
       stmt_login.reset();
       stmt_login.clearBindings();
     };
-    stmt_login.bindNoCopy(1, uuid, sizeof uuid);
+    stmt_login.bindNoCopy(1, uuid, sizeof(uuid));
     stmt_login.bindNoCopy(2, address);
     stmt_login.exec();
   } catch (...) {
     LOGV("Illegal connection from %s (name: %s)") % address % name;
     auto& snh = *LocateService<ServerNetworkHandler>();
     if (snh.mRequireTrustedAuthentication) {
-      snh.forceDisconnectClient(*netId, req.mClientSubId, false, true, "Illegal connection!");
+      snh.forceDisconnectClient(netId, req.mClientSubId, false, true, "Illegal connection!");
     }
   }
   return std::move(player);
@@ -202,7 +202,7 @@ TClasslessInstanceHook(
       stmt_logout.reset();
       stmt_logout.clearBindings();
     };
-    stmt_logout.bindNoCopy(1, it->uuid, sizeof(mce::UUID));
+    stmt_logout.bindNoCopy(1, it->uuid, sizeof(it->uuid));
     stmt_logout.exec();
     (db.*emitter<"left"_sig>) (SIG("left"), *it);
     auxm->erase(player);

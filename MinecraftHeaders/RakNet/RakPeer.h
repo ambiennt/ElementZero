@@ -26,19 +26,7 @@ enum class StartupResult : int32_t {
 	STARTUP_OTHER_FAILURE = 0xB,
 };
 
-class RakPeerInterface {
-public:
-	virtual ~RakPeerInterface();
-	// TODO: rest of vtable
-};
-
-class RNS2EventHandler {
-public:
-	virtual ~RNS2EventHandler();
-	// TODO: rest of vtable
-};
-
-class RakPeer : public RakPeerInterface, public RNS2EventHandler {
+class RakPeer /*: public RakPeerInterface, public RNS2EventHandler*/ {
 public:
 	MCAPI RakPeer();
 

@@ -16,20 +16,20 @@ struct MoveActorAbsoluteData {
 			};
 			uint8_t mRaw = 0x0;
 		};
+		Header() : mRaw(0x0) {}
 	};
 	ActorRuntimeID mRuntimeId;
 	MoveActorAbsoluteData::Header mFlags; // mHeader
-	Vec3 mPos = Vec3::ZERO;
-	uint8_t mRotX = 0, mRotY = 0, mRotYHead = 0;
+	Vec3 mPos;
+	uint8_t mRotX, mRotY, mRotYHead;
 
-	MoveActorAbsoluteData() {}
+	MoveActorAbsoluteData() : mPos(Vec3::ZERO), mRotX(0x0), mRotY(0x0), mRotYHead(0x0) {}
 	MCAPI MoveActorAbsoluteData(Actor const &);
 	inline ~MoveActorAbsoluteData() {}
 };
 
 class MoveActorAbsolutePacket : public Packet {
 public:
-
 	MoveActorAbsoluteData mMoveData;
 
 	MoveActorAbsolutePacket() {}

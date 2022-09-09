@@ -1,37 +1,30 @@
 #include "include/base/compat.h"
 
-
-
-
-
-
-
-
 std::string session;
 
 mce::UUID const& getSessionUUID() {
-  	if (!session.empty()) {
-    	static auto result = mce::UUID::fromString(session);
-    	return result;
-  	}
-  	return mce::UUID::EMPTY;
+	if (!session.empty()) {
+		static auto result = mce::UUID::fromString(session);
+		return result;
+	}
+	return mce::UUID::EMPTY;
 }
 
-THook(DedicatedServer::StartResult,
-  	"?start@DedicatedServer@@QEAA?AW4StartResult@1@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
-  	void* self, std::string const &uuid) {
-  	session = uuid;
-  	return original(self, uuid);
+TClasslessInstanceHook(int32_t,
+	"?start@DedicatedServer@@QEAA?AW4StartResult@1@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
+	const std::string& uuid) {
+	session = uuid;
+	return original(this, uuid);
 }
 
 TClasslessInstanceHook(void,
-  	"?announceServer@RakNetServerLocator@@UEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0W4GameType@@HH_N@Z",
-  	std::string const &playerName, std::string const &worldName, int32_t gameType,
-  	int32_t numPlayers, int32_t maxNumPlayers, bool isJoinableThroughServerScreen) {
+	"?announceServer@RakNetServerLocator@@UEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0W4GameType@@HH_N@Z",
+	std::string const &playerName, std::string const &worldName, int32_t gameType,
+	int32_t numPlayers, int32_t maxNumPlayers, bool isJoinableThroughServerScreen) {
 
-  	direct_access<RakNet::RakPeer*>(this, 0x118) = LocateService<RakNet::RakPeer>();
-  	original(this, playerName, worldName, gameType, numPlayers, maxNumPlayers, isJoinableThroughServerScreen);
-  	direct_access<RakNet::RakPeer*>(this, 0x118) = nullptr;
+	direct_access<RakNet::RakPeer*>(this, 0x118) = LocateService<RakNet::RakPeer>();
+	original(this, playerName, worldName, gameType, numPlayers, maxNumPlayers, isJoinableThroughServerScreen);
+	direct_access<RakNet::RakPeer*>(this, 0x118) = nullptr;
 }
 
 TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z", void *data) {
@@ -39,7 +32,6 @@ TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z"
 	worldHook(std::filesystem::weakly_canonical(path));
 	return original(this, data);
 }
-
 
 
 
@@ -61,13 +53,13 @@ THook(void*, "??0DedicatedServer@@QEAA@XZ", void* self) {
 }
 
 THook(void*, "??0AppPlatform@@QEAA@_N@Z", void* self, bool registerService) {
-  	auto ret = original(self, registerService);
-  	if (!mAppPlatform) { mAppPlatform = (AppPlatform*)self; }
-  	return ret;
+	auto ret = original(self, registerService);
+	if (!mAppPlatform) { mAppPlatform = (AppPlatform*)self; }
+	return ret;
 }
 
 THook(void*, "??0RakPeer@RakNet@@QEAA@XZ", void *self) {
-  	auto ret = original(self);
+	auto ret = original(self);
 	if (!mRakPeer) { mRakPeer = (RakNet::RakPeer*)self; }
 	return ret;
 }
@@ -86,9 +78,9 @@ THook(void*, "??0ScriptEngine@@QEAA@W4ApiScriptType@ScriptApi@@@Z", void* self, 
 
 
 template <> ServerInstance *LocateService<ServerInstance>() {
-  	static auto ptr = GetServerSymbol<ServerInstance *>(
+	static auto ptr = GetServerSymbol<ServerInstance *>(
 		"?mService@?$ServiceLocator@VServerInstance@@@@0V?$NonOwnerPointer@VServerInstance@@@Bedrock@@A");
-  	return *ptr;
+	return *ptr;
 }
 
 template <> DedicatedServer *LocateService<DedicatedServer>() { return mDedicatedServer; }
@@ -283,7 +275,7 @@ bool EnchantUtils::applyUnfilteredEnchant(ItemStackBase &out, EnchantmentInstanc
 				if (instanceVectorToWriteTo[i].mEnchantType == newEnchant.mEnchantType) { // if the enchant id is the same, overwrite at that index
 
 					instanceVectorToWriteTo[i] = newEnchant;
-					_convertBookCheck(out);
+					EnchantUtils::_convertBookCheck(out);
 					out.saveEnchantsToUserData(resultEnchants);
 					return true;
 				}

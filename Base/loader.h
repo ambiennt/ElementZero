@@ -1,7 +1,6 @@
 #pragma once
 
 #include <filesystem>
-
 #include <yaml.h>
 
 extern void loadMods(YAML::Node &cfg_node);
