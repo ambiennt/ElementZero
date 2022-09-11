@@ -22,6 +22,7 @@
 #include <base/ezplayer.h>
 #include "../dll.h"
 
+class Attribute;
 class Packet;
 class ServerPlayer;
 class NetworkIdentifier;
@@ -117,6 +118,13 @@ enum class BedSleepingResult {
 
 class Player : public Mob {
 public:
+
+	MCAPI static const Attribute HUNGER;
+	MCAPI static const Attribute SATURATION;
+	MCAPI static const Attribute EXHAUSTION;
+	MCAPI static const Attribute LEVEL;
+	MCAPI static const Attribute EXPERIENCE;
+
 	class PlayerSpawnPoint {
 	public:
 		inline static BlockPos INVALID_SPAWN_POS = BlockPos::MIN;

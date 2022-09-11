@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 enum class AttributeID : uint32_t {
 	PlayerHunger                     = 1,
 	PlayerSaturation                 = 2,
@@ -16,5 +18,5 @@ enum class AttributeID : uint32_t {
 	AttackDamage                     = 13,
 	Absorption                       = 14,
 	Luck                             = 15,
-	JumpStrength                     = 16 // for horse
+	JumpStrength                     = 16,
 };

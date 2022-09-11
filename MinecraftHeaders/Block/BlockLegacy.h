@@ -17,11 +17,10 @@
 #include "../Core/HashedString.h"
 #include "../Core/Color.h"
 #include "../Core/SemVersion.h"
+#include "../BlockActor/BlockActorType.h"
 #include "../dll.h"
 
 class LootComponent;
-
-enum class BlockActorType;
 enum class CreativeItemCategory;
 enum class MaterialType;
 
@@ -473,6 +472,10 @@ public:
 
 	inline MaterialType getMaterialType() const {
 		return this->mMaterial->mType;
+	}
+
+	inline bool hasBlockEntity() const {
+		return (this->mBlockEntityType != BlockActorType::Undefined);
 	}
 };
 
