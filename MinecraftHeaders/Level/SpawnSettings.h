@@ -14,7 +14,7 @@ public:
 	};
 
 	Type mType;
-	std::string mUserDefinedBiomeName = "plains";
+	std::string mUserDefinedBiomeName;
 	DimensionID mDim; // AutomaticID<Dimension, int32_t>
 };
 

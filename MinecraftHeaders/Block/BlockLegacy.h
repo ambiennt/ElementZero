@@ -485,5 +485,6 @@ static_assert(offsetof(BlockLegacy, mProperties) == 0xA0);
 static_assert(offsetof(BlockLegacy, mBlockEntityType) == 0xA8);
 static_assert(offsetof(BlockLegacy, mSolid) == 0xF2);
 static_assert(offsetof(BlockLegacy, mId) == 0x10C);
+static_assert(offsetof(BlockLegacy, mStates) == 0x1B8);
 static_assert(offsetof(BlockLegacy, mBlockPermutations) == 0xFF8);
 static_assert(sizeof(BlockLegacy) == 0x1060);

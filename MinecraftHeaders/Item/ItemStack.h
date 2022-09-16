@@ -40,7 +40,6 @@ protected:
 	static std::string const TAG_STORE_CAN_PLACE_ON;
 
 public:
-
 	WeakPtr<Item> mItem; // 0x8
 	std::unique_ptr<CompoundTag> mUserData; // 0x10
 	const Block* mBlock; // 0x18
@@ -72,9 +71,7 @@ public:
 	MCAPI bool isStackedByData() const;
 	MCAPI bool isHorseArmorItem() const;
 	MCAPI bool isStackable(class ItemStackBase const &) const;
-
 	MCAPI std::string toString() const;
-
 	MCAPI int16_t getId() const; // item id
 	MCAPI int32_t getIdAux() const; // assume item id x 65536
 	MCAPI class Item const *getItem() const;
@@ -88,29 +85,22 @@ public:
 	MCAPI std::string getCustomName() const;
 	MCAPI std::string getDescriptionId() const;
 	MCAPI std::unique_ptr<class CompoundTag> getNetworkUserData() const;
-
 	MCAPI bool hasCustomHoverName() const;
 	MCAPI bool hasSameAuxValue(class ItemStackBase const &) const;
 	MCAPI bool hasSameUserData(class ItemStackBase const &) const;
-
 	MCAPI void set(const int32_t amount);
 	MCAPI void setChargedItem(class ItemInstance const &, bool);
 	MCAPI void setCustomName(std::string const &);
 	MCAPI void setUserData(std::unique_ptr<class CompoundTag>);
 	MCAPI void setCustomLore(std::vector<std::string> const &);
-
 	MCAPI void saveEnchantsToUserData(class ItemEnchants const &);
 	MCAPI void addCustomUserData(class BlockActor &, class BlockSource &);
-
 	MCAPI bool hasComponent(std::string const &) const;
 	MCAPI bool addComponents(class Json::Value const &, std::string &);
 	MCAPI bool updateComponent(std::string const &, class Json::Value const &);
-
 	MCAPI void serializeComponents(class IDataOutput &) const;
 	MCAPI void deserializeComponents(class IDataInput &);
-
 	MCAPI std::unique_ptr<class CompoundTag> save() const;
-
 	MCAPI bool sameItem(int32_t, int32_t) const;
 	MCAPI bool matches(class ItemStackBase const &) const;
 	MCAPI void setRepairCost(int32_t);
@@ -120,15 +110,16 @@ public:
 	MCAPI void _write(class BinaryStream &) const;
 	MCAPI void hurtAndBreak(int32_t, class Actor *);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
-
+	MCAPI operator bool() const;
+	
 	inline uint8_t getStackSize() const { return this->mCount; }
 	inline bool hasUserData() const { return (this->mUserData.get() != nullptr); }
 
 	inline std::vector<std::string> getCustomLore() const {
-		std::vector<std::string> ret;
-		if (mUserData && mUserData->contains(TAG_DISPLAY, Tag::Compound)) {
-			auto disp = mUserData->getCompound(TAG_DISPLAY);
-			if (disp->contains(TAG_LORE, Tag::List)) {
+		std::vector<std::string> ret{};
+		if (this->hasUserData() && this->mUserData->contains(TAG_DISPLAY, Tag::Type::Compound)) {
+			auto disp = this->mUserData->getCompound(TAG_DISPLAY);
+			if (disp->contains(TAG_LORE, Tag::Type::List)) {
 				auto list = disp->getList(TAG_LORE);
 				for (auto &item : list->value) {
 					ret.emplace_back(static_cast<StringTag *>(item.get())->value);
@@ -137,8 +128,6 @@ public:
 		}
 		return ret;
 	}
-
-	MCAPI operator bool() const;
 
 protected:
 	MCAPI ItemStackBase();
@@ -149,10 +138,8 @@ protected:
 	MCAPI ItemStackBase(BlockLegacy const &, int32_t);
 	MCAPI ItemStackBase(Block const &, int32_t, CompoundTag const *);
 	MCAPI ItemStackBase(ItemStackBase const &rhs);
-
-	MCAPI ItemStackBase &operator=(ItemStackBase const &rhs);
-	
 	MCAPI bool _setItem(int32_t id);
+	MCAPI ItemStackBase &operator=(ItemStackBase const &rhs);
 
 public:
 
@@ -183,7 +170,6 @@ public:
 };
 class ItemStack : public ItemStackBase {
 public:
-
 	ItemStackNetIdVariant mNetIdVariant; // 0x88
 
 	virtual void reinit(BlockLegacy const& blockLegacy, int32_t count) override;
@@ -198,9 +184,9 @@ public:
 	MCAPI ItemStack(Item const &item, int32_t count, int32_t auxValue);
 	MCAPI ItemStack(Block const &block, int32_t count, CompoundTag const *userData);
 	MCAPI ItemStack(BlockLegacy const &block, int32_t count);
+	MCAPI void _assignNetIdVariant(ItemStack const &rhs) const;
 
 	MCAPI static ItemStack fromTag(CompoundTag const &userData);
-	MCAPI void _assignNetIdVariant(ItemStack const &rhs) const;
 
 	inline ItemStack& operator=(ItemStack const& rhs) {
 		ItemStackBase::operator=(rhs);

@@ -3,12 +3,11 @@
 #include "../Core/NBT.h"
 #include "../Core/WeakPtr.h"
 #include "BlockLegacy.h"
+#include "../Item/VanillaStates.h"
 #include "../dll.h"
 
 enum class BlockRenderLayer : int32_t;
 enum class CreativeItemCategory : int32_t;
-
-class ItemState;
 class BlockPos;
 class BlockSource;
 
@@ -24,16 +23,8 @@ public:
 	virtual ~Block();
 	virtual BlockRenderLayer getRenderLayer() const;
 
-	inline bool operator==(const Block& rhs) const {
-		return (this->mLegacyBlock.get() == rhs.mLegacyBlock.get()) && (this->mAux == rhs.mAux);
-	}
-	inline bool operator!=(const Block& rhs) const {
-		return !(*this == rhs);
-	}
-
 	template <typename T> MCAPI Block const *setState(ItemState const &, T) const;
 	template <typename T> MCAPI T getState(ItemState const &) const;
-
 	MCAPI bool isSolidBlockingBlock() const;
 	MCAPI bool hasState(ItemState const &) const;
 	MCAPI Block const &keepState(ItemState const &) const;
@@ -44,11 +35,25 @@ public:
 	MCAPI std::string toDebugString() const;
 	MCAPI uint32_t getStateMask(ItemState const &) const;
 	MCAPI CreativeItemCategory getCreativeCategory() const;
+
+	MCAPI static const std::string BLOCK_DESCRIPTION_PREFIX;
+
+	inline bool operator==(const Block& rhs) const {
+		return (this->mLegacyBlock.get() == rhs.mLegacyBlock.get()) && (this->mAux == rhs.mAux);
+	}
+	inline bool operator!=(const Block& rhs) const {
+		return !(*this == rhs);
+	}
+
+	inline bool isWaterSource() const {
+		auto legacy = this->mLegacyBlock.get();
+		return ((legacy->getMaterialType() == MaterialType::Water) &&
+				(legacy->mStates[VanillaStates::LiquidDepth.mID].mInitialized) &&
+				(legacy->getState<int32_t>(VanillaStates::LiquidDepth, this->mAux) == 0));
+	}
 protected:
 	MCAPI void buildSerializationId(uint32_t);
 public:
-
-	MCAPI static const std::string BLOCK_DESCRIPTION_PREFIX;
 };
 
 static_assert(offsetof(Block, mAux) == 0x8);

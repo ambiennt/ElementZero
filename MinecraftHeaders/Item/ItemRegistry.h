@@ -6,6 +6,7 @@
 #include "../Core/SharedPtr.h"
 #include "../Item/Item.h"
 #include "../Item/ItemRuntimeID.h"
+#include "../Block/Block.h"
 
 #include <unordered_map>
 #include <vector>

@@ -3,7 +3,7 @@
 #include "mce.h"
 #include "SemVersion.h"
 
-enum struct PackType {
+enum class PackType : int32_t {
 	Invalid          = 0,
 	Addon            = 1,
 	Cached           = 2,
@@ -13,7 +13,7 @@ enum struct PackType {
 	Resources        = 6,
 	Skins            = 7,
 	WorldTemplate    = 8,
-	PackTypeCount    = 9
+	PackTypeCount    = 9,
 };
 
 struct PackIdVersion {
@@ -22,7 +22,13 @@ struct PackIdVersion {
 	PackType mPackType; // 0x80
 };
 
+struct PackInstanceId {
+    PackIdVersion mPackId; // 0x0
+    std::string mSubpackName; // 0x88
+};
+
 static_assert(offsetof(PackIdVersion, mUUID) == 0x0);
 static_assert(offsetof(PackIdVersion, mVersion) == 0x10);
 static_assert(offsetof(PackIdVersion, mPackType) == 0x80);
 static_assert(sizeof(PackIdVersion) == 0x88);
+static_assert(sizeof(PackInstanceId) == 0xA8);

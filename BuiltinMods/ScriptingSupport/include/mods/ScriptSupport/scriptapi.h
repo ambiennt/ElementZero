@@ -163,7 +163,7 @@ struct ScriptNBT {
 
   inline ScriptNBT(std::unique_ptr<Tag> const &tag) : storage(tag->copy()) {}
 
-  inline int type() const { return storage->getId(); }
+  inline int type() const { return (int32_t)storage->getId(); }
 
   inline std::string toString() { return storage->toString(); }
 

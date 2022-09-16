@@ -23,15 +23,20 @@
 
 #include "../dll.h"
 
-enum class EducationEditionOffer {
-	None        = 0,
-	RestOfWorld = 1,
-	China       = 2
-};
-
 enum class NetherWorldType : int8_t {
 	Normal = 0,
 	Flat   = 1
+};
+
+enum class EducationEditionOffer : int32_t {
+	None        = 0,
+	RestOfWorld = 1,
+	China       = 2,
+};
+
+class EducationEditionOfferValue {
+public:
+	EducationEditionOffer mValue;
 };
 
 struct LevelDataValue : public std::variant<int, bool, float, std::string, GeneratorType,
@@ -40,6 +45,7 @@ GameType, BlockPos, uint32_t, std::unique_ptr<CompoundTag>> {
 };
 
 namespace LevelDataKeys {
+
 extern MCAPI StringKey EDUCATION_OID;
 extern MCAPI StringKey GAME_TYPE;
 extern MCAPI StringKey GENERATOR;
@@ -48,6 +54,7 @@ extern MCAPI StringKey LIMITED_WORLD_WIDTH;
 extern MCAPI StringKey LOADED_PLAYER_TAG;
 extern MCAPI StringKey SEED;
 extern MCAPI StringKey SPAWN_POS;
+
 }; // namespace LevelDataKeys
 
 // ref: LevelData::getTagData

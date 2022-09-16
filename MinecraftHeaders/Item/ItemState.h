@@ -38,3 +38,11 @@ struct ItemStateInstance {
 };
 
 static_assert(sizeof(ItemStateInstance) == 0x20);
+
+template <class T>
+class ItemStateVariant : public ItemState {};
+
+template <>
+class ItemStateVariant<int32_t> : public ItemState {
+public:
+};

@@ -10,6 +10,10 @@
 #include <set>
 
 class ChestBlockActor : public RandomizableBlockActorFillingContainer {
+	MCAPI void _closeChest(BlockSource &region, Player *player);
+	MCAPI bool _detectBlockObstruction(BlockSource &region) const;
+	MCAPI bool _saveClientSideState(CompoundTag &tag) const;
+	MCAPI void _unpair();
 public:
 
 	enum class Flags : int32_t {
@@ -17,7 +21,7 @@ public:
 		mPairingChanged = 2,
 		mAlongX = 3,
 		mDeferredPairLoad = 4,
-		mConverted = 5
+		mConverted = 5,
 	};
 
 	float mSpeed; // 0x1F8
@@ -38,12 +42,7 @@ public:
 	std::unordered_set<ActorUniqueID> mOpenedByIds; // 0x238
 	bool mNotifyPlayersOnChange; // 0x278
 
-	MCAPI ChestBlockActor(BlockActorType type, std::string const& id, BlockActorRendererId renderId, BlockPos const& pos, bool isTrapped);
-
-	MCAPI void _closeChest(BlockSource &region, Player *player);
-	MCAPI bool _detectBlockObstruction(BlockSource &region);
-	MCAPI bool _saveClientSideState(CompoundTag &tag);
-	MCAPI void _unpair();
+	MCAPI ChestBlockActor(BlockActorType type, const std::string &id, BlockActorRendererId renderId, const BlockPos &pos, bool isTrapped);
 	MCAPI bool canPairWith(BlockActor *actor, BlockSource &region);
 	MCAPI void forceCloseChest(BlockSource &region);
 	MCAPI void pairWith(ChestBlockActor *chest, bool isLeadingChest);

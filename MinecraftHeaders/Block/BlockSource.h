@@ -7,6 +7,7 @@
 #include "../Actor/ActorType.h"
 #include "../Block/ActorBlockSyncMessage.h"
 #include "../Block/Block.h"
+#include "../Block/BedrockBlockTypes.h"
 #include "../Math/ChunkPos.h"
 #include "../Math/AABB.h"
 #include "Brightness.h"
@@ -63,7 +64,6 @@ public:
 
 	MCAPI bool canSeeSky(int, int, int) const;
 	MCAPI short getHeightmap(int, int);
-	MCAPI bool isEmptyBlock(int, int, int);
 	MCAPI bool isInWall(class Vec3 const &);
 	MCAPI class Block const &getBlock(int, int, int) const;
 	MCAPI bool hasChunksAt(class AABB const &) const;
@@ -116,7 +116,7 @@ public:
 	MCAPI class AABB generateUnloadedChunkAABB(class ChunkPos const &);
 	MCAPI struct Brightness getRawBrightness(class BlockPos const &, bool, bool) const;
 	MCAPI bool isPositionUnderLiquid(class Vec3 const &, enum MaterialType);
-	MCAPI bool mayPlace(class Block const &, class BlockPos const &, unsigned char, class Actor *, bool);
+	MCAPI bool mayPlace(class Block const &block, class BlockPos const &pos, uint8_t face, class Actor *placer, bool ignoreEntities);
 	MCAPI bool containsAnyBlockOfType(class BlockPos const &, class BlockPos const &, class Block const &);
 	MCAPI struct BrightnessPair getBrightnessPair(class BlockPos const &) const;
 	MCAPI bool isTouchingMaterial(class BlockPos const &, enum MaterialType) const;
@@ -160,6 +160,13 @@ public:
 
 	inline enum LegacyBlockID getBlockIdAt(int32_t x, int32_t y, int32_t z) {
 		return (LegacyBlockID)this->getBlock(BlockPos(x, y, z)).mLegacyBlock->mId;
+	}
+
+	inline bool isEmptyBlock(const BlockPos &pos) const {
+		return (this->getBlock(pos).mLegacyBlock.get() == BedrockBlockTypes::mAir.get());
+	}
+	inline bool isEmptyBlock(int32_t x, int32_t y, int32_t z) const {
+		return this->isEmptyBlock(BlockPos(x, y, z));
 	}
 };
 
