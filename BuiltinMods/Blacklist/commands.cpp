@@ -11,7 +11,7 @@ void BanCommand::execute(CommandOrigin const &origin, CommandOutput &output) {
 		auto it = *results.begin();
 		auto opt = PLAYER_DB.Find(it);
 		if (opt) {
-			LocateService<ServerNetworkHandler>()->forceDisconnectClient(*opt->player, false, false, reason);
+			LocateService<ServerNetworkHandler>()->forceDisconnectClient(*opt->player, false, reason);
 			if (opt->xuid == 0) {
 				BLACKLIST.Add(Mod::Blacklist::UUID{opt->uuid, opt->name}, reason, op);
 				auto uuid = opt->uuid.asString();
@@ -46,7 +46,7 @@ void BanNameCommand::execute(CommandOrigin const &origin, CommandOutput &output)
 	if (opt) {
 		auto online = PLAYER_DB.Find(opt->uuid);
 		if (online) {
-			LocateService<ServerNetworkHandler>()->forceDisconnectClient(*online->player, false, false, reason);
+			LocateService<ServerNetworkHandler>()->forceDisconnectClient(*online->player, false, reason);
 		}
 
 		if (opt->xuid == 0) {
@@ -159,7 +159,7 @@ void ForceKickCommand::execute(CommandOrigin const &origin, CommandOutput &outpu
 
 	auto& snh = *LocateService<ServerNetworkHandler>();
 	for (auto it : results) {
-		snh.forceDisconnectClient(*it, this->useDefaultDisconnectMsg, this->skipPlayerLeftChatMsg, this->reason);
+		snh.forceDisconnectClient(*it, this->skipPlayerLeftChatMsg, this->reason);
 	}
 
 	output.success("commands.force-kick.success");
@@ -173,9 +173,8 @@ void ForceKickCommand::setup(CommandRegistry *registry) {
 
 	registry->registerOverload<ForceKickCommand>("force-kick",
 		mandatory(&ForceKickCommand::selector, "target"),
-		optional(&ForceKickCommand::useDefaultDisconnectMsg, "useDefaultDisconnectMsg"),
-		optional(&ForceKickCommand::reason, "reason"),
-		optional(&ForceKickCommand::skipPlayerLeftChatMsg, "skipPlayerLeftChatMsg")
+		optional(&ForceKickCommand::skipPlayerLeftChatMsg, "skipPlayerLeftChatMsg"),
+		optional(&ForceKickCommand::reason, "reason")
 	);
 }
 

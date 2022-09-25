@@ -59,12 +59,11 @@ public:
 
 class ForceKickCommand : public Command {
   	CommandSelector<Player> selector;
-	bool useDefaultDisconnectMsg;
 	std::string reason;
 	bool skipPlayerLeftChatMsg;
 
 public:
-  	ForceKickCommand() : useDefaultDisconnectMsg(true), skipPlayerLeftChatMsg(false) {
+  	ForceKickCommand() : skipPlayerLeftChatMsg(false) {
 		this->selector.setIncludeDeadPlayers(true);
 	}
 

@@ -12,21 +12,21 @@
 class Player;
 class NetworkIdentifier;
 
-// note to self:
-// ServerNetworkHandler::handle - for server-bound packets (client sends to server)
-// PacketHandlerDispatcherInstance::handle - for client-bound packets (server to client)
-// or GameSpecificPacketHandlerDispatcherInstance
-
 class ServerNetworkHandler /*: public NetEventCallback, public LevelListener, public Social::MultiplayerServiceObserver, public Social::XboxLiveUserObserver*/ {
-	MCAPI void _onPlayerLeft(ServerPlayer *player, bool useDefaultDisconnectMsg); // do not use, use forceDisconnectClient instead
+	//MCAPI void _onPlayerLeft(ServerPlayer *player, bool useDefaultDisconnectMsg);
 	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
 	MCAPI int32_t _getActiveAndInProgressPlayerCount(mce::UUID excludePlayer) const;
-
+	inline void onDisconnect(const NetworkIdentifier& netId, const std::string& disconnectMsg, bool skipPlayerLeftChatMsg) { // do not use, use forceDisconnectClient instead
+		return CallServerClassMethod<void>(
+			"?onDisconnect@ServerNetworkHandler@@UEAAXAEBVNetworkIdentifier@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N1@Z",
+			this, netId, disconnectMsg, skipPlayerLeftChatMsg, std::string{} /*std::string const& telemetryOverride*/);
+	}
 public:
 	class Client;
 
-	MCAPI void disconnectClient(NetworkIdentifier const& netId,
-		uint8_t subId, std::string const &reason, bool useDefaultDisconnectMsg); // do not use, use forceDisconnectClient instead
+	// do not use, use forceDisconnectClient instead
+	// useDefaultDisconnectMsg set to true overrides the contents of disconnectMsg
+	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subId, std::string const &disconnectMsg, bool useDefaultDisconnectMsg);
 	MCAPI void updateServerAnnouncement();
 
 	inline ServerPlayer* getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
@@ -45,19 +45,12 @@ public:
 		this->mServerName = motd;
 	}
 
-	inline void onDisconnect(NetworkIdentifier const &netId, std::string const &msg, bool skipPlayerLeftChatMsg) { // do not use, use forceDisconnectClient instead
-		return CallServerClassMethod<void>(
-			"?onDisconnect@ServerNetworkHandler@@UEAAXAEBVNetworkIdentifier@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N1@Z",
-			this, netId, msg, skipPlayerLeftChatMsg, std::string() /*std::string const& telemetryOverride*/);
-	}
-
-	// useDefaultDisconnectMsg set to true will cause the contents of mMessage will be ignored and the client will default to disconnectionScreen.disconnected
-	// setting useDefaultDisconnectMsg to true will only make a difference if disconnectMsg is not an empty string
-	// skipPlayerLeftChatMsg set to true will prevent the "%s left the game" message from outputting in the in-game chat
-	BASEAPI void forceDisconnectClient(NetworkIdentifier const& netId, uint8_t subId, bool useDefaultDisconnectMsg,
-		bool skipPlayerLeftChatMsg, std::string const& disconnectMsg = std::string());
-	BASEAPI void forceDisconnectClient(Player const& player, bool useDefaultDisconnectMsg,
-		bool skipPlayerLeftChatMsg, std::string const& disconnectMsg = std::string());
+	// - if disconnectMsg.empty(), the client will default to disconnectionScreen.disconnected
+	// - skipPlayerLeftChatMsg set to true will prevent the "%s left the game" message from outputting in the in-game chat
+	BASEAPI void forceDisconnectClient(const NetworkIdentifier& netId, uint8_t subId,
+		 bool skipPlayerLeftChatMsg, const std::string& disconnectMsg = std::string{});
+	BASEAPI void forceDisconnectClient(const Player& player,
+		bool skipPlayerLeftChatMsg, const std::string& disconnectMsg = std::string{});
 
 	BUILD_ACCESS_MUT(class GameCallbacks *, mGameCallbacks, 0x30);
 	BUILD_ACCESS_MUT(class Level *, mLevel, 0x38);

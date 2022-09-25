@@ -110,8 +110,10 @@ public:
 	MCAPI void _write(class BinaryStream &) const;
 	MCAPI void hurtAndBreak(int32_t, class Actor *);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
-	MCAPI operator bool() const;
 	
+	inline operator bool() const {
+		return (this->mValid && this->mItem && !this->isNull() && (this->mCount > 0));
+	}
 	inline uint8_t getStackSize() const { return this->mCount; }
 	inline bool hasUserData() const { return (this->mUserData.get() != nullptr); }
 

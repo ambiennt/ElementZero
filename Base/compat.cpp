@@ -229,15 +229,14 @@ uint8_t Player::getClientSubId() const {
 
 
 
-void ServerNetworkHandler::forceDisconnectClient(Player const& player,
-	bool skipDisconnectScreen, bool skipPlayerLeftChatMsg, std::string const& disconnectMsg) {
-	this->forceDisconnectClient(player.getNetworkIdentifier(), player.mClientSubId,
-		skipDisconnectScreen, skipPlayerLeftChatMsg, disconnectMsg);
+void ServerNetworkHandler::forceDisconnectClient(const Player& player,
+	bool skipPlayerLeftChatMsg, const std::string& disconnectMsg) {
+	this->forceDisconnectClient(player.getNetworkIdentifier(), player.mClientSubId, skipPlayerLeftChatMsg, disconnectMsg);
 }
 
-void ServerNetworkHandler::forceDisconnectClient(NetworkIdentifier const& netId, uint8_t subId,
-	bool skipDisconnectScreen, bool skipPlayerLeftChatMsg, std::string const& disconnectMsg) {
-	this->disconnectClient(netId, subId, disconnectMsg, skipDisconnectScreen);
+void ServerNetworkHandler::forceDisconnectClient(const NetworkIdentifier& netId, uint8_t subId,
+	bool skipPlayerLeftChatMsg, const std::string& disconnectMsg) {
+	this->disconnectClient(netId, subId, disconnectMsg, disconnectMsg.empty());
 	this->onDisconnect(netId, disconnectMsg, skipPlayerLeftChatMsg);
 }
 
