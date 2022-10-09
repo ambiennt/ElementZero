@@ -14,8 +14,7 @@ class ResourcePackManager;
 
 class MobEffect {
 public:
-
-	const MobEffectID mId; // 0x8 (actually a uint32_t)
+	const MobEffectID mId; // 0x8 - const uint32_t
 	bool mIsHarmful; // 0xC
 	Color mColor; // 0x10
 	std::string mDescriptionId; // 0x20
@@ -107,7 +106,7 @@ public:
 	bool mDisplayOnScreenTextureAnimation, mAmbient, mNoCounter, mEffectVisible; // 0x18, 0x19, 0x1A, 0x1C
 
 	MCAPI static const MobEffectInstance NO_EFFECT;
-	static const int32_t MAX_AMPLIFIER_COUNT = 5;
+	static constexpr inline int32_t MAX_AMPLIFIER_COUNT = 5;
 
 	MobEffectInstance(
 		MobEffectID id, int32_t dur, int32_t durEasy, int32_t durNormal, int32_t durHard,
@@ -120,10 +119,10 @@ public:
 	MobEffectInstance(MobEffectID id, int32_t dur, int32_t amplifier, bool visible) :
 		MobEffectInstance(id, dur, dur, dur, dur, amplifier, false, false, false, visible) {}
 
-	bool operator==(MobEffectInstance const &rhs) const {
+	inline bool operator==(MobEffectInstance const &rhs) const {
 		return (this->mId == rhs.mId);
 	}
-	bool operator!=(MobEffectInstance const &rhs) const {
+	inline bool operator!=(MobEffectInstance const &rhs) const {
 		return !(*this == rhs);
 	}
 };

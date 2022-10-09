@@ -624,24 +624,24 @@ public:
 			this, destination, &facePosition, destinationDimension, yaw, pitch, commandVersion, &id);
 	}
 
-	inline AttributeInstance* getMutableAttribute(AttributeID id) {
-		return this->mAttributes->getMutableInstance((uint32_t)id);
+	inline AttributeInstance &getAttributeInstance(AttributeID id) {
+		return this->mAttributes->getInstance(id);
 	}
 
 	inline float getHealth() {
-		return this->getMutableAttribute(AttributeID::Health)->mCurrentValue;
+		return this->getAttributeInstance(AttributeID::Health).mCurrentValue;
 	}
 
 	inline float getAbsorption() {
-		return this->getMutableAttribute(AttributeID::Absorption)->mCurrentValue;
+		return this->getAttributeInstance(AttributeID::Absorption).mCurrentValue;
 	}
 
 	inline int32_t getHealthAsInt() {
-		return (int32_t)this->getHealth();
+		return static_cast<int32_t>(this->getHealth());
 	}
 
 	inline int32_t getAbsorptionAsInt() {
-		return (int32_t)this->getAbsorption();
+		return static_cast<int32_t>(this->getAbsorption());
 	}
 
 	inline bool hasAnyEffects() const {

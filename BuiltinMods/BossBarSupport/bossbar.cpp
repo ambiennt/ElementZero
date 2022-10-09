@@ -117,8 +117,7 @@ void Handle::UpdateColor(uint32_t color) {
 }
 
 Instance::Instance(Config const &cfg) : cfg(cfg) {
-  static std::random_device rd;
-  static std::mt19937 eng{rd()};
+  static std::mt19937 eng{std::random_device{}()};
   static std::uniform_int_distribution<uint64_t> distr{0xFF00000000, 0xFF7FFFFFFF};
   unqid = distr(eng);
   createBossActor();

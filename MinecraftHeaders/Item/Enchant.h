@@ -173,7 +173,7 @@ public:
 	MCAPI static int32_t applyEnchant(ItemStackBase &out, ItemEnchants const &enchants, bool allowNonVanilla);
 	MCAPI static int32_t getEnchantLevel(Enchant::Type enchantType, ItemStackBase const& stack);
 	MCAPI static void doPostHurtEffects(Mob &victim, Mob &attacker);
-	MCAPI static void doPostDamageEffects(Actor &, Actor &);
+	MCAPI static void doPostDamageEffects(Actor &victim, Actor &attacker);
 	MCAPI static int32_t determineActivation(Enchant::Type);
 	MCAPI static int32_t getBestEnchantLevel(Enchant::Type, Mob const &, EquipmentFilter);
 	MCAPI static int32_t getLootableRandomEnchantIndex(Random &);
@@ -184,7 +184,7 @@ public:
 	MCAPI static void randomlyEnchant(ItemInstance &, int32_t, int32_t, bool);
 	MCAPI static std::vector<Vec3> getBookCasePositions(BlockSource &, Vec3 const &);
 	MCAPI static std::vector<int32_t> getLegalEnchants(Item const *);
-	MCAPI static int32_t getMeleeDamageBonus(Actor const &, Actor &);
+	MCAPI static int32_t getMeleeDamageBonus(Actor const &victim, Actor &attacker);
 	MCAPI static void appendEnchantToFormattedText(Enchant::Type, std::string const &, std::string &);
 	MCAPI static ItemStack const &getRandomItemWithMending(Mob const &);
 	MCAPI static ItemStack const &getRandomItemWith(Enchant::Type, Mob const &, EquipmentFilter);

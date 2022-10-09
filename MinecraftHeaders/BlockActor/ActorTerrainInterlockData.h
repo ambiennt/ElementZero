@@ -7,9 +7,9 @@ class ActorTerrainInterlockData {
 public:
 
 	enum class VisibilityState : int8_t {
-        InitialNotVisible            = 0x0,
-        Visible_0                    = 0x1,
-        DelayedDestructionNotVisible = 0x2,
+		InitialNotVisible            = 0x0,
+		Visible_0                    = 0x1,
+		DelayedDestructionNotVisible = 0x2,
 	};
 
 	VisibilityState mRenderVisibilityState;

@@ -14,9 +14,9 @@
 #include "../Block/BlockLegacy.h"
 #include "ItemStackNetIdVariant.h"
 #include "ItemRuntimeID.h"
+#include "Item.h"
 #include "../dll.h"
 
-class Item;
 class Block;
 class CompoundTag;
 class IDataOutput;
@@ -112,7 +112,7 @@ public:
 	MCAPI void _read(class ReadOnlyBinaryStream &);
 	
 	inline operator bool() const {
-		return (this->mValid && this->mItem && !this->isNull() && (this->mCount > 0));
+		return !this->isNull();
 	}
 	inline uint8_t getStackSize() const { return this->mCount; }
 	inline bool hasUserData() const { return (this->mUserData.get() != nullptr); }
@@ -167,6 +167,13 @@ public:
 
 	inline LegacyBlockID toBlockIdAsEnum() const {
 		return (LegacyBlockID)this->toBlockId();
+	}
+
+	inline int32_t getAttackDamage() const {
+		if (this->mItem) {
+			return this->mItem->getAttackDamage();
+		}
+		return 0;
 	}
 
 };
