@@ -19,7 +19,9 @@ public:
 	CommandOutputType type;
 	std::unique_ptr<CommandPropertyBag> property_bag;
 	std::vector<CommandOutputMessage> messages;
+	int32_t successCount;
 
+	MCAPI CommandOutput(CommandOutputType);
 	BASEAPI void success();
 	MCAPI void success(std::string const &, std::vector<CommandOutputParameter> const &params = {});
 	MCAPI void error(std::string const &, std::vector<CommandOutputParameter> const &params = {});
@@ -30,4 +32,10 @@ public:
 		}
 	}
 	template <typename T> MCAPI void set(char const *name, T value);
+
+	inline bool wantsData() const {
+		return (this->type == CommandOutputType::WithJson);
+	}
 };
+
+static_assert(sizeof(CommandOutput) == 0x30);

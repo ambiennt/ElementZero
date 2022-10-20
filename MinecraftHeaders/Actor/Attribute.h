@@ -187,7 +187,7 @@ public:
 static_assert(sizeof(AttributeInstance) == 0x88);
 
 class BaseAttributeMap {
-	static AttributeInstance mInvalidInstance;
+	MCAPI static AttributeInstance mInvalidInstance;
 public:
 	std::unordered_map<uint32_t, AttributeInstance> mInstanceMap; // 0x0
 	std::vector<AttributeInstanceHandle> mDirtyAttributes; // 0x40

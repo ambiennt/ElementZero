@@ -74,6 +74,7 @@ public:
 	};
 
 	MCAPI void registerCommand(std::string const &, char const *, CommandPermissionLevel, CommandFlag, CommandFlag);
+	MCAPI std::string getCommandName(const std::string &commandLine) const;
 	MCAPI void registerAlias(std::string name, std::string alias);
 	MCAPI int32_t addSoftEnum(std::string const &enumName, std::vector<std::string> values);
 	MCAPI int32_t addEnumValues(std::string const &enumName, std::vector<std::string> const &values);
@@ -85,6 +86,7 @@ public:
 private:
 	MCAPI Signature const *findCommand(std::string const &) const;
 	MCAPI void registerOverloadInternal(Signature &, Overload &);
+	MCAPI std::string symbolToString(CommandRegistry::Symbol symbol) const;
 
 	template <typename Type>
 	MCAPI bool parse(void *storage, ParseToken const &token, CommandOrigin const &origin, int32_t version,

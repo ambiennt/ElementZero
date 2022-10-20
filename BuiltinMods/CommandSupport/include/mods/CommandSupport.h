@@ -68,6 +68,7 @@ template <> COMMANDAPI typeid_t<CommandRegistry> CommandSupport::GetParameterTyp
 template <> COMMANDAPI typeid_t<CommandRegistry> CommandSupport::GetParameterTypeId<CommandSelector<Actor>>();
 template <> COMMANDAPI typeid_t<CommandRegistry> CommandSupport::GetParameterTypeId<CommandSelector<Player>>();
 template <> COMMANDAPI typeid_t<CommandRegistry> CommandSupport::GetParameterTypeId<CommandRawText>();
+template <> COMMANDAPI typeid_t<CommandRegistry> CommandSupport::GetParameterTypeId<std::unique_ptr<Command>>();
 
 class CustomCommandOrigin : public CommandOrigin {
 public:

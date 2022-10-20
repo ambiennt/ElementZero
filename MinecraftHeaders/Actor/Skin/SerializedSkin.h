@@ -41,6 +41,8 @@ public:
 	Color mSkinColor; // 0x1B8
 	TrustedSkinFlag mTrustedFlag; // 0x1C8 - mTrustedSkin
 
+	static constexpr inline const char *DEFAULT_SKIN_ID_PREFIX = "c18e65aa-7b21-4637-9b63-8ad63622ef01.Custom";
+
 	MCAPI SerializedSkin();
 	MCAPI SerializedSkin(SerializedSkin const &);
 	MCAPI SerializedSkin(ConnectionRequest const &);
@@ -106,10 +108,13 @@ static_assert(sizeof(SerializedSkin) == 0x1D0);
 
 class SteveSkin : public SerializedSkin {
 public:
+	static constexpr inline const char *STEVE_SKIN_ID = "c18e65aa-7b21-4637-9b63-8ad63622ef01.Steve";
+
 	SteveSkin() : SerializedSkin() {
 
-		//this->mId = "c18e65aa-7b21-4637-9b63-8ad63622ef01_Steve";
-		this->mId = this->mFullId = mce::UUID::generateUUIDAsString();
+		//this->mId = SteveSkin::STEVE_SKIN_ID;
+		this->mId = SerializedSkin::DEFAULT_SKIN_ID_PREFIX + mce::UUID::generateUUIDAsString();
+		this->mFullId = this->mId;
 		this->mArmSize = "wide";
 		this->mTrustedFlag = SerializedSkin::TrustedSkinFlag::YES;
 		this->mResourcePatch = "{\"geometry\":{\"default\":\"geometry.humanoid.custom\"}}";
@@ -131,10 +136,13 @@ public:
 
 class AlexSkin : public SerializedSkin {
 public:
+	static constexpr inline const char* ALEX_SKIN_ID = "c18e65aa-7b21-4637-9b63-8ad63622ef01.Alex";
+
 	AlexSkin() : SerializedSkin() {
 
-		//this->mId = "c18e65aa-7b21-4637-9b63-8ad63622ef01_Alex";
-		this->mId = this->mFullId = mce::UUID::generateUUIDAsString();
+		//this->mId = AlexSkin::ALEX_SKIN_ID;
+		this->mId = SerializedSkin::DEFAULT_SKIN_ID_PREFIX + mce::UUID::generateUUIDAsString();
+		this->mFullId = this->mId;
 		this->mArmSize = "slim";
 		this->mTrustedFlag = SerializedSkin::TrustedSkinFlag::YES;
 		this->mResourcePatch = "{\"geometry\":{\"default\":\"geometry.humanoid.customSlim\"}}";

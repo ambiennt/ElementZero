@@ -12,11 +12,11 @@ template <typename T> class CommandSelectorResults;
 
 class Command {
 protected:
-	int32_t mVersion; // 8
-	CommandRegistry *mRegistry; // 16
-	int32_t mCommandSymbol = -1; // 24
-	CommandPermissionLevel mPermissionLevel = CommandPermissionLevel::Internal; // 28
-	CommandFlagValue mFlags; // 29
+	int32_t mVersion; // 0x8
+	CommandRegistry *mRegistry; // 0x10
+	int32_t mCommandSymbol = -1; // 0x18
+	CommandPermissionLevel mPermissionLevel = CommandPermissionLevel::Internal; // 0x1C
+	CommandFlagValue mFlags; // 0x1D
 
 public:
 	virtual ~Command();
@@ -26,6 +26,8 @@ public:
 	MCAPI static bool validRange(int, int, int, class CommandOutput &);
 	MCAPI void run(class CommandOrigin const &, class CommandOutput &) const;
 
+	inline int32_t getCommandSymbol() const { return this->mCommandSymbol; }
+
 protected:
 	MCAPI static bool isWildcard(class CommandSelectorBase const &);
 	MCAPI bool shouldSendTelemetry(class CommandOrigin const &) const;
@@ -33,3 +35,5 @@ protected:
 	MCAPI void sendTelemetry(class CommandOrigin const &, class CommandOutput const &) const;
 	template <typename T> MCAPI static bool checkHasTargets(CommandSelectorResults<T> const &, CommandOutput &);
 };
+
+static_assert(sizeof(Command) == 0x20);

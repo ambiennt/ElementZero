@@ -76,6 +76,10 @@ template <> typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<Co
 template <> COMMANDAPI typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<CommandRawText>() {
   return GETID("?id@?1???$type_id@VCommandRegistry@@VCommandRawText@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");
 }
+template <> COMMANDAPI typeid_t<CommandRegistry> Mod::CommandSupport::GetParameterTypeId<std::unique_ptr<Command>>() {
+  return GETID(
+    "?id@?1???$type_id@VCommandRegistry@@V?$unique_ptr@VCommand@@U?$default_delete@VCommand@@@std@@@std@@@@YA?AV?$typeid_t@VCommandRegistry@@@@XZ@4V1@A");
+}
 
 void dllenter() {}
 void dllexit() {}
