@@ -31,4 +31,5 @@ public:
 	std::vector<NetworkIdentifierWithSubId> mTempUserIds; // 0x38
 };
 
+static_assert(offsetof(LoopbackPacketSender, mNetwork) == 0x10);
 static_assert(sizeof(LoopbackPacketSender) == 0x50);

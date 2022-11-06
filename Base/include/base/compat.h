@@ -13,6 +13,8 @@
 #include <Core/DedicatedServer.h>
 #include <Core/mce.h>
 #include <RakNet/RakPeer.h>
+#include <Packet/DisconnectPacket.h>
+#include <Core/PacketSender.h>
 
 #include <modutils.h>
 #include "base.h"

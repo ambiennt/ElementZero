@@ -20,10 +20,10 @@ struct NetworkStatus : Command {
 		output.type = CommandOutputType::Normal;
 
 		if (origin.getOriginType() != CommandOriginType::Player) {
-			return output.error("commands.generic.error.invalidPlayer", {"/net-stat"});
+			return output.error("This command can only be executed by players");
 		}
 
-		auto& executor = *(Player*)(origin.getEntity());
+		auto& executor = *reinterpret_cast<Player*>(origin.getEntity());
 		auto& netId = executor.getNetworkIdentifier();
 		auto peer = LocateService<NetworkHandler>()->getPeerForUser(netId);
 		
@@ -33,7 +33,7 @@ struct NetworkStatus : Command {
 			if (std::isnan(status.mCurrentPacketLoss)) { status.mCurrentPacketLoss = 0.f; }
 			if (std::isnan(status.mAveragePacketLoss)) { status.mAveragePacketLoss = 0.f; }
 
-			return output.success("commands.net-stat.result",
+			return output.success("commands.netstat.result",
 				{status.mCurrentPing, status.mAveragePing, status.mCurrentPacketLoss, status.mAveragePacketLoss});
 		}
 
@@ -41,9 +41,12 @@ struct NetworkStatus : Command {
 	}
 
 	static void setup(CommandRegistry *registry) {
-		registry->registerCommand("net-stat", "commands.net-stat.description",
-			CommandPermissionLevel::Any, CommandFlagUsage, CommandFlagCheat);
-		registry->registerOverload<NetworkStatus>("net-stat");
+		std::string cmdName("netstat");
+
+		registry->registerCommand(cmdName, "commands.netstat.description",
+			CommandPermissionLevel::Any, CommandFlagUsage, CommandFlagNone);
+		registry->registerAlias(cmdName, "ping");
+		registry->registerOverload<NetworkStatus>(cmdName);
 	}
 };
 

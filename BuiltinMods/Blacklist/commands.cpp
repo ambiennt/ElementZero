@@ -153,7 +153,7 @@ void ForceKickCommand::execute(CommandOrigin const &origin, CommandOutput &outpu
 
 	auto results = this->selector.results(origin);
 	if (results.empty()) {
-		output.error("commands.generic.selector.empty");
+		output.error("No targets matched selector");
 		return;
 	}
 
@@ -162,16 +162,17 @@ void ForceKickCommand::execute(CommandOrigin const &origin, CommandOutput &outpu
 		snh.forceDisconnectClient(*it, this->skipPlayerLeftChatMsg, this->reason);
 	}
 
-	output.success("commands.force-kick.success");
+	int32_t resultCount = results.count();
+	output.success("Successfully force-kicked " + std::to_string(resultCount) + ((resultCount == 1) ? " player" : " players"));
 }
 
 void ForceKickCommand::setup(CommandRegistry *registry) {
 	using namespace commands;
 
-	registry->registerCommand("force-kick", "commands.force-kick.description",
-		CommandPermissionLevel::GameMasters, CommandFlagCheat, CommandFlagNone);
+	registry->registerCommand("forcekick", "Force-kick a player.",
+		CommandPermissionLevel::GameMasters, CommandFlagUsage, CommandFlagNone);
 
-	registry->registerOverload<ForceKickCommand>("force-kick",
+	registry->registerOverload<ForceKickCommand>("forcekick",
 		mandatory(&ForceKickCommand::selector, "target"),
 		optional(&ForceKickCommand::skipPlayerLeftChatMsg, "skipPlayerLeftChatMsg"),
 		optional(&ForceKickCommand::reason, "reason")

@@ -236,8 +236,14 @@ void ServerNetworkHandler::forceDisconnectClient(const Player& player,
 
 void ServerNetworkHandler::forceDisconnectClient(const NetworkIdentifier& netId, uint8_t subId,
 	bool skipPlayerLeftChatMsg, const std::string& disconnectMsg) {
-	this->disconnectClient(netId, subId, disconnectMsg, disconnectMsg.empty());
-	this->onDisconnect(netId, disconnectMsg, skipPlayerLeftChatMsg);
+
+	auto sendPkt = [&]() -> void {
+		DisconnectPacket pkt(disconnectMsg.empty(), disconnectMsg);
+		this->mPacketSender->sendToClient(netId, pkt, subId)
+;	};
+
+	this->mPacketSender->flush(netId, std::move(sendPkt));
+	this->onDisconnect(netId, skipPlayerLeftChatMsg);
 }
 
 void CommandOutput::success() { direct_access<bool>(this, 40) = true; }

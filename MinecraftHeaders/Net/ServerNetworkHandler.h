@@ -13,20 +13,25 @@ class Player;
 class NetworkIdentifier;
 
 class ServerNetworkHandler /*: public NetEventCallback, public LevelListener, public Social::MultiplayerServiceObserver, public Social::XboxLiveUserObserver*/ {
-	//MCAPI void _onPlayerLeft(ServerPlayer *player, bool useDefaultDisconnectMsg);
 	MCAPI ServerPlayer* _getServerPlayer(NetworkIdentifier const& netId, uint8_t subId);
 	MCAPI int32_t _getActiveAndInProgressPlayerCount(mce::UUID excludePlayer) const;
-	inline void onDisconnect(const NetworkIdentifier& netId, const std::string& disconnectMsg, bool skipPlayerLeftChatMsg) { // do not use, use forceDisconnectClient instead
+
+	// do not call directly, use forceDisconnectClient instead
+	// ServerNetworkHandler::onDisconnect cleans up and saves all player data on the server and closes the connection
+	// however it doesnt have an interface for customizing the disconnect screen message
+	inline void onDisconnect(const NetworkIdentifier& netId, bool skipPlayerLeftChatMsg) {
 		return CallServerClassMethod<void>(
 			"?onDisconnect@ServerNetworkHandler@@UEAAXAEBVNetworkIdentifier@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N1@Z",
-			this, netId, disconnectMsg, skipPlayerLeftChatMsg, std::string{} /*std::string const& telemetryOverride*/);
+			this,
+			netId,
+			/*const std::string& disconnectMsg*/ std::string{}, // unused param
+			skipPlayerLeftChatMsg, // whether or not to show the "%s has left the game" in chat
+			/*std::string const& telemetryOverride*/ std::string{} // unused param
+		);
 	}
 public:
 	class Client;
 
-	// do not use, use forceDisconnectClient instead
-	// useDefaultDisconnectMsg set to true overrides the contents of disconnectMsg
-	MCAPI void disconnectClient(NetworkIdentifier const& netId, uint8_t subId, std::string const &disconnectMsg, bool useDefaultDisconnectMsg);
 	MCAPI void updateServerAnnouncement();
 
 	inline ServerPlayer* getServerPlayer(NetworkIdentifier const& netId, uint8_t subId) {
