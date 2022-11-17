@@ -2,6 +2,8 @@
 
 #include "ActorUniqueID.h"
 #include "../dll.h"
+#include <memory>
+#include <string>
 
 class BlockSource;
 class Block;

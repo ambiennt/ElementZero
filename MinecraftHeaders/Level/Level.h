@@ -541,7 +541,7 @@ public:
 	MCAPI class Actor *getRuntimeEntity(class ActorRuntimeID, bool) const;
 	MCAPI class ITickingArea *getTickingArea(class mce::UUID const &) const;
 	MCAPI float getSpecialMultiplier(AutomaticID<class Dimension, int>);
-	MCAPI class MapItemSavedData *getMapSavedData(struct ActorUniqueID);
+	MCAPI class MapItemSavedData *getMapSavedData(struct ActorUniqueID uuid);
 	MCAPI class Dimension *getDimension(class AutomaticID<class Dimension, int>) const;
 	MCAPI std::string const &getPlayerPlatformOnlineId(class mce::UUID const &) const;
 
@@ -592,8 +592,8 @@ public:
 	MCAPI void addTerrainParticleEffect(class BlockPos const &, class Block const &, class Vec3 const &, float, float, float);
 	MCAPI void entityChangeDimension(class Actor &, class AutomaticID<class Dimension, int>);
 	MCAPI class Particle * addParticle(enum ParticleType, class Vec3 const &, class Vec3 const &, int, class CompoundTag const *, bool);
-	MCAPI class MapItemSavedData &createMapSavedData(struct ActorUniqueID const &,
-		class BlockPos const &, class AutomaticID<class Dimension, int>, int);
+	MCAPI class MapItemSavedData &createMapSavedData(const struct ActorUniqueID &uuid,
+		const class BlockPos &origin, class AutomaticID<class Dimension, int32_t> dimension, int32_t returnScaleLevel);
 	MCAPI void spawnParticleEffect(std::string const &, class Vec3 const &, class Dimension *);
 	MCAPI void requestPlayerChangeDimension(class Player &, std::unique_ptr<class ChangeDimensionRequest>);
 

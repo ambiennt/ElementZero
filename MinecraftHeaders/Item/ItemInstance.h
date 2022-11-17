@@ -1,18 +1,20 @@
 #pragma once
 
 #include "ItemStack.h"
-#include "../Core/NBT.h"
-#include "../Block/Block.h"
-#include "../Block/BlockLegacy.h"
 #include "../dll.h"
+#include <cstdint>
+
+class Block;
+class BlockLegacy;
+class CompoundTag;
+class Item;
 
 class ItemInstance : public ItemStackBase {
 public:
 
-	virtual void reinit(BlockLegacy const& blockLegacy, int32_t count) override;
-	virtual void reinit(Item const&, int32_t count, int32_t auxValue) override;
-	
-	ItemInstance() : ItemStackBase() {}
+	virtual void reinit(BlockLegacy const &blockLegacy, int32_t count) override;
+	virtual void reinit(Item const &, int32_t count, int32_t auxValue) override;
+
 	// no symbols for these
 	//MCAPI ItemInstance();
 	//MCAPI ItemInstance(BlockLegacy const&, int32_t count, int16_t auxValue);

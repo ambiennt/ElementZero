@@ -1,10 +1,8 @@
 #pragma once
 
-#include <chrono>
-#include <memory>
-#include <vector>
-#include <string>
-
+#include "ItemStackNetIdVariant.h"
+#include "ItemRuntimeID.h"
+#include "Item.h"
 #include "../Level/Tick.h"
 #include "../Core/json.h"
 #include "../Core/NBT.h"
@@ -12,17 +10,19 @@
 #include "../Block/LegacyBlockID.h"
 #include "../Block/Block.h"
 #include "../Block/BlockLegacy.h"
-#include "ItemStackNetIdVariant.h"
-#include "ItemRuntimeID.h"
-#include "Item.h"
 #include "../dll.h"
+
+#include <chrono>
+#include <memory>
+#include <vector>
+#include <string>
 
 class Block;
 class CompoundTag;
 class IDataOutput;
 class IDataInput;
-class ItemInstance;
 class ItemEnchants;
+class ItemInstance;
 
 class ItemStackBase {
 public:
@@ -181,8 +181,8 @@ class ItemStack : public ItemStackBase {
 public:
 	ItemStackNetIdVariant mNetIdVariant; // 0x88
 
-	virtual void reinit(BlockLegacy const& blockLegacy, int32_t count) override;
-	virtual void reinit(Item const&, int32_t count, int32_t auxValue) override;
+	virtual void reinit(BlockLegacy const &blockLegacy, int32_t count) override;
+	virtual void reinit(Item const &, int32_t count, int32_t auxValue) override;
 
 	MCAPI static ItemStack const EMPTY_ITEM;
 
@@ -193,9 +193,14 @@ public:
 	MCAPI ItemStack(Item const &item, int32_t count, int32_t auxValue);
 	MCAPI ItemStack(Block const &block, int32_t count, CompoundTag const *userData);
 	MCAPI ItemStack(BlockLegacy const &block, int32_t count);
-	MCAPI void _assignNetIdVariant(ItemStack const &rhs) const;
 
+	MCAPI void _assignNetIdVariant(ItemStack const &rhs) const;
+	MCAPI void serverInitNetId();
 	MCAPI static ItemStack fromTag(CompoundTag const &userData);
+
+	inline ItemStack(const ItemInstance& rhs) : ItemStackBase(*(ItemStackBase*)(&rhs)) { // ugliest thing ever we dont talk abt this
+		this->serverInitNetId();
+	}
 
 	inline ItemStack& operator=(ItemStack const& rhs) {
 		ItemStackBase::operator=(rhs);

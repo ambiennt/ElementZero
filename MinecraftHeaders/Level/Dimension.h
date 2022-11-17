@@ -62,7 +62,7 @@ public:
 	std::unique_ptr<CircuitSystem> mCircuitSystem; // 0x108
 	int32_t CIRCUIT_TICK_RATE; // const int32_t - 0x110
 	int32_t mCircuitSystemTickRate; // 0x114
-	std::unordered_map<ActorUniqueID, Actor **> mEntityIdLookup; // std::unordered_map<struct ActorUniqueID, gsl::not_null<class Actor *>> - 0x118
+	std::unordered_map<ActorUniqueID, Actor *> mEntityIdLookup; // std::unordered_map<struct ActorUniqueID, gsl::not_null<class Actor *>> - 0x118
 	BeardAndShaverStorage mBeardandShaverStorage; // 0x158
 	std::unordered_map<ChunkPos, std::vector<std::unique_ptr<CompoundTag>>> mLimboEntities; // 0x1A0
 	std::vector<Actor *> mEntitiesToMoveChunks; // 0x1E0
