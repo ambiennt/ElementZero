@@ -18,9 +18,9 @@
 #include <vector>
 #include <string>
 
-class EducationLevelSettings {
+class alignas(8) EducationLevelSettings {
 public:
-	uint64_t pad[0xB8 / sizeof(uint64_t)];
+	uint8_t pad[0xB8];
 };
 static_assert(sizeof(EducationLevelSettings) == 0xB8);
 

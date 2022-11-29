@@ -1,9 +1,8 @@
 #include <Core/DataIO.h>
 #include <Item/Enchant.h>
 #include <Item/ItemStack.h>
-
+#include <Container/EnderChestContainer.h>
 #include <base/log.h>
-
 #include <mods/ScriptSupport/scriptapi.h>
 
 namespace Mod::Scripting {
@@ -60,11 +59,11 @@ using namespace Mod::Scripting;
 
 static ModuleRegister reg("ez:inventory", [](JsObjectWrapper native) -> std::string {
   native["getOffHandItem"] = +[](Mod::PlayerEntry entry) {
-    auto &container = entry.player->getHandContainer();
+    auto &container = *entry.player->mHandContainer.get();
     return ToJs(container.mItems[1]);
   };
   native["getEquipmentItems"] = +[](Mod::PlayerEntry entry) {
-    auto &container = entry.player->getEquipmentContainer();
+    auto &container = *entry.player->mArmorContainer.get();
     return ToJsArray(container.mItems);
   };
   native["getInventoryItems"] = +[](Mod::PlayerEntry entry) {
@@ -72,7 +71,7 @@ static ModuleRegister reg("ez:inventory", [](JsObjectWrapper native) -> std::str
     return ToJsArray(container.mItems);
   };
   native["getEnderChestItems"] = +[](Mod::PlayerEntry entry) {
-    auto &container = *entry.player->getEnderChestContainer();
+    auto &container = entry.player->getEnderChestContainer();
     return ToJsArray(container.mItems);
   };
   return R"js(

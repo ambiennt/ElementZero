@@ -1,14 +1,14 @@
 #pragma once
 
-#include <functional>
-#include <string>
-
 #include "../Core/AutomaticID.h"
+#include "../Actor/ActorUniqueID.h"
 #include "LevelDataWrapper.h"
-
+#include "../dll.h"
 #include <modutils.h>
 #include <hook.h>
-#include "../dll.h"
+
+#include <functional>
+#include <string>
 
 class Player;
 class Dimension;
@@ -598,29 +598,36 @@ public:
 	MCAPI void requestPlayerChangeDimension(class Player &, std::unique_ptr<class ChangeDimensionRequest>);
 
 	inline enum GeneratorType getWorldGeneratorType() {
-		return this->getLevelDataWrapper()->getWorldGenerator();
+		return this->mLevelDataWrapper->getWorldGenerator();
 	}
 
-	template <typename T> T getGameRuleValue(enum GameRulesIndex index) {
+	template <typename T>
+	T getGameRuleValue(enum GameRulesIndex index) {
 		return this->getGameRules().getGameRuleValue<T>(index);
 	}
 
 	inline BlockPalette* getBlockPalette() const {
-		return direct_access<BlockPalette*>((Level*)&this->mRegistriesProvider, 0x7C8);
+		uintptr_t worldRegProvider = reinterpret_cast<uintptr_t>(this) + 0x8; // multi vtable class...
+		return directAccess<BlockPalette*>(worldRegProvider, 0x7C8);
 	}
 
-	BUILD_ACCESS_MUT(class IWorldRegistriesProvider, mRegistriesProvider, 0x8); // ItemUseInventoryTransaction::getTargetBlock, not actually a field but a base class
-	BUILD_ACCESS_MUT(std::vector<class Player*>, mActivePlayers, 0x58); // Level::forEachPlayer
-	BUILD_ACCESS_MUT(std::shared_ptr<class ActorInfoRegistry>, mActorInfoRegistry, 0x180); // SetSpawnEggFunction::apply
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mLastUniqueID, 0x1A0); // Level::getNewUniqueID
-	BUILD_ACCESS_MUT(std::unique_ptr<class LevelStorage>, mLevelStorage, 0x208); // Level::getLevelStorage
-	BUILD_ACCESS_MUT(std::unique_ptr<class Spawner>, mMobSpawner, 0x7B0); // enderPearlItem::use
-	BUILD_ACCESS_MUT(std::unique_ptr<class ActorEventCoordinator>, mActorEventCoordinator, 0x1F68); // Player::attack, 0x1F80 - 0x18
-	BUILD_ACCESS_MUT(class ActorFactory, mActorFactory, 0x2068); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt - 0x2090 - 0x28
-	BUILD_ACCESS_MUT(bool, mServerAuthoritativeMovement, 0x2508); // ServerNetworkHandler::_sendLevelData
+	// xref: Level::getCurrentServerTick
+	inline uint64_t getServerTick() const {
+		return this->mLevelDataWrapper->mCurrentTick.value;
+	}
 
-	BASEAPI PacketSender &getPacketSender() const;
-	BASEAPI LevelDataWrapper &getLevelDataWrapper();
-	BASEAPI uint64_t getServerTick();
-	BASEAPI ActorUniqueID getNewUniqueID() const;
+	inline ActorUniqueID getNewUniqueID() {
+		return ActorUniqueID{++this->mLastUniqueID.value};
+	}
+
+	CLASS_FIELD(mActivePlayers, 0x58, std::vector<class Player*>); // Level::forEachPlayer
+	CLASS_FIELD(mActorInfoRegistry, 0x180, std::shared_ptr<class ActorInfoRegistry>); // SetSpawnEggFunction::apply
+	CLASS_FIELD(mLastUniqueID, 0x1A0, struct ActorUniqueID); // Level::getNewUniqueID
+	CLASS_FIELD(mLevelStorage, 0x208, std::unique_ptr<class LevelStorage>); // Level::getLevelStorage
+	CLASS_FIELD(mLevelDataWrapper, 0x220, class LevelDataWrapper);
+	CLASS_FIELD(mMobSpawner, 0x7B0, std::unique_ptr<class Spawner>); // enderPearlItem::use
+	CLASS_FIELD(mPacketSender, 0x8C0, class PacketSender *); // xref: RaidBossComponent::_sendBossEvent
+	CLASS_FIELD(mActorEventCoordinator, 0x1F68, std::unique_ptr<class ActorEventCoordinator>); // Player::attack, 0x1F80 - 0x18
+	CLASS_FIELD(mActorFactory, 0x2068, class ActorFactory); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt - 0x2090 - 0x28
+	CLASS_FIELD(mServerAuthoritativeMovement, 0x2508, bool); // ServerNetworkHandler::_sendLevelData
 };

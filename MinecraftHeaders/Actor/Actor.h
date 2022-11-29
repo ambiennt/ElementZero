@@ -25,13 +25,14 @@
 #include <modutils.h>
 
 class Dimension;
-enum class ActorType;
-enum class MaterialType;
+
 enum class ActorEvent : int8_t;
-enum class ActorDamageCause;
-enum class ItemUseMethod;
-enum class LevelSoundEvent;
-enum class DimensionID;
+enum class ActorType : int32_t;
+enum class MaterialType : int32_t;
+enum class ActorDamageCause : int32_t;
+enum class ItemUseMethod : int32_t;
+enum class LevelSoundEvent : int32_t;
+enum class DimensionID : int32_t;
 
 enum class InputMode : int32_t {
 	Undefined         = 0,
@@ -42,28 +43,28 @@ enum class InputMode : int32_t {
 	Count             = 5,
 };
 
-enum class SpawnRuleEnum {
+enum class SpawnRuleEnum : int32_t {
 	Undefined     = -1,
 	NoSpawnRules  = 0,
-	HasSpawnRules = 1
+	HasSpawnRules = 1,
 };
 
-enum class PortalAxis {
+enum class PortalAxis : int32_t {
 	Unknown = 0,
 	X       = 1,
 	Z       = 2,
-	Count   = 3
+	Count   = 3,
 };
 
-enum class ArmorMaterialType {
+enum class ArmorMaterialType : int32_t {
 	None                  = -1,
 	DefaultArmor          = 0,
 	EnchantedArmor        = 1,
 	LeatherArmor          = 2,
-	EnchantedLeatherArmor = 3
+	EnchantedLeatherArmor = 3,
 };
 
-enum class ArmorTextureType {
+enum class ArmorTextureType : int32_t {
 	None      = -1,
 	Leather   = 0,
 	Chain     = 1,
@@ -72,10 +73,10 @@ enum class ArmorTextureType {
 	Gold      = 4,
 	Elytra    = 5,
 	Turtle    = 6,
-	Netherite = 7
+	Netherite = 7,
 };
 
-enum class ActorLocation {
+enum class ActorLocation : int32_t {
 	Feet               = 0,
 	Body               = 1,
 	WeaponAttachPoint  = 2,
@@ -84,10 +85,10 @@ enum class ActorLocation {
 	ExplosionPoint     = 5,
 	Eyes               = 6,
 	BreathingPoint     = 7,
-	Mouth              = 8
+	Mouth              = 8,
 };
 
-enum class PaletteColor {
+enum class PaletteColor : int32_t {
 	White              = 0,
 	Orange             = 1,
 	Magenta            = 2,
@@ -104,15 +105,15 @@ enum class PaletteColor {
 	Green              = 13,
 	Red                = 14,
 	Black              = 15,
-	PaletteColorCount  = 16
+	PaletteColorCount  = 16,
 };
 
 enum class ArmorSlot : int32_t {
-	Head             = 0,
-	Torso            = 1,
-	Legs             = 2,
-	Feet             = 3,
-	SlotCount        = 4,
+	Head  = 0,
+	Torso = 1,
+	Legs  = 2,
+	Feet  = 3,
+	Count = 4,
 };
 
 enum class ActorFlags {
@@ -213,18 +214,15 @@ enum class ActorFlags {
 	Celebrating                 = 92,
 	Admiring                    = 93,
 	CelebratingSpecial          = 94,
-	Count                       = 95
+	Count                       = 95,
 };
 
 class Actor {
-private:
-
-
 protected:
 	MCAPI bool _damageSensorComponentHurt(int32_t &damage, int32_t lastHurt, ActorDamageSource const& source);
 
 public:
-	enum class InitializationMethod {
+	enum class InitializationMethod : int32_t {
 		INVALID          = 0,
 		LOADED           = 1,
 		SPAWNED          = 2,
@@ -232,7 +230,7 @@ public:
 		TRANSFORMED      = 4,
 		UPDATED          = 5,
 		EVENT            = 6,
-		LEGACY           = 7
+		LEGACY           = 7,
 	};
 
 	virtual bool hasComponent(class HashedString const &) const;
@@ -645,7 +643,7 @@ public:
 	}
 
 	inline bool hasAnyEffects() const {
-		if (this->mMobEffects.size() <= 0) return false;
+		if (this->mMobEffects.empty()) return false;
 		for (const auto& effect : this->mMobEffects) {
 			if (effect != MobEffectInstance::NO_EFFECT) return true;
 		}
@@ -653,7 +651,7 @@ public:
 	}
 
 	inline bool hasCategory(ActorCategory category) const {
-		return (this->mCategories & (uint32_t)category);
+		return this->mCategories & static_cast<uint32_t>(category);
 	}
 
 	inline bool isInstanceOfMob() const {
@@ -665,7 +663,7 @@ public:
 	}
 
 	inline bool hasRider() const {
-		return (this->mRiderIDs.size() > 0);
+		return !this->mRiderIDs.empty();
 	}
 
 	inline class Actor* getRide() const {
@@ -677,19 +675,23 @@ public:
 	// so I think its better to calculate manually
 	// only use this on non-player entities, for players use getRawPlayerPosDelta()
 	inline class Vec3 getRawActorPosDelta() const {
-		const auto& prevPos = this->getPosOld();
-		const auto& currPos = this->getPos();
-		return Vec3(currPos.x - prevPos.x, currPos.y - prevPos.y, currPos.z - prevPos.z);
+		return this->getPos() - this->getPosOld();
 	}
 
 	inline class Vec3 getPosGrounded() const {
-		const auto& thisAabb = this->mAABBComponent.mAABB;
-		float yNew;
-		if (this->isRiding() && this->getRide()) {
-			yNew = std::fmaxf(thisAabb.min.y, this->getRide()->mAABBComponent.mAABB.min.y);
+		const auto& aabb = this->mAABBComponent.mAABB;
+		auto ride = this->getRide();
+
+		float yNew{};
+		if (ride) {
+			yNew = std::max(aabb.min.y, ride->mAABBComponent.mAABB.min.y);
 		}
-		else { yNew = thisAabb.min.y; }
-		return Vec3(this->getPos().x, yNew, this->getPos().z);
+		else {
+			yNew = aabb.min.y;
+		}
+
+		const auto& pos = this->getPos();
+		return Vec3{pos.x, yNew, pos.z};
 	}
 
 	inline class BlockPos getBlockPos() const {
@@ -701,188 +703,174 @@ public:
 	}
 
 	// actor fields
-	//BUILD_ACCESS_MUT(class OwnerPtrT<class EntityRefTraits>, mEntity, 0x8); // stupid entt component bloat
-	BUILD_ACCESS_MUT(enum InitializationMethod, mInitMethod, 0x20);
-	BUILD_ACCESS_MUT(std::string, mCustomInitEventName, 0x28);
-	BUILD_ACCESS_MUT(class VariantParameterList, mInitParams, 0x48);
-	BUILD_ACCESS_MUT(bool, mForceInitMethodToSpawnOnReload, 0xC8);
-
-	//using dimensionId = class AutomaticID<class Dimension, int;
-	//BUILD_ACCESS_MUT(dimensionId, mDimensionId, 0xCC);
-	BUILD_ACCESS_MUT(enum DimensionID, mDimensionId, 0xCC); // its just easier to use the enum directly
-
-	BUILD_ACCESS_MUT(bool, mAdded, 0xD0);
-	BUILD_ACCESS_MUT(class ActorDefinitionGroup *, mDefinitions, 0xD8);
-	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDescriptor>, mCurrentDescription, 0xE0);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mUniqueID, 0xE8); // maps to Actor::getUniqueID(), but use Actor::getUniqueID() instead
-	BUILD_ACCESS_MUT(std::shared_ptr<class RopeSystem>, mLeashRopeSystem, 0xF0);
-	BUILD_ACCESS_MUT(class Vec2, mRot, 0x100);
-	BUILD_ACCESS_MUT(class Vec2, mRotPrev, 0x108);
-	BUILD_ACCESS_MUT(float, mSwimAmount, 0x110);
-	BUILD_ACCESS_MUT(float, mSwimPrev, 0x114);
-	BUILD_ACCESS_MUT(class ChunkPos, mChunkPos, 0x118);
-	BUILD_ACCESS_MUT(class Vec3, mRenderPos, 0x120);
-	BUILD_ACCESS_MUT(class Vec2, mRenderRot, 0x12C);
-	BUILD_ACCESS_MUT(int32_t, mAmbientSoundTime, 0x134);
-	BUILD_ACCESS_MUT(int32_t, mLastHurtByPlayerTime, 0x138);
-	BUILD_ACCESS_MUT(uint32_t, mCategories, 0x13C); // bit flags for enum ActorCategory
-	BUILD_ACCESS_MUT(class SynchedActorData, mEntityData, 0x140);
-	BUILD_ACCESS_MUT(std::unique_ptr<class SpatialActorNetworkData>, mNetworkData, 0x160);
-	BUILD_ACCESS_MUT(class Vec3, mSentDelta, 0x168);
-	BUILD_ACCESS_MUT(float, mScale, 0x174);
-	BUILD_ACCESS_MUT(float, mScalePrev, 0x178);
-	BUILD_ACCESS_MUT(uint64_t, mNameTagHash, 0x180);
-	BUILD_ACCESS(const class Block *, mInsideBlock, 0x188);
-	BUILD_ACCESS_MUT(class BlockPos, mInsideBlockPos, 0x190);
-	BUILD_ACCESS_MUT(float, mFallDistance, 0x19C);
-	BUILD_ACCESS_MUT(bool, mOnGround, 0x1A0);
-	BUILD_ACCESS_MUT(bool, mWasOnGround, 0x1A1);
-	BUILD_ACCESS_MUT(bool, mHorizontalCollision, 0x1A2);
-	BUILD_ACCESS_MUT(bool, mVerticalCollision, 0x1A3);
-	BUILD_ACCESS_MUT(bool, mCollision, 0x1A4);
-	BUILD_ACCESS_MUT(bool, mIgnoreLighting, 0x1A5);
-	BUILD_ACCESS_MUT(bool, mFilterLighting, 0x1A6);
-	BUILD_ACCESS_MUT(class Color, mTintColor, 0x1A8);
-	BUILD_ACCESS_MUT(class Color, mTintColor2, 0x1B8);
-	BUILD_ACCESS_MUT(float, mStepSoundVolume, 0x1C8);
-	BUILD_ACCESS_MUT(float, mStepSoundPitch, 0x1CC);
-	BUILD_ACCESS_MUT(class AABB *, mLastHitBB, 0x1D0);
-	BUILD_ACCESS_MUT(std::vector<class AABB>, mSubBBs, 0x1D8); // presumably for ender dragon?
-	BUILD_ACCESS_MUT(float, mTerrainSurfaceOffset, 0x1F0);
-	BUILD_ACCESS_MUT(float, mHeightOffset, 0x1F4); // 1.62001 for players
-	BUILD_ACCESS_MUT(float, mExplosionOffset, 0x1F8);
-	BUILD_ACCESS_MUT(float, mShadowOffset, 0x1FC);
-	BUILD_ACCESS_MUT(float, mMaxAutoStep, 0x200);
-	BUILD_ACCESS_MUT(float, mPushthrough, 0x204);
-	BUILD_ACCESS_MUT(float, mWalkDistPrev, 0x208);
-	BUILD_ACCESS_MUT(float, mWalkDist, 0x20C);
-	BUILD_ACCESS_MUT(float, mMoveDist, 0x210);
-	BUILD_ACCESS_MUT(float, mBlockMovementSlowdownMultiplier, 0x214);
-	BUILD_ACCESS_MUT(float, mNextStep, 0x218);
-	BUILD_ACCESS_MUT(bool, mImmobile, 0x21C);
-	BUILD_ACCESS_MUT(bool, mWasInWater, 0x21D);
-	BUILD_ACCESS_MUT(bool, mHasEnteredWater, 0x21E);
-	BUILD_ACCESS_MUT(bool, mHeadInWater, 0x21F);
-	BUILD_ACCESS_MUT(bool, mIsWet, 0x220);
-	BUILD_ACCESS_MUT(class Vec2, mSlideOffset, 0x224);
-	BUILD_ACCESS_MUT(class Vec3, mHeadOffset, 0x22C);
-	BUILD_ACCESS_MUT(class Vec3, mEyeOffset, 0x238);
-	BUILD_ACCESS_MUT(class Vec3, mBreathingOffset, 0x244);
-	BUILD_ACCESS_MUT(class Vec2, mMouthOffset, 0x250);
-	BUILD_ACCESS_MUT(class Vec3, mDropOffset, 0x25C);
-	BUILD_ACCESS_MUT(bool, mFirstTick, 0x268);
-	BUILD_ACCESS_MUT(int32_t, mTickCount, 0x26C);
-	BUILD_ACCESS_MUT(int32_t, mInvulnerableTime, 0x270);
-	BUILD_ACCESS_MUT(int32_t, mLastHealth, 0x274);
-	BUILD_ACCESS_MUT(bool, mFallDamageImmune, 0x278);
-	BUILD_ACCESS_MUT(bool, mHurtMarked, 0x279);
-	BUILD_ACCESS_MUT(bool, mWasHurtLastFrame, 0x27A);
-	BUILD_ACCESS_MUT(bool, mInvulnerable, 0x27B);
-	BUILD_ACCESS_MUT(int32_t, mOnFireTicks, 0x27C);
-	BUILD_ACCESS_MUT(int32_t, mFlameTexFrameIndex, 0x280);
-	BUILD_ACCESS_MUT(int32_t, mClientSideFireTransitionStartTick, 0x284);
-	BUILD_ACCESS_MUT(float, mFlameFrameIncrementTime, 0x288);
-	BUILD_ACCESS_MUT(bool, mOnHotBlock, 0x28C);
-	BUILD_ACCESS_MUT(bool, mClientSideFireTransitionLatch, 0x28D);
-	BUILD_ACCESS_MUT(bool, mAlwaysFireImmune, 0x28E);
-	BUILD_ACCESS_MUT(int32_t, mPortalCooldown, 0x290);
-	BUILD_ACCESS_MUT(class BlockPos, mPortalBlockPos, 0x294);
-	BUILD_ACCESS_MUT(enum PortalAxis, mPortalEntranceAxis, 0x2A0);
-	BUILD_ACCESS_MUT(int32_t, mInsidePortalTime, 0x2A4);
-	BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mRiderIDs, 0x2A8);
-	BUILD_ACCESS_MUT(std::vector<struct ActorUniqueID>, mRiderIDsToRemove, 0x2C0);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mRidingID, 0x2D8);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mRidingPrevID, 0x2E0);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mPushedByID, 0x2E8);
-	BUILD_ACCESS_MUT(bool, mInheritRotationWhenRiding, 0x2F0);
-	BUILD_ACCESS_MUT(bool, mRidersChanged, 0x2F1);
-	BUILD_ACCESS_MUT(bool, mBlocksBuilding, 0x2F2);
-	BUILD_ACCESS_MUT(bool, mUsesOneWayCollision, 0x2F3);
-	BUILD_ACCESS_MUT(bool, mForcedLoading, 0x2F4);
-	BUILD_ACCESS_MUT(bool, mPrevPosRotSetThisTick, 0x2F5);
-	BUILD_ACCESS_MUT(bool, mTeleportedThisTick, 0x2F6);
-	BUILD_ACCESS_MUT(bool, mForceSendMotionPacket, 0x2F7);
-	BUILD_ACCESS_MUT(float, mSoundVolume, 0x2F8);
-	BUILD_ACCESS_MUT(int32_t, mShakeTime, 0x2FC); // for arrows
-	BUILD_ACCESS_MUT(float, mWalkAnimSpeedMultiplier, 0x300); // set to 1.5x when hurt
-	BUILD_ACCESS_MUT(float, mWalkAnimSpeedO, 0x304);
-	BUILD_ACCESS_MUT(float, mWalkAnimSpeed, 0x308);
-	BUILD_ACCESS_MUT(float, mWalkAnimPos, 0x30C);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mLegacyUniqueID, 0x310); // DO NOT USE THIS, use the getter/mUniqueID instead
-	BUILD_ACCESS_MUT(bool, mHighlightedThisFrame, 0x318);
-	BUILD_ACCESS_MUT(bool, mInitialized, 0x319);
-	BUILD_ACCESS_MUT(class BlockSource *, mRegion, 0x320);
-	BUILD_ACCESS_MUT(class Dimension *, mDimension, 0x328);
-	BUILD_ACCESS_MUT(class Level *, mLevel, 0x330);
-	BUILD_ACCESS_MUT(class HashedString, mActorRendererId, 0x338);
-	BUILD_ACCESS_MUT(class HashedString, mActorRendererIdThatAnimationComponentWasInitializedWith, 0x360); // yes this is the actual name
-	BUILD_ACCESS_MUT(bool, mChanged, 0x388);
-	BUILD_ACCESS_MUT(bool, mRemoved, 0x389); // probably died on this tick
-	BUILD_ACCESS_MUT(bool, mGlobal, 0x38A);
-	BUILD_ACCESS_MUT(bool, mAutonomous, 0x38B);
-	BUILD_ACCESS_MUT(enum ActorType, mActorType, 0x38C);
-	BUILD_ACCESS_MUT(struct ActorDefinitionIdentifier, mActorIdentifier, 0x390);
-	BUILD_ACCESS_MUT(std::unique_ptr<class BaseAttributeMap>, mAttributes, 0x438);
-	BUILD_ACCESS_MUT(std::unique_ptr<class EconomyTradeableComponent>, mEconomyTradeableComponent, 0x440);
-	BUILD_ACCESS_MUT(std::shared_ptr<class AnimationComponent>, mAnimationComponent, 0x448);
-	BUILD_ACCESS_MUT(class AABBShapeComponent, mAABBComponent, 0x458);
-	BUILD_ACCESS_MUT(struct StateVectorComponent, mStateVectorComponent, 0x47C);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mTargetId, 0x4A0);
-	BUILD_ACCESS_MUT(float, mRestrictRadius, 0x4A8);
-	BUILD_ACCESS_MUT(class BlockPos, mRestrictCenter, 0x4AC);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mInLovePartner, 0x4B8);
-	BUILD_ACCESS_MUT(std::vector<class MobEffectInstance>, mMobEffects, 0x4C0);
-	BUILD_ACCESS_MUT(bool, mEffectsDirty, 0x4D8);
-	BUILD_ACCESS_MUT(bool, mLootDropped, 0x4D9);
-	BUILD_ACCESS_MUT(bool, mPersistingTrade, 0x4DA);
-	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mPersistingTradeOffers, 0x4E0);
-	BUILD_ACCESS_MUT(int32_t, mPersistingTradeRiches, 0x4E8);
-	BUILD_ACCESS_MUT(class ActorRuntimeID, mRuntimeID, 0x4F0);
-	BUILD_ACCESS_MUT(class Color, mHurtColor, 0x4F8); // r 1.0, g 0.0, b 0.0, a 0.6
-	BUILD_ACCESS_MUT(std::unique_ptr<class ActorDefinitionDiffList>, mDefinitionList, 0x508);
-	BUILD_ACCESS_MUT(bool, mHasLimitedLife, 0x510);
-	BUILD_ACCESS_MUT(bool, mEnforceRiderRotationLimit, 0x511);
-	BUILD_ACCESS_MUT(bool, mIsStuckItem, 0x512);
-	BUILD_ACCESS_MUT(bool, mIsSafeToSleepNear, 0x513);
-	BUILD_ACCESS_MUT(int32_t, mLimitedLifeTicks, 0x514);
-	BUILD_ACCESS_MUT(int32_t, mForceVisibleTimerTicks, 0x518);
-	BUILD_ACCESS_MUT(float, mRidingExitDistance, 0x51C);
-	BUILD_ACCESS_MUT(std::string, mFilteredNameTag, 0x520); // idk why but this is always empty for players
-	BUILD_ACCESS_MUT(class ActorTerrainInterlockData, mTerrainInterlockData, 0x540);
-
-	using floatArr4 = float[4];
-	BUILD_ACCESS_MUT(floatArr4, mArmorDropChance, 0x558); // default: 25% for each armor piece
-
-	using floatArr2 = float[2];
-	BUILD_ACCESS_MUT(floatArr2, mHandDropChance, 0x568); // default: 25% chance for mainhand and offhand
-
-	BUILD_ACCESS_MUT(bool, mIsKnockedBackOnDeath, 0x570); // does not work on players
-	BUILD_ACCESS_MUT(bool, mUpdateEffects, 0x571);
-	BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mArmorContainer, 0x578);
-	BUILD_ACCESS_MUT(std::unique_ptr<class SimpleContainer>, mHandContainer, 0x580);
-	BUILD_ACCESS_MUT(std::vector<class AABB>, mOnewayPhysicsBlocks, 0x588);
-	BUILD_ACCESS_MUT(bool, mStuckInCollider, 0x5A0);
-	BUILD_ACCESS_MUT(bool, mPenetratingLastFrame, 0x5A1);
-	BUILD_ACCESS_MUT(bool, mCollidableMobNear, 0x5A2);
-	BUILD_ACCESS_MUT(bool, mCollidableMob, 0x5A3);
-	BUILD_ACCESS_MUT(bool, mCanPickupItems, 0x5A4);
-	BUILD_ACCESS_MUT(bool, mHasSetCanPickupItems, 0x5A5);
-	BUILD_ACCESS_MUT(bool, mChainedDamageEffects, 0x5A6);
-	BUILD_ACCESS_MUT(bool, mWasInBubbleColumn, 0x5A7);
-	BUILD_ACCESS_MUT(bool, mIsExperimental, 0x5A8);
-	BUILD_ACCESS_MUT(bool, mWasInWallLastTick, 0x5A9);
-	BUILD_ACCESS_MUT(int32_t, mTicksInWall, 0x5AC);
-	BUILD_ACCESS_MUT(int32_t, mDamageNearbyMobsTick, 0x5B0); // riptide / spin attack
-	BUILD_ACCESS_MUT(enum SpawnRuleEnum, mSpawnRulesEnum, 0x5B4);
-	BUILD_ACCESS_MUT(std::unique_ptr<class ActionQueue>, mActionQueue, 0x5B8);
-	BUILD_ACCESS_MUT(class MolangVariableMap, mMolangVariables, 0x5C0);
-	BUILD_ACCESS_MUT(class CompoundTag, mCachedComponentData, 0x600);
-	BUILD_ACCESS_MUT(struct ActorUniqueID, mFishingHookID, 0x618); // when player casts fishing hook
-
-	BUILD_ACCESS_COMPAT(SimpleContainer &, EquipmentContainer);
-	BUILD_ACCESS_COMPAT(SimpleContainer &, HandContainer);
-	BUILD_ACCESS_COMPAT(SynchedActorData &, EntityData);
-	BUILD_ACCESS_COMPAT(class Dimension *, Dimension);
+	//CLASS_FIELD(mEntity, 0x8, class OwnerPtrT<class EntityRefTraits>); // stupid entt component bloat
+	CLASS_FIELD(mInitMethod, 0x20, enum InitializationMethod);
+	CLASS_FIELD(mCustomInitEventName, 0x28, std::string);
+	CLASS_FIELD(mInitParams, 0x48, class VariantParameterList);
+	CLASS_FIELD(mForceInitMethodToSpawnOnReload, 0xC8, bool);
+	CLASS_FIELD(mDimensionId, 0xCC, enum DimensionID); // xref: Actor::getDimensionId, class AutomaticID<class Dimension, int>
+	CLASS_FIELD(mAdded, 0xD0, bool);
+	CLASS_FIELD(mDefinitions, 0xD8, class ActorDefinitionGroup *);
+	CLASS_FIELD(mCurrentDescription, 0xE0, std::unique_ptr<class ActorDefinitionDescriptor>);
+	CLASS_FIELD(mUniqueID, 0xE8, struct ActorUniqueID); // maps to Actor::getUniqueID(), but use Actor::getUniqueID() instead
+	CLASS_FIELD(mLeashRopeSystem, 0xF0, std::shared_ptr<class RopeSystem>);
+	CLASS_FIELD(mRot, 0x100, class Vec2);
+	CLASS_FIELD(mRotPrev, 0x108, class Vec2);
+	CLASS_FIELD(mSwimAmount, 0x110, float);
+	CLASS_FIELD(mSwimPrev, 0x114, float);
+	CLASS_FIELD(mChunkPos, 0x118, class ChunkPos);
+	CLASS_FIELD(mRenderPos, 0x120, class Vec3);
+	CLASS_FIELD(mRenderRot, 0x12C, class Vec2);
+	CLASS_FIELD(mAmbientSoundTime, 0x134, int32_t);
+	CLASS_FIELD(mLastHurtByPlayerTime, 0x138, int32_t);
+	CLASS_FIELD(mCategories, 0x13C, uint32_t); // bit flags for enum ActorCategory
+	CLASS_FIELD(mEntityData, 0x140, class SynchedActorData); // xref: ServerPlayer::handleActorPickRequestOnServer
+	CLASS_FIELD(mNetworkData, 0x160, std::unique_ptr<class SpatialActorNetworkData>);
+	CLASS_FIELD(mSentDelta, 0x168, class Vec3);
+	CLASS_FIELD(mScale, 0x174, float);
+	CLASS_FIELD(mScalePrev, 0x178, float);
+	CLASS_FIELD(mNameTagHash, 0x180, uint64_t);
+	CLASS_FIELD(mInsideBlock, 0x188, const class Block *);
+	CLASS_FIELD(mInsideBlockPos, 0x190, class BlockPos);
+	CLASS_FIELD(mFallDistance, 0x19C, float);
+	CLASS_FIELD(mOnGround, 0x1A0, bool);
+	CLASS_FIELD(mWasOnGround, 0x1A1, bool);
+	CLASS_FIELD(mHorizontalCollision, 0x1A2, bool);
+	CLASS_FIELD(mVerticalCollision, 0x1A3, bool);
+	CLASS_FIELD(mCollision, 0x1A4, bool);
+	CLASS_FIELD(mIgnoreLighting, 0x1A5, bool);
+	CLASS_FIELD(mFilterLighting, 0x1A6, bool);
+	CLASS_FIELD(mTintColor, 0x1A8, class Color);
+	CLASS_FIELD(mTintColor2, 0x1B8, class Color);
+	CLASS_FIELD(mStepSoundVolume, 0x1C8, float);
+	CLASS_FIELD(mStepSoundPitch, 0x1CC, float);
+	CLASS_FIELD(mLastHitBB, 0x1D0, class AABB *);
+	CLASS_FIELD(mSubBBs, 0x1D8, std::vector<class AABB>); // presumably for ender dragon?
+	CLASS_FIELD(mTerrainSurfaceOffset, 0x1F0, float);
+	CLASS_FIELD(mHeightOffset, 0x1F4, float); // 1.62001 for players
+	CLASS_FIELD(mExplosionOffset, 0x1F8, float);
+	CLASS_FIELD(mShadowOffset, 0x1FC, float);
+	CLASS_FIELD(mMaxAutoStep, 0x200, float);
+	CLASS_FIELD(mPushthrough, 0x204, float);
+	CLASS_FIELD(mWalkDistPrev, 0x208, float);
+	CLASS_FIELD(mWalkDist, 0x20C, float);
+	CLASS_FIELD(mMoveDist, 0x210, float);
+	CLASS_FIELD(mBlockMovementSlowdownMultiplier, 0x214, float);
+	CLASS_FIELD(mNextStep, 0x218, float);
+	CLASS_FIELD(mImmobile, 0x21C, bool);
+	CLASS_FIELD(mWasInWater, 0x21D, bool);
+	CLASS_FIELD(mHasEnteredWater, 0x21E, bool);
+	CLASS_FIELD(mHeadInWater, 0x21F, bool);
+	CLASS_FIELD(mIsWet, 0x220, bool);
+	CLASS_FIELD(mSlideOffset, 0x224, class Vec2);
+	CLASS_FIELD(mHeadOffset, 0x22C, class Vec3);
+	CLASS_FIELD(mEyeOffset, 0x238, class Vec3);
+	CLASS_FIELD(mBreathingOffset, 0x244, class Vec3);
+	CLASS_FIELD(mMouthOffset, 0x250, class Vec2);
+	CLASS_FIELD(mDropOffset, 0x25C, class Vec3);
+	CLASS_FIELD(mFirstTick, 0x268, bool);
+	CLASS_FIELD(mTickCount, 0x26C, int32_t);
+	CLASS_FIELD(mInvulnerableTime, 0x270, int32_t);
+	CLASS_FIELD(mLastHealth, 0x274, int32_t);
+	CLASS_FIELD(mFallDamageImmune, 0x278, bool);
+	CLASS_FIELD(mHurtMarked, 0x279, bool);
+	CLASS_FIELD(mWasHurtLastFrame, 0x27A, bool);
+	CLASS_FIELD(mInvulnerable, 0x27B, bool);
+	CLASS_FIELD(mOnFireTicks, 0x27C, int32_t);
+	CLASS_FIELD(mFlameTexFrameIndex, 0x280, int32_t);
+	CLASS_FIELD(mClientSideFireTransitionStartTick, 0x284, int32_t);
+	CLASS_FIELD(mFlameFrameIncrementTime, 0x288, float);
+	CLASS_FIELD(mOnHotBlock, 0x28C, bool);
+	CLASS_FIELD(mClientSideFireTransitionLatch, 0x28D, bool);
+	CLASS_FIELD(mAlwaysFireImmune, 0x28E, bool);
+	CLASS_FIELD(mPortalCooldown, 0x290, int32_t);
+	CLASS_FIELD(mPortalBlockPos, 0x294, class BlockPos);
+	CLASS_FIELD(mPortalEntranceAxis, 0x2A0, enum PortalAxis);
+	CLASS_FIELD(mInsidePortalTime, 0x2A4, int32_t);
+	CLASS_FIELD(mRiderIDs, 0x2A8, std::vector<struct ActorUniqueID>);
+	CLASS_FIELD(mRiderIDsToRemove, 0x2C0, std::vector<struct ActorUniqueID>);
+	CLASS_FIELD(mRidingID, 0x2D8, struct ActorUniqueID);
+	CLASS_FIELD(mRidingPrevID, 0x2E0, struct ActorUniqueID);
+	CLASS_FIELD(mPushedByID, 0x2E8, struct ActorUniqueID);
+	CLASS_FIELD(mInheritRotationWhenRiding, 0x2F0, bool);
+	CLASS_FIELD(mRidersChanged, 0x2F1, bool);
+	CLASS_FIELD(mBlocksBuilding, 0x2F2, bool);
+	CLASS_FIELD(mUsesOneWayCollision, 0x2F3, bool);
+	CLASS_FIELD(mForcedLoading, 0x2F4, bool);
+	CLASS_FIELD(mPrevPosRotSetThisTick, 0x2F5, bool);
+	CLASS_FIELD(mTeleportedThisTick, 0x2F6, bool);
+	CLASS_FIELD(mForceSendMotionPacket, 0x2F7, bool);
+	CLASS_FIELD(mSoundVolume, 0x2F8, float);
+	CLASS_FIELD(mShakeTime, 0x2FC, int32_t); // for arrows
+	CLASS_FIELD(mWalkAnimSpeedMultiplier, 0x300, float); // set to 1.5x when hurt
+	CLASS_FIELD(mWalkAnimSpeedO, 0x304, float);
+	CLASS_FIELD(mWalkAnimSpeed, 0x308, float);
+	CLASS_FIELD(mWalkAnimPos, 0x30C, float);
+	//CLASS_FIELD(mLegacyUniqueID, 0x310, struct ActorUniqueID); // DO NOT USE THIS, use the getter/mUniqueID instead
+	CLASS_FIELD(mHighlightedThisFrame, 0x318, bool);
+	CLASS_FIELD(mInitialized, 0x319, bool);
+	CLASS_FIELD(mRegion, 0x320, class BlockSource *); // xref: Actor::_getBlockWhenClimbing
+	CLASS_FIELD(mDimension, 0x328, class Dimension *); // xref: PlayerCommandOrigin::getDimension
+	CLASS_FIELD(mLevel, 0x330, class Level *);
+	CLASS_FIELD(mActorRendererId, 0x338, class HashedString);
+	CLASS_FIELD(mActorRendererIdThatAnimationComponentWasInitializedWith, 0x360, class HashedString); // yes this is the actual name
+	CLASS_FIELD(mChanged, 0x388, bool);
+	CLASS_FIELD(mRemoved, 0x389, bool); // probably died on this tick
+	CLASS_FIELD(mGlobal, 0x38A, bool);
+	CLASS_FIELD(mAutonomous, 0x38B, bool);
+	CLASS_FIELD(mActorType, 0x38C, enum ActorType);
+	CLASS_FIELD(mActorIdentifier, 0x390, struct ActorDefinitionIdentifier);
+	CLASS_FIELD(mAttributes, 0x438, std::unique_ptr<class BaseAttributeMap>);
+	CLASS_FIELD(mEconomyTradeableComponent, 0x440, std::unique_ptr<class EconomyTradeableComponent>);
+	CLASS_FIELD(mAnimationComponent, 0x448, std::shared_ptr<class AnimationComponent>);
+	CLASS_FIELD(mAABBComponent, 0x458, class AABBShapeComponent);
+	CLASS_FIELD(mStateVectorComponent, 0x47C, struct StateVectorComponent);
+	CLASS_FIELD(mTargetId, 0x4A0, struct ActorUniqueID);
+	CLASS_FIELD(mRestrictRadius, 0x4A8, float);
+	CLASS_FIELD(mRestrictCenter, 0x4AC, class BlockPos);
+	CLASS_FIELD(mInLovePartner, 0x4B8, struct ActorUniqueID);
+	CLASS_FIELD(mMobEffects, 0x4C0, std::vector<class MobEffectInstance>);
+	CLASS_FIELD(mEffectsDirty, 0x4D8, bool);
+	CLASS_FIELD(mLootDropped, 0x4D9, bool);
+	CLASS_FIELD(mPersistingTrade, 0x4DA, bool);
+	CLASS_FIELD(mPersistingTradeOffers, 0x4E0, std::unique_ptr<class CompoundTag>);
+	CLASS_FIELD(mPersistingTradeRiches, 0x4E8, int32_t);
+	CLASS_FIELD(mRuntimeID, 0x4F0, class ActorRuntimeID);
+	CLASS_FIELD(mHurtColor, 0x4F8, class Color); // r 1.0, g 0.0, b 0.0, a 0.6
+	CLASS_FIELD(mDefinitionList, 0x508, std::unique_ptr<class ActorDefinitionDiffList>);
+	CLASS_FIELD(mHasLimitedLife, 0x510, bool);
+	CLASS_FIELD(mEnforceRiderRotationLimit, 0x511, bool);
+	CLASS_FIELD(mIsStuckItem, 0x512, bool);
+	CLASS_FIELD(mIsSafeToSleepNear, 0x513, bool);
+	CLASS_FIELD(mLimitedLifeTicks, 0x514, int32_t);
+	CLASS_FIELD(mForceVisibleTimerTicks, 0x518, int32_t);
+	CLASS_FIELD(mRidingExitDistance, 0x51C, float);
+	CLASS_FIELD(mFilteredNameTag, 0x520, std::string); // idk why but this is always empty for players
+	CLASS_FIELD(mTerrainInterlockData, 0x540, class ActorTerrainInterlockData);
+	CLASS_FIELD(mArmorDropChance, 0x558, std::array<float, 4>); // actually a c array, default: 25% for each armor piece
+	CLASS_FIELD(mHandDropChance, 0x568, std::array<float, 2>); // actually a c array, default: 25% chance for mainhand and offhand
+	CLASS_FIELD(mIsKnockedBackOnDeath, 0x570, bool); // does not work on players
+	CLASS_FIELD(mUpdateEffects, 0x571, bool);
+	CLASS_FIELD(mArmorContainer, 0x578, std::unique_ptr<class SimpleContainer>); // xref: Actor::Actor
+	CLASS_FIELD(mHandContainer, 0x580, std::unique_ptr<class SimpleContainer>); // xref: Actor::Actor
+	CLASS_FIELD(mOnewayPhysicsBlocks, 0x588, std::vector<class AABB>);
+	CLASS_FIELD(mStuckInCollider, 0x5A0, bool);
+	CLASS_FIELD(mPenetratingLastFrame, 0x5A1, bool);
+	CLASS_FIELD(mCollidableMobNear, 0x5A2, bool);
+	CLASS_FIELD(mCollidableMob, 0x5A3, bool);
+	CLASS_FIELD(mCanPickupItems, 0x5A4, bool);
+	CLASS_FIELD(mHasSetCanPickupItems, 0x5A5, bool);
+	CLASS_FIELD(mChainedDamageEffects, 0x5A6, bool);
+	CLASS_FIELD(mWasInBubbleColumn, 0x5A7, bool);
+	CLASS_FIELD(mIsExperimental, 0x5A8, bool);
+	CLASS_FIELD(mWasInWallLastTick, 0x5A9, bool);
+	CLASS_FIELD(mTicksInWall, 0x5AC, int32_t);
+	CLASS_FIELD(mDamageNearbyMobsTick, 0x5B0, int32_t); // riptide / spin attack
+	CLASS_FIELD(mSpawnRulesEnum, 0x5B4, enum SpawnRuleEnum);
+	CLASS_FIELD(mActionQueue, 0x5B8, std::unique_ptr<class ActionQueue>);
+	CLASS_FIELD(mMolangVariables, 0x5C0, class MolangVariableMap);
+	CLASS_FIELD(mCachedComponentData, 0x600, class CompoundTag);
+	CLASS_FIELD(mFishingHookID, 0x618, struct ActorUniqueID); // when player casts fishing hook
 };
 
 // CLASS SIZE RANGES:

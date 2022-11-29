@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace persona {
 
 enum class AnimatedTextureType : int32_t {

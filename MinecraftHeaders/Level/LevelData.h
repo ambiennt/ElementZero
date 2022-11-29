@@ -57,7 +57,7 @@ extern MCAPI StringKey SPAWN_POS;
 
 }; // namespace LevelDataKeys
 
-// ref: LevelData::getTagData
+// xref: LevelData::getTagData
 class LevelData {
 public:
 	AdventureSettings mAdventureSettings;

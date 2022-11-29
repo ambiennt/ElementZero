@@ -22,13 +22,13 @@ TClasslessInstanceHook(void,
 	std::string const &playerName, std::string const &worldName, int32_t gameType,
 	int32_t numPlayers, int32_t maxNumPlayers, bool isJoinableThroughServerScreen) {
 
-	direct_access<RakNet::RakPeer*>(this, 0x118) = LocateService<RakNet::RakPeer>();
+	directAccess<RakNet::RakPeer*>(this, 0x118) = LocateService<RakNet::RakPeer>();
 	original(this, playerName, worldName, gameType, numPlayers, maxNumPlayers, isJoinableThroughServerScreen);
-	direct_access<RakNet::RakPeer*>(this, 0x118) = nullptr;
+	directAccess<RakNet::RakPeer*>(this, 0x118) = nullptr;
 }
 
 TClasslessInstanceHook(bool, "?loadLevelData@DBStorage@@UEAA_NAEAVLevelData@@@Z", void *data) {
-	auto &path = direct_access<std::string>(this, 0xA0);
+	auto &path = directAccess<std::string>(this, 0xA0);
 	worldHook(std::filesystem::weakly_canonical(path));
 	return original(this, data);
 }
@@ -125,113 +125,9 @@ template <> LoopbackPacketSender *LocateService<LoopbackPacketSender>() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma region player
-
-// ServerPlayer::handleActorPickRequestOnServer
-class SynchedActorData &Actor::getEntityData() const {
-	return direct_access<class SynchedActorData>(this, 320); // verified
-}
-
-// Actor::Actor
-class SimpleContainer &Actor::getEquipmentContainer() const {
-	return *direct_access<std::unique_ptr<SimpleContainer>>(this, 1400).get(); // verified
-}
-
-// Actor::Actor
-class SimpleContainer &Actor::getHandContainer() const {
-	return *direct_access<std::unique_ptr<SimpleContainer>>(this, 1408).get(); // verified
-}
-
-// xref to Actor::transferTickingArea
-class Dimension *Actor::getDimension() const {
-	return direct_access<class Dimension *>(this, 808); // verified
-}
-
-// Player::Player
-class Certificate &Player::getCertificate() const {
-	return *direct_access<class Certificate *>(this, 2736); // verified
-}
-
-// Player::setBedRespawnPosition
-class BlockPos &Player::getSpawnPosition() const {
-	return direct_access<class BlockPos>(this, 7176);
-}
-
-// ServerPlayer::ServerPlayer
-class NetworkIdentifier const &Player::getNetworkIdentifier() const {
-	return direct_access<class NetworkIdentifier const>(this, 8048);
-}
-
-// AddPlayerPacket::AddPlayerPacket
-std::string &Player::getDeviceId() const {
-	return direct_access<std::string>(this, 7872);
-}
-
-// ServerNetworkHandler::_createNewPlayer
-std::string &Player::getClientPlatformId() const {
-	return direct_access<std::string>(this, 2744); // verified
-}
-
-// ServerNetworkHandler::_createNewPlayer
-std::string &Player::getPlatformOfflineId() const {
-	return direct_access<std::string>(this, 2680);  // verified
-}
-
-// ServerNetworkHandler::_createNewPlayer
-std::string &Player::getClientPlatformOnlineId() const {
-	return direct_access<std::string>(this, 3528); // verified
-}
-
-// RaidBossComponent::_sendBossEvent
-uint8_t Player::getClientSubId() const {
-	return direct_access<uint8_t>(this, 3520); // verified
-}
-
-#pragma endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void ServerNetworkHandler::forceDisconnectClient(const Player& player,
 	bool skipPlayerLeftChatMsg, const std::string& disconnectMsg) {
-	this->forceDisconnectClient(player.getNetworkIdentifier(), player.mClientSubId, skipPlayerLeftChatMsg, disconnectMsg);
+	this->forceDisconnectClient(player.mNetworkIdentifier, player.mClientSubId, skipPlayerLeftChatMsg, disconnectMsg);
 }
 
 void ServerNetworkHandler::forceDisconnectClient(const NetworkIdentifier& netId, uint8_t subId,
@@ -246,20 +142,7 @@ void ServerNetworkHandler::forceDisconnectClient(const NetworkIdentifier& netId,
 	this->onDisconnect(netId, skipPlayerLeftChatMsg);
 }
 
-void CommandOutput::success() { direct_access<bool>(this, 40) = true; }
-
-// RaidBossComponent::_sendBossEvent
-PacketSender &Level::getPacketSender() const { return *direct_access<PacketSender *>(this, 2240); } // verified
-
-LevelDataWrapper &Level::getLevelDataWrapper() { return direct_access<LevelDataWrapper>(this, 544); } // verified
-
-uint64_t Level::getServerTick() {
-	return (uint64_t)(CallServerClassMethod<const struct Tick>("?getCurrentServerTick@Level@@UEBA?BUTick@@XZ", this).value);
-}
-
-struct ActorUniqueID Level::getNewUniqueID() const {
-	return ActorUniqueID(++this->mLastUniqueID.value);
-}
+void CommandOutput::success() { directAccess<bool>(this, 40) = true; }
 
 RakNet::SystemAddress NetworkIdentifier::getRealAddress() const {
 	return LocateService<RakNet::RakPeer>()->GetSystemAddressFromGuid(this->mGuid);

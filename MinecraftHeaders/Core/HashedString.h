@@ -17,15 +17,17 @@ public:
 		this->mStr = str;
 		this->mStrHash = this->computeHash(str);
 	}
-	HashedString(const char* str) : HashedString(std::string(str)) {}
+	HashedString(const char* str) : HashedString(std::string{str}) {}
 	HashedString(const HashedString &rhs) : mStrHash(rhs.mStrHash), mStr(rhs.mStr) {}
 	HashedString(HashedString &&rhs) : mStrHash(std::move(rhs.mStrHash)), mStr(std::move(rhs.mStr)) {}
 
 	inline uint64_t getHash() const { return this->mStrHash; }
 	inline const std::string &getString() const { return this->mStr; }
+
 	constexpr inline uint64_t computeHash(const char *str) const {
-		uint8_t currentChar = (uint8_t)(*str);
-		if (!currentChar) return 0;
+		if (!str) return 0;
+		uint8_t currentChar = static_cast<uint8_t>(*str);
+		if (currentChar == '\0') return 0;
 		uint64_t result = VAL_64;
 		do {
 			++str;
@@ -34,6 +36,7 @@ public:
 		} while (*str);
 		return result;
 	}
+
 	constexpr uint64_t computeHash(const std::string& str) const {
 		return this->computeHash(str.c_str());
 	}

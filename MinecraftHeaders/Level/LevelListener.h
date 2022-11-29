@@ -41,8 +41,8 @@ public:
 	virtual void onChunkLoaded(ChunkSource &, LevelChunk &);
 	virtual void onChunkUnloaded(LevelChunk &);
 	virtual void onLevelDestruction(std::string const &);
-	virtual void levelEvent(LevelEvent, CompoundTag const &);
-	virtual void levelEvent(LevelEvent, Vec3 const &, int32_t);
+	virtual void levelEvent(enum class LevelEvent, CompoundTag const &);
+	virtual void levelEvent(enum class LevelEvent, const Vec3 &pos, int32_t data); // this func only handles LevelEvent enum types: 0xBBB, 0xBB9, 0xBBA, 0xBBC
 	virtual void levelSoundEvent(std::string const &, Vec3 const &, float, float);
 	virtual void levelSoundEvent(LevelSoundEvent, Vec3 const &, int32_t, ActorDefinitionIdentifier const &, bool, bool);
 	virtual void stopSoundEvent(std::string const &);

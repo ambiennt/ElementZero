@@ -11,7 +11,7 @@ public:
 
 	Vec3() : x(0.f), y(0.f), z(0.f) {}
 	Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
-	Vec3(Vec3 const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
+	Vec3(const Vec3 &rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
 
 	Vec3 operator+(Vec3 const &rhs) const {
 		return Vec3(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);

@@ -213,7 +213,7 @@ TClasslessInstanceHook(bool,
     return false;
   }
 
-  auto &name = direct_access<std::string>(&id, 0xC0); // HACK
+  auto &name = directAccess<std::string>(&id, 0xC0); // HACK
 
   uint64_t xuid = 0;
   if (!id.xuid.empty()) {

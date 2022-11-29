@@ -58,7 +58,7 @@ public:
     });
     container.emplace(TeleportEntry{source, target, token});
     auto pkt = TextPacket::createTranslatedMessageWithParams(
-        "commands.tpa.message.sent", {ExtendedCertificate::getIdentityName(source->getCertificate())});
+        "commands.tpa.message.sent", {ExtendedCertificate::getIdentityName(*source->mCertificate.get())});
     target->sendNetworkPacket(pkt);
     output.success("commands.tpa.success", {target});
   }

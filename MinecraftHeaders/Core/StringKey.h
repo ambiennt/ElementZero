@@ -10,6 +10,9 @@ public:
 	using HashedString::operator!=;
 
 	const StringKey* mMatch;
+
+	// this is weird to copy the hashedstring but whatever, its what vanilla does
+	StringKey(const HashedString &str) : HashedString(str), mMatch(nullptr) {}
 };
 
 namespace std {

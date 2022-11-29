@@ -12,6 +12,8 @@ class Item;
 class ItemInstance : public ItemStackBase {
 public:
 
+	MCAPI static class ItemInstance const EMPTY_ITEM;
+
 	virtual void reinit(BlockLegacy const &blockLegacy, int32_t count) override;
 	virtual void reinit(Item const &, int32_t count, int32_t auxValue) override;
 

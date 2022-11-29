@@ -12,10 +12,10 @@ struct TextureUVCoordinateSet { // const struct
     uint16_t _texSizeW, _texSizeH;
     //ResourceLocation sourceFileLocation;
     //IsotropicFaceData mIsotropicFaceData;
-    uint8_t pad[0x38];
+    uint8_t pad[0x40];
 };
 
-static_assert(sizeof(TextureUVCoordinateSet) == 0x50);
+static_assert(sizeof(TextureUVCoordinateSet) == 0x58);
 
 class TextureAtlasItem { // const class
 public:

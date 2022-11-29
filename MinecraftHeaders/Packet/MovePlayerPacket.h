@@ -26,7 +26,7 @@ public:
 	bool mOnGround;
 	ActorRuntimeID mRidingActorId;
 	TeleportCause mTeleportCause = TeleportCause::Unknown; // actually an int32_t in bds
-	ActorType mSourceEntityType = (ActorType)0; // actually an int32_t in bds
+	ActorType mSourceEntityType = static_cast<ActorType>(0); // actually an int32_t in bds
 
 	MCAPI MovePlayerPacket(Player &player, Player::PositionMode resetPosition,
 		/*MovePlayerPacket::TeleportCause*/ int32_t cause, /*ActorType*/ int32_t sourceEntityType);

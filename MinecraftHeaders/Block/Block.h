@@ -45,11 +45,11 @@ public:
 		return !(*this == rhs);
 	}
 
-	inline bool isWaterSource() const {
-		auto legacy = this->mLegacyBlock.get();
-		return ((legacy->getMaterialType() == MaterialType::Water) &&
-				(legacy->mStates[VanillaStates::LiquidDepth.mID].mInitialized) &&
-				(legacy->getState<int32_t>(VanillaStates::LiquidDepth, this->mAux) == 0));
+	inline bool isWaterSource() const { // xref: BlockUtils::isWaterSource
+		const auto& legacy = *this->mLegacyBlock.get();
+		return ((legacy.getMaterialType() == MaterialType::Water) &&
+				(legacy.mStates[VanillaStates::LiquidDepth.mID].mInitialized) &&
+				(legacy.getState<int32_t>(VanillaStates::LiquidDepth, this->mAux) == 0));
 	}
 protected:
 	MCAPI void buildSerializationId(uint32_t);

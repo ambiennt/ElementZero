@@ -156,7 +156,7 @@ TClasslessInstanceHook(
     "std@@AEBVNetworkIdentifier@@AEBVConnectionRequest@@@Z",
     const NetworkIdentifier &netId, const ConnectionRequest &req) {
   auto player  = original(this, netId, req);
-  auto &cert   = player->getCertificate();
+  auto &cert   = *player->mCertificate.get();
   auto uuid    = ExtendedCertificate::getIdentity(cert);
   auto name    = ExtendedCertificate::getIdentityName(cert);
   auto sadd    = netId.getRealAddress();

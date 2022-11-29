@@ -42,12 +42,8 @@ public:
 		return this->_getActiveAndInProgressPlayerCount(excludePlayer);
 	}
 
-	inline std::string const& getMOTD() const {
-		return this->mServerName;
-	}
-
-	inline void setMOTD(std::string const& motd) {
-		this->mServerName = motd;
+	inline void setMOTD(const std::string &str) {
+		this->mServerName = str;
 	}
 
 	// - if disconnectMsg.empty(), the client will default to disconnectionScreen.disconnected
@@ -57,48 +53,39 @@ public:
 	BASEAPI void forceDisconnectClient(const Player& player,
 		bool skipPlayerLeftChatMsg, const std::string& disconnectMsg = std::string{});
 
-	BUILD_ACCESS_MUT(class GameCallbacks *, mGameCallbacks, 0x30);
-	BUILD_ACCESS_MUT(class Level *, mLevel, 0x38);
-	BUILD_ACCESS_MUT(class NetworkHandler *, mNetworkHandler, 0x40);
-	BUILD_ACCESS_MUT(class PrivateKeyManager *, mServerKeys, 0x48);
-	BUILD_ACCESS_MUT(class ServerLocator * , mServerLocator, 0x50);
-	BUILD_ACCESS_MUT(class PacketSender *, mPacketSender, 0x58);
-	BUILD_ACCESS_MUT(bool, mUseWhitelist, 0x60);
-	BUILD_ACCESS_MUT(class Whitelist *, mWhitelist, 0x68);
-	BUILD_ACCESS_MUT(class PermissionsFile *, mPermissionsFile, 0x70);
-	BUILD_ACCESS_MUT(class BlackList, mServerBlackList, 0x78); // not a pointer
-	BUILD_ACCESS_MUT(bool, mRequireTrustedAuthentication, 0xE0);
-	BUILD_ACCESS_MUT(bool, mHasDisplayedPackErrors, 0xE1);
-	BUILD_ACCESS_MUT(class NetworkIdentifier, mMyId, 0xE8); // localplayer NetworkIdentifier?
-	BUILD_ACCESS_MUT(const int32_t, mMaxChunkRadius, 0x180);
-	BUILD_ACCESS_MUT(class MinecraftCommands *, mMinecraftCommands, 0x188);
-	BUILD_ACCESS_MUT(class IMinecraftApp *, mApp, 0x190);
-	BUILD_ACCESS_MUT(class TextFilteringProcessor *, mTextFilteringProcessor, 0x198);
-
-	//using clientManagerPtr = std::unique_ptr<class ClientBlobCache::Server::ActiveTransfersManager>;
-	//BUILD_ACCESS_MUT(clientManagerPtr, mClientCacheManager, 0x1A0);
-
-	BUILD_ACCESS_MUT(std::unique_ptr<class ClassroomModeNetworkHandler>, mCompanionHandler,  0x1A8);
-	BUILD_ACCESS_MUT(std::string, mTenantId, 0x1B0);
-	BUILD_ACCESS_MUT(std::string, mShareableIdentityToken, 0x1D0);
-	BUILD_ACCESS_MUT(std::mutex, mValidatePlayerMutex, 0x1F0);
-	BUILD_ACCESS_MUT(bool, mAllowIncoming, 0x240);
-	BUILD_ACCESS_MUT(class mce::UUID, mHostPlayerId, 0x248);
-	BUILD_ACCESS_MUT(std::string, mServerName, 0x258);
-	BUILD_ACCESS_MUT(std::string, mServerType, 0x278); // defaults to "normal", can also be "realms"
-	BUILD_ACCESS_MUT(std::string, mMultiplayerCorrelationId, 0x298);
-	BUILD_ACCESS_MUT(std::vector<std::string>, mTrustedKeys, 0x2B8);
-	BUILD_ACCESS_MUT(int32_t, mMaxNumPlayers, 0x2D0);
-	BUILD_ACCESS_MUT(std::unordered_set<class mce::UUID>, mKnownEmotePieceIdLookup, 0x2D8);
-	BUILD_ACCESS_MUT(std::vector<class mce::UUID>, mKnownEmotePieceIds, 0x318);
-
-	using clientMap = std::unordered_map<class NetworkIdentifier, std::unique_ptr<class ServerNetworkHandler::Client>>;
-	BUILD_ACCESS_MUT(clientMap, mClients, 0x330);
-
-	BUILD_ACCESS_MUT(bool, mIsTrial, 0x370);
-
-	using packIdKeyMap = std::unordered_map<struct PackIdVersion, std::string>;
-	BUILD_ACCESS_MUT(packIdKeyMap, mPackIdToContentKey, 0x378);
-
-	BUILD_ACCESS_MUT(std::unique_ptr<class GameSpecificNetEventCallback>, mGameSpecificNetEventCallback, 0x3B8);
+	CLASS_FIELD(mGameCallbacks, 0x30, class GameCallbacks *);
+	CLASS_FIELD(mLevel, 0x38, class Level *);
+	CLASS_FIELD(mNetworkHandler, 0x40, class NetworkHandler *);
+	CLASS_FIELD(mServerKeys, 0x48, class PrivateKeyManager *);
+	CLASS_FIELD(mServerLocator, 0x50, class ServerLocator * );
+	CLASS_FIELD(mPacketSender, 0x58, class PacketSender *);
+	CLASS_FIELD(mUseWhitelist, 0x60, bool);
+	CLASS_FIELD(mWhitelist, 0x68, class Whitelist *);
+	CLASS_FIELD(mPermissionsFile, 0x70, class PermissionsFile *);
+	CLASS_FIELD(mServerBlackList, 0x78, class BlackList); // not a pointer
+	CLASS_FIELD(mRequireTrustedAuthentication, 0xE0, bool);
+	CLASS_FIELD(mHasDisplayedPackErrors, 0xE1, bool);
+	CLASS_FIELD(mMyId, 0xE8, class NetworkIdentifier); // localplayer NetworkIdentifier?
+	CLASS_FIELD(mMaxChunkRadius, 0x180, const int32_t);
+	CLASS_FIELD(mMinecraftCommands, 0x188, class MinecraftCommands *);
+	CLASS_FIELD(mApp, 0x190, class IMinecraftApp *);
+	CLASS_FIELD(mTextFilteringProcessor, 0x198, class TextFilteringProcessor *);
+	//CLASS_FIELD(mClientCacheManager, 0x1A0, std::unique_ptr<class ClientBlobCache::Server::ActiveTransfersManager>);
+	CLASS_FIELD(mCompanionHandler,  0x1A8, std::unique_ptr<class ClassroomModeNetworkHandler>);
+	CLASS_FIELD(mTenantId, 0x1B0, std::string);
+	CLASS_FIELD(mShareableIdentityToken, 0x1D0, std::string);
+	CLASS_FIELD(mValidatePlayerMutex, 0x1F0, std::mutex);
+	CLASS_FIELD(mAllowIncoming, 0x240, bool);
+	CLASS_FIELD(mHostPlayerId, 0x248, class mce::UUID);
+	CLASS_FIELD(mServerName, 0x258, std::string); // the MOTD shown in the client server screen
+	CLASS_FIELD(mServerType, 0x278, std::string); // defaults to "normal", can also be "realms"
+	CLASS_FIELD(mMultiplayerCorrelationId, 0x298, std::string);
+	CLASS_FIELD(mTrustedKeys, 0x2B8, std::vector<std::string>);
+	CLASS_FIELD(mMaxNumPlayers, 0x2D0, int32_t);
+	CLASS_FIELD(mKnownEmotePieceIdLookup, 0x2D8, std::unordered_set<class mce::UUID>);
+	CLASS_FIELD(mKnownEmotePieceIds, 0x318, std::vector<class mce::UUID>);
+	CLASS_FIELD(mClients, 0x330, std::unordered_map<class NetworkIdentifier, std::unique_ptr<class ServerNetworkHandler::Client>>);
+	CLASS_FIELD(mIsTrial, 0x370, bool);
+	CLASS_FIELD(mPackIdToContentKey, 0x378, std::unordered_map<struct PackIdVersion, std::string>);
+	CLASS_FIELD(mGameSpecificNetEventCallback, 0x3B8, std::unique_ptr<class GameSpecificNetEventCallback>);
 };

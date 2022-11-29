@@ -20,10 +20,10 @@ public:
 		FromPlayer = 0x3,
 	};
 
-	BUILD_ACCESS_MUT(ActorUniqueID, mFollowingPlayer, 0x620);
-	BUILD_ACCESS_MUT(int32_t, mFollowingTime, 0x628);
-	BUILD_ACCESS_MUT(int32_t, mAge, 0x62C);
-	BUILD_ACCESS_MUT(int32_t, mHealth, 0x630);
+	CLASS_FIELD(mFollowingPlayer, 0x620, ActorUniqueID);
+	CLASS_FIELD(mFollowingTime, 0x628, int32_t);
+	CLASS_FIELD(mAge, 0x62C, int32_t);
+	CLASS_FIELD(mHealth, 0x630, int32_t);
 
 	// xref: Mob::TickDeath
 	MCAPI static void spawnOrbs(BlockSource &region, const Vec3 &pos, int32_t xpValue, DropType type, Player *owner);

@@ -23,12 +23,11 @@ struct NetworkStatus : Command {
 			return output.error("This command can only be executed by players");
 		}
 
-		auto& executor = *reinterpret_cast<Player*>(origin.getEntity());
-		auto& netId = executor.getNetworkIdentifier();
-		auto peer = LocateService<NetworkHandler>()->getPeerForUser(netId);
+		const auto& executor = *reinterpret_cast<Player*>(origin.getEntity());
+		const auto& netId = executor.mNetworkIdentifier;
+		const auto peer = LocateService<NetworkHandler>()->getPeerForUser(netId);
 		
-		if (peer) {
-			
+		if (peer) {	
 			auto status = peer->getNetworkStatus();
 			if (std::isnan(status.mCurrentPacketLoss)) { status.mCurrentPacketLoss = 0.f; }
 			if (std::isnan(status.mAveragePacketLoss)) { status.mAveragePacketLoss = 0.f; }

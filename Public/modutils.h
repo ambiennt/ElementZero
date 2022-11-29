@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <type_traits>
 #include "../Base/include/base/base.h"
 
@@ -9,40 +10,15 @@ template <class T> struct remove_cvref { typedef std::remove_cv_t<std::remove_re
 
 template <class T> using remove_cvref_t = typename remove_cvref<T>::type;
 
-template <typename Ret, typename Type> Ret &direct_access(Type *type, size_t offset) {
-  union {
-    size_t raw;
-    Type *source;
-    Ret *target;
-  } u;
-  u.source = type;
-  u.raw += offset;
-  return *u.target;
+// obtains a reference to a class field at the given offset
+template <typename TreatAs, typename Pointer>
+constexpr inline TreatAs &directAccess(Pointer ptr, ptrdiff_t offset) {
+	return *reinterpret_cast<TreatAs *>(reinterpret_cast<uintptr_t>(ptr) + offset);
 }
 
-
-
-
-
-
-// use BUILD_ACCESS_MUT as a macro for a mutable instance of a field (like you would with direct_access)
-// its useful so you don't have to worry about padding when filling in fields from classes
+// allows the assigning of fake fields to a class with a given offset, without the need for padding
 // if your class is small and/or has mostly primitive types then I would suggest defining fields normally
-
-#define AS_FIELD(type, name, fn) __declspec(property(get = fn)) type name
-#define DEF_FIELD_RW(type, name) __declspec(property(get = get##name, put = set##name)) type name
-
-// read only getter that returns a copy
-#define BUILD_ACCESS(type, name, offset)                                                                               \
-  AS_FIELD(type, name, get##name);                                                                                     \
-  type get##name() const { return direct_access<type>(this, offset); }
-
-// read and write getter/setter that returns a reference
-#define BUILD_ACCESS_MUT(type, name, offset)                                                                           \
-  DEF_FIELD_RW(type, name);                                                                                            \
-  type &get##name() const { return direct_access<type>(this, offset); }                                                \
-  template<typename T>void set##name(T const &value) { direct_access<type>(this, offset) = value; }
-
-#define BUILD_ACCESS_COMPAT(type, name)                                                                                \
-  AS_FIELD(type, name, get##name);                                                                                     \
-  BASEAPI type get##name() const;
+#define CLASS_FIELD(name, offset, ...)																					\
+	__declspec(property(get = GET_FIELD_##name, put = SET_FIELD_##name)) __VA_ARGS__ name;								\
+	__VA_ARGS__ &GET_FIELD_##name() const { return directAccess<__VA_ARGS__>(this, offset); }							\
+	template <typename T> void SET_FIELD_##name(const T &value) { directAccess<__VA_ARGS__>(this, offset) = value; }

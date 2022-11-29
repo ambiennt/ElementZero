@@ -6,10 +6,14 @@
 #include "../Math/Vec3.h"
 #include "../dll.h"
 
+#include <string>
+#include <vector>
+
 class ActorDamageSource;
 class Actor;
 class CompoundTag;
 class OnHitSubcomponent;
+class DataLoadHelper;
 
 enum class ParticleType : int32_t;
 enum class ActorType : int32_t;

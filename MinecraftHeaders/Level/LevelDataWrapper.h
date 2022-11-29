@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LevelData.h"
+#include "../dll.h"
 
 class LevelDataWrapper {
 public:
@@ -12,6 +13,6 @@ public:
 	LevelData *operator->() { return rdata ? rdata : &data; }
 	LevelData const *operator->() const { return rdata ? rdata : &data; }
 
-	void resetLevelDataPointer() { rdata = nullptr; }
-	void setLevelData(LevelData &data) { rdata = &data; }
+	inline void resetLevelDataPointer() { rdata = nullptr; }
+	inline void setLevelData(LevelData &data) { rdata = &data; }
 };

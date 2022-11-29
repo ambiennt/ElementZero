@@ -10,9 +10,13 @@
 #include "../dll.h"
 #include <modutils.h>
 
+#include <cstdint>
 #include <thread>
 #include <mutex>
 #include <atomic>
+#include <unordered_map>
+#include <vector>
+#include <array>
 
 enum class ChunkCachedDataState : int8_t {
 	NotGenerating = 0,
@@ -23,6 +27,39 @@ enum class ChunkCachedDataState : int8_t {
 enum class ChunkDebugDisplaySavedState : int8_t {
 	Generated = 0,
 	Saved     = 1
+};
+
+enum class LevelChunkFormat : int8_t {
+	v9_00 = 0x0,
+	v9_02 = 0x1,
+	v9_05 = 0x2,
+	v17_0 = 0x3,
+	v18_0 = 0x4,
+	vConsole1_to_v18_0 = 0x5,
+	v1_2_0 = 0x6,
+	v1_2_0_bis = 0x7,
+	v1_3_0 = 0x8,
+	v1_8_0 = 0x9,
+	v1_9_0 = 0xA,
+	v1_10_0 = 0xB,
+	v1_11_0 = 0xC,
+	v1_11_1 = 0xD,
+	v1_11_2 = 0xE,
+	v1_12_0 = 0xF,
+	v1_14_0 = 0x10,
+	v1_15_0 = 0x11,
+	v1_16_0 = 0x12,
+	v1_16_0_bis = 0x13,
+	Count_3 = 0x14,
+};
+
+enum class ChunkTerrainDataState : int8_t {
+	NoData_0           = 0x0,
+	NeedsFixup         = 0x1,
+	ReadyForGeneration = 0x2,
+	Generated_0        = 0x3,
+	PostProcessed_0    = 0x4,
+	Ready              = 0x5,
 };
 
 struct BiomeChunkState {
@@ -44,14 +81,14 @@ public:
 	class HardcodedSpawningArea {
 	public:
 		enum class HardcodedSpawnAreaType : int8_t {
-			None                   = -1,
-			NetherFortress         = 0,
-			WitchHut               = 1,
-			OceanMonument          = 2,
+			None		   = -1,
+			NetherFortress	 = 0,
+			WitchHut	       = 1,
+			OceanMonument	  = 2,
 			Village_Deprecated     = 3,
-			PillagerOutpost        = 4,
+			PillagerOutpost	= 4,
 			NewVillage_Deprecated  = 5,
-			Count                  = 6
+			Count		  = 6
 		};
 
 		BoundingBox mAABB;
@@ -64,83 +101,54 @@ public:
 		Noop    = 2
 	};
 
-	BUILD_ACCESS_MUT(class Level *, mLevel, 0x0);
-	BUILD_ACCESS_MUT(class Dimension *, mDimension, 0x8);
-	BUILD_ACCESS_MUT(class BlockPos, mMin, 0x10);
-	BUILD_ACCESS_MUT(class BlockPos, mMax, 0x1C);
-	BUILD_ACCESS_MUT(class ChunkPos, mPosition, 0x28);
-	BUILD_ACCESS_MUT(std::atomic<bool>, mLightingFixupDone, 0x30);
-	BUILD_ACCESS_MUT(bool, mReadOnly, 0x32);
-	BUILD_ACCESS_MUT(class ChunkSource *, mGenerator, 0x38);
-	BUILD_ACCESS_MUT(uint8_t, mLoadedFormat, 0x40); // char array of size 1
-	BUILD_ACCESS_MUT(std::string, mSerializedEntitiesBuffer, 0x48);
-	BUILD_ACCESS_MUT(std::atomic<enum ChunkState>, mLoadState, 0x68);
-	BUILD_ACCESS_MUT(int8_t, mTerrainDataState, 0x69); // char array of size 1
-	BUILD_ACCESS_MUT(enum ChunkDebugDisplaySavedState, mDebugDisplaySavedState, 0x6A);
-	BUILD_ACCESS_MUT(enum ChunkCachedDataState, mCachedDataState, 0x6B);
-	BUILD_ACCESS_MUT(class SpinLock, mCachedDataStateSpinLock, 0x70);
-	BUILD_ACCESS_MUT(struct Tick, mLastTick, 0x90);
-	BUILD_ACCESS_MUT(std::unique_ptr<class BlockTickingQueue>, mTickQueue, 0x98);
-	BUILD_ACCESS_MUT(std::unique_ptr<class BlockTickingQueue>, mRandomTickQueue, 0xA0);
+	CLASS_FIELD(mLevel, 0x0, class Level *);
+	CLASS_FIELD(mDimension, 0x8, class Dimension *);
+	CLASS_FIELD(mMin, 0x10, class BlockPos);
+	CLASS_FIELD(mMax, 0x1C, class BlockPos);
+	CLASS_FIELD(mPosition, 0x28, class ChunkPos);
+	CLASS_FIELD(mLightingFixupDone, 0x30, std::atomic<bool>);
+	CLASS_FIELD(mReadOnly, 0x32, bool);
+	CLASS_FIELD(mGenerator, 0x38, class ChunkSource *);
+	CLASS_FIELD(mLoadedFormat, 0x40, enum class LevelChunkFormat);
+	CLASS_FIELD(mSerializedEntitiesBuffer, 0x48, std::string);
+	CLASS_FIELD(mLoadState, 0x68, std::atomic<enum ChunkState>);
+	CLASS_FIELD(mTerrainDataState, 0x69, enum class ChunkTerrainDataState);
+	CLASS_FIELD(mDebugDisplaySavedState, 0x6A, enum ChunkDebugDisplaySavedState);
+	CLASS_FIELD(mCachedDataState, 0x6B, enum ChunkCachedDataState);
+	CLASS_FIELD(mCachedDataStateSpinLock, 0x70, class SpinLock);
+	CLASS_FIELD(mLastTick, 0x90, struct Tick);
+	CLASS_FIELD(mTickQueue, 0x98, std::unique_ptr<class BlockTickingQueue>);
+	CLASS_FIELD(mRandomTickQueue, 0xA0, std::unique_ptr<class BlockTickingQueue>);
+	//CLASS_FIELD(mSubChunks, 0xA8, struct AppendOnlyAtomicLookupTable<class SubChunk, 16>);
+	CLASS_FIELD(mSubChunkSpinLocks, 0x450, std::array<class SpinLock, 16>);
+	CLASS_FIELD(mBiomes, 0x650, std::array<struct BiomeChunkData, 256>);
+	CLASS_FIELD(mCachedData, 0x750, std::array<struct ColumnCachedData, 256>);
+	CLASS_FIELD(mHeightmap, 0xF50, std::array<int16_t, 256>);
+	CLASS_FIELD(mPreWorldGenHeightmap, 0x1150, std::unique_ptr<std::vector<int16_t>>);
+	CLASS_FIELD(mBiomeStates, 0x1158, std::unordered_map<uint8_t, struct BiomeChunkState>);
+	CLASS_FIELD(mHasCachedTemperatureNoise, 0x1198, bool);
+	CLASS_FIELD(mBorderBlockMap, 0x1199, std::array<uint8_t, 256>);
+	CLASS_FIELD(mFinalized, 0x129C, enum LevelChunk::Finalization);
+	CLASS_FIELD(mIsRedstoneLoaded, 0x12A0, bool);
+	CLASS_FIELD(mOwnedByTickingThread, 0x12A1, bool);
+	CLASS_FIELD(mFullChunkDirtyTicksCounters, 0x12A4, class DirtyTicksCounter);
+	CLASS_FIELD(mRainHeights, 0x12D4, std::array<int16_t, 256>);
+	//CLASS_FIELD(mEntities, 0x14D8, SmallSet<std::unique_ptr<class Actor>>);
+	CLASS_FIELD(mBlockEntities, 0x14F0, std::unordered_map<class ChunkBlockPos, std::shared_ptr<class BlockActor>>);
+	CLASS_FIELD(mDeletedBlockEntities, 0x1530, std::vector<std::shared_ptr<class BlockActor>>);
+	CLASS_FIELD(mDefaultBrightness, 0x1548, struct BrightnessPair);
+	CLASS_FIELD(mHardcodedSpawningAreas, 0x1550, std::vector<class LevelChunk::HardcodedSpawningArea>);
+	CLASS_FIELD(mbChunkInterpolants, 0x1568, std::array<std::array<uint8_t, 2>, 2>); // actually a 2d c array
+	CLASS_FIELD(mbChunkHasConverterTag, 0x156C, bool);
+	CLASS_FIELD(mDBChunkSurroundedByNeighbors, 0x156D, bool);
+	CLASS_FIELD(mLevelChunkChecksums, 0x1570, std::unordered_map<class LevelChunkHashMapKey, uint64_t>);
+	CLASS_FIELD(mOnChunkLoadedCalled, 0x15B0, bool);
+	CLASS_FIELD(mBlockEntityAccessThread, 0x15B4, std::thread::id);
+	CLASS_FIELD(mBlockEntityAccessThreadMutex, 0x15B8, std::mutex);
+	CLASS_FIELD(mBlockEntityAccessCount, 0x1608, uint32_t);
 
-	//using lookupTable16 = struct AppendOnlyAtomicLookupTable<class SubChunk, 16>;
-	//BUILD_ACCESS_MUT(lookupTable16, mSubChunks, 0xA8);
-
-	using spinLockArr16 = std::array<class SpinLock, 16>;
-	BUILD_ACCESS_MUT(spinLockArr16, mSubChunkSpinLocks, 0x450);
-
-	using biomeChunkDataArr256 = std::array<struct BiomeChunkData, 256>;
-	BUILD_ACCESS_MUT(biomeChunkDataArr256, mBiomes, 0x650);
-
-	using ColumnCachedDataArr256 = std::array<struct ColumnCachedData, 256>;
-	BUILD_ACCESS_MUT(ColumnCachedDataArr256, mCachedData, 0x750);
-
-	using heightMapArr256 = std::array<int16_t, 256>;
-	BUILD_ACCESS_MUT(heightMapArr256, mHeightmap, 0xF50);
-
-	BUILD_ACCESS_MUT(std::unique_ptr<std::vector<int16_t>>, mPreWorldGenHeightmap, 0x1150);
-
-	using biomeChunkStateMap = std::unordered_map<uint8_t, struct BiomeChunkState>;
-	BUILD_ACCESS_MUT(biomeChunkStateMap, mBiomeStates, 0x1158);
-
-	BUILD_ACCESS_MUT(bool, mHasCachedTemperatureNoise, 0x1198);
-
-	using borderBlockMapArr256 = std::array<uint8_t, 256>;
-	BUILD_ACCESS_MUT(borderBlockMapArr256, mBorderBlockMap, 0x1199);
-
-	BUILD_ACCESS_MUT(enum LevelChunk::Finalization, mFinalized, 0x129C);
-	BUILD_ACCESS_MUT(bool, mIsRedstoneLoaded, 0x12A0);
-	BUILD_ACCESS_MUT(bool, mOwnedByTickingThread, 0x12A1);
-	BUILD_ACCESS_MUT(class DirtyTicksCounter, mFullChunkDirtyTicksCounters, 0x12A4);
-
-	using rainHeightsArr256 = std::array<int16_t, 256>;
-	BUILD_ACCESS_MUT(rainHeightsArr256, mRainHeights, 0x12D4);
-
-	//BUILD_ACCESS_MUT(SmallSet<std::unique_ptr<class Actor>>, mEntities, 0x14D8);
-
-	using chunkBlockPosBlockActorMap = std::unordered_map<class ChunkBlockPos, std::shared_ptr<class BlockActor>>;
-	BUILD_ACCESS_MUT(chunkBlockPosBlockActorMap, mBlockEntities, 0x14F0);
-
-	BUILD_ACCESS_MUT(std::vector<std::shared_ptr<class BlockActor>>, mDeletedBlockEntities, 0x1530);
-	BUILD_ACCESS_MUT(struct BrightnessPair, mDefaultBrightness, 0x1548);
-	BUILD_ACCESS_MUT(std::vector<class LevelChunk::HardcodedSpawningArea>, mHardcodedSpawningAreas, 0x1550);
-
-	using chunkInterpolantsArr2_2 = uint8_t[2][2];
-	BUILD_ACCESS_MUT(chunkInterpolantsArr2_2, mbChunkInterpolants, 0x1568);
-
-	BUILD_ACCESS_MUT(bool, mbChunkHasConverterTag, 0x156C);
-	BUILD_ACCESS_MUT(bool, mDBChunkSurroundedByNeighbors, 0x156D);
-
-	using levelChunkHashMap = std::unordered_map<class LevelChunkHashMapKey, uint64_t>;
-	BUILD_ACCESS_MUT(levelChunkHashMap, mLevelChunkChecksums, 0x1570);
-
-	BUILD_ACCESS_MUT(bool, mOnChunkLoadedCalled, 0x15B0);
-	BUILD_ACCESS_MUT(std::thread::id, mBlockEntityAccessThread, 0x15B4);
-	BUILD_ACCESS_MUT(std::mutex, mBlockEntityAccessThreadMutex, 0x15B8);
-	BUILD_ACCESS_MUT(uint32_t, mBlockEntityAccessCount, 0x1608);
-
-	MCAPI void setSaved(void);
-	MCAPI void setUnsaved(void);
+	MCAPI void setSaved();
+	MCAPI void setUnsaved();
 	MCAPI bool hasEntity(class Actor&);
 };
 

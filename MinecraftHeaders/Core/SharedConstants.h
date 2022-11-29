@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../dll.h"
+#include <cstdint>
 
 enum class SubChunkFormat : int8_t {
 	v17_0                  = 0x0,

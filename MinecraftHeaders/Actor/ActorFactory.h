@@ -8,10 +8,10 @@
 
 class ActorFactory {
 public:
-	BUILD_ACCESS_MUT(class Level *, mLevel, 0x0);
-	BUILD_ACCESS_MUT(std::shared_ptr<class IEntityInitializer>, mEntityInitializer, 0x8);
-	BUILD_ACCESS_MUT(class ActorComponentFactory, mComponentFactory, 0x18);
-	BUILD_ACCESS_MUT(class ActorGoalFactory, mActorFactory, 0x60);
+	CLASS_FIELD(mLevel, 0x0, class Level *);
+	CLASS_FIELD(mEntityInitializer, 0x8, std::shared_ptr<class IEntityInitializer>);
+	CLASS_FIELD(mComponentFactory, 0x18, class ActorComponentFactory);
+	CLASS_FIELD(mActorFactory, 0x60, class ActorGoalFactory);
 
 	MCAPI std::unique_ptr<Actor> createSpawnedEntity(ActorDefinitionIdentifier const &id, Actor *spawner, Vec3 const &pos, Vec2 const &rot);
 };

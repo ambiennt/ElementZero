@@ -39,8 +39,7 @@ public:
 	Level* mLevel; // 0x38
 	int16_t mSeaLevel; // 0x40
 	std::unique_ptr<BlockSource> mBlockSource; // 0x48
-	float mMobsPerChunkSurface[7]; // 0x50
-	float mMobsPerChunkUnderground[7]; // 0x6C
+	std::array<float, 7> mMobsPerChunkSurface, mMobsPerChunkUnderground; // actually a C array but we dont like dat - 0x50, 0x6C
 	BrightnessPair mDefaultBrightness; // 0x88
 	std::unique_ptr<BaseLightTextureImageBuilder> mLightTextureImageBuilder; // 0x90
 	std::unique_ptr<DimensionBrightnessRamp> mDimensionBrightnessRamp; // 0x98

@@ -3,6 +3,7 @@
 #include "Vec3.h"
 #include "../dll.h"
 
+#include <cstdint>
 #include <limits>
 
 class BlockPos {
@@ -13,12 +14,11 @@ public:
 
 	BlockPos() : x(0), y(0), z(0) {}
 	BlockPos(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
-	BlockPos(BlockPos const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
-	BlockPos(Vec3 const& vec) {
-		this->x = (int32_t)(std::floorf(vec.x));
-		this->y = (int32_t)(std::floorf(vec.y));
-		this->z = (int32_t)(std::floorf(vec.z));
-	}
+	BlockPos(const BlockPos &rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
+	BlockPos(const Vec3 &rhs) :
+		x(static_cast<int32_t>(std::floorf(rhs.x))),
+		y(static_cast<int32_t>(std::floorf(rhs.y))),
+		z(static_cast<int32_t>(std::floorf(rhs.z))) {}
 
 	BlockPos operator+(BlockPos const &rhs) const {
 		return BlockPos(this->x + rhs.x, this->y + rhs.y, this->z + rhs.z);

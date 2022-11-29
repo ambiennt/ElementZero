@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
 #include "../Core/HashedString.h"
 #include "ActorType.h"
 #include "../dll.h"
+
+#include <string>
 
 struct ActorDefinitionIdentifier {
 	std::string mNamespace, mIdentifier, mInitEvent, mFullName; // 0x0, 0x20, 0x40, 0x60
@@ -20,12 +21,12 @@ struct ActorDefinitionIdentifier {
 	inline void setIdentifier(std::string const &id) { this->mIdentifier = id; }
 	inline void setInitEvent(std::string const &e) { this->mInitEvent = e; }
 
+	inline ActorDefinitionIdentifier() {}
 	MCAPI ActorDefinitionIdentifier(ActorDefinitionIdentifier const &);
 	MCAPI ActorDefinitionIdentifier(ActorDefinitionIdentifier &&);
 	MCAPI ActorDefinitionIdentifier(std::string ns, std::string identifier, std::string event); // "minecraft:entity_spawned", minecraft:entity_born", or "minecraft:entity_transformed" for initEvent
 	MCAPI ActorDefinitionIdentifier(std::string const & fullName);
 	MCAPI ActorDefinitionIdentifier(ActorType);
-	inline ActorDefinitionIdentifier() {}
 	MCAPI ActorDefinitionIdentifier &operator=(ActorDefinitionIdentifier const &);
 	MCAPI bool operator==(ActorDefinitionIdentifier const &);
 };

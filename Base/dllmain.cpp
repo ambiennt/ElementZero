@@ -23,7 +23,7 @@
 Settings settings;
 
 THook(void*, "??R?$default_delete@VConsoleInputReader@@@std@@QEBAXPEAVConsoleInputReader@@@Z", void *self, char *s) {
-  	auto &thrd = direct_access<std::thread>(s, 0x58);
+  	auto &thrd = directAccess<std::thread>(s, 0x58);
   	if (thrd.joinable()) { thrd.detach(); }
   	return original(self, s);
 }

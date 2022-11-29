@@ -1,9 +1,12 @@
 #pragma once
 
-enum class Difficulty {
+#include <cstdint>
+
+enum class Difficulty : int32_t {
 	Peaceful  = 0,
 	Easy      = 1,
 	Normal    = 2,
 	Hard      = 3,
-	Unknown   = 5
+	Count     = 4,
+	Unknown   = 5,
 };

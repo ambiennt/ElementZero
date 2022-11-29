@@ -14,16 +14,15 @@ public:
 		WaitRemoval = 1
 	};
 
-	BUILD_ACCESS_MUT(bool, mCreative, 0x620);
-	BUILD_ACCESS_MUT(enum State, mState, 0x624);
-	BUILD_ACCESS_MUT(int32_t, mWaitTicks, 0x628);
-	BUILD_ACCESS_MUT(int32_t, mTime, 0x62C);
-	BUILD_ACCESS_MUT(bool, mCancelDrop, 0x630);
-	BUILD_ACCESS_MUT(bool, mHurtEntities, 0x631);
-	BUILD_ACCESS_MUT(int32_t, mFallDamageMax, 0x634);
-	BUILD_ACCESS_MUT(int32_t, mFallDamageAmount, 0x638);
-	BUILD_ACCESS_MUT(std::unique_ptr<class CompoundTag>, mFallingBlockSerId, 0x640);
-	BUILD_ACCESS_MUT(uint16_t, mFallingBlockId, 0x648); // class NewBlockID
-	BUILD_ACCESS_MUT(uint16_t, mFallingBlockAux, 0x64A); // mFallingBlockData
+	CLASS_FIELD(mCreative, 0x620, bool);
+	CLASS_FIELD(mState, 0x624, enum State);
+	CLASS_FIELD(mWaitTicks, 0x628, int32_t);
+	CLASS_FIELD(mTime, 0x62C, int32_t);
+	CLASS_FIELD(mCancelDrop, 0x630, bool);
+	CLASS_FIELD(mHurtEntities, 0x631, bool);
+	CLASS_FIELD(mFallDamageMax, 0x634, int32_t);
+	CLASS_FIELD(mFallDamageAmount, 0x638, int32_t);
+	CLASS_FIELD(mFallingBlockSerId, 0x640, std::unique_ptr<class CompoundTag>);
+	CLASS_FIELD(mFallingBlockId, 0x648, uint16_t); // class NewBlockID
+	CLASS_FIELD(mFallingBlockAux, 0x64A, uint16_t); // mFallingBlockData
 };
-

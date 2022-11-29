@@ -4,6 +4,9 @@
 #include "BlockActor.h"
 #include "../dll.h"
 
+#include <string>
+#include <array>
+
 class SignBlockActor : public BlockActor {
 public:
 
@@ -24,7 +27,7 @@ public:
 	};
 
 	struct CachedMessageData {
-		CachedLineData[4] mLineData; // 0x0
+		std::array<CachedLineData, 4> mLineData; // actually a c array - 0x0
 		uint32_t mNumLines; // 0xA0
 		std::string mFilteredMessage; // 0xA8
 		const void* mCachedFontCompare; // 0xC8

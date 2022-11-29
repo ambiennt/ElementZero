@@ -54,10 +54,10 @@ public:
 	MCAPI virtual StreamReadResult read(ReadOnlyBinaryStream &);
 
 	inline bool hasFlag(AdventureSettingsPacket::Flags flag) {
-		return (this->mFlags & (uint32_t)flag);
+		return (this->mFlags & static_cast<uint32_t>(flag));
 	}
 	inline bool hasFlag(AdventureSettingsPacket::PermissionsFlags flag) {
-		return (this->mPermissionsFlags & (uint32_t)flag);
+		return (this->mPermissionsFlags & static_cast<uint32_t>(flag));
 	}
 };
 

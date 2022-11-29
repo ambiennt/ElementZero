@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 enum class ActorEvent : int8_t {
 	NONE = 0x0,
 	JUMP = 0x1,
