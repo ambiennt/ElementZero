@@ -622,23 +622,23 @@ public:
 			this, destination, &facePosition, destinationDimension, yaw, pitch, commandVersion, &id);
 	}
 
-	inline AttributeInstance &getAttributeInstance(AttributeID id) {
+	inline AttributeInstance &getAttributeInstance(AttributeID id) const {
 		return this->mAttributes->getInstance(id);
 	}
 
-	inline float getHealth() {
+	inline float getHealth() const {
 		return this->getAttributeInstance(AttributeID::Health).mCurrentValue;
 	}
 
-	inline float getAbsorption() {
+	inline float getAbsorption() const {
 		return this->getAttributeInstance(AttributeID::Absorption).mCurrentValue;
 	}
 
-	inline int32_t getHealthAsInt() {
+	inline int32_t getHealthAsInt() const {
 		return static_cast<int32_t>(this->getHealth());
 	}
 
-	inline int32_t getAbsorptionAsInt() {
+	inline int32_t getAbsorptionAsInt() const {
 		return static_cast<int32_t>(this->getAbsorption());
 	}
 

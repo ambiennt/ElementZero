@@ -27,12 +27,8 @@ class BlockTickingQueue;
 
 enum class ActorType;
 enum class LegacyBlockID : uint16_t;
+enum class TickingQueueType : int8_t;
 enum class MaterialType;
-
-enum class TickingQueueType {
-	Internal = 0,
-	Random = 1
-};
 
 class BlockSource {
 public:
@@ -62,10 +58,12 @@ public:
 	MCAPI BlockSource(class Level &, class Dimension &, class ChunkSource &, bool, bool);
 	MCAPI virtual ~BlockSource();
 
+	MCAPI class BlockTickingQueue* getTickingQueue(class BlockPos const &pos, enum class TickingQueueType type) const;
 	MCAPI bool canSeeSky(int, int, int) const;
 	MCAPI short getHeightmap(int, int);
 	MCAPI bool isInWall(class Vec3 const &);
-	MCAPI class Block const &getBlock(int, int, int) const;
+	MCAPI class Block const &getBlock(int32_t x, int32_t y, int32_t z) const; // BlockLegacy ptr will always be valid in return value
+	MCAPI class Block const &getBlock(class BlockPos const &pos) const; // BlockLegacy ptr will always be valid in return value
 	MCAPI bool hasChunksAt(class AABB const &) const;
 	MCAPI bool hasBlock(class BlockPos const &) const;
 	MCAPI bool canSeeSky(class BlockPos const &) const;
@@ -87,7 +85,6 @@ public:
 	MCAPI bool setBlockNoUpdate(int, int, int, class Block const &);
 	MCAPI void updateNeighborsAt(class BlockPos const &);
 	MCAPI class Biome &getBiome(class BlockPos const &);
-	MCAPI class Block const &getBlock(class BlockPos const &) const;
 	MCAPI class BlockActor *getBlockEntity(int, int, int);
 	MCAPI class HitResult clip(class Vec3 const &, class Vec3 const &, bool, bool, int, bool, bool);
 	MCAPI float getSeenPercent(class Vec3 const &, class AABB const &);
@@ -111,7 +108,7 @@ public:
 	MCAPI bool findNextTopSolidBlockUnder(class BlockPos &);
 	MCAPI bool containsMaterial(class AABB const &, enum MaterialType);
 	MCAPI class BlockActor *getBlockEntity(class BlockPos const &);
-	MCAPI void addToTickingQueue(class BlockPos const &, class Block const &, int, int);
+	MCAPI void addToTickingQueue(const class BlockPos &pos, const class Block &block, int32_t tickDelay, int32_t priorityOffset);
 	MCAPI bool isUnobstructedByEntities(class AABB const &, class Actor *);
 	MCAPI class AABB generateUnloadedChunkAABB(class ChunkPos const &);
 	MCAPI struct Brightness getRawBrightness(class BlockPos const &, bool, bool) const;
@@ -173,7 +170,7 @@ public:
 static_assert(offsetof(BlockSource, mDimension) == 0x20);
 static_assert(offsetof(BlockSource, mTempBlockFetchResult) == 0x30);
 static_assert(offsetof(BlockSource, mTestOnlyBlockChangeListeners) == 0x70);
-static_assert(offsetof(BlockSource, mLastChunk) == 0x110);
-static_assert(offsetof(BlockSource, mTempEntityList) == 0x130);
+static_assert(offsetof(BlockSource, mRandomTickQueue) == 0x118);
+static_assert(offsetof(BlockSource, mTickQueue) == 0x120);
 static_assert(offsetof(BlockSource, mTempCubeList) == 0x160);
 static_assert(sizeof(BlockSource) == 0x178);
