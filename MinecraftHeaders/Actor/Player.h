@@ -404,14 +404,17 @@ public:
 
 	// player fields
 	// some fields still missing
-	CLASS_FIELD(mCastawayTimer, 0x7D0, int32_t);  // first field in Player
+	CLASS_FIELD(mCastawayTimer, 0x7D0, int32_t); // first field in Player
 	CLASS_FIELD(mAteKelp, 0x7D4, bool);
 	CLASS_FIELD(mLastBiome, 0x7D8, int32_t); // I guess biome ids are ints
 	CLASS_FIELD(mOceanBiomes, 0x7E0, std::vector<int32_t>);
 	CLASS_FIELD(mCastawaySent, 0x7F8, bool);
+	CLASS_FIELD(mSailSeasSent, 0x7F9, bool); // untested offset
 	CLASS_FIELD(mDimensionState, 0x7FC, enum Player::DimensionState);
 	CLASS_FIELD(mServerHasMovementAuthority, 0x800, bool); // check mServerAuthoritativeMovement in Level instead
+	CLASS_FIELD(mUserType, 0x801, int8_t); // untested offset
 	CLASS_FIELD(mScore, 0x804, int32_t); // no clue what this is for
+	CLASS_FIELD(mBobOld, 0x808, float); // mOBob
 	CLASS_FIELD(mBob, 0x80C, float);
 	CLASS_FIELD(mHandsBusy, 0x810, bool);
 	CLASS_FIELD(mPlayerName, 0x818, std::string); // mName
@@ -432,6 +435,7 @@ public:
 	CLASS_FIELD(mInteractTarget, 0xAF0, struct ActorUniqueID);
 	CLASS_FIELD(mInteractTargetPos, 0xAF8, class Vec3);
 	CLASS_FIELD(mHasFakeInventory, 0xB04, bool);
+	CLASS_FIELD(mIsRegionSuspended, 0xB05, bool);
 	CLASS_FIELD(mChunkSource, 0xB08, std::unique_ptr<class ChunkViewSource>);
 	CLASS_FIELD(mSpawnChunkSource, 0xB10, std::unique_ptr<class ChunkViewSource>);
 	CLASS_FIELD(mOwnedBlockSource, 0xB18, std::unique_ptr<class BlockSource>);
@@ -440,9 +444,12 @@ public:
 	//CLASS_FIELD(mFirstPersonLatestHandOffset, 0xB24, class Vec3); // some remnants of client stuff (replaced by mEZPlayer field)
 	CLASS_FIELD(mEZPlayer, 0xB24, class EZPlayer *);
 
-	CLASS_FIELD(mCapePosOld, 0xB30, class Vec3);
+	CLASS_FIELD(mCapePosOld, 0xB30, class Vec3); // mCapePosO
 	CLASS_FIELD(mCapePos, 0xB3C, class vec3);
+	CLASS_FIELD(mPaddleForces, 0xB48, std::array<float, 2>); // actually a c array
+	CLASS_FIELD(mIsPaddling, 0xB50, std::array<bool, 2>); // actually a c array
 	CLASS_FIELD(mDistanceSinceTraveledEvent, 0xB54, float);
+	CLASS_FIELD(mDistanceSinceTransformedEvent, 0xB58, float);
 	CLASS_FIELD(mContainerManager, 0xB60, std::shared_ptr<class IContainerManager>);
 	CLASS_FIELD(mPlayerInventory, 0xB70, std::unique_ptr<class PlayerInventory>); // mInventory
 	CLASS_FIELD(mSkin, 0xB78, class SerializedSkin); // use this to read and write to the player skin
@@ -451,6 +458,7 @@ public:
 	CLASS_FIELD(mClientSubId, 0xDC0, uint8_t); // xref: RaidBossComponent::_sendBossEvent, 1 for the other xbox splitscreen player, if not using splitscreen assume its 0
 	CLASS_FIELD(mPlatformOnlineId, 0xDC8, std::string); // xref: ServerNetworkHandler::_createNewPlayer
 	CLASS_FIELD(mSpawnPositionState, 0xDE8, enum Player::SpawnPositionState);
+	CLASS_FIELD(mSpawnPositionSource, 0xDEC, enum Player::SpawnPositionSource);
 	CLASS_FIELD(mSpawnPositioningTestPosition, 0xDF0, class Vec3);
 	CLASS_FIELD(mBlockRespawnUntilClientMessage, 0xDFC, bool);
 	CLASS_FIELD(mRespawnChunkBuilderPolicyHandle, 0xE00, uint32_t);
@@ -462,9 +470,9 @@ public:
 	CLASS_FIELD(mRespawnOriginalDimension, 0xE94, enum DimensionID); // AutomaticID<class Dimension, int>
 	CLASS_FIELD(mRespawnReady, 0xE98, bool);
 	CLASS_FIELD(mRespawnMessage, 0xEA0, std::string);
-	CLASS_FIELD(mCheckBed, 0xEC0, bool); // idk what this is
+	CLASS_FIELD(mCheckBed, 0xEC0, bool);
 	CLASS_FIELD(mIsInitialSpawnDone, 0xEC1, bool);
-	CLASS_FIELD(mItemInUse, 0xEC8, class ItemStack); // why isnt this a pointer?
+	CLASS_FIELD(mItemInUse, 0xEC8, class ItemStack);
 	CLASS_FIELD(mItemInUseSlot, 0xF58, struct PlayerInventory::SlotData);
 	CLASS_FIELD(mItemInUseDuration, 0xF60, int32_t);
 	CLASS_FIELD(mSleepCounter, 0xF64, int16_t);
@@ -497,18 +505,20 @@ public:
 	CLASS_FIELD(mUIAnimationComponent, 0x1BE8, std::shared_ptr<class AnimationComponent>);
 	CLASS_FIELD(mMapAnimationComponent, 0x1BF8, std::shared_ptr<class AnimationComponent>);
 	CLASS_FIELD(mPlayerRespawnPoint, 0x1C08, class Player::PlayerSpawnPoint); //  basically just the spawn position, xref: Player::setSpawnBlockRespawnPosition
-	CLASS_FIELD(mUseUIAnimationComponent, 0x1C24, bool);     
+	CLASS_FIELD(mUseUIAnimationComponent, 0x1C24, bool);
+	CLASS_FIELD(mUseMapAnimationComponent, 0x1C25, bool); 	
 	CLASS_FIELD(mListeners, 0x1C28, std::vector<class PlayerListener *>);
 	CLASS_FIELD(mLastLevelUpTime, 0x1C40, int32_t);
-	CLASS_FIELD(mRespawnPositionCandidate, 0x1C4C, class Vec3);
 	CLASS_FIELD(mPlayerLevelChanged, 0x1C44, int32_t);
 	CLASS_FIELD(mPreviousLevelRequirement, 0x1C48, int32_t);
+	CLASS_FIELD(mRespawnPositionCandidate, 0x1C4C, class Vec3);
 	CLASS_FIELD(mPlayerIsSleeping, 0x1C58, bool);
 	CLASS_FIELD(mDestroyingBlock, 0x1C5A, bool);
 	CLASS_FIELD(mSurvivalViewerPosition, 0x1C5C, class Vec3);
 	CLASS_FIELD(mOnScreenAnimationTextures, 0x1C68, std::vector<uint32_t>);
 	CLASS_FIELD(mOnScreenAnimationTicks, 0x1C80, int32_t);
 	CLASS_FIELD(mPlayerGameType, 0x1C84, enum GameType);
+	CLASS_FIELD(mEnchantmentSeed, 0x1C88, int32_t);
 	CLASS_FIELD(mChunkRadius, 0x1C8C, uint32_t); // always mClientViewRadius + 5
 	CLASS_FIELD(mMapIndex, 0x1C90, int32_t);
 	CLASS_FIELD(mElytraLoop, 0x1C98, uint64_t);
@@ -519,10 +529,11 @@ public:
 	CLASS_FIELD(mBlockedUsingShieldTimeStamp, 0x1CC8, int64_t);
 	CLASS_FIELD(mBlockedUsingDamagedShieldTimeStamp, 0x1CD0, int64_t);
 	CLASS_FIELD(mPrevBlockedUsingShield, 0x1CD8, bool);
+	CLASS_FIELD(mPrevBlockedUsingDamagedShield, 0x1CD9, bool);
 	CLASS_FIELD(mUsedPotion, 0x1CDA, bool);
 	CLASS_FIELD(mBounceHeight, 0x1CDC, int32_t);
 	CLASS_FIELD(mSkinAdjustments, 0x1CE0, class SkinAdjustments);
-	CLASS_FIELD(mSerializedSkin, 0x1CE8, class SerializedSkin); // mSkin (0xB78) seems to be used instead - do not use this field
+	//CLASS_FIELD(mSerializedSkin, 0x1CE8, class SerializedSkin); // mSkin (0xB78) seems to be used instead - do not use this field
 	CLASS_FIELD(mScanForDolphinTimer, 0x1EB8, int32_t);
 	CLASS_FIELD(mR5DataRecoverComplete, 0x1EBC, bool); // mojang...
 	CLASS_FIELD(mDeviceId, 0x1EC0, std::string); // xref: ServerPlayer::ServerPlayer
