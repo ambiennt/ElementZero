@@ -171,6 +171,13 @@ public:
 		SpawnComplete                     = 8,
 	};
 
+	enum class SpawnPositionSource: int32_t {
+		Randomizer = 0x0,
+		Respawn = 0x1,
+		Teleport = 0x2,
+		Static = 0x3,
+	};
+
 	enum class PositionMode : uint8_t {
 		Normal       = 0,
 		Respawn      = 1,
@@ -457,8 +464,8 @@ public:
 	CLASS_FIELD(mFilteredCreativeItemList, 0xD60, std::array<std::vector<class ItemGroup>, 4>);
 	CLASS_FIELD(mClientSubId, 0xDC0, uint8_t); // xref: RaidBossComponent::_sendBossEvent, 1 for the other xbox splitscreen player, if not using splitscreen assume its 0
 	CLASS_FIELD(mPlatformOnlineId, 0xDC8, std::string); // xref: ServerNetworkHandler::_createNewPlayer
-	CLASS_FIELD(mSpawnPositionState, 0xDE8, enum Player::SpawnPositionState);
-	CLASS_FIELD(mSpawnPositionSource, 0xDEC, enum Player::SpawnPositionSource);
+	CLASS_FIELD(mSpawnPositionState, 0xDE8, enum class Player::SpawnPositionState);
+	CLASS_FIELD(mSpawnPositionSource, 0xDEC, enum class Player::SpawnPositionSource);
 	CLASS_FIELD(mSpawnPositioningTestPosition, 0xDF0, class Vec3);
 	CLASS_FIELD(mBlockRespawnUntilClientMessage, 0xDFC, bool);
 	CLASS_FIELD(mRespawnChunkBuilderPolicyHandle, 0xE00, uint32_t);
@@ -467,7 +474,7 @@ public:
 	CLASS_FIELD(mHasSeenCredits, 0xE50, bool);
 	CLASS_FIELD(mRespawnStopwatchSearching, 0xE58, class StopWatch);
 	CLASS_FIELD(mRespawnOriginalPosition, 0xE88, class Vec3);
-	CLASS_FIELD(mRespawnOriginalDimension, 0xE94, enum DimensionID); // AutomaticID<class Dimension, int>
+	CLASS_FIELD(mRespawnOriginalDimension, 0xE94, enum class DimensionID); // AutomaticID<class Dimension, int>
 	CLASS_FIELD(mRespawnReady, 0xE98, bool);
 	CLASS_FIELD(mRespawnMessage, 0xEA0, std::string);
 	CLASS_FIELD(mCheckBed, 0xEC0, bool);
@@ -489,8 +496,8 @@ public:
 	CLASS_FIELD(mHudContainerManagerModel, 0xFB0, std::shared_ptr<class HudContainerManagerModel>);
 	CLASS_FIELD(mEnderChestInventory, 0xFC0, std::unique_ptr<class EnderChestContainer>);
 	CLASS_FIELD(mTrackedBossIDs, 0xFC8, std::vector<struct ActorUniqueID>);
-	CLASS_FIELD(mPositionMode, 0xFE0, enum Player::PositionMode);
-	CLASS_FIELD(mLastHurtBy, 0xFE4, enum ActorType);
+	CLASS_FIELD(mPositionMode, 0xFE0, enum class Player::PositionMode);
+	CLASS_FIELD(mLastHurtBy, 0xFE4, enum class ActorType);
 	CLASS_FIELD(mCursorSelectedItemGroup, 0xFE8, class ItemGroup);
 	CLASS_FIELD(mPlayerUIContainer, 0x1078, class PlayerUIContainer);
 	CLASS_FIELD(mTransactionManager, 0x1178, class InventoryTransactionManager);
@@ -517,7 +524,7 @@ public:
 	CLASS_FIELD(mSurvivalViewerPosition, 0x1C5C, class Vec3);
 	CLASS_FIELD(mOnScreenAnimationTextures, 0x1C68, std::vector<uint32_t>);
 	CLASS_FIELD(mOnScreenAnimationTicks, 0x1C80, int32_t);
-	CLASS_FIELD(mPlayerGameType, 0x1C84, enum GameType);
+	CLASS_FIELD(mPlayerGameType, 0x1C84, enum class GameType);
 	CLASS_FIELD(mEnchantmentSeed, 0x1C88, int32_t);
 	CLASS_FIELD(mChunkRadius, 0x1C8C, uint32_t); // always mClientViewRadius + 5
 	CLASS_FIELD(mMapIndex, 0x1C90, int32_t);
@@ -546,9 +553,9 @@ public:
 	CLASS_FIELD(mNetworkIdentifier, 0x1F70, const class NetworkIdentifier); // xref: ServerPlayer::ServerPlayer, only seems to be in release bds?
 	CLASS_FIELD(mInventoryMenu, 0x20D8, class InventoryMenu);
 	CLASS_FIELD(mLocalPlayerInitialized, 0x2123, bool); // in response to SetLocalPlayerAsInitializedPacket, use Player::isPlayerInitialized() instead
-	CLASS_FIELD(mCurrentInputMode, 0x21A8, enum InputMode);
-	CLASS_FIELD(mPlayMode, 0x21AC, enum PlayMode);
-	CLASS_FIELD(mContainerCounter, 0x2118, enum ContainerID);
+	CLASS_FIELD(mCurrentInputMode, 0x21A8, enum class InputMode);
+	CLASS_FIELD(mPlayMode, 0x21AC, enum class PlayMode);
+	CLASS_FIELD(mContainerCounter, 0x2118, enum class ContainerID);
 	CLASS_FIELD(mClientViewRadius, 0x211C, int32_t); // max render distance
 	CLASS_FIELD(mMovementData, 0x21B0, class PlayerMovementTelemetryData); // last field in ServerPlayer, ends at 0x21C0 (0x21B0 + 0x10)
 };

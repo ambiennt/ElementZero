@@ -110,6 +110,7 @@ public:
 	MCAPI void _write(class BinaryStream &) const;
 	MCAPI void hurtAndBreak(int32_t, class Actor *);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
+	//MCAPI int16_t getDamageValue() const;
 	
 	inline operator bool() const {
 		return !this->isNull();
@@ -129,6 +130,19 @@ public:
 			}
 		}
 		return ret;
+	}
+
+	inline int16_t getDamageValue() const {
+		if (this->mItem) {
+			return this->mItem->getDamageValue(this->mUserData.get());
+		}
+		return 0;
+	}
+	
+	inline void setDamageValue(int16_t newDmgValue) {
+		if (this->mItem) {
+			this->mItem->setDamageValue(*this, newDmgValue);
+		}
 	}
 
 protected:

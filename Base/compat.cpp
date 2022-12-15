@@ -208,9 +208,8 @@ bool EnchantUtils::removeEnchant(ItemStackBase &out, Enchant::Type typeToRemove)
 
 void EnchantUtils::removeAllEnchants(ItemStackBase &out) {
 	auto resultEnchants = out.constructItemEnchantsFromUserData();
-	constexpr int32_t ENCHANTS_ARRAY_SIZE = 3;
-	for (int32_t i = 0; i < ENCHANTS_ARRAY_SIZE; i++) {
-		resultEnchants.mItemEnchants[i].clear();
+	for (auto& ench : resultEnchants.mItemEnchants) {
+		ench.clear();
 	}
 	out.saveEnchantsToUserData(resultEnchants);
 }

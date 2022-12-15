@@ -155,7 +155,7 @@ public:
 	virtual int getCooldownTime() const;
 	virtual void fixupOnLoad(class ItemStackBase &) const;
 	virtual void fixupOnLoad(class ItemStackBase &, class Level &) const;
-	virtual short getDamageValue(std::unique_ptr<class CompoundTag> const &) const;
+	virtual short getDamageValue(const class CompoundTag *) const;
 	virtual void setDamageValue(class ItemStackBase &, short) const;
 	virtual enum InHandUpdateType getInHandUpdateType(class Player const &, class ItemInstance const &, class ItemInstance const &, bool, bool) const;
 	virtual enum InHandUpdateType getInHandUpdateType(class Player const &, class ItemStack const &, class ItemStack const &, bool, bool) const;

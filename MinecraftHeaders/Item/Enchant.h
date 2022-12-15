@@ -1,12 +1,13 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include <modutils.h>
 #include "../Core/HashedString.h"
 #include "../Core/NBT.h"
 #include "../dll.h"
+
+#include <string>
+#include <vector>
+#include <array>
 
 class ActorDamageSource;
 class Actor;
@@ -254,7 +255,7 @@ public:
 
 	inline std::string getName() const { return EnchantUtils::getEnchantName(this->mEnchantType); }
 	inline std::string toString() const { return EnchantUtils::getEnchantNameAndLevel(this->mEnchantType, this->mLevel); }
-	inline bool operator==(EnchantmentInstance const& rhs) { return ((this->mEnchantType == rhs.mEnchantType) && (this->mLevel == rhs.mLevel)); }
+	inline bool operator==(EnchantmentInstance const& rhs) { return (this->mEnchantType == rhs.mEnchantType) && (this->mLevel == rhs.mLevel); }
 	inline bool operator!=(EnchantmentInstance const& rhs) { return !(*this == rhs); }
 };
 static_assert(sizeof(EnchantmentInstance) == 0x8);
@@ -265,7 +266,7 @@ class ItemEnchants {
 
 public:
 	Enchant::Slot mSlot; // int32_t
-	std::vector<EnchantmentInstance> mItemEnchants[3];
+	std::array<std::vector<EnchantmentInstance>, 3> mItemEnchants; // actually a C array
 
 	MCAPI std::vector<EnchantmentInstance> getAllEnchants() const;
 	MCAPI std::vector<std::string> getEnchantNames() const;
