@@ -17,12 +17,12 @@ class FoodItemComponent;
 class SeedItemComponent;
 class CameraItemComponent;
 
-enum class BlockShape;
+enum class BlockShape : int32_t;
 
-enum class InHandUpdateType {
+enum class InHandUpdateType : int32_t {
 	None   = 0,
 	Update = 1,
-	Swap   = 2
+	Swap   = 2,
 };
 
 enum class CooldownType { // custom items can have custom cooldown types
@@ -30,7 +30,7 @@ enum class CooldownType { // custom items can have custom cooldown types
 	ChorusFruit  = 0,
 	EnderPearl   = 1,
 	IceBomb      = 2,
-	Count        = 3
+	Count        = 3,
 };
 
 enum class UseAnimation : int8_t {
@@ -43,7 +43,7 @@ enum class UseAnimation : int8_t {
 	Spear            = 6,
 	GlowStick        = 7,
 	Sparkler         = 8,
-	Crossbow         = 9
+	Crossbow         = 9,
 };
 
 enum class CreativeItemCategory : int32_t {
@@ -57,7 +57,7 @@ enum class CreativeItemCategory : int32_t {
 	NUM_CATEGORIES   = 7,
 };
 
-enum class ItemUseMethod {
+enum class ItemUseMethod : int32_t {
 	Unknown          = -1,
 	EquipArmor       = 0,
 	Eat              = 1,
@@ -73,7 +73,7 @@ enum class ItemUseMethod {
 	Interact         = 11,
 	Retrieved        = 12,
 	Dyed             = 13,
-	Traded           = 14
+	Traded           = 14,
 };
 
 class Item {
@@ -141,8 +141,8 @@ public:
 	virtual float getDestroySpeed(class ItemInstance const &, class Block const &) const;
 	virtual void hurtEnemy(class ItemInstance &, class Mob *, class Mob *) const;
 	virtual void hurtEnemy(class ItemStack &, class Mob *, class Mob *) const;
-	virtual bool mineBlock(class ItemInstance &, class Block const &, int, int, int, class Actor *) const;
-	virtual bool mineBlock(class ItemStack &, class Block const &, int, int, int, class Actor *) const;
+	virtual bool mineBlock(class ItemInstance &instance, const class Block &block, int32_t x, int32_t y, int32_t z, class Actor *owner) const;
+	virtual bool mineBlock(class ItemStack &stack, const class Block &block, int32_t x, int32_t y, int32_t z, class Actor *owner) const;
 	virtual std::string buildDescriptionId(class ItemDescriptor const &, class CompoundTag const *) const;
 	virtual std::string buildEffectDescriptionName(class ItemStackBase const &) const;
 	virtual std::string buildCategoryDescriptionName(void) const;
@@ -189,7 +189,9 @@ public:
 	MCAPI std::string getSerializedName() const;
 	MCAPI std::string buildDescriptionName(class ItemStackBase const &) const;
 
-	enum class Flags : int32_t {
+	MCAPI static const bool mGenerateDenyParticleEffect;
+
+	enum class Flags : int32_t { // not a real bds enum, prob should switch this to a union
 		mIsGlint = 1,
 		mHandEquipped = 2,
 		mIsStackedByData = 3,
@@ -199,7 +201,7 @@ public:
 		mShouldDespawn = 7,
 		mAllowOffhand = 8,
 		mIgnoresPermissions = 9,
-		mExperimental = 10
+		mExperimental = 10,
 	};
 
 	std::string mTextureAtlasFile; // 0x8
@@ -232,8 +234,8 @@ public:
 	std::unique_ptr<CameraItemComponent> mCameraComponent; // 0x198
 	std::vector<std::function<void ()>> mOnResetBAIcallbacks; // 0x1A0
 
-	inline bool hasBitFlag(enum Item::Flags flag) {
-		return (this->mFlags & (uint16_t)flag);
+	inline bool hasBitFlag(Item::Flags flag) const {
+		return this->mFlags & static_cast<uint16_t>(flag);
 	}
 };
 

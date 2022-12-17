@@ -108,7 +108,7 @@ public:
 	MCAPI bool matchesItem(class ItemStackBase const &) const;
 	MCAPI bool sameItemAndAux(class ItemStackBase const &) const;
 	MCAPI void _write(class BinaryStream &) const;
-	MCAPI void hurtAndBreak(int32_t, class Actor *);
+	MCAPI bool hurtAndBreak(int32_t deltaDamage, class Actor *owner);
 	MCAPI void _read(class ReadOnlyBinaryStream &);
 	//MCAPI int16_t getDamageValue() const;
 	

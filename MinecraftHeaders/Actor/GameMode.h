@@ -11,6 +11,8 @@
 class ItemStack;
 
 class GameMode {
+	MCAPI bool _canDestroy(const BlockPos &, uint8_t);
+	MCAPI bool _creativeDestroyBlock(const BlockPos &, uint8_t);
 public:
 
 	Player* mPlayer; // 0x8
@@ -24,12 +26,12 @@ public:
 	bool mLastBuildBlockWasInteractive; // 0x4C
 	bool mLastBuildBlockWasSnappable; // 0x4D
 	float mMinPlayerSpeed; // 0x50
-	std::chrono::time_point<std::chrono::steady_clock, std::chrono::duration<int64_t, std::ratio<1, 1000000000>>> mLastBuildTime; // 0x58
-	std::chrono::time_point<std::chrono::steady_clock, std::chrono::duration<int64_t, std::ratio<1, 1000000000>>> mNoDestroyUntil; // 0x60
-	std::chrono::time_point<std::chrono::steady_clock, std::chrono::duration<int64_t, std::ratio<1, 1000000000>>> mNoDestroySoundUntil; // 0x68
-	std::chrono::duration<int64_t, std::ratio<1, 1000>> mCreativeDestructionTickDelay; // 0x70
-	std::chrono::duration<int64_t, std::ratio<1, 1000>> mBuildingTickDelay; // 0x78
-	std::chrono::duration<int64_t, std::ratio<1, 1000>> mDestroySoundDelay; // 0x80
+	std::chrono::nanoseconds mLastBuildTime; // 0x58
+	std::chrono::nanoseconds mNoDestroyUntil; // 0x60
+	std::chrono::nanoseconds mNoDestroySoundUntil; // 0x68
+	std::chrono::milliseconds mCreativeDestructionTickDelay; // 0x70
+	std::chrono::milliseconds mBuildingTickDelay; // 0x78
+	std::chrono::milliseconds mDestroySoundDelay; // 0x80
 	bool mHasBuildDirection; // 0x88
 	bool mHasLastBuiltPosition; // 0x89
 	uint8_t mContinueFacing; // 0x8A
@@ -54,7 +56,7 @@ public:
 	virtual void releaseUsingItem();
 	virtual void setTrialMode(bool trialModeValue);
 	virtual bool isInTrialMode();
-	virtual void registerUpsellScreenCallback(std::function<void(bool)>);
+	virtual void registerUpsellScreenCallback(std::function<void (bool)>);
 
 	MCAPI bool baseUseItem(ItemStack &item);
 };

@@ -583,7 +583,7 @@ public:
 	MCAPI void potionSplash(class Vec3 const &, class Color const &, bool);
 	MCAPI class Actor *fetchEntity(struct ActorUniqueID entityId, bool getRemoved) const;
 	MCAPI void unregisterTemporaryPointer(class _TickPtr &);
-	MCAPI bool destroyBlock(class BlockSource &, class BlockPos const &, bool);
+	MCAPI bool destroyBlock(class BlockSource &, const class BlockPos &, bool dropResources);
 	MCAPI bool extinguishFire(class BlockSource &, class BlockPos const &, unsigned char);
 	MCAPI void explode(class BlockSource &, class Actor *, class Vec3 const &, float, bool, bool, float, bool);
 	MCAPI class Dimension &createDimension(class AutomaticID<class Dimension, int>);
@@ -628,6 +628,7 @@ public:
 	CLASS_FIELD(mMobSpawner, 0x7B0, std::unique_ptr<class Spawner>); // enderPearlItem::use
 	CLASS_FIELD(mPacketSender, 0x8C0, class PacketSender *); // xref: RaidBossComponent::_sendBossEvent
 	CLASS_FIELD(mActorEventCoordinator, 0x1F68, std::unique_ptr<class ActorEventCoordinator>); // Player::attack, 0x1F80 - 0x18
+	CLASS_FIELD(mBlockEventCoordinator, 0x1F80, std::unique_ptr<class BlockEventCoordinator>);
 	CLASS_FIELD(mActorFactory, 0x2068, class ActorFactory); // _anonymous_namespace_::_spawnEntityAt, xref: CommandUtils::spawnEntityAt - 0x2090 - 0x28
 	CLASS_FIELD(mServerAuthoritativeMovement, 0x2508, bool); // ServerNetworkHandler::_sendLevelData
 };

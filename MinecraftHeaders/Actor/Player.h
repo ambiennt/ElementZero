@@ -286,8 +286,8 @@ public:
 	MCAPI float getDestroySpeed(class Block const &) const;
 	MCAPI float getDestroyProgress(class Block const &) const;
 	MCAPI class ItemStack const &getSelectedItem() const;
-	MCAPI void setSelectedItem(class ItemStack const&);
 	MCAPI class ItemStack const &getCurrentActiveShield() const;
+	//MCAPI void setSelectedItem(class ItemStack const&); // nah lets implement ourself to get more compiler optimizations
 	//MCAPI class EnderChestContainer *getEnderChestContainer();
 	//MCAPI class PlayerInventory& getSupplies();
 	MCAPI void updateTeleportDestPos();
@@ -319,6 +319,10 @@ public:
 
 	inline class ItemStack const& getPlayerUIItem() const {
 		return this->mPlayerUIContainer.getItem(static_cast<int32_t>(PlayerUISlot::CursorSelected));
+	}
+
+	inline void setSelectedItem(const ItemStack &stack) {
+		return this->mPlayerInventory->setSelectedItem(stack);
 	}
 
 	inline class Vec3 const& getRawPlayerPos() const {

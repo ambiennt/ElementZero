@@ -22,8 +22,9 @@ public:
 	int32_t mAbsorptionOld; // absorption value from the previous tick
 	uint64_t mLastSharpnessParticleInvokeTimestamp; // the tick when the player last invoked a sharpness particle on another actor
 	uint64_t mLastWhisperMessagerXuid; // the xuid of the most recent player who sent this a whisper message
+	uint64_t mLastWebInstabreakTimestamp; // the tick when the player last instabroke a cobweb
 
 	EZPlayer() : mLastUHCHeadEatTimestamp(0), mBucketCooldownTimestamp(0), mShouldCancelBucketPickup(false),
-		mLastAttackedActorTimestamp(0), mHasResetSprint(false), mRawPos(Vec3::ZERO), mRawPosOld(Vec3::ZERO),
-		mHealthOld(0), mAbsorptionOld(0), mLastSharpnessParticleInvokeTimestamp(0), mLastWhisperMessagerXuid(0) {}
+		mLastAttackedActorTimestamp(0), mHasResetSprint(false), mRawPos(Vec3::ZERO), mRawPosOld(Vec3::ZERO), mHealthOld(0),
+		mAbsorptionOld(0), mLastSharpnessParticleInvokeTimestamp(0), mLastWhisperMessagerXuid(0), mLastWebInstabreakTimestamp(0) {}
 };

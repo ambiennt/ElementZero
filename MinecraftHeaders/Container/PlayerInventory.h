@@ -22,10 +22,15 @@ public:
 		int32_t mSlot;
 	};
 
-	virtual void createTransactionContext(
-		std::function<void(Container &, int32_t, const ItemStack &, const ItemStack &)>, std::function<void()>);
+	virtual void createTransactionContext(std::function<void (Container &, int32_t, const ItemStack &, const ItemStack &)>, std::function<void ()>);
 
 	inline int32_t getContainerSize() const {
 		return this->mInventory->getContainerSize();
+	}
+
+	inline void setSelectedItem(const ItemStack &stack) {
+		if (this->mSelectedContainerId == ContainerID::Inventory) {
+			this->mInventory->setItem(this->mSelectedSlot, stack);
+		}
 	}
 };

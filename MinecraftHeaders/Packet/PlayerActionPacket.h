@@ -5,7 +5,7 @@
 #include "../Actor/ActorRuntimeID.h"
 #include "../dll.h"
 
-enum class PlayerActionType {
+enum class PlayerActionType : int32_t {
 	START_BREAK              = 0,
 	ABORT_BREAK              = 1,
 	STOP_BREAK               = 2,
@@ -37,7 +37,7 @@ enum class PlayerActionType {
 class PlayerActionPacket : public Packet {
 public:
 	BlockPos mPos;
-	int mFace;
+	int32_t mFace; // block face
 	PlayerActionType mAction;
 	ActorRuntimeID mRuntimeId;
 
