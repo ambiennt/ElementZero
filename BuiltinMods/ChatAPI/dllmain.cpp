@@ -134,24 +134,28 @@ void Chat::logChat(Mod::PlayerEntry const &sender, std::string const &content, s
 
 TClasslessInstanceHook(void,
 	"?_displayGameMessage@ServerNetworkHandler@@AEAAXAEBVPlayer@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
-	Player const& player, std::string& content) try {
+	Player const& player, std::string& content) {
 
 	auto it = Mod::PlayerDatabase::GetInstance().Find((Player*)&player);
 	if (!it) return;
 
-	Mod::CallbackToken<std::string> token;
-	(Mod::Chat::GetInstance().*emitter)(SIG("chat"), *it, it->name, content, token);
+	try {
+		Mod::CallbackToken<std::string> token;
+		(Mod::Chat::GetInstance().*emitter)(SIG("chat"), *it, it->name, content, token);
 
-	Mod::Chat::logChat(*it, content);
-
-	if (token) return;
+		// if chat is cancelled lets just not log it in the database
+		// this is purely an impl preference so maybe change this later?
+		if (token) return;
+		Mod::Chat::logChat(*it, content);
+	}
+	catch (...) {}
 
 	auto chatTxtPkt = TextPacket::createTextPacket<TextPacketType::SystemMessage>(
 		it->name, settings.namePrefix + it->name + settings.nameSuffix + " " + content);
 
-	LocateService<Level>()->forEachPlayer([&](Player const &p) -> bool {
+	LocateService<Level>()->forEachPlayer([&chatTxtPkt](Player const &p) -> bool {
 		p.sendNetworkPacket(chatTxtPkt);
 		return true;
 	});
 
-} catch (...) {}
+}

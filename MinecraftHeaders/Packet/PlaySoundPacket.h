@@ -11,12 +11,11 @@ public:
 	float mVolume = 1.f, mPitch = 1.f;
 
 	PlaySoundPacket() {}
-	PlaySoundPacket(const std::string &name, const BlockPos &pos, float volume = 1.f, float pitch = 1.f) {
-		this->mName = name;
-		this->mPos = pos * 8; // for some reason it needs this conversion idk
-		this->mVolume = volume;
-		this->mPitch = pitch;
-	}
+
+	// not sure why it needs the * 8 conversion, must be an fmod thing on the client
+	PlaySoundPacket(const std::string &name, const BlockPos &pos, float volume = 1.f, float pitch = 1.f)
+		: mName(name), mPos(pos * 8), mVolume(volume), mPitch(pitch) {}
+
 	inline ~PlaySoundPacket() {}
 	MCAPI virtual MinecraftPacketIds getId() const;
 	MCAPI virtual std::string getName() const;
