@@ -134,7 +134,7 @@ void Chat::logChat(Mod::PlayerEntry const &sender, std::string const &content, s
 
 TClasslessInstanceHook(void,
 	"?_displayGameMessage@ServerNetworkHandler@@AEAAXAEBVPlayer@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
-	Player const& player, std::string& content) {
+	const Player& player, std::string& content) {
 
 	auto it = Mod::PlayerDatabase::GetInstance().Find((Player*)&player);
 	if (!it) return;
@@ -157,5 +157,4 @@ TClasslessInstanceHook(void,
 		p.sendNetworkPacket(chatTxtPkt);
 		return true;
 	});
-
 }

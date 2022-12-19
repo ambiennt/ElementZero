@@ -13,10 +13,8 @@ THook(void*,
 }
 
 THook(void*, "??1Player@@UEAA@XZ", Player* player) {
-
 	auto ret = original(player);
-	delete player->mEZPlayer; // clean up to be safe because idk what BDS does with this field
-	player->mEZPlayer = nullptr;
+	delete player->mEZPlayer; // clean up
 	return ret;
 }
 
