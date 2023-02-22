@@ -1,6 +1,8 @@
 #pragma once
 
-enum class GameType {
+#include <cstdint>
+
+enum class GameType : int32_t {
 	Undefined      = -1,
 	Survival       = 0,
 	Creative       = 1,
@@ -8,5 +10,5 @@ enum class GameType {
 	SurvivalViewer = 3,
 	CreativeViewer = 4,
 	Default        = 5,
-	WorldDefault   = 5
+	WorldDefault   = 5,
 };

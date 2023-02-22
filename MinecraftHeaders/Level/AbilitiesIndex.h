@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdint>
+#include <type_traits>
+
 enum class AbilitiesIndex : int16_t { // this is actually an int16 in bds
 	Invalid              = -1,
 	Build                = 0,

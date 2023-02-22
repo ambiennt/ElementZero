@@ -360,6 +360,8 @@ public:
 		return *this->mEnderChestInventory.get();
 	}
 
+	// we say that a server-side "operator" is a player that can use operator commands
+	// trying to phase about the ability system as much as possible...
 	inline bool isOperator() const {
 		return this->getCommandPermissionLevel() >= CommandPermissionLevel::GameMasters;
 	}

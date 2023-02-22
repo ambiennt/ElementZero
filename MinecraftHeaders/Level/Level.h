@@ -552,8 +552,8 @@ public:
 	MCAPI void setDefaultGameType(enum GameType);
 	MCAPI bool hasCommandsEnabled() const;
 	MCAPI bool hasExperimentalGameplayEnabled() const;
-	MCAPI void forEachPlayer(std::function<bool(Player &)>);
-	MCAPI void forEachPlayer(std::function<bool(Player const &)>) const;
+	MCAPI void forEachPlayer(std::function<bool (Player &)>);
+	MCAPI void forEachPlayer(std::function<bool (Player const &)>) const;
 	MCAPI void forEachDimension(std::function<bool(Dimension const &)>);
 	MCAPI void broadcastBossEvent(enum BossEventUpdateType);
 	MCAPI void broadcastActorEvent(class Actor &, enum ActorEvent, int32_t data);

@@ -10,7 +10,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "intelliSenseMode": "windows-clang-x64",
+      "intelliSenseMode": "windows-msvc-x64",
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
@@ -44,7 +44,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "intelliSenseMode": "windows-clang-x64",
+      "intelliSenseMode": "windows-msvc-x64",
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",

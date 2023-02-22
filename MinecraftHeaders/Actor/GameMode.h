@@ -26,12 +26,12 @@ public:
 	bool mLastBuildBlockWasInteractive; // 0x4C
 	bool mLastBuildBlockWasSnappable; // 0x4D
 	float mMinPlayerSpeed; // 0x50
-	std::chrono::nanoseconds mLastBuildTime; // 0x58
-	std::chrono::nanoseconds mNoDestroyUntil; // 0x60
-	std::chrono::nanoseconds mNoDestroySoundUntil; // 0x68
-	std::chrono::milliseconds mCreativeDestructionTickDelay; // 0x70
-	std::chrono::milliseconds mBuildingTickDelay; // 0x78
-	std::chrono::milliseconds mDestroySoundDelay; // 0x80
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> mLastBuildTime; // 0x58
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> mNoDestroyUntil; // 0x60
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> mNoDestroySoundUntil; // 0x68
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> mCreativeDestructionTickDelay; // 0x70
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> mBuildingTickDelay; // 0x78
+	std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> mDestroySoundDelay; // 0x80
 	bool mHasBuildDirection; // 0x88
 	bool mHasLastBuiltPosition; // 0x89
 	uint8_t mContinueFacing; // 0x8A

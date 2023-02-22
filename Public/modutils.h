@@ -12,7 +12,7 @@ template <class T> using remove_cvref_t = typename remove_cvref<T>::type;
 
 // obtains a reference to a class field at the given offset
 template <typename TreatAs, typename Pointer>
-constexpr inline TreatAs &directAccess(Pointer ptr, ptrdiff_t offset) {
+inline TreatAs &directAccess(Pointer ptr, ptrdiff_t offset) {
 	return *reinterpret_cast<TreatAs *>(reinterpret_cast<uintptr_t>(ptr) + offset);
 }
 
